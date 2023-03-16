@@ -23,3 +23,39 @@
 <br>
 :warning: Work in Progress :warning:
 </p>
+
+## Introduction
+
+CoLLIE is a LLM specialized to perform personalized Information-Extraction (IE) on demand, based on simple especifications given in the input.
+
+### Example
+
+Prompt
+```python
+@dataclass
+class EnergyAndInfraestructureEvent:
+    """This class is used to instantiate events that involve Chinese energy and infraestructure projects."""
+    meeting_attendees: Union[List[str], None] # Persons or organizations that attended the meeting.
+    meeting_locations: Union[List[str], None] # Location where the meeting happened.
+    meeting_topic: Union[List[str], None] # Topic discussed on the meeting
+    project_location: Union[List[str], None] # Location of the project
+    project_name: Union[List[str], None] # Name of the project
+    
+# This is the sentence to analyze
+sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility."
+
+# The following list contains the events instances that happens in the sentence defined above
+```
+
+Output (LLaMA 65B zero-shot)
+```python
+events = [
+    EnergyAndInfraestructureEvent(
+        meeting_attendees=["Chinese", "Rongovian"],
+        meeting_location=["Berlin"],
+        meeting_topic=["Pangean Reunification Facility"],
+        project_location=["Rongovia"],
+        project_name=["Pangean Reunification Facility"]
+    ),
+]
+```
