@@ -26,7 +26,7 @@
 
 ## Introduction
 
-CoLLIE is a LLM specialized to perform personalized Information-Extraction (IE) on demand, based on simple especifications given in the input.
+CoLLIE is a LLM specialized to perform personalized Information-Extraction (IE) on demand, based on simple specifications given in the input.
 
 ### Example
 
