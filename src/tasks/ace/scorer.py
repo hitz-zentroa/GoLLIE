@@ -9,7 +9,7 @@ class ACEEntityScorer(Scorer):
     valid_types: List[Entity] = ENTITY_DEFINITIONS
 
     def __call__(
-        self, reference: List[Entity], predictions: List[Entity]
+        self, reference: List[List[Entity]], predictions: List[List[Entity]]
     ) -> Dict[str, float]:
         if len(reference) and not isinstance(reference[0], list):
             reference = [reference]
