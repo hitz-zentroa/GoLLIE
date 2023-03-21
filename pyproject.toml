@@ -1,0 +1,11 @@
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  | data
+  | tests
+  | venv
+)/
+'''
+preview = true

@@ -26,31 +26,31 @@
 
 ## Introduction
 
-CoLLIE is a LLM specialized to perform personalized Information-Extraction (IE) on demand, based on simple specifications given in the input.
+CoLLIE is a LLM specialized to perform personalized Information-Extraction (IE) on demand, based on simple specifications given in the input. Developing a model of such characteristics could be a breakthrough that changes the complete paradigm of actual IE. Unfortunately, models capable of achieving such capabilities have restricted access like Codex, InstructGPT or GPT-4. CoLLIE is an open-source attempt to achieve personalized IE. Personalized IE allows to extract information for a given schema (dynamically) without annotating further examples, i.e. zero-shot, this could be very convenient for annotation assistants for example.
 
-### Example
+### Example (using Code format)
+Paper: [Code4Struct: Code Generation for Few-Shot Structured Prediction from Natural Language](https://arxiv.org/abs/2210.12810)
 
 Prompt
 ```python
 @dataclass
-class EnergyAndInfraestructureEvent:
-    """This class is used to instantiate events that involve Chinese energy and infraestructure projects."""
+class EnergyAndInfrastructureEvent:
+    """This class is used to instantiate events that involve Chinese energy and infrastructure projects."""
     meeting_attendees: Union[List[str], None] # Persons or organizations that attended the meeting.
-    meeting_locations: Union[List[str], None] # Location where the meeting happened.
+    meeting_location: Union[List[str], None] # Location where the meeting happened.
     meeting_topic: Union[List[str], None] # Topic discussed on the meeting
     project_location: Union[List[str], None] # Location of the project
     project_name: Union[List[str], None] # Name of the project
     
 # This is the sentence to analyze
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility."
-
-# The following list contains the events instances that happens in the sentence defined above
 ```
-
 Output (LLaMA 65B zero-shot)
 ```python
+# The following list contains the events instances that happens in the sentence defined above
+—————————
 events = [
-    EnergyAndInfraestructureEvent(
+    EnergyAndInfrastructureEvent(
         meeting_attendees=["Chinese", "Rongovian"],
         meeting_location=["Berlin"],
         meeting_topic=["Pangean Reunification Facility"],
