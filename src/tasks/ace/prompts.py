@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any, List
+from typing import List
 
 from ..utils import Entity, Relation
 
@@ -77,7 +77,7 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-relations-guidel
 @dataclass
 class Located(Relation):
     """The Located relation captures the physical location of an entity. This
-    relation is restricted to people. In other words, arg1 in Located
+    relation is restricted to people. In other words, `arg1` in Located
     relations can only be occupied by mentions of Entities of type Person.
     """
 

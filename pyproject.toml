@@ -4,7 +4,6 @@ include = '\.pyi?$'
 extend-exclude = '''
 /(
   | data
-  | tests
   | venv
 )/
 '''
