@@ -1,4 +1,5 @@
 .slurm/*
+.vscode/*
 data/*
 
 # Byte-compiled / optimized / DLL files
