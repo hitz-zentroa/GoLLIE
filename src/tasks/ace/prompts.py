@@ -257,6 +257,9 @@ class OrgLocationOrigin(Relation):
     trumps this relation for government organizations.
     """
 
+    arg1: str
+    arg2: str
+
 
 RELATION_DEFINITIONS: List[Relation] = [
     Located,
