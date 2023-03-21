@@ -20,11 +20,11 @@ class ACEEntityScorer(Scorer):
             f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount"
             " must be equal."
         )
-        tp = total_pos = total_pre = 0
 
+        tp = total_pos = total_pre = 0
         for ref, pre in zip(reference, predictions):
-            total_pos += len(ref)
-            total_pre += len(pre)
+            total_pos += len([e for e in ref if type(e) in self.valid_types])
+            total_pre += len([e for e in pre if type(e) in self.valid_types])
 
             ref = deepcopy(ref)
             for entity in pre:
