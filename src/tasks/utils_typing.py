@@ -34,4 +34,3 @@ class Scorer:
 
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
         raise NotImplementedError("This method must be implemented.")
-

@@ -7,9 +7,14 @@ class SpanScorer(Scorer):
     """A general scorer implementation for span identification and classification
     tasks.
     """
+
     valid_types: List[Type] = [Entity, Value]
 
-    def __call__(self, reference: List[Union[Entity, Value]], predictions: List[Union[Entity, Value]]) -> Dict[str, float]:
+    def __call__(
+        self,
+        reference: List[Union[Entity, Value]],
+        predictions: List[Union[Entity, Value]],
+    ) -> Dict[str, float]:
         if len(reference) and not isinstance(reference[0], list):
             reference = [reference]
         if len(predictions) and not isinstance(predictions[0], list):
@@ -41,6 +46,10 @@ class SpanScorer(Scorer):
         )
 
         return {"precision": precision, "recall": recall, "f1-score": f1_score}
-    
+
     def _filter_valid_types(self, elems: List[Any]) -> List[Union[Entity, Value]]:
-        return [elem for elem in elems if any(isinstance(elem, _type) for _type in self.valid_types)]
+        return [
+            elem
+            for elem in elems
+            if any(isinstance(elem, _type) for _type in self.valid_types)
+        ]
