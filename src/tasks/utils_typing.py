@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from typing import Any, Dict
 
 
 @dataclass
@@ -31,4 +32,6 @@ class Relation:
 class Scorer:
     """An abstract class for scorers"""
 
-    pass
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
+        raise NotImplementedError("This method must be implemented.")
+

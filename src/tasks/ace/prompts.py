@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from ..utils import Entity, Value, Relation
+from ..utils_typing import Entity, Value, Relation
 
 """Entity definitions
 
