@@ -30,7 +30,13 @@ class Relation:
 
 
 class Scorer:
-    """An abstract class for scorers"""
+    """An abstract class for scorers."""
 
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
         raise NotImplementedError("This method must be implemented.")
+
+
+class DatasetLoader:
+    """An abstract class for dataset loaders."""
+
+    pass

@@ -138,6 +138,16 @@ class ContactInfo(Value):
     span: str
 
 
+@dataclass
+class Vehicle(Value):
+    """A Vehicle value refers to vehicles that are used for transportation. The
+    vehicles can transport either persons or artifacts. For example: 'car', 'plane',
+    'cabin', ...
+    """
+
+    span: str
+
+
 VALUE_DEFINITIONS: List[Value] = [
     Time,
     Numeric,
