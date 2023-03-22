@@ -7,7 +7,7 @@ OUTPUT_PATH="data/ace05"
 
 mkdir ${OUTPUT_PATH}
 
-python src/preprocessing/preprocess_ace.py \
+python src/tasks/ace/preprocess_ace.py \
     -i ${ACE_DATA_PATH} \
     -o ${OUTPUT_PATH} \
     -s ${ACE_DATA_SPLITS} \

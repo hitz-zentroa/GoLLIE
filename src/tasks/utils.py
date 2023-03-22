@@ -18,7 +18,7 @@ class Value:
 
     span: str
 
-    def __eq__(self: Entity, other: Entity) -> bool:
+    def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.span == self.other
 
 
