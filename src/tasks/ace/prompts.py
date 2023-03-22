@@ -14,8 +14,8 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-entities-guideli
 class Person(Entity):
     """Each distinct person or set of people mentioned in a document refers
     to an entity of type Person. For example, people may be specified by name
-    (“John Smith”), occupation (“the butcher”), family relation (“dad”),
-    pronoun (“he”), etc., or by some combination of these.
+    ("John Smith"), occupation ("the butcher"), family relation ("dad"),
+    pronoun ("he"), etc., or by some combination of these.
     """
 
     span: str
