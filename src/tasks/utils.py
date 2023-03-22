@@ -12,6 +12,16 @@ class Entity:
         return type(self) == type(other) and self.span == self.other
 
 
+@dataclass
+class Value:
+    """A general class to represent values."""
+
+    span: str
+
+    def __eq__(self: Entity, other: Entity) -> bool:
+        return type(self) == type(other) and self.span == self.other
+
+
 class Relation:
     """A general class to represent relations."""
 

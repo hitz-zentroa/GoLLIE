@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from ..utils import Entity, Relation
+from ..utils import Entity, Value, Relation
 
 """Entity definitions
 
@@ -65,6 +65,88 @@ class Facility(Entity):
 
 
 ENTITY_DEFINITIONS: List[Entity] = [Person, Organization, GPE, Location, Facility]
+
+
+"""Value definitions
+
+The following "entities" are not defined on the ACE schema, however, they are
+annotated as time expressions or value/numeric data.
+"""
+
+
+@dataclass
+class Time(Value):
+    """A Time value refers to a specific time frame. Usually known as time
+    expressions. For example: '4 years', 'today', 'December', 'future', ...
+    """
+
+    span: str
+
+
+@dataclass
+class Numeric(Value):
+    """A Numeric value refers to relevant numbers, amounts, etc. For example:
+    'billions of dollars', '50 percent', '100%', ...
+    """
+
+    span: str
+
+
+@dataclass
+class JobTitle(Value):
+    """A JobTitle value refers to the name of the job or position of a Person
+    entity in a Organization. For example: 'co-chief executive', 'move coordinator',
+    'interim ED', ...
+    """
+
+    span: str
+
+
+@dataclass
+class Weapon(Value):
+    """A Weapon value refers to instruments that can be used to deal physical damage,
+    destroy something or kill someone. For example: 'bomb', 'm-16s', 'missile', ...
+    """
+
+    span: str
+
+
+@dataclass
+class Crime(Value):
+    """A Crime value refers to the specific reason (crime) that a Person entity can
+    be judged or sentenced for. For example: 'raping', 'murder', 'drug', ...
+    """
+
+    span: str
+
+
+@dataclass
+class Sentence(Value):
+    """A Sentence value refers to sentences decided by a court or judge for a
+    specific crime. For example: '124 years in prison', 'a sentence', 'death'...
+    """
+
+    span: str
+
+
+@dataclass
+class ContactInfo(Value):
+    """A ContactInfo value refers to contact information values such as telephone
+    numbers, emails, addresses. For example: 'mich...@sumptionandwyland.com', ...
+    """
+
+    span: str
+
+
+VALUE_DEFINITIONS: List[Value] = [
+    Time,
+    Numeric,
+    JobTitle,
+    Weapon,
+    Crime,
+    Sentence,
+    ContactInfo,
+]
 
 
 """Relation definitions
