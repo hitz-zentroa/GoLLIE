@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from ..utils_typing import Entity, Value, Relation
+from ..utils_typing import Entity, Event, Value, Relation
 
 """Entity definitions
 
@@ -372,3 +372,375 @@ RELATION_DEFINITIONS: List[Relation] = [
     CitizenResidentReligionEthnicity,
     OrgLocationOrigin,
 ]
+
+"""Event definitions
+
+The events definitions are derived from the oficial ACE guidelines:
+https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-events-guidelines-v5.4.3.pdf
+"""
+
+
+@dataclass
+class BeBorn(Event):
+    """A BeBorn Event occurs whenever a Person Entity is given birth to"""
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The person who is born
+    time: List[str]  # When the birth takes place
+    place: List[str]  # Where the birth takes place
+
+
+@dataclass
+class Marry(Event):
+    """Marry Events are official Events, where two people are married under the
+    legal definition.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The people who are married
+    time: List[str]  # When the marriage takes place
+    place: List[str]  # Where the marriage takes place
+
+
+@dataclass
+class Divorce(Event):
+    """A DIVORCE Event occurs whenever two people are officially divorced under the
+    legal definition of divorce. We do not include separations or church annulments.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The people who are divorced
+    time: List[str]  # When the divorce takes place
+    place: List[str]  # Where the divorce takes place
+
+
+@dataclass
+class Injure(Event):
+    """An Injure Event occurs whenever a Person Entity experiences physical harm.
+    Injure Events can be accidental, intentional or self-inflicted.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    agent: List[str]  # The attacking agent / The one that enacts the harm
+    victim: List[str]  # The harmed person(s)
+    instrument: List[str]  # The device used to inflict the harm
+    time: List[str]  # When the injuring takes place
+    place: List[str]
+
+
+@dataclass
+class Die(Event):
+    """A Die Event occurs whenever the life of a Person Entity ends. Die Events
+    can be accidental, intentional or self-inflicted
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    agent: List[str]  # (Optional) The attacking agent / The killer
+    victim: List[str]  # The person(s) who died
+    instrument: List[str]  # The device used to kill
+    time: List[str]  # When the death takes place
+    place: List[str]  # Where the death takes place
+
+
+@dataclass
+class Transport(Event):
+    """A Transport Event occurs whenever an Artifact (Weapon or Vehicle) or a
+    Person is moved from one Place (GPE, Facility, Location) to another.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    agent: List[str]  # The agent responsible for the transport Event
+    artifact: List[str]  # The person doing the traveling or the artifact being traveled
+    vehicle: List[str]  # The vehicle used to transport the person or artifact
+    price: List[str]  # The price of transporting the person or artifact
+    origin: List[str]  # Where the transporting originated
+    destination: List[str]  # Where the transporting is directed
+    time: List[str]  # When the transporting takes place
+
+
+@dataclass
+class TransferOwnership(Event):
+    """TransferOwnership Events refer to the buying, selling, loaning,
+    borrowing, giving, or receiving of artifacts or organizations.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    buyer: List[str]  # The buying agent
+    seller: List[str]  # The selling agent
+    beneficiary: List[str]  # The agent that benefits from the transaction
+    artifact: List[str]  # The item or Organization that was bought or sold
+    price: List[str]  # The sale price of the artifact
+    time: List[str]  # When the sale takes place
+    place: List[str]  # Where the sale takes place
+
+
+@dataclass
+class TransferMoney(Event):
+    """TransferMoney Events refer to the giving, receiving, borrowing, or
+    lending money when it is not in the context of purchasing something. The
+    canonical examples are: (1) people giving money to organizations (and getting
+    nothing tangible in return); and (2) organizations lending money to people or
+    other orgs.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    giver: List[str]  # The donating agent
+    recipient: List[str]  # The recipient agent
+    beneficiary: List[str]  # The agent that benefits from the transfer
+    money: List[str]  # The amount given, donated or loaned
+    time: List[str]  # When the amount is transferred
+    place: List[str]  # Where the transation takes place
+
+
+@dataclass
+class StartOrg(Event):
+    """A StartOrg Event occurs whenever a new Organization is created."""
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    agent: List[str]  # The agent responsible for the StattOrg Event (the founder)
+    org: List[str]  # The organization that is started
+    time: List[str]  # When the Event takes place
+    place: List[str]  # Where the Event takes place
+
+
+@dataclass
+class MergeOrg(Event):
+    """A MergeOrg Event occurs whenever two or more Organization Entities
+    come together to form a new Organization Entity. This Event applies to any
+    kind of Organization, including government agencies. It also includes joint
+    venture
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    org: List[str]  # The organization(s) that are merged
+    time: List[str]  # When the merger takes place
+    place: List[str]  # Where the merger takes place
+
+
+@dataclass
+class DeclareBankruptcy(Event):
+    """A DeclareBankruptcy Event will occur whenever an Entity officially
+    requests legal protection from debt collection due to an extremely negative
+    balance sheet.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    org: List[str]  # The Organization declaring bankruptcy
+    time: List[str]  # When the bankruptcy is declared
+    place: List[str]  # Where the declaration takes place
+
+
+@dataclass
+class EndOrg(Event):
+    """An EndOrg Event occurs whenever an Organization ceases to exist (in
+    other words 'goes out of business').
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    org: List[str]  # The Organization that is ended
+    time: List[str]  # When the Event takes place
+    place: List[str]  # Where the Event takes place
+
+
+@dataclass
+class Attack(Event):
+    """An Attack Event is defined as a violent physical act causing harm or damage.
+    Attack Events include any such Event not covered by the Injure or Die
+    subtypes, including Events where there is no stated agent.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    attacker: List[str]  # The attacking/instigating agent
+    target: List[str]  # The target of the attack (including unintended targets)
+    instrument: List[str]  # The instrument used in the attack
+    time: List[str]  # When the attack takes place
+    place: List[str]  # Where the attack takes place
+
+
+@dataclass
+class Demonstrate(Event):
+    """A Demonstrate Event occurs whenever a large number of people come
+    together in a public area to protest or demand some sort of official action.
+    Demonstrate Events include, but are not limited to, protests, sit-ins, strikes,
+    and riots.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    entity: List[str]  # The demonstrating agent
+    time: List[str]  # When the demonstration takes place
+    place: List[str]  # Where the demonstration takes place
+
+
+@dataclass
+class Meet(Event):
+    """A Meet Event occurs whenever two or more Entities come together at a single
+    location and interact with one another face-to-face. Meet Events include talks,
+    summits, conferences, meetings, visits, and any other Event where two or more
+    parties get together at some location.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    entity: List[str]  # The agents who are meeting
+    time: List[str]  # When the meeting takes place
+    place: List[str]  # Where the meeting takes place
+
+
+@dataclass
+class PhoneWrite(Event):
+    """A PhoneWrite Event occurs when two or more people directly engage in
+    discussion which does not take place 'face-to-face'. To make this Event less
+    open-ended, we limit it to written or telephone communication where at least two
+    parties are specified.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    entity: List[str]  # The communicating agents
+    time: List[str]  # When the communication takes place
+
+
+@dataclass
+class StartPosition(Event):
+    """A StartPosition Event occurs whenever a Person Entity begins working
+    for (or changes offices within) an Organization or GPE. This includes
+    government officials starting their terms, whether elected or appointed.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The employee
+    entity: List[str]  # The employer
+    position: List[str]  # The JobTitle for the position being started
+    time: List[str]  # When the employment relationship begins
+    place: List[str]  # Where the employment relationship begins
+
+
+@dataclass
+class EndPosition(Event):
+    """An EndPosition Event occurs whenever a Person Entity stops working for
+    (or changes offices within) an Organization or GPE.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The employee
+    entity: List[str]  # The employer
+    position: List[str]  # The JobTitle for the position being ended
+    time: List[str]  # When the employment relationship ends
+    place: List[str]  # Where the employment relationship ends
+
+
+@dataclass
+class Nominate(Event):
+    """A Nominate Event occurs whenever a Person is proposed for a StartPosition
+    Event by the appropriate Person, through official channels.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The person(s) nominated
+    agent: List[str]  # The nominating agent
+    position: List[str]  # The JobTitle for the position being nominated to
+    time: List[str]  # When the nomination takes place
+    place: List[str]  # Where the nomination takes place
+
+
+@dataclass
+class Elect(Event):
+    """An Elect Event occurs whenever a candidate wins an election designed to
+    determine the Person argument of a StartPosition Event.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The person elected
+    entity: List[str]  # The voting agent(s)
+    position: List[str]  # The JobTitle for the position being nominated to
+    time: List[str]  # When the election takes place
+    place: List[str]  # Where the election takes place
+
+
+@dataclass
+class ArrestJail(Event):
+    """A Jail Event occurs whenever the movement of a Person is constrained by a
+    state actor (a GPE, its Organization subparts, or its Person representatives).
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str] # The person who is jailed or arrested
+    agent: List[str] # The jailer or the arresting agent
+    crime: List[str] # The Crime for which the Person is being jailed or arrested
+    time: List[str] # When the person is arrested or sent to jail
+    place: List[str] # Where the person is arrested or where they are in jail
+
+
+@dataclass
+class ReleaseParole(Event):
+    """A Release Event occurs whenever a state actor (GPE, Organization
+    subpart, or Person representative) ends its custody of a Person Entity. 
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str] # The person who is released
+    entity: List[str] # The former captor agent(s)
+    crime: List[str] # The Crime for which the released Person was being held
+    time: List[str] # When the release takes place
+    place: List[str] # Where the release takes place
+
+@dataclass
+class TrialHearing(Event):
+    """A Trial Event occurs whenever a court proceeding has been initiated for the
+    purposes of determining the guilt or innocence of a Person, Organization
+    or GPE accused of committing a crime.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str] # The agent on trial
+    prosecutor: List[str] # The prosecuting agent
+    adjudicator: List[str] # The judge or court
+    crime: List[str] # The Crime for which the Defendant is being tried
+    time: List[str] # When the trial takes place
+    place: List[str] # Where the trial takes place
+
+@dataclass
+class ChargeIndict(Event):
+    """A Charge Event occurs whenever a Person, Organization or GPE is
+    accused of a crime by a state actor (GPE, an Organization subpart of a GPE
+    or a Person representing a GPE).
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str] # The agent that is indicted
+    prosecutor: List[str] # The agent bringing charges or executing the indictment
+    adjudicator: List[str] # The judge our court
+    crime: List[str] # The Crime for which the Defendant is being indicted
+    time: List[str] # When the indictment takes place
+    place: List[str] # When the indictment takes place
+
+
+@dataclass
+class Sue(Event):
+    """A Sue Event occurs whenever a court proceeding has been initiated for the
+    purposes of determining the liability of a Person, Organization or GPE
+    accused of committing a crime or neglecting a commitment.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    plaintiff: List[str] # The suing agent
+    defendant: List[str] # The agent being sued
+    adjudicator: List[str] # The judge or court
+    crime: List[str] # The Crime (or offense) for which the Defendant is being sued
+    time: List[str] # When the suit takes place
+    place: List[str] # Where the suit takes place
+
+
+@dataclass
+class Convict(Event):
+    """A Convict Event occurs whenever a Try Event ends with a successful
+    prosecution of the Defendant. In other words, a Person,
+    Organization or GPE Entity is convicted whenever that Entity has been found
+    guilty of a Crime. 
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str] # The convicted agent(s)
+    adjudicator: List[str] # The judge or court
+    crime: List[str] # The Crime for which the Defendant has been convicted
+    time: List[str] # When the conviction takes place
+    place: List[str] # Where the conviction takes place
+

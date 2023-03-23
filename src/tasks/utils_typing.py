@@ -23,10 +23,18 @@ class Value:
         return type(self) == type(other) and self.span == self.other
 
 
+@dataclass
 class Relation:
     """A general class to represent relations."""
 
     pass
+
+
+@dataclass
+class Event:
+    """A general class to represent events."""
+
+    mention: str
 
 
 class Scorer:
