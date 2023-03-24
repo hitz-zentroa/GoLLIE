@@ -48,3 +48,10 @@ class DatasetLoader:
     """An abstract class for dataset loaders."""
 
     pass
+
+
+class Sampler:
+    """An abstract class for example sampling."""
+
+    def __init__(self, dataset_loader: DatasetLoader) -> None:
+        raise NotImplementedError("This is an abstract class.")

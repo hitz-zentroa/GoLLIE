@@ -1,5 +1,5 @@
 from typing import Any, Dict, Union
-from ..utils_typing import DatasetLoader
+from ..utils_typing import DatasetLoader, Sampler
 from .prompts import *
 
 import json
@@ -341,3 +341,23 @@ class ACEDatasetLoader(DatasetLoader):
             return list(self.elements.values())[idx]  # Not very efficient
         else:
             return self.elements[idx]
+
+
+class ACEEntityAndValueSampler(Sampler):
+    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
+        raise NotImplementedError("TODO")
+
+
+class ACERelationSampler(Sampler):
+    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
+        raise NotImplementedError("TODO")
+
+
+class ACEEventSampler(Sampler):
+    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
+        raise NotImplementedError("TODO")
+
+
+class ACEMixedSampler(Sampler):
+    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
+        raise NotImplementedError("TODO")
