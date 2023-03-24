@@ -748,8 +748,8 @@ class Convict(Event):
 
 
 @dataclass
-class Sentence(Event):
-    """A Sentence Event takes place whenever the punishment (particularly
+class SentenceAct(Event):
+    """A SentenceAct Event takes place whenever the punishment (particularly
     incarceration) for the Defendant of a Try Event is issued by a state
     actor (a GPE, an Organization subpart or a Person representing them)
     """
