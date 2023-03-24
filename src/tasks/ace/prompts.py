@@ -840,7 +840,7 @@ class Pardon(Event):
 
 @dataclass
 class Appeal(Event):
-    """An APPEAL Event occurs whenever the decision of a court is taken to a higher
+    """An Appeal Event occurs whenever the decision of a court is taken to a higher
     court for review.
     """
 
