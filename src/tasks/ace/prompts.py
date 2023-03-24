@@ -662,25 +662,26 @@ class ArrestJail(Event):
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
-    person: List[str] # The person who is jailed or arrested
-    agent: List[str] # The jailer or the arresting agent
-    crime: List[str] # The Crime for which the Person is being jailed or arrested
-    time: List[str] # When the person is arrested or sent to jail
-    place: List[str] # Where the person is arrested or where they are in jail
+    person: List[str]  # The person who is jailed or arrested
+    agent: List[str]  # The jailer or the arresting agent
+    crime: List[str]  # The Crime for which the Person is being jailed or arrested
+    time: List[str]  # When the person is arrested or sent to jail
+    place: List[str]  # Where the person is arrested or where they are in jail
 
 
 @dataclass
 class ReleaseParole(Event):
     """A Release Event occurs whenever a state actor (GPE, Organization
-    subpart, or Person representative) ends its custody of a Person Entity. 
+    subpart, or Person representative) ends its custody of a Person Entity.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
-    person: List[str] # The person who is released
-    entity: List[str] # The former captor agent(s)
-    crime: List[str] # The Crime for which the released Person was being held
-    time: List[str] # When the release takes place
-    place: List[str] # Where the release takes place
+    person: List[str]  # The person who is released
+    entity: List[str]  # The former captor agent(s)
+    crime: List[str]  # The Crime for which the released Person was being held
+    time: List[str]  # When the release takes place
+    place: List[str]  # Where the release takes place
+
 
 @dataclass
 class TrialHearing(Event):
@@ -690,12 +691,13 @@ class TrialHearing(Event):
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
-    defendant: List[str] # The agent on trial
-    prosecutor: List[str] # The prosecuting agent
-    adjudicator: List[str] # The judge or court
-    crime: List[str] # The Crime for which the Defendant is being tried
-    time: List[str] # When the trial takes place
-    place: List[str] # Where the trial takes place
+    defendant: List[str]  # The agent on trial
+    prosecutor: List[str]  # The prosecuting agent
+    adjudicator: List[str]  # The judge or court
+    crime: List[str]  # The Crime for which the Defendant is being tried
+    time: List[str]  # When the trial takes place
+    place: List[str]  # Where the trial takes place
+
 
 @dataclass
 class ChargeIndict(Event):
@@ -705,12 +707,12 @@ class ChargeIndict(Event):
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
-    defendant: List[str] # The agent that is indicted
-    prosecutor: List[str] # The agent bringing charges or executing the indictment
-    adjudicator: List[str] # The judge our court
-    crime: List[str] # The Crime for which the Defendant is being indicted
-    time: List[str] # When the indictment takes place
-    place: List[str] # When the indictment takes place
+    defendant: List[str]  # The agent that is indicted
+    prosecutor: List[str]  # The agent bringing charges or executing the indictment
+    adjudicator: List[str]  # The judge our court
+    crime: List[str]  # The Crime for which the Defendant is being indicted
+    time: List[str]  # When the indictment takes place
+    place: List[str]  # When the indictment takes place
 
 
 @dataclass
@@ -721,12 +723,12 @@ class Sue(Event):
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
-    plaintiff: List[str] # The suing agent
-    defendant: List[str] # The agent being sued
-    adjudicator: List[str] # The judge or court
-    crime: List[str] # The Crime (or offense) for which the Defendant is being sued
-    time: List[str] # When the suit takes place
-    place: List[str] # Where the suit takes place
+    plaintiff: List[str]  # The suing agent
+    defendant: List[str]  # The agent being sued
+    adjudicator: List[str]  # The judge or court
+    crime: List[str]  # The Crime (or offense) for which the Defendant is being sued
+    time: List[str]  # When the suit takes place
+    place: List[str]  # Where the suit takes place
 
 
 @dataclass
@@ -734,13 +736,155 @@ class Convict(Event):
     """A Convict Event occurs whenever a Try Event ends with a successful
     prosecution of the Defendant. In other words, a Person,
     Organization or GPE Entity is convicted whenever that Entity has been found
-    guilty of a Crime. 
+    guilty of a Crime.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
-    defendant: List[str] # The convicted agent(s)
-    adjudicator: List[str] # The judge or court
-    crime: List[str] # The Crime for which the Defendant has been convicted
-    time: List[str] # When the conviction takes place
-    place: List[str] # Where the conviction takes place
+    defendant: List[str]  # The convicted agent(s)
+    adjudicator: List[str]  # The judge or court
+    crime: List[str]  # The Crime for which the Defendant has been convicted
+    time: List[str]  # When the conviction takes place
+    place: List[str]  # Where the conviction takes place
 
+
+@dataclass
+class Sentence(Event):
+    """A Sentence Event takes place whenever the punishment (particularly
+    incarceration) for the Defendant of a Try Event is issued by a state
+    actor (a GPE, an Organization subpart or a Person representing them)
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str]  # The agent who is sentenced
+    adjudicator: List[str]  # The judge or court
+    crime: List[str]  # The Crime for which the Person is being sentenced
+    sentence: List[str]  # The sentence
+    time: List[str]  # The time of the sentencing Event
+    place: List[str]  # Where the sentencing takes place
+
+
+@dataclass
+class Fine(Event):
+    """A Fine Event takes place whenever a state actor issues a financial punishment
+    to a GPE, Person or Organization Entity, typically as a result of court
+    proceedings.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    entity: List[str]  # The Entity that was fined
+    adjudicator: List[str]  # The Entity doing the finding
+    money: List[str]  # The amount of the fine
+    crime: List[str]  # The Crime (or offence) for which the Entity is being fined
+    time: List[str]  # When the fining Event takes place
+    place: List[str]  # Where the fining Event takes place
+
+
+@dataclass
+class Execute(Event):
+    """An Execute Event occurs whenever the life of a Person is taken by a state
+    actor (a GPE, its Organization subparts, or Person representatives).
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    person: List[str]  # The person executed
+    agent: List[str]  # The agent responsible for carrying out the execution
+    crime: List[str]  # The Crime for which the Person is being executed
+    time: List[str]  # When te execution takes place
+    place: List[str]  # Where the execution takes place
+
+
+@dataclass
+class Extradite(Event):
+    """An Extradite Event occurs whenever a Person is sent by a state actor from
+    one Place (normally the GPE associated with the state actor, but sometimes a
+    Facility under its control) to another place (Location, GPE or Facility) for
+    the purposes of legal proceedings there.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    agent: List[str]  # The extraditing agent
+    person: List[str]  # The person being extradited
+    destination: List[str]  # Where the person is extradited to, the destination
+    origin: List[str]  # The original location of the person being extradited
+    crime: List[str]  # The Crime for which the Person is being extradited
+    time: List[str]  # When the extradition takes place
+
+
+@dataclass
+class Acquit(Event):
+    """An Acquit Event occurs whenever a trial ends but fails to produce a conviction.
+    This will include cases where the charges are dropped by the Prosecutor.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str]  # The agent being acquitted
+    adjudicator: List[str]  # The judge or court
+    crime: List[str]  # The Crime of which the Defendant is being acquitted
+    time: List[str]  # When the acquittal takes place
+    place: List[str]  # Where the acquittal takes place
+
+
+@dataclass
+class Pardon(Event):
+    """A Pardon Event occurs whenever a head-of-state or their appointed
+    representative lifts a sentence imposed by the judiciary.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str]  # The agent being pardoned
+    adjudicator: List[str]  # The state official who does the pardoning
+    crime: List[str]  # The Crime of which the Defendant is being pardoned
+    time: List[str]  # When the pardon takes place
+    place: List[str]  # Where the pardon takes place
+
+
+@dataclass
+class Appeal(Event):
+    """An APPEAL Event occurs whenever the decision of a court is taken to a higher
+    court for review.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    defendant: List[str]  # The defendant
+    prosecutor: List[str]  # The prosecuting agent
+    adjudicator: List[str]  # The judge or court
+    crime: List[str]  # The Crime which is the subject of the appeal
+    time: List[str]  # When the appeal takes place
+    place: List[str]  # Where the appeal takes place
+
+
+EVENT_DEFINITIONS: List[Event] = [
+    BeBorn,
+    Marry,
+    Divorce,
+    Injure,
+    Die,
+    Transport,
+    TransferOwnership,
+    TransferMoney,
+    StartOrg,
+    MergeOrg,
+    DeclareBankruptcy,
+    EndOrg,
+    Attack,
+    Demonstrate,
+    Meet,
+    PhoneWrite,
+    StartPosition,
+    EndPosition,
+    Nominate,
+    Elect,
+    ArrestJail,
+    ReleaseParole,
+    TrialHearing,
+    ChargeIndict,
+    Sue,
+    Convict,
+    Sentence,
+    Fine,
+    Execute,
+    Extradite,
+    Acquit,
+    Pardon,
+    Appeal,
+]
