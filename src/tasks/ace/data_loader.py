@@ -51,7 +51,7 @@ class ACEDatasetLoader(DatasetLoader):
         "Place": "place",
         "Time-After": "time",
         "Time-At-Begginning": "time",
-        "Time-At-Beginning": "time", # A bug on the data
+        "Time-At-Beginning": "time",  # A bug on the data
         "Time-At-End": "time",
         "Time-Before": "time",
         "Time-Ending": "time",
@@ -299,7 +299,7 @@ class ACEDatasetLoader(DatasetLoader):
                     for rel in line["relation_mentions"]
                     if rel["relation_subtype"] in self.RELATION_TO_CLASS_MAPPING
                 ]
-                events = []  # TODO: Load events once the prompts are defined
+                events = []
                 for event in line["event_mentions"]:
                     if event["event_type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
@@ -319,8 +319,6 @@ class ACEDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            print(event['event_type'])
-                            print(argument['role'])
                             raise ValueError(
                                 f"Argument {event['event_type']}:{argument['role']} not"
                                 " found!"
