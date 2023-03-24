@@ -48,7 +48,6 @@ sentence = "The Chinese and Rongovian delegations met at the sidelines of the Be
 Output (LLaMA 65B zero-shot)
 ```python
 # The following list contains the events instances that happens in the sentence defined above
-—————————
 events = [
     EnergyAndInfrastructureEvent(
         meeting_attendees=["Chinese", "Rongovian"],
