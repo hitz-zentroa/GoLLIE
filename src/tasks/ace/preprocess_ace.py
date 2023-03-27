@@ -1192,9 +1192,11 @@ def split_data(input_file: str, output_dir: str, split_path: str):
 
     # split the dataset
     with open(input_file, "r", encoding="utf-8") as r, open(
-        os.path.join(output_dir, "train.event.json"), "w"
-    ) as w_train, open(os.path.join(output_dir, "dev.event.json"), "w") as w_dev, open(
-        os.path.join(output_dir, "test.event.json"), "w"
+        os.path.join(output_dir, "train.sentence.json"), "w"
+    ) as w_train, open(
+        os.path.join(output_dir, "dev.sentence.json"), "w"
+    ) as w_dev, open(
+        os.path.join(output_dir, "test.sentence.json"), "w"
     ) as w_test:
         for line in r:
             inst = json.loads(line)

@@ -1,0 +1,52 @@
+{
+    "dataset_name": "ACE05",
+    "tasks": [
+        "NER",
+        "VER",
+        "RE",
+        "EE"
+    ],
+    "dataloader_cls": "src.tasks.ace.data_loader.ACEDatasetLoader",
+    "sampler_cls": "src.tasks.ace.data_loader.ACESampler",
+    "train_file": "data/ace05/train.sentence.json",
+    "dev_file": "data/ace05/dev.sentence.json",
+    "test_file": "data/ace05/test.sentence.json",
+    "prompt_template": "templates/prompt.txt",
+    "seed": 0,
+    "task_configuration": {
+        "NER": {
+            "group_by": "sentence",
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.ACEEntityScorer"
+        },
+        "VER": {
+            "group_by": "sentence",
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.ACEValueScorer"
+        },
+        "RE": {
+            "group_by": "sentence",
+            "parallel_instances": [
+                2,
+                5
+            ],
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.ACERelationScorer"
+        },
+        "EE": {
+            "group_by": "sentence",
+            "parallel_instances": [
+                2,
+                5
+            ],
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.ACEEventScorer"
+        }
+    }
+}

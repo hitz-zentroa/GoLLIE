@@ -1,0 +1,14 @@
+# The following lines describe the task definition
+{%- for definition in guidelines %}
+{{ definition }}
+{%- endfor %}
+
+# This is the text to analyze
+text = "{{ text }}"
+
+# The annotation instances that take place in the text above are listed here
+result = [
+{%- for ann in annotations %}
+    {{ ann }}
+{%- endfor %}
+]

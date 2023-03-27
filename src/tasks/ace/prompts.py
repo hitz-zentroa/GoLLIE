@@ -880,7 +880,7 @@ EVENT_DEFINITIONS: List[Event] = [
     ChargeIndict,
     Sue,
     Convict,
-    Sentence,
+    SentenceAct,
     Fine,
     Execute,
     Extradite,

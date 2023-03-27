@@ -1,9 +1,13 @@
-from typing import Any, Dict, Union
+import math
+from typing import Any, Dict, Tuple, Union
+from jinja2 import Template
 from ..utils_typing import DatasetLoader, Sampler
 from .prompts import *
 
 import json
 import inspect
+import random
+from copy import deepcopy
 
 
 class ACEDatasetLoader(DatasetLoader):
@@ -254,7 +258,7 @@ class ACEDatasetLoader(DatasetLoader):
         },
     }
 
-    def __init__(self, path: str, group_by: str = "sentence") -> None:
+    def __init__(self, path: str, group_by: str = "sentence", **kwargs) -> None:
         assert group_by in [
             "sentence",
             "document",
@@ -343,21 +347,126 @@ class ACEDatasetLoader(DatasetLoader):
             return self.elements[idx]
 
 
-class ACEEntityAndValueSampler(Sampler):
-    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
-        raise NotImplementedError("TODO")
+class ACESampler(Sampler):
+    def __init__(
+        self,
+        dataset_loader: ACEDatasetLoader,
+        task: str = None,
+        split: str = "train",
+        parallel_instances: Union[int, Tuple[int, int]] = 1,
+        max_guidelines: int = -1,
+        guideline_dropout: float = 0.0,
+        seed: float = 0,
+        prompt_template: str = "templates/prompt.txt",
+        ensure_positives_on_train: bool = False,
+        **kwargs,
+    ) -> None:
+        self.loader = dataset_loader
+        assert task in [
+            "NER",
+            "VER",
+            "RE",
+            "EE",
+        ], f"{task} must be either 'NER', 'VER', 'RE', 'EE'."
+        self.task = task
+        assert split in [
+            "train",
+            "dev",
+            "test",
+        ], f"{split} must be either 'train', 'dev' or 'test'."
+        self.split = split
+        if isinstance(parallel_instances, int):
+            parallel_instances = (1, 1)
+        self.parallel_instances = tuple(parallel_instances)
+        self.guideline_dropout = guideline_dropout
+        self.seed = seed
+        self.task_definitions, self.task_target = {
+            "NER": (ENTITY_DEFINITIONS, "entities"),
+            "VER": (VALUE_DEFINITIONS, "values"),
+            "RE": (RELATION_DEFINITIONS, "relations"),
+            "EE": (EVENT_DEFINITIONS, "events"),
+        }[self.task]
+        if max_guidelines < 0 or max_guidelines > len(self.task_definitions):
+            self.max_guidelines = len(self.task_definitions)
+        else:
+            self.max_guidelines = max_guidelines
 
+        with open(prompt_template, "rt") as f:
+            self.template = Template(f.read())
 
-class ACERelationSampler(Sampler):
-    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
-        raise NotImplementedError("TODO")
+    def __iter__(self):
+        random.seed(self.seed)
+        guidelines = [definition for definition in self.task_definitions]
+        instances = []
+        total_inst = random.randint(*self.parallel_instances)
+        for elem in self.loader:
+            if len(instances) == total_inst:
+                random.shuffle(guidelines)
+                splits = math.ceil(len(guidelines) / self.max_guidelines)
+                for i in range(splits):
+                    _guidelines = guidelines[
+                        i * self.max_guidelines : (i + 1) * self.max_guidelines
+                    ]
+                    # Apply guideline dropout
+                    if self.split == "train":
+                        _guidelines = [
+                            definition
+                            for definition in _guidelines
+                            if random.random() > self.guideline_dropout
+                        ]
+                    _text = " ".join([inst["text"] for inst in instances]).strip()
+                    _ann = [
+                        ann
+                        for inst in instances
+                        for ann in inst[self.task_target]
+                        if type(ann) in _guidelines
+                    ]
+                    yield {
+                        "ids": [inst["id"] for inst in instances],
+                        "labels": [ann.__repr__() for ann in _ann],
+                        "text": self.template.render(
+                            guidelines=[
+                                inspect.getsource(definition)
+                                for definition in _guidelines
+                            ],
+                            text=_text,
+                            annotations=_ann,
+                        ),
+                    }
+                instances = []
+                total_inst = random.randint(*self.parallel_instances)
 
+            instances.append(elem)
 
-class ACEEventSampler(Sampler):
-    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
-        raise NotImplementedError("TODO")
-
-
-class ACEMixedSampler(Sampler):
-    def __init__(self, dataset_loader: ACEDatasetLoader) -> None:
-        raise NotImplementedError("TODO")
+        if len(instances):
+            random.shuffle(guidelines)
+            splits = math.ceil(len(guidelines) / self.max_guidelines)
+            for i in range(splits):
+                _guidelines = guidelines[
+                    i * self.max_guidelines : (i + 1) * self.max_guidelines
+                ]
+                # Apply guideline dropout
+                if self.split == "train":
+                    _guidelines = [
+                        definition
+                        for definition in _guidelines
+                        if random.random() > self.guideline_dropout
+                    ]
+                _text = " ".join([inst["text"] for inst in instances]).strip()
+                _ann = [
+                    ann
+                    for inst in instances
+                    for ann in inst[self.task_target]
+                    if type(ann) in _guidelines
+                ]
+                yield {
+                    "ids": [inst["id"] for inst in instances],
+                    "labels": [ann.__repr__() for ann in _ann],
+                    "text": self.template.render(
+                        guidelines=[
+                            inspect.getsource(definition) for definition in _guidelines
+                        ],
+                        text=_text,
+                        annotations=_ann,
+                    ),
+                }
