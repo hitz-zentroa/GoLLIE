@@ -1,6 +1,5 @@
-from copy import deepcopy
 from typing import Any, Dict, List, Type, Union
-from .utils_typing import Scorer, Entity, Value
+from .utils_typing import Event, Relation, Scorer, Entity, Value
 
 
 class SpanScorer(Scorer):
@@ -47,9 +46,72 @@ class SpanScorer(Scorer):
 
         return {"precision": precision, "recall": recall, "f1-score": f1_score}
 
-    def _filter_valid_types(self, elems: List[Any]) -> List[Union[Entity, Value]]:
-        return [
-            elem
-            for elem in elems
-            if any(isinstance(elem, _type) for _type in self.valid_types)
-        ]
+
+class RelationScorer(SpanScorer):
+    """A general scorer implementation for relation identification and
+    classification tasks
+    """
+
+    valid_types: List[Type] = [Relation]
+
+
+class EventScorer(Scorer):
+    """A general scorer implementation for event and argument extraction."""
+
+    valid_types: List[Type] = [Event]
+
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
+        if len(reference) and not isinstance(reference[0], list):
+            reference = [reference]
+        if len(predictions) and not isinstance(predictions[0], list):
+            predictions = [predictions]
+
+        assert len(reference) == len(predictions), (
+            f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount"
+            " must be equal."
+        )
+        e_tp = e_total_pos = e_total_pre = 0
+        a_tp = a_total_pos = a_total_pre = 0
+        for ref, pre in zip(reference, predictions):
+            ref = self._filter_valid_types(ref)
+            pre = self._filter_valid_types(pre)
+
+            e_total_pos += len(ref)
+            for event in ref:
+                a_total_pos += len(event)
+
+            e_total_pre += len(pre)
+            for pre_event in pre:
+                a_total_pre += len(pre_event)
+                if pre_event in ref:
+                    ref_event = ref.pop(ref.index(event))
+                    e_tp += 1
+                    a_tp += len(ref_event & pre_event)
+
+        e_precision = e_tp / e_total_pre if e_total_pre > 0.0 else 0.0
+        a_precision = a_tp / a_total_pre if a_total_pre > 0.0 else 0.0
+        e_recall = e_tp / e_total_pos if e_total_pos > 0.0 else 0.0
+        a_recall = a_tp / a_total_pos if a_total_pos > 0.0 else 0.0
+        e_f1_score = (
+            2 * e_precision * e_recall / (e_precision + e_recall)
+            if (e_precision + e_recall) > 0.0
+            else 0.0
+        )
+        a_f1_score = (
+            2 * a_precision * a_recall / (a_precision + a_recall)
+            if (a_precision + a_recall) > 0.0
+            else 0.0
+        )
+
+        return {
+            "events": {
+                "precision": e_precision,
+                "recall": e_recall,
+                "f1-score": e_f1_score,
+            },
+            "arguments": {
+                "precision": a_precision,
+                "recall": a_recall,
+                "f1-score": a_f1_score,
+            },
+        }
