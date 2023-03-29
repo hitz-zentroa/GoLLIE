@@ -14,22 +14,36 @@ import bitsandbytes as bnb
 from tabulate import tabulate
 import argparse
 import torch
+import string
+
+
+def generate_random_sentence(sentence_length: int = 5120):
+    sentence = ""
+    for i in range(sentence_length):
+        # generate a random word of length between 1 and 10 characters
+        word = "".join(
+            random.choice(string.ascii_lowercase) for i in range(random.randint(1, 10))
+        )
+        sentence += word + " "
+    return sentence
 
 
 class TestDataset(Dataset):
     def __init__(self, tokenizer: PreTrainedTokenizerBase, seq_len: int, data_len: int):
         self.data = []
         for i in range(data_len):
-            inputs_ids = random.sample(range(0, len(tokenizer) - 1), seq_len)
-            self.data.append(
-                BatchEncoding(
-                    {
-                        "input_ids": inputs_ids,
-                        "attention_mask": [1] * seq_len,
-                        "labels": inputs_ids,
-                    }
-                )
+            model_inputs = tokenizer(
+                generate_random_sentence(),
+                return_tensors=None,
+                padding="max_length",
+                truncation=True,
+                max_length=seq_len,
+                add_special_tokens=True,
             )
+
+            model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+            self.data.append(model_inputs)
 
     def __len__(self):
         return len(self.data)
