@@ -1,12 +1,82 @@
 import math
 from typing import Any, Dict, Tuple, Union
 from jinja2 import Template
+
+from src.tasks.ace.prompts import (
+    ENTITY_DEFINITIONS,
+    EVENT_DEFINITIONS,
+    GPE,
+    RELATION_DEFINITIONS,
+    VALUE_DEFINITIONS,
+    Acquit,
+    Appeal,
+    ArrestJail,
+    Attack,
+    BeBorn,
+    Business,
+    ChargeIndict,
+    CitizenResidentReligionEthnicity,
+    ContactInfo,
+    Convict,
+    Crime,
+    DeclareBankruptcy,
+    Demonstrate,
+    Die,
+    Divorce,
+    Elect,
+    Employment,
+    EndOrg,
+    EndPosition,
+    Execute,
+    Extradite,
+    Facility,
+    Family,
+    Fine,
+    Founder,
+    Injure,
+    InvestorShareholder,
+    JobTitle,
+    LastingPersonal,
+    Located,
+    Location,
+    Marry,
+    Meet,
+    Membership,
+    MergeOrg,
+    Near,
+    Nominate,
+    Numeric,
+    OrgLocationOrigin,
+    Organization,
+    Ownership,
+    Pardon,
+    Person,
+    PhoneWrite,
+    ReleaseParole,
+    Sentence,
+    SentenceAct,
+    SportsAffiliation,
+    StartOrg,
+    StartPosition,
+    StudentAlum,
+    Subsidiary,
+    Sue,
+    Time,
+    TransferMoney,
+    TransferOwnership,
+    Transport,
+    TrialHearing,
+    UserOwnerInventorManufacturer,
+    Vehicle,
+    Weapon,
+    Geographical,
+)
 from ..utils_typing import DatasetLoader, Sampler
-from .prompts import *
 
 import json
 import inspect
 import random
+import numpy as np
 
 
 class ACEDatasetLoader(DatasetLoader):
@@ -405,66 +475,38 @@ class ACESampler(Sampler):
         self.dataset_name = dataset_name
         self.scorer_cls = scorer
 
-    def __iter__(self):
-        random.seed(self.seed)
-        guidelines = [definition for definition in self.task_definitions]
-        instances = []
-        total_inst = random.randint(*self.parallel_instances)
-        prev_id = None
-        for elem in self.loader:
-            # Prevent mixing sentences from different documents. TODO: generalize
-            if (len(instances) == total_inst) or (
-                prev_id is not None and elem["doc_id"] != prev_id
-            ):
-                random.shuffle(guidelines)
-                splits = math.ceil(len(guidelines) / self.max_guidelines)
-                for i in range(splits):
-                    _guidelines = guidelines[
-                        i * self.max_guidelines : (i + 1) * self.max_guidelines
-                    ]
-                    _ann = [
-                        ann
-                        for inst in instances
-                        for ann in inst[self.task_target]
-                        if type(ann) in _guidelines
-                    ]
-                    _text = " ".join([inst["text"] for inst in instances]).strip()
-                    # Apply guideline dropout
-                    if self.split == "train":
-                        positive_guidelines = {type(ann) for ann in _ann}
-                        _guidelines = [
-                            definition
-                            for definition in _guidelines
-                            if random.random() > self.guideline_dropout
-                            or (
-                                self.ensure_positives_on_train
-                                and definition in positive_guidelines
-                            )
-                        ]
-
-                    yield {
-                        "ids": [inst["id"] for inst in instances],
-                        "task_id": f"{self.dataset_name}_{self.task}",
-                        "scorer_cls": self.scorer_cls,
-                        "labels": [ann.__repr__() for ann in _ann],
-                        "text": self.template.render(
-                            guidelines=[
-                                inspect.getsource(definition)
-                                for definition in _guidelines
-                            ],
-                            text=_text,
-                            annotations=_ann,
-                        ),
-                    }
-                instances = []
-                total_inst = random.randint(*self.parallel_instances)
-
-            instances.append(elem)
-            prev_id = elem["doc_id"]
-
-        if len(instances):
-            _guidelines = guidelines[
-                i * self.max_guidelines : (i + 1) * self.max_guidelines
+    def _sample(self, instances):
+        if self.split == "train":
+            positive_guidelines = {
+                type(ann) for inst in instances for ann in inst[self.task_target]
+            }
+            # Assign a probability distribution that helps positive classes
+            # if ensure_positives_on_train is True
+            p = np.asarray(
+                [
+                    (
+                        5.0
+                        if _def in positive_guidelines
+                        and self.ensure_positives_on_train
+                        else 0.0
+                    )
+                    for _def in self.task_definitions
+                ]
+            )
+            p += 1.0 / p.shape[0]
+            p /= p.sum()
+            _guidelines = np.random.choice(
+                np.asarray(self.task_definitions),
+                size=(self.max_guidelines,),
+                replace=False,
+                p=p,
+            ).tolist()
+            # Apply guideline dropout
+            _guidelines = [
+                _def
+                for _def in _guidelines
+                if random.random() > self.guideline_dropout
+                or (_def in positive_guidelines and self.ensure_positives_on_train)
             ]
             _ann = [
                 ann
@@ -473,24 +515,11 @@ class ACESampler(Sampler):
                 if type(ann) in _guidelines
             ]
             _text = " ".join([inst["text"] for inst in instances]).strip()
-            # Apply guideline dropout
-            if self.split == "train":
-                positive_guidelines = {type(ann) for ann in _ann}
-                _guidelines = [
-                    definition
-                    for definition in _guidelines
-                    if random.random() > self.guideline_dropout
-                    or (
-                        self.ensure_positives_on_train
-                        and definition in positive_guidelines
-                    )
-                ]
-
             yield {
                 "ids": [inst["id"] for inst in instances],
                 "task_id": f"{self.dataset_name}_{self.task}",
-                "labels": [ann.__repr__() for ann in _ann],
                 "scorer_cls": self.scorer_cls,
+                "labels": [ann.__repr__() for ann in _ann],
                 "text": self.template.render(
                     guidelines=[
                         inspect.getsource(definition) for definition in _guidelines
@@ -499,3 +528,54 @@ class ACESampler(Sampler):
                     annotations=_ann,
                 ),
             }
+        else:
+            guidelines = [definition for definition in self.task_definitions]
+            random.shuffle(guidelines)
+            splits = math.ceil(len(guidelines) / self.max_guidelines)
+            for i in range(splits):
+                _guidelines = guidelines[
+                    i * self.max_guidelines : (i + 1) * self.max_guidelines
+                ]
+                _ann = [
+                    ann
+                    for inst in instances
+                    for ann in inst[self.task_target]
+                    if type(ann) in _guidelines
+                ]
+                _text = " ".join([inst["text"] for inst in instances]).strip()
+
+                yield {
+                    "ids": [inst["id"] for inst in instances],
+                    "task_id": f"{self.dataset_name}_{self.task}",
+                    "scorer_cls": self.scorer_cls,
+                    "labels": [ann.__repr__() for ann in _ann],
+                    "text": self.template.render(
+                        guidelines=[
+                            inspect.getsource(definition) for definition in _guidelines
+                        ],
+                        text=_text,
+                        annotations=_ann,
+                    ),
+                }
+
+    def __iter__(self):
+        random.seed(self.seed)
+        instances = []
+        total_inst = random.randint(*self.parallel_instances)
+        prev_id = None
+        for elem in self.loader:
+            # Prevent mixing sentences from different documents. TODO: generalize
+            if (len(instances) == total_inst) or (
+                prev_id is not None and elem["doc_id"] != prev_id
+            ):
+                for samp in self._sample(instances):
+                    yield samp
+                instances = []
+                total_inst = random.randint(*self.parallel_instances)
+
+            instances.append(elem)
+            prev_id = elem["doc_id"]
+
+        if len(instances):
+            for samp in self._sample(instances):
+                yield samp
