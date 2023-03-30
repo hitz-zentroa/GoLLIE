@@ -11,19 +11,19 @@ def dataclass(
     *,
     init=True,
     repr=True,
-    eq=True,
+    eq=False,
     order=False,
     unsafe_hash=False,
     frozen=False,
 ):
     return org_dataclass(
         cls,
-        init=True,
-        repr=True,
-        eq=False,
-        order=False,
-        unsafe_hash=False,
-        frozen=False,
+        init=init,
+        repr=repr,
+        eq=eq,
+        order=order,
+        unsafe_hash=unsafe_hash,
+        frozen=frozen,
     )
 
 
