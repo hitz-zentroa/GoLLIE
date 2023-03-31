@@ -2,10 +2,10 @@ from model.load_model import load_model_for_training
 from accelerate import Accelerator
 from torch.utils.data import DataLoader, Dataset
 from transformers import (
-    BatchEncoding,
     PreTrainedTokenizerBase,
     DataCollatorForSeq2Seq,
     PreTrainedModel,
+    BatchEncoding,
 )
 import random
 from torch.optim import AdamW
@@ -15,6 +15,8 @@ from tabulate import tabulate
 import argparse
 import torch
 import string
+import logging
+import sys
 
 
 def generate_random_sentence(sentence_length: int = 5120):
@@ -22,7 +24,7 @@ def generate_random_sentence(sentence_length: int = 5120):
     for i in range(sentence_length):
         # generate a random word of length between 1 and 10 characters
         word = "".join(
-            random.choice(string.ascii_lowercase) for i in range(random.randint(1, 10))
+            random.choice(string.ascii_lowercase) for _ in range(random.randint(1, 10))
         )
         sentence += word + " "
     return sentence
@@ -32,18 +34,30 @@ class TestDataset(Dataset):
     def __init__(self, tokenizer: PreTrainedTokenizerBase, seq_len: int, data_len: int):
         self.data = []
         for i in range(data_len):
-            model_inputs = tokenizer(
-                generate_random_sentence(),
-                return_tensors=None,
-                padding="max_length",
-                truncation=True,
-                max_length=seq_len,
-                add_special_tokens=True,
+            # model_inputs = tokenizer(
+            #    generate_random_sentence(),
+            #    return_tensors=None,
+            #    padding="max_length",
+            #    truncation=True,
+            #    max_length=seq_len,
+            #    add_special_tokens=True,
+            # )
+
+            # model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+            # self.data.append(model_inputs)
+
+            inputs_ids = random.sample(range(100, len(tokenizer) - 100), seq_len)
+
+            self.data.append(
+                BatchEncoding(
+                    {
+                        "input_ids": inputs_ids,
+                        "attention_mask": [1] * seq_len,
+                        "labels": inputs_ids.copy(),
+                    }
+                )
             )
-
-            model_inputs["labels"] = model_inputs["input_ids"].copy()
-
-            self.data.append(model_inputs)
 
     def __len__(self):
         return len(self.data)
@@ -55,9 +69,9 @@ class TestDataset(Dataset):
 def get_dataloader(
     tokenizer: PreTrainedTokenizerBase,
     batch_size: int,
-    data_len: int,
+    seq_len: int,
 ):
-    dataset = TestDataset(tokenizer, batch_size, data_len)
+    dataset = TestDataset(tokenizer=tokenizer, seq_len=seq_len, data_len=batch_size)
     data_collator = DataCollatorForSeq2Seq(
         tokenizer, padding=True, pad_to_multiple_of=8, return_tensors="pt"
     )
@@ -73,6 +87,7 @@ def get_dataloader(
 def run_training_test(
     model: PreTrainedModel,
     tokenizer: PreTrainedTokenizerBase,
+    accelerator: Accelerator,
     seq_len: int,
     batch_size: int,
     use_lora: bool,
@@ -85,12 +100,10 @@ def run_training_test(
         "AdaFactor",
     ], f"Optimizer {optimizer_name} not supported. Choose between adamW and AdaFactor."
 
-    accelerator = Accelerator()
-
     model.config.max_length = seq_len
 
     dataloader = get_dataloader(
-        tokenizer=tokenizer, batch_size=batch_size, data_len=seq_len
+        tokenizer=tokenizer, batch_size=batch_size, seq_len=seq_len
     )
 
     if int8_quantization:
@@ -116,10 +129,18 @@ def run_training_test(
                 clip_threshold=1.0,
             )
 
-    model, optimizer, dataloader = accelerator.prepare(model, optimizer, dataloader)
+    optimizer, dataloader = accelerator.prepare(optimizer, dataloader)
+
     model.train()
+
     for i, batch in enumerate(dataloader):
         optimizer.zero_grad()
+        # print("Data devices:")
+        # print(batch.input_ids.device)
+        # print(batch.attention_mask.device)
+        # print(batch.labels.device)
+        # print("Model devices:")
+        # print(model.device)
         outputs = model(
             input_ids=batch.input_ids,
             labels=batch.labels,
@@ -147,14 +168,14 @@ def get_params():
         "--seq_len",
         type=int,
         nargs="+",
-        default=[512, 1024, 1536, 2048, 5120],
+        default=[128, 256, 512, 1024, 1536, 2048, 4096],
         help="Sequence lengths to test",
     )
     parser.add_argument(
         "--batch_size",
         type=int,
         nargs="+",
-        default=[1, 4, 8, 16, 32, 64],
+        default=[1, 4, 8, 16, 32, 64, 128],
         help="Batch sizes to test",
     )
     parser.add_argument(
@@ -177,7 +198,7 @@ def get_params():
     parser.add_argument(
         "--learning_rate",
         type=float,
-        default=1e-4,
+        default=5e-5,
         help="Learning rate",
     )
     return parser.parse_args()
@@ -190,32 +211,36 @@ def main():
 
     result_matrix = [[0 for i in range(len(batch_sizes))] for j in range(len(seq_lens))]
 
-    print(f"***** Experiment parameters *****")
-    print(f"Model name or path: {args.model_name_or_path}")
-    print(f"Sequence lengths: {seq_lens}")
-    print(f"Batch sizes: {batch_sizes}")
-    print(f"Use LORA: {args.use_lora}")
-    print(f"Use int8 quantization: {args.int8_quantization}")
-    print(f"Optimizer: {args.optimizer_name}")
-    print(f"Learning rate: {args.learning_rate}")
-    print(f"*********************************")
-    print()
-    print(f"Loading model {args.model_name_or_path}...")
+    logging.info(f"***** Experiment parameters *****")
+    logging.info(f"Model name or path: {args.model_name_or_path}")
+    logging.info(f"Sequence lengths: {seq_lens}")
+    logging.info(f"Batch sizes: {batch_sizes}")
+    logging.info(f"Use LORA: {args.use_lora}")
+    logging.info(f"Use int8 quantization: {args.int8_quantization}")
+    logging.info(f"Optimizer: {args.optimizer_name}")
+    logging.info(f"Learning rate: {args.learning_rate}")
+    logging.info(f"*********************************")
+    logging.info(f"Loading model {args.model_name_or_path}...")
     model, tokenizer = load_model_for_training(
         model_weights_name_or_path=args.model_name_or_path,
         use_lora=args.use_lora,
         int8_quantization=args.int8_quantization,
     )
-    print("Model loaded.")
-    print()
+    logging.info("Model loaded.")
+
+    accelerator = Accelerator()
+    model = accelerator.prepare(model)
 
     for i, seq_len in enumerate(seq_lens):
         for j, batch_size in enumerate(batch_sizes):
-            print(f"Running test with seq_len={seq_len} and batch_size={batch_size}...")
+            logging.info(
+                f"Running test with seq_len={seq_len} and batch_size={batch_size}..."
+            )
             try:
                 result_matrix[i][j] = run_training_test(
                     model=model,
                     tokenizer=tokenizer,
+                    accelerator=accelerator,
                     seq_len=seq_len,
                     batch_size=batch_size,
                     use_lora=args.use_lora,
@@ -223,19 +248,18 @@ def main():
                     optimizer_name=args.optimizer_name,
                     learning_rate=args.learning_rate,
                 )
-                print("Test passed.")
+                logging.info("Test passed.")
             except RuntimeError as e:
                 if "out of memory" in str(e):
-                    print("| WARNING: ran out of memory, retrying batch")
+                    logging.info("| WARNING: ran out of memory, retrying batch")
                     for p in model.parameters():
                         if p.grad is not None:
                             del p.grad  # free some memory
                     torch.cuda.empty_cache()
-                    print("Test failed.")
+                    logging.info("Test failed.")
                     continue
                 else:
                     raise e
-            print()
 
     table = tabulate(
         tabular_data=result_matrix, headers=batch_sizes, showindex=seq_lens

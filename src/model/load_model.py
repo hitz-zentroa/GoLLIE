@@ -109,12 +109,6 @@ def load_model_for_training(
         f" trainable%: {round(trainable_percentage,6)}\n"
     )
 
-    # if torch.__version__ >= "2" and sys.platform != "win32":
-    #    logging.info(
-    #        "Pytorch 2 detected, we will call torch.compile for faster training"
-    #    )
-    #    model = torch.compile(model)
-
     return model, tokenizer
 
 
@@ -165,11 +159,5 @@ def load_model_for_inference(
             f"Loading pretrained LORA weights from {lora_weights_name_or_path}"
         )
         model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
-
-    # if torch.__version__ >= "2" and sys.platform != "win32":
-    #    logging.info(
-    #        "Pytorch 2 detected, we will call torch.compile for faster training"
-    #    )
-    #    model = torch.compile(model)
 
     return model, tokenizer
