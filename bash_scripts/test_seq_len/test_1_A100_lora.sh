@@ -19,5 +19,27 @@ cd ../..
 accelerate launch --mixed_precision fp16 src/test_context_batch_size.py \
 --optimizer_name adamW \
 --use_lora \
---int8_quantization
+--int8_quantization \
+--model_name_or_path /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/65B/
+
+accelerate launch --mixed_precision fp16 src/test_context_batch_size.py \
+--optimizer_name adamW \
+--use_lora \
+--int8_quantization \
+--model_name_or_path /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/30B/
+
+accelerate launch --mixed_precision fp16 src/test_context_batch_size.py \
+--optimizer_name adamW \
+--use_lora \
+--int8_quantization \
+--model_name_or_path /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/13B/
+
+accelerate launch --mixed_precision fp16 src/test_context_batch_size.py \
+--optimizer_name adamW \
+--use_lora \
+--int8_quantization \
+--model_name_or_path /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
+
+
+
 
