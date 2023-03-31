@@ -87,6 +87,8 @@ def run_training_test(
 
     accelerator = Accelerator()
 
+    model.config.max_length = seq_len
+
     dataloader = get_dataloader(
         tokenizer=tokenizer, batch_size=batch_size, data_len=seq_len
     )
