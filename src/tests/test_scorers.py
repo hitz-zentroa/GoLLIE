@@ -36,7 +36,7 @@ class TestEntityScorers(unittest.TestCase):
         # recall -> 2 / 5 = 0.4
         # F1 -> 2 * 0.5 * 0.4 / (0.5 + 0.4) = 0.5
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions),
+            scorer(reference=reference, predictions=predictions)["entities"],
             {"precision": 0.5, "recall": 0.4, "f1-score": 0.4444444444444445},
         )
 

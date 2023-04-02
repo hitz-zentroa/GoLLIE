@@ -13,7 +13,7 @@ class SpanScorer(Scorer):
         self,
         reference: List[Union[Entity, Value]],
         predictions: List[Union[Entity, Value]],
-    ) -> Dict[str, float]:
+    ) -> Dict[str, Dict[str, float]]:
         if len(reference) and not isinstance(reference[0], list):
             reference = [reference]
         if len(predictions) and not isinstance(predictions[0], list):
@@ -44,7 +44,9 @@ class SpanScorer(Scorer):
             else 0.0
         )
 
-        return {"precision": precision, "recall": recall, "f1-score": f1_score}
+        return {
+            "spans": {"precision": precision, "recall": recall, "f1-score": f1_score}
+        }
 
 
 class RelationScorer(SpanScorer):
@@ -54,13 +56,19 @@ class RelationScorer(SpanScorer):
 
     valid_types: List[Type] = [Relation]
 
+    def __call__(
+        self, reference: List[Relation], predictions: List[Relation]
+    ) -> Dict[str, Dict[str, float]]:
+        output = super().__call__(reference, predictions)
+        return {"relations": output["spans"]}
+
 
 class EventScorer(Scorer):
     """A general scorer implementation for event and argument extraction."""
 
     valid_types: List[Type] = [Event]
 
-    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
         if len(reference) and not isinstance(reference[0], list):
             reference = [reference]
         if len(predictions) and not isinstance(predictions[0], list):

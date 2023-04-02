@@ -75,7 +75,7 @@ class Event:
         attrs = {
             attr: []
             for attr, _ in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr == "mention")
+            if not (attr.startswith("__") or attr in ["mention", "subtype"])
         }
         if self == other:
             for attr in attrs.keys():
