@@ -6,9 +6,8 @@ from transformers import (
 )
 from typing import Optional
 import logging
-import torch
-import sys
 from .model_utils import get_trainable_parameters
+import os
 
 
 def load_model_for_training(
@@ -42,11 +41,11 @@ def load_model_for_training(
             " in Int8 without LoRA."
         )
     device_map = "auto"
-    # world_size = int(os.environ.get("WORLD_SIZE", 1))
-    # ddp = world_size != 1
-    # if ddp:
-    #    device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-    # logging.info(f"Device map: {device_map}")
+    world_size = int(os.environ.get("WORLD_SIZE", 1))
+    ddp = world_size != 1
+    if ddp:
+        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
+    logging.info(f"Device map: {device_map}")
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
     model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
@@ -55,7 +54,8 @@ def load_model_for_training(
         device_map=device_map if int8_quantization else None,
     )
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
-        model_weights_name_or_path
+        model_weights_name_or_path,
+        add_eos_token=True,
     )
 
     if tokenizer.pad_token_id is None:
@@ -113,14 +113,14 @@ def load_model_for_training(
 
 
 def load_model_for_inference(
-    llama_weights_path: str,
+    weights_path: str,
     int8_quantization: bool = False,
     lora_weights_name_or_path: Optional[str] = None,
 ) -> (PreTrainedModel, PreTrainedTokenizerBase):
     """
     Load any Decoder model for inference.
-    :param llama_weights_path: The path to your local Llama model weights and tokenizer.
-                                You can also provide a huggingface hub model name if they are available.
+    :param weights_path: The path to your local model weights and tokenizer.
+                                You can also provide a huggingface hub model name.
     :param int8_quantization: Whether to use int8 quantization.
                               Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
     :param lora_weights_name_or_path: If the model has been trained with LoRA, path or huggingface hub name to the
@@ -129,26 +129,26 @@ def load_model_for_inference(
     """
 
     device_map = "auto"
-    # world_size = int(os.environ.get("WORLD_SIZE", 1))
-    # ddp = world_size != 1
-    # if ddp:
-    #    device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-    # logging.info(f"Device map: {device_map}")
+    world_size = int(os.environ.get("WORLD_SIZE", 1))
+    ddp = world_size != 1
+    if ddp:
+        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
+    logging.info(f"Device map: {device_map}")
 
-    logging.info(f"Loading Llama model from {llama_weights_path}")
+    logging.info(f"Loading model from {weights_path}")
     model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
-        pretrained_model_name_or_path=llama_weights_path,
+        pretrained_model_name_or_path=weights_path,
         load_in_8bit=int8_quantization,
         device_map=device_map if int8_quantization else None,
     )
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
-        llama_weights_path
+        weights_path,
+        add_eos_token=True,
     )
 
     if tokenizer.pad_token_id is None:
         logging.warning(
-            "LlaMA model does not have a pad token, we will use the ukn token as pad"
-            " token."
+            "Model does not have a pad token, we will use the ukn token as pad token."
         )
         tokenizer.pad_token_id = tokenizer.unk_token_id
 
