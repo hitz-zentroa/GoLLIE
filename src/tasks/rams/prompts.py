@@ -11,8 +11,8 @@ https://github.com/raspberryice/gen-arg/blob/main/aida_ontology_cleaned.csv
 
 @dataclass
 class ArtifactFailure(Event):
-    """An ArtifactFailure Event occurs whenever a (mechanical) Artifact failed
-    due to some Instrument at some Place.
+    """An ArtifactFailure (artifact) Event occurs whenever a (mechanical) Artifact
+    failed due to some Instrument at some Place.
 
     The possible Event subtypes are: "MechanicalFailure" or None.
     """
@@ -26,8 +26,8 @@ class ArtifactFailure(Event):
 
 @dataclass
 class DamageDestroy(Event):
-    """A DamageDestroy Event occurs when an Artifact is damaged or destroyed by
-    some Agent (damager or destroyer) using an Instrument at some Place.
+    """A DamageDestroy (conflict) Event occurs when an Artifact is damaged or destroyed
+    by some Agent (damager or destroyer) using an Instrument at some Place.
 
     The possible Event subtypes are: "Damage", "Destroy" or None.
     """
@@ -42,7 +42,7 @@ class DamageDestroy(Event):
 
 @dataclass
 class Attack(Event):
-    """An Attack Event occurs when an Attacker attacks a Target with some
+    """An Attack (conflict) Event occurs when an Attacker attacks a Target with some
     Instrument at some Place.
 
     The possible Event subtypes are: "AirStrikeMissileStrike",
@@ -62,8 +62,8 @@ class Attack(Event):
 
 @dataclass
 class Coup(Event):
-    """A Coup Event occurs when a DeposedEntity was desposed by a DeposingEntity
-    at some Place.
+    """A Coup (conflict) Event occurs when a DeposedEntity was desposed by a
+    DeposingEntity at some Place.
 
     The only possible event subtype is: "Coup".
     """
@@ -77,7 +77,8 @@ class Coup(Event):
 
 @dataclass
 class Demonstrate(Event):
-    """A Demonstrate Event occurs when a Demonstrator(s) protest in some Place.
+    """A Demonstrate (conflict) Event occurs when a Demonstrator(s) protest at some
+    Place.
 
     The possible Event subtypes are: "MarchProtestPoliticalGathering" or None.
     """
@@ -91,7 +92,7 @@ class Demonstrate(Event):
 @dataclass
 class Yield(Event):
     """A Yield (conflict) Event occurs when an Agent (yielder or surrender)
-    yields or surrenders to a Recipient in some Place. But also, when an Agent
+    yields or surrenders to a Recipient at some Place. But also, when an Agent
     (retreater) retreats from Origin to some Destination.
 
     The possible Event subtypes are: "Surrender", "Retreat" or None
@@ -109,7 +110,7 @@ class Yield(Event):
 @dataclass
 class Collaborate(Event):
     """A Collaborate (contact) Event occurs when some Participants
-    communicates (remotely or face-to-face) in some Place.
+    communicates (remotely or face-to-face) at some Place.
 
     The possible Event subtypes are: "Correspondence", "Meet" or None.
     """
@@ -154,7 +155,7 @@ class CommitmentPromiseExpressIntent(Event):
 
 @dataclass
 class Discussion(Event):
-    """A Discussion (contact) Event occurs when some Participants discuss in some
+    """A Discussion (contact) Event occurs when some Participants discuss at some
     place.
 
     The possible Event subtypes: "Corresponde", "Meet" or None.
@@ -169,7 +170,7 @@ class Discussion(Event):
 @dataclass
 class FuneralVigil(Event):
     """A FuneralVigil (contact) Event occurs when some Participants communicate
-    during a funeral or vigil for Deceased in some Place.
+    during a funeral or vigil for Deceased at some Place.
 
     The possible Event subtypes: "Meet" or None.
     """
@@ -184,7 +185,7 @@ class FuneralVigil(Event):
 @dataclass
 class MediaStatement(Event):
     """A MediaStatement (contact) Event occurs when a Communicator communicates
-    something on media to some Recipients in some Place.
+    something on media to some Recipients at some Place.
 
     The possible Event subtypes: "Broadcast" or None.
     """
@@ -199,7 +200,7 @@ class MediaStatement(Event):
 @dataclass
 class Negotiate(Event):
     """A Negotiate (contact) Event occurs when some Participants participate on
-    a negotiation about some Topic in some Place.
+    a negotiation about some Topic at some Place.
 
     The possible Event subtypes: "Correspondence", "Meet" or None.
     """
@@ -214,7 +215,7 @@ class Negotiate(Event):
 @dataclass
 class Prevarication(Event):
     """A Prevarication (contact) Event occurs when a Communicator prevaricate about
-    some Topic to a Recipient in some Place.
+    some Topic to a Recipient at some Place.
 
     The possible Event subtypes: "Correspondence", "Meet" or None.
     """
@@ -230,7 +231,7 @@ class Prevarication(Event):
 @dataclass
 class PublicStatementInPerson(Event):
     """A PublicStatementInPerson (contact) Event occurs when a Communicator gives
-    a public statement to a Recipient in some Place.
+    a public statement to a Recipient at some Place.
 
     The possible Event subtypes: "Broadcast" or None.
     """
@@ -241,3 +242,210 @@ class PublicStatementInPerson(Event):
     recipient: List[str]  # The recipient of the statement
     topic: List[str]  # The topic of the public statement
     place: List[str]  # Where the event takes place
+
+
+@dataclass
+class RequestAdvice(Event):
+    """A RequestAdvice (contact) Event occurs when a Communicator requests something
+    or gives advice about a Topic to a Recipient at some Place.
+
+    The possible Event subtypes: "Broadcast", "Correspondence", "Meet" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    communicator: List[str]  # The communicator of the request or advice
+    recipient: List[str]  # The recipient of the request or advice
+    topic: List[str]  # The topic requested or adviced
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class ThreatenCoerce(Event):
+    """A ThreatenCoerce (contact) Event occurs when a Communicator threats or coerces
+    a Recipient about a Topic at some Place.
+
+    The possible Event subtypes: "Broadcast", "Correspondence", "Meet" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    communicator: List[str]  # The threatening or coercing agent
+    recipient: List[str]  # The threatened or coerced entity
+    topic: List[str]  # The topic of the threat or coerce
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class AccidentCrash(Event):
+    """An AccidentCrash (disaster) Event occurs when a Driver/Passenger in a
+    Vehicle crashes into CrashObject at some place.
+
+    The only possible event subtype is: "AccidentCrash".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    driver_or_passengers: List[str]  # The driven/passengers of the vehicle
+    vehicle: List[str]  # The crashed vehicle
+    crash_object: List[str]  # The object to which the vehicle crashed
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class DiseaseOutbreak(Event):
+    """A DiseaseOutbreak (disaster) Event occurs when a Disease broke out
+    among some Victims at some Place.
+
+    The only possible event subtype is: "DiseaseOutbreak".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    disease: List[str]  # The disease of the outbreak
+    victim: List[str]  # The victims of the outbreak
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class FireExplosion(Event):
+    """A FireExplosion (disaster) Event occurs when a FireExplosionObject caught fire
+    or exploded from an Instrument at some Place.
+
+    The only possible event subtype is: "FireExplosion".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    fire_explosion_object: List[str]  # The object that caught fire or exploded
+    instrument: List[str]  # The instrument used to generate the explosion
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class GenericCrime(Event):
+    """A GenericCrime (crime) Event occurs when a Perpetrator commits a crime against
+    a Victim at some Place.
+
+    The only possible event subtype is: "GenericCrime".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    perpetrator: List[str]  # The person commiting the crime
+    victim: List[str]  # The victim of the crime
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Agreement(Event):
+    """An Agreement (government) Event occurs when a Participant signed, rejected,
+    nullified or violated an agreement at some Place.
+
+    The possible Event subtypes: "Accept", "RejectNullify", "Violate" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    participants: List[str]  # Only in "Accept" or None. List of participants
+    rejecter_nullifier: List[str]  # Only in "RejectNullify". The rejecter or nullifier.
+    violator: List[str]  # Only in "Violate". The agreement violator.
+    other_participant: List[str]  # Only in "RejectNullify" or "Violate". The rest.
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Convene(Event):
+    """A Convene (government) Event occurs when a Convener convened a ConvenedEntity
+    at some Place.
+
+    The only possible event subtype is: "GenericCrime".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    convener: List[str]  # The convener
+    convened_entity: List[str]  # The convened entity
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Formation(Event):
+    """A Formation (government) Event occurs when some Participant (GPEs) are merged or
+    when a GPE is formed/started by a Founder at some Place.
+
+    The possible Event subtypes: "Merge", "Start", None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    gpe: List[str]  # Only in "Start" or None. The founded Geo-Political entity
+    participants: List[str]  # Only in "Merge". The merged participants.
+    founder: List[str]  # Only in "Start" or None. The founder of the GPE.
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Legislate(Event):
+    """A Legislate (government) Event occurs when a Government legislature enacted
+    a Law in some Place.
+
+    The only possible event subtype is: "Legislate".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    government_body: List[str]  # The Government body that enacted the law
+    law: List[str]  # The law enacted by the government
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Spy(Event):
+    """An Spy (government) Event occurs when a Spy spied on a ObservedEntity to the
+    benefit of a Beneficiary in some Place.
+
+    The only possible event subtype is: "Spy".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    spy: List[str]  # The spying entity
+    observed_entity: List[str]  # The entity being observed (spied)
+    beneficiary: List[str]  # The entity that benefits from the information
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Vote(Event):
+    """A Vote (government) Event occurs when a Voter votes for a Candidate on a
+    Ballot with a Result in some Place. This event also handles the situations when
+    a Preventer prevents a Voter for voting.
+
+    The possible Event subtypes: "CastVote", "PreventVote", None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    voter: List[str]  # The person or entity who votes.
+    candidate: List[str]  # The candidate, entity being voted.
+    ballot: List[str]  # The ballot
+    result: List[str]  # The result of the ballot
+    preventer: List[str]  # Only in "PreventVote". The vote preventer.
+    place: List[str]  # Where the evnet takes place
+
+
+@dataclass
+class SensoryObserve(Event):
+    """A SensoryObserve (inspection) Event occurs when a Observer observed, inspected or
+    monitored a ObservedEntity in some Place.
+
+    The possible Event subtypes: "InspectPeopleOrganization", "MonitorElection",
+    "PhysicalInvestigateInspect" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    observer: List[str]  # The observer entity
+    observed_entity: List[str]  # The observed entity
+    place: List[str]  # Where the evnet takes place
