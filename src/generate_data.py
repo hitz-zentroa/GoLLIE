@@ -3,10 +3,8 @@ from argparse import ArgumentParser
 import json
 from typing import Type
 import os
-import shutil
-from rich import print
 from rich.progress import Progress, TimeElapsedColumn, SpinnerColumn
-import logging
+
 
 parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
 
