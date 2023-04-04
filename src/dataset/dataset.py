@@ -172,7 +172,7 @@ class CollieDataset(Dataset):
         max_length: int = 2048,
         pad_to_max_length: bool = False,
         inference: bool = False,
-        num_workers: int = 0,
+        num_workers: int = min(os.cpu_count(), 16),
     ):
         """
         :param tokenizer: The tokenizer to use.
@@ -194,7 +194,7 @@ class CollieDataset(Dataset):
 
         examples = [json.loads(example.strip())["text"] for example in examples]
 
-        if num_workers == 0:
+        if num_workers <= 1:
             self.tokenized_examples = batch_tokenization(
                 tokenizer,
                 self.dataset_name,
