@@ -49,7 +49,8 @@ def train_collie(
     )
 
     training_datasets = []
-    for train_path in data_args.train_tasks:
+    for train_task in data_args.train_tasks:
+        train_path = os.path.join(data_args.dataset_dir, f"{train_task}.train.jsonl")
         train_dataset = CollieDataset(
             tokenizer=tokenizer,
             dataset_path=train_path,
@@ -63,7 +64,8 @@ def train_collie(
     train_dataset = torch.utils.data.ConcatDataset(training_datasets)
 
     dev_datasets = DatasetDict()
-    for dev_path in data_args.validation_tasks:
+    for dev_task in data_args.validation_tasks:
+        dev_path = os.path.join(data_args.dataset_dir, f"{dev_task}.dev.jsonl")
         dev_dataset = CollieDataset(
             tokenizer=tokenizer,
             dataset_path=dev_path,
@@ -145,10 +147,11 @@ def inference_collie(
         ),
     )
 
-    for dataset in data_args.test_tasks:
+    for test_task in data_args.test_tasks:
+        test_dataset = os.path.join(data_args.dataset_dir, f"{test_task}.test.jsonl")
         test_dataset = CollieDataset(
             tokenizer=tokenizer,
-            dataset_path=f"{os.path.join(data_args.dataset_dir, dataset)}.test.jsonl",
+            dataset_path=test_dataset,
             max_length=data_args.max_seq_length,
             pad_to_max_length=False,
             is_encoder_decoder=model.config.is_encoder_decoder,
