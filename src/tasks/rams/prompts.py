@@ -26,7 +26,7 @@ class ArtifactFailure(Event):
 
 @dataclass
 class DamageDestroy(Event):
-    """A DamageDestroy (conflict) Event occurs when an Artifact is damaged or destroyed
+    """A DamageDestroy (artifact) Event occurs when an Artifact is damaged or destroyed
     by some Agent (damager or destroyer) using an Instrument at some Place.
 
     The possible Event subtypes are: "Damage", "Destroy" or None.
@@ -37,6 +37,21 @@ class DamageDestroy(Event):
     agent: List[str]  # The damager or destroyer
     artifact: List[str]  # The damaged or destroyed artifact
     instrument: List[str]  # The instrument used for damaging or destroying
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Shortage(Event):
+    """A Shortage (artifact) Event occurs when a Experiencer experienced a shortage of
+    Supply in some Place.
+
+    The only possible event subtype is: "Shortage".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype.
+    experiencer: List[str]  # The entity experiencing the shortage of supply
+    supply: List[str]  # The entity being supplied
     place: List[str]  # Where the event takes place
 
 
