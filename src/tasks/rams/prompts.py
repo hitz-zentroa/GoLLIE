@@ -150,6 +150,7 @@ class CommandOrder(Event):
     communicator: List[str]  # The Communicator agent
     recipient: List[str]  # The recipient of the communication event
     topic: List[str]  # The topic of the communication
+    place: List[str]  # Where the Event takes place
 
 
 @dataclass
@@ -232,7 +233,7 @@ class Prevarication(Event):
     """A Prevarication (contact) Event occurs when a Communicator prevaricate about
     some Topic to a Recipient at some Place.
 
-    The possible Event subtypes are: "Correspondence", "Meet" or None.
+    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -255,7 +256,6 @@ class PublicStatementInPerson(Event):
     subtype: Union[str, None]  # Possible event subtype
     communicator: List[str]  # The communicator of the public statement
     recipient: List[str]  # The recipient of the statement
-    topic: List[str]  # The topic of the public statement
     place: List[str]  # Where the event takes place
 
 
@@ -374,7 +374,7 @@ class Convene(Event):
     """A Convene (government) Event occurs when a Convener convened a ConvenedEntity
     at some Place.
 
-    The only possible event subtype is: "GenericCrime".
+    The only possible event subtype is: "Convene".
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -528,13 +528,14 @@ class InvestigateCrime(Event):
     subtype: Union[str, None]  # Possible event subtype
     investigator: List[str]  # The investigator of the crime
     defendant: List[str]  # The person investigated
+    crime: List[str]  # The crime investigated
     place: List[str]  # Where the event takes place
 
 
 @dataclass
 class JudicialConsequences(Event):
     """A JudicialConsequence (justice) Event occurs when a JudgeCourt decided
-    the consequences, convicted, exeuted or extradited a Defendant for a Crime
+    the consequences, convicted, executed or extradited a Defendant for a Crime
     in some Place.
 
     The possible Event subtypes are: "Convict", "Execute", "Extradite" or None.
@@ -542,9 +543,11 @@ class JudicialConsequences(Event):
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
-    judge_court: List[str]  # The judge, court, extraditr or executioner
+    judge_court: List[str]  # The judge, court, extraditer or executioner
     defendant: List[str]  # The defendant of the judicial process
     crime: List[str]  # The crime
+    origin: List[str] # Only in "Extradite". The location of origin
+    destination: List[str] # Only in "Extradite". The location of destination.
     place: List[str]  # Where the event takes place
 
 
@@ -619,6 +622,7 @@ class MedicalIntervention(Event):
     treater: List[str]  # The entity in charge of the intervention
     patient: List[str]  # The treated entity
     medical_issue: List[str]  # The reason for the intervention
+    instrument: List[str]  # The instrument used on the intervention
     place: List[str]  # Where the event takes place
 
 
@@ -701,7 +705,7 @@ class EndPossition(Event):
 
 @dataclass
 class StartPossition(Event):
-    """An StartPossition (personnel) Event occurs when an Employee stars working on
+    """An StartPossition (personnel) Event occurs when an Employee starts working on
     a Organization in some Place.
 
     The possible Event subtypes are: "Hiring" or None.

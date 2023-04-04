@@ -118,7 +118,18 @@ class Scorer:
 class DatasetLoader:
     """An abstract class for dataset loaders."""
 
-    pass
+    def __iter__(self):
+        for elem in self.elements.values():
+            yield elem
+
+    def __len__(self):
+        return len(self.elements)
+
+    def __getitem__(self, idx: Union[int, str]) -> Dict[str, Any]:
+        if isinstance(idx, int):
+            return list(self.elements.values())[idx]  # Not very efficient
+        else:
+            return self.elements[idx]
 
 
 class Sampler:
