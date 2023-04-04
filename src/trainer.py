@@ -199,14 +199,14 @@ if __name__ == "__main__":
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    if data_args.train_files is not None:
+    if data_args.train_tasks is not None:
         train_collie(
             model_args,
             data_args,
             training_args,
         )
 
-    if data_args.test_files is not None:
+    if data_args.test_tasks is not None:
         inference_collie(
             model_args,
             data_args,
