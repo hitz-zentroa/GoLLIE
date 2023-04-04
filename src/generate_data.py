@@ -68,8 +68,11 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
+                )
                 with open(
-                    os.path.join(args.output_dir, "train.code.jsonl"), "a"
+                    os.path.join(args.output_dir, output_name), "w"
                 ) as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
@@ -96,8 +99,11 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
+                )
                 with open(
-                    os.path.join(args.output_dir, "dev.code.jsonl"), "a"
+                    os.path.join(args.output_dir, output_name), "w"
                 ) as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
@@ -124,8 +130,11 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
+                )
                 with open(
-                    os.path.join(args.output_dir, "test.code.jsonl"), "a"
+                    os.path.join(args.output_dir, output_name), "w"
                 ) as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
