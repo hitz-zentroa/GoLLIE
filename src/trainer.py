@@ -161,8 +161,7 @@ def inference_collie(
         predictions = trainer.predict(test_dataset)
 
         output_name = (
-            f"{os.path.join(training_args.output_dir,os.path.splitext(os.path.basename(dataset))[0])}"
-            ".predictions.txt"
+            f"{os.path.join(training_args.output_dir,test_task)}.predictions.txt"
         )
 
         with open(output_name, "w", encoding="utf8") as f:
@@ -180,6 +179,8 @@ def inference_collie(
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
+
     parser = HfArgumentParser(
         (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
     )
