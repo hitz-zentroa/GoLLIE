@@ -1,11 +1,6 @@
 import inspect
 import json
-import math
-import random
 from typing import Tuple, Union
-from jinja2 import Template
-
-import numpy as np
 
 from src.tasks.rams.prompts import (
     EVENT_DEFINITIONS,
@@ -56,7 +51,7 @@ from src.tasks.rams.prompts import (
     Vote,
     Yield,
 )
-from ..utils_typing import DatasetLoader, Sampler
+from ..utils_data import DatasetLoader, Sampler
 
 
 class RAMSDatasetLoader(DatasetLoader):
@@ -599,7 +594,5 @@ class RAMSSampler(Sampler):
             scorer=scorer,
             task_definitions=EVENT_DEFINITIONS,
             task_target=task_target,
-            **kwargs
+            **kwargs,
         )
-
-    

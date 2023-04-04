@@ -3,8 +3,6 @@ import unittest
 import json
 from rich import print
 
-from src.tasks.rams.data_loader import RAMSSampler
-
 
 class TestDataLoaders(unittest.TestCase):
     @unittest.skipIf(
@@ -35,7 +33,7 @@ class TestDataLoaders(unittest.TestCase):
         not os.path.exists("data/rams/dev.jsonlines"), "No RAMS data available"
     )
     def test_RAMS(self):
-        from src.tasks.rams.data_loader import RAMSDatasetLoader
+        from src.tasks.rams.data_loader import RAMSDatasetLoader, RAMSSampler
 
         with open("configs/rams_config.json") as f:
             config = json.load(f)

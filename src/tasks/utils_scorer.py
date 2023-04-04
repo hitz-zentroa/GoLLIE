@@ -1,5 +1,19 @@
 from typing import Any, Dict, List, Type, Union
-from .utils_typing import Event, Relation, Scorer, Entity, Value
+from .utils_typing import Event, Relation, Entity, Value
+
+
+class Scorer:
+    """An abstract class for scorers."""
+
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
+        raise NotImplementedError("This method must be implemented.")
+
+    def _filter_valid_types(self, elems: List[Any]) -> List[Union[Entity, Value]]:
+        return [
+            elem
+            for elem in elems
+            if any(isinstance(elem, _type) for _type in self.valid_types)
+        ]
 
 
 class SpanScorer(Scorer):
