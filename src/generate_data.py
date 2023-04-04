@@ -1,9 +1,8 @@
+import logging
 from argparse import ArgumentParser
 import json
 from typing import Type
 import os
-import shutil
-from rich import print
 from rich.progress import Progress, TimeElapsedColumn, SpinnerColumn
 
 
@@ -42,15 +41,8 @@ def get_class(class_path: str) -> Type:
 
 
 def main(args):
-    try:
-        os.makedirs(args.output_dir)
-    except:
-        if args.overwrite_output_dir:
-            for _file in os.listdir(args.output_dir):
-                os.remove(os.path.join(args.output_dir, _file))
-                # shutil.rmtree(os.path.join(args.output_dir, _file))
-        else:
-            raise FileExistsError("The output directory already exists!")
+    os.makedirs(args.output_dir, exist_ok=True)
+
     for config_file in args.configs:
         with open(config_file, "rt") as f:
             config = json.load(f)
@@ -68,8 +60,21 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
+                )
+
+                if (
+                    os.path.join(args.output_dir, output_name)
+                    and not args.overwrite_output_dir
+                ):
+                    logging.warning(
+                        f"Skipping {output_name} because it already exists."
+                    )
+                    continue
+
                 with open(
-                    os.path.join(args.output_dir, "train.code.jsonl"), "a"
+                    os.path.join(args.output_dir, output_name), "w"
                 ) as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
@@ -96,8 +101,21 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
+                )
+
+                if (
+                    os.path.join(args.output_dir, output_name)
+                    and not args.overwrite_output_dir
+                ):
+                    logging.warning(
+                        f"Skipping {output_name} because it already exists."
+                    )
+                    continue
+
                 with open(
-                    os.path.join(args.output_dir, "dev.code.jsonl"), "a"
+                    os.path.join(args.output_dir, output_name), "w"
                 ) as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
@@ -124,8 +142,21 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
+                output_name = (
+                    f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
+                )
+
+                if (
+                    os.path.join(args.output_dir, output_name)
+                    and not args.overwrite_output_dir
+                ):
+                    logging.warning(
+                        f"Skipping {output_name} because it already exists."
+                    )
+                    continue
+
                 with open(
-                    os.path.join(args.output_dir, "test.code.jsonl"), "a"
+                    os.path.join(args.output_dir, output_name), "w"
                 ) as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),

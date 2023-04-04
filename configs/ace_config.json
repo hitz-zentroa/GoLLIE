@@ -31,10 +31,10 @@
         "RE": {
             "group_by": "sentence",
             "parallel_instances": [
-                2,
-                5
+                1,
+                3
             ],
-            "max_guidelines": -1,
+            "max_guidelines": 5,
             "guideline_dropout": 0.15,
             "scorer": "src.tasks.ace.scorer.ACERelationScorer",
             "ensure_positives_on_train": true
@@ -42,8 +42,8 @@
         "EE": {
             "group_by": "sentence",
             "parallel_instances": [
-                2,
-                5
+                1,
+                3
             ],
             "max_guidelines": 5,
             "guideline_dropout": 0.15,
