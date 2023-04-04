@@ -133,3 +133,5 @@ dmypy.json
 .pyre/
 
 .idea/
+
+pretrained_models/

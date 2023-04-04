@@ -95,6 +95,7 @@ def train_collie(
     trainer.save_model()
 
     model.save_pretrained(training_args.output_dir)
+    tokenizer.save_pretrained(training_args.output_dir)
 
 
 def inference_collie(
@@ -102,10 +103,31 @@ def inference_collie(
     data_args: DataTrainingArguments,
     training_args: Seq2SeqTrainingArguments,
 ):
+    if training_args.do_train:
+        logging.warning(
+            "You are doing inference after training a model! We will load the "
+            f"pretrained model saved in {training_args.output_dir}."
+        )
+
+        model_path = training_args.output_dir
+    else:
+        model_path = model_args.model_name_or_path
+
+    if model_args.use_lora and model_args.lora_weights_name_or_path is None:
+        logging.warning(
+            "You are have specified to use LORA, but have not specified a path to the "
+            "LORA weights. We will attempt to load the LORA weights from the same "
+            f"path as the model weights: {model_path}."
+        )
+
     model, tokenizer = load_model_for_inference(
-        weights_path=model_args.model_name_or_path,
+        weights_path=model_path,
         int8_quantization=model_args.int8_quantization,
-        lora_weights_name_or_path=model_args.lora_weights_name_or_path,
+        lora_weights_name_or_path=(
+            model_args.lora_weights_name_or_path
+            if model_args.lora_weights_name_or_path is not None
+            else model_path
+        ),
     )
 
     trainer = Seq2SeqTrainer(
