@@ -10,9 +10,9 @@ dataset_dir:
   /gscratch4/users/osainz006/CoLLIE/data/processed
 train_tasks:
   - ace05.ner
-validation_files:
+validation_tasks:
   - ace05.ner
-test_files:
+test_tasks:
   - ace05.ner
 max_seq_length: 2048
 generation_max_length: 512
