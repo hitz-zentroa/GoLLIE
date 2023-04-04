@@ -1,7 +1,14 @@
 import inspect
 import json
+import math
+import random
+from typing import Tuple, Union
+from jinja2 import Template
+
+import numpy as np
 
 from src.tasks.rams.prompts import (
+    EVENT_DEFINITIONS,
     AccidentCrash,
     Agreement,
     ArrestJailDetain,
@@ -49,7 +56,7 @@ from src.tasks.rams.prompts import (
     Vote,
     Yield,
 )
-from ..utils_typing import DatasetLoader
+from ..utils_typing import DatasetLoader, Sampler
 
 
 class RAMSDatasetLoader(DatasetLoader):
@@ -292,7 +299,7 @@ class RAMSDatasetLoader(DatasetLoader):
             "monitor": "observer",
             "monitoredentity": "observed_entity",
             "inspector": "observer",
-            "inspectedentity": "observed_entity"
+            "inspectedentity": "observed_entity",
         },
         "inspection.targetaimat": {
             "class": TargetAimAt,
@@ -336,7 +343,7 @@ class RAMSDatasetLoader(DatasetLoader):
             "executioner": "judge_court",
             "extraditer": "judge_court",
             "origin": "origin",
-            "destination": "destination"
+            "destination": "destination",
         },
         "life.die": {
             "class": Die,
@@ -539,7 +546,7 @@ class RAMSDatasetLoader(DatasetLoader):
                             value = self._EVENT_CONSTANTS_MAPPING[role]
                         else:
                             raise ValueError(f"Argument {event_type}:{role} not found!")
-                        
+
                         try:
                             _inst[value].append(arg_text)
                         except KeyError as e:
@@ -548,6 +555,51 @@ class RAMSDatasetLoader(DatasetLoader):
                     events.append(info["class"](**_inst))
 
                 self.elements[key] = {
+                    "id": key,
+                    "doc_id": key,
                     "text": text,
-                    "labels": events
+                    "labels": events,
                 }
+
+
+class RAMSSampler(Sampler):
+    def __init__(
+        self,
+        dataset_loader: RAMSDatasetLoader,
+        task: str = None,
+        split: str = "train",
+        parallel_instances: Union[int, Tuple[int, int]] = 1,
+        max_guidelines: int = -1,
+        guideline_dropout: float = 0.0,
+        seed: float = 0,
+        prompt_template: str = "templates/prompt_eae.txt",
+        ensure_positives_on_train: bool = True,
+        dataset_name: str = None,
+        scorer: str = None,
+        task_target: str = "labels",
+        sample_only_gold_guidelines: bool = True,
+        **kwargs,
+    ) -> None:
+        assert task in [
+            "EAE",
+        ], f"{task} must be 'EAE'."
+
+        super().__init__(
+            dataset_loader=dataset_loader,
+            task=task,
+            split=split,
+            parallel_instances=parallel_instances,
+            max_guidelines=max_guidelines,
+            guideline_dropout=guideline_dropout,
+            seed=seed,
+            prompt_template=prompt_template,
+            ensure_positives_on_train=ensure_positives_on_train,
+            sample_only_gold_guidelines=sample_only_gold_guidelines,
+            dataset_name=dataset_name,
+            scorer=scorer,
+            task_definitions=EVENT_DEFINITIONS,
+            task_target=task_target,
+            **kwargs
+        )
+
+    

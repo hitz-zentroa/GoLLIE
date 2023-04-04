@@ -546,8 +546,8 @@ class JudicialConsequences(Event):
     judge_court: List[str]  # The judge, court, extraditer or executioner
     defendant: List[str]  # The defendant of the judicial process
     crime: List[str]  # The crime
-    origin: List[str] # Only in "Extradite". The location of origin
-    destination: List[str] # Only in "Extradite". The location of destination.
+    origin: List[str]  # Only in "Extradite". The location of origin
+    destination: List[str]  # Only in "Extradite". The location of destination.
     place: List[str]  # Where the event takes place
 
 
@@ -790,3 +790,53 @@ class TransferOwnership(Event):
         str
     ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
     place: List[str]  # Where the event takes place
+
+
+EVENT_DEFINITIONS: List[Event] = [
+    ArtifactFailure,
+    DamageDestroy,
+    Shortage,
+    Attack,
+    Coup,
+    Demonstrate,
+    Yield,
+    Collaborate,
+    CommandOrder,
+    CommitmentPromiseExpressIntent,
+    Discussion,
+    FuneralVigil,
+    MediaStatement,
+    Negotiate,
+    Prevarication,
+    PublicStatementInPerson,
+    RequestAdvice,
+    ThreatenCoerce,
+    AccidentCrash,
+    DiseaseOutbreak,
+    FireExplosion,
+    GenericCrime,
+    Agreement,
+    Convene,
+    Formation,
+    Legislate,
+    Spy,
+    Vote,
+    SensoryObserve,
+    TargetAimAt,
+    ArrestJailDetain,
+    InitiateJudicialProcess,
+    InvestigateCrime,
+    JudicialConsequences,
+    Die,
+    Injure,
+    ManufactureArtifact,
+    MedicalIntervention,
+    TransportArtifact,
+    TransportPerson,
+    Elect,
+    EndPossition,
+    StartPossition,
+    Transaction,
+    TransferMoney,
+    TransferOwnership,
+]
