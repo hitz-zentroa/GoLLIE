@@ -44,9 +44,7 @@ class SpanScorer(Scorer):
             else 0.0
         )
 
-        return {
-            "spans": {"precision": precision, "recall": recall, "f1-score": f1_score}
-        }
+        return {"spans": {"precision": precision, "recall": recall, "f1-score": f1_score}}
 
 
 class RelationScorer(SpanScorer):

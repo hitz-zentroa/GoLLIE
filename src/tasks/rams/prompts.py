@@ -158,7 +158,7 @@ class Discussion(Event):
     """A Discussion (contact) Event occurs when some Participants discuss at some
     place.
 
-    The possible Event subtypes: "Corresponde", "Meet" or None.
+    The possible Event subtypes are: "Corresponde", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -172,7 +172,7 @@ class FuneralVigil(Event):
     """A FuneralVigil (contact) Event occurs when some Participants communicate
     during a funeral or vigil for Deceased at some Place.
 
-    The possible Event subtypes: "Meet" or None.
+    The possible Event subtypes are: "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -187,7 +187,7 @@ class MediaStatement(Event):
     """A MediaStatement (contact) Event occurs when a Communicator communicates
     something on media to some Recipients at some Place.
 
-    The possible Event subtypes: "Broadcast" or None.
+    The possible Event subtypes are: "Broadcast" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -202,7 +202,7 @@ class Negotiate(Event):
     """A Negotiate (contact) Event occurs when some Participants participate on
     a negotiation about some Topic at some Place.
 
-    The possible Event subtypes: "Correspondence", "Meet" or None.
+    The possible Event subtypes are: "Correspondence", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -217,7 +217,7 @@ class Prevarication(Event):
     """A Prevarication (contact) Event occurs when a Communicator prevaricate about
     some Topic to a Recipient at some Place.
 
-    The possible Event subtypes: "Correspondence", "Meet" or None.
+    The possible Event subtypes are: "Correspondence", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -233,7 +233,7 @@ class PublicStatementInPerson(Event):
     """A PublicStatementInPerson (contact) Event occurs when a Communicator gives
     a public statement to a Recipient at some Place.
 
-    The possible Event subtypes: "Broadcast" or None.
+    The possible Event subtypes are: "Broadcast" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -249,7 +249,7 @@ class RequestAdvice(Event):
     """A RequestAdvice (contact) Event occurs when a Communicator requests something
     or gives advice about a Topic to a Recipient at some Place.
 
-    The possible Event subtypes: "Broadcast", "Correspondence", "Meet" or None.
+    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -265,7 +265,7 @@ class ThreatenCoerce(Event):
     """A ThreatenCoerce (contact) Event occurs when a Communicator threats or coerces
     a Recipient about a Topic at some Place.
 
-    The possible Event subtypes: "Broadcast", "Correspondence", "Meet" or None.
+    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -342,7 +342,7 @@ class Agreement(Event):
     """An Agreement (government) Event occurs when a Participant signed, rejected,
     nullified or violated an agreement at some Place.
 
-    The possible Event subtypes: "Accept", "RejectNullify", "Violate" or None.
+    The possible Event subtypes are: "Accept", "RejectNullify", "Violate" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -374,7 +374,7 @@ class Formation(Event):
     """A Formation (government) Event occurs when some Participant (GPEs) are merged or
     when a GPE is formed/started by a Founder at some Place.
 
-    The possible Event subtypes: "Merge", "Start", None.
+    The possible Event subtypes are: "Merge", "Start", None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -422,7 +422,7 @@ class Vote(Event):
     Ballot with a Result in some Place. This event also handles the situations when
     a Preventer prevents a Voter for voting.
 
-    The possible Event subtypes: "CastVote", "PreventVote", None.
+    The possible Event subtypes are: "CastVote", "PreventVote", None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -432,7 +432,7 @@ class Vote(Event):
     ballot: List[str]  # The ballot
     result: List[str]  # The result of the ballot
     preventer: List[str]  # Only in "PreventVote". The vote preventer.
-    place: List[str]  # Where the evnet takes place
+    place: List[str]  # Where the event takes place
 
 
 @dataclass
@@ -440,7 +440,7 @@ class SensoryObserve(Event):
     """A SensoryObserve (inspection) Event occurs when a Observer observed, inspected or
     monitored a ObservedEntity in some Place.
 
-    The possible Event subtypes: "InspectPeopleOrganization", "MonitorElection",
+    The possible Event subtypes are: "InspectPeopleOrganization", "MonitorElection",
     "PhysicalInvestigateInspect" or None.
     """
 
@@ -448,4 +448,326 @@ class SensoryObserve(Event):
     subtype: Union[str, None]  # Possible event subtype
     observer: List[str]  # The observer entity
     observed_entity: List[str]  # The observed entity
-    place: List[str]  # Where the evnet takes place
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class TargetAimAt(Event):
+    """A TargetAimAt (inspection) Event occurs when a Targeter physically targeted a
+    Target with a Instrument at some Place.
+
+    The only possible event subtype is: "TargetAimAt".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    targeter: List[str]  # The agent of the event
+    target: List[str]  # The entity being physically targeted
+    instrument: List[str]  # The instrument used
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class ArrestJailDetain(Event):
+    """An ArrestJailDetain (justice) Event occurs when a Jailer arrested or jailed
+    a Detainee for a Crime at some Place.
+
+    The only possible event subtype is: "ArrestJailDetain".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    jailer: List[str]  # The person who arrested or jailed the detainee
+    detainee: List[str]  # The person being arrested or jailed
+    crime: List[str]  # The reason (crime) for the arresting or jailing
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class InitiateJudicialProcess(Event):
+    """An InitiateJudicialProcess (justice) Event occurs when a Prosecutor charged,
+    indicted, tried or initiated a judicial process pertaining to a Defendant before
+    a JudgeCourt for a Crime in some Place.
+
+    The possible Event subtypes are: "ChargeIndict", "TrialHearing" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    prosecutor: List[str]  # The prosecutor entity
+    defendant: List[str]  # The defendant of the process
+    judge_court: List[str]  # The judge or court in charge
+    crime: List[str]  # The crime
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class InvestigateCrime(Event):
+    """An InvestigateCrime (justice) Event occurs when a Investigator investigated
+    a Defendant for a Crime in some Place.
+
+    The possible Event subtypes are: "InvestigateCrime" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    investigator: List[str]  # The investigator of the crime
+    defendant: List[str]  # The person investigated
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class JudicialConsequences(Event):
+    """A JudicialConsequence (justice) Event occurs when a JudgeCourt decided
+    the consequences, convicted, exeuted or extradited a Defendant for a Crime
+    in some Place.
+
+    The possible Event subtypes are: "Convict", "Execute", "Extradite" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    judge_court: List[str]  # The judge, court, extraditr or executioner
+    defendant: List[str]  # The defendant of the judicial process
+    crime: List[str]  # The crime
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Die(Event):
+    """A Die (life) Event occurs when a Victim died in some Place. The reason
+    of the death can be: killed by a Killer or by a MedicalIssue, with or without
+    an Instrument.
+
+    The possible Event subtypes are: "Violent", "NonViolent" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    victim: List[str]  # The person who died
+    killer: List[str]  # If any, the killer
+    medical_issue: List[str]  # If died by medicall issues, the issue
+    instrument: List[str]  # If killed with an instrument, the instrument
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Injure(Event):
+    """An Injure (life) Event occurs when a Victim is injured in some Place. The
+    reasons can be: have extreme hunger or thirst, some physical degradation and
+    sickness or illness by some MedicalIssue either infected by some Disease or imposed
+    by some Injurer. The injures can be caused by some Instrument.
+
+    The possible Event subtypes are: "HungerThirst", "Physical", "Sickness",
+    "Violent" or None
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    victim: List[str]  # The injured person
+    medical_issue: List[str]  # If any, the medical issue
+    disease: List[str]  # If any, the disease causing the medical issue
+    injurer: List[str]  # If any, the agent causing the injure
+    instrument: List[str]  # The instrument used to injure
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class ManufactureArtifact(Event):
+    """A ManufactureArtifact (manufacture) Event occurs when a Manufacturer
+    manufactured, created or produced an Artifact using an Instrument at
+    some Place.
+
+    The possible Event subtypes are: "Build", "IntellectualProperty",
+    "CreateManufacture" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    manufacturer: List[str]  # The entity that created the artifact
+    artifact: List[str]  # The artifact being created
+    instrument: List[str]  # The instrument used to create the artifact
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class MedicalIntervention(Event):
+    """A MedicalIntervention (medical) Event occurs when a Treater treated
+    a Patient for a MedicalIssue by means of some Instrument at some
+    Place.
+
+    The only possible event subtype is: "Intervention".
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    treater: List[str]  # The entity in charge of the intervention
+    patient: List[str]  # The treated entity
+    medical_issue: List[str]  # The reason for the intervention
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class TransportArtifact(Event):
+    """A TransportArtifact (transport) Event occurs when a Transporter transports
+    an Artifact from the Origin to the Destination in some Vehicle. For some cases
+    a Preventer entity can prevent the Transporter to transport the Artifact.
+
+    The possible Event subtypes are: "BringCarryUnload", "DisperseSeparate",
+    "Fall", "GrantEntry", "Hide", "LostOfControl", "NonViolentThrowLaunch",
+    "PreventEntry", "PreventExit", "ReceiveImport", "SendSupplyExport",
+    "SmuggleExtract" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    transporter: List[str]  # The entity carrying the transport event
+    artifact: List[str]  # The entity being transported
+    vehicle: List[str]  # The vehicle used to transport the entity
+    origin: List[str]  # The origin place
+    destination: List[str]  # The destination place
+    hidding_place: List[str]  # Only in "Hide". The place to hide the artifact.
+    preventer: List[str]  # Only in "PreventEntry" and "PreventExit". The preventer.
+
+
+@dataclass
+class TransportPerson(Event):
+    """A TransportPerson (transport) Event occurs when a Transporter transports
+    itself or a Passanger from the Origin to the Destination in some Vehicle. For
+    some cases a Preventer entity can prevent the Transporter to transport itself or
+    the Passenger.
+
+    The possible Event subtypes are: "BringCarryUnload", "DisperseSeparate",
+    "EvacuationRescue", "Fall", "GrantedAsylum", "Hide", "PreventEntry",
+    "PreventExit", "SelfMotion", "SmuggleExtract" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    transporter: List[str]  # The entity carrying the transport event
+    passenger: List[str]  # If any, the passenger transported
+    vehicle: List[str]  # The vehicle used to transport the entity
+    origin: List[str]  # The origin place
+    destination: List[str]  # The destination place
+    granter: List[str]  # Only in "GrantedAsylum". The granter of asylum permission
+    hidding_place: List[str]  # Only in "Hide". The place to hide the passenger.
+    preventer: List[str]  # Only in "PreventEntry" and "PreventExit". The preventer.
+
+
+@dataclass
+class Elect(Event):
+    """An Elect (personnel) Event occurs when a Voter elects a Candidate in some
+    Place.
+
+    The possible Event subtypes are: "WinElection" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    voter: List[str]  # The entity who elects the candidate
+    candidate: List[str]  # The candidate being elected
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class EndPossition(Event):
+    """An EndPossition (personnel) Event occurs when an Employee stops working on
+    a Organization in some Place.
+
+    The possible Event subtypes are: "FiringLayOff", "QuitRetire" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    employee: List[str]  # The entity that has stopped working for the organization
+    organization: List[str]  # The organization to which the employee worked for
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class StartPossition(Event):
+    """An StartPossition (personnel) Event occurs when an Employee stars working on
+    a Organization in some Place.
+
+    The possible Event subtypes are: "Hiring" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    employee: List[str]  # The entity that has started working on the organization
+    organization: List[str]  # The organization to which the employee works
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class Transaction(Event):
+    """A Transaction (transaction) Event occurs when a transaction of some Artifact
+    occurred between some Participants for the benefit of a Beneficiary at some Place.
+    The Participants can be characterized into Giver and Recipient. There can be a
+    preventer that prevents the transaction to occur.
+
+    The possible Event subtypes are: "EmbargoSanction", "GiftGrantProvideAid",
+    "TransferControl" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    participants: List[str]  # Only if subtype is None. The participants.
+    giver: List[str]  # The entity giving the artifact
+    recipient: List[str]  # The entity receiving the artifact
+    beneficiary: List[
+        str
+    ]  # The entity that benefits from the transaction (other than recipient)
+    artifact: List[str]  # The entity being transferred (artifact, money or territory)
+    preventer: List[
+        str
+    ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class TransferMoney(Event):
+    """A TransferMoney (transaction) Event occurs when a Giver gives Money to a
+    Recipient for the benefit of Beneficiary in some Place. There can be a
+    preventer that prevents the transaction to occur.
+
+    The possible Event subtypes are: "BorrowLend", "EmbargoSanction",
+    "GiftGrantProvideAid", "PayForService", "Purchase" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    giver: List[str]  # The entity giving the money
+    recipient: List[str]  # The entity receiving the money
+    beneficiary: List[
+        str
+    ]  # The entity that benefits from the transaction (other than recipient)
+    money: List[str]  # The money amount
+    preventer: List[
+        str
+    ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
+    place: List[str]  # Where the event takes place
+
+
+@dataclass
+class TransferOwnership(Event):
+    """A TransferMoney (transaction) Event occurs when a Giver gives some Artifact to a
+    Recipient for the benefit of Beneficiary in some Place. There can be a
+    preventer that prevents the transaction to occur.
+
+    The possible Event subtypes are: "BorrowLend", "EmbargoSanction",
+    "GiftGrantProvideAid", "Purchase" or None.
+    """
+
+    mention: str  # The text span that most clearly expresses (triggers) the event
+    subtype: Union[str, None]  # Possible event subtype
+    giver: List[str]  # The entity giving the artifact
+    recipient: List[str]  # The entity receiving the artifact
+    beneficiary: List[
+        str
+    ]  # The entity that benefits from the transaction (other than recipient)
+    artifact: List[str]  # The artifact being transferred
+    preventer: List[
+        str
+    ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
+    place: List[str]  # Where the event takes place

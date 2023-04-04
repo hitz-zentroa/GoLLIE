@@ -486,8 +486,7 @@ class ACESampler(Sampler):
                 [
                     (
                         5.0
-                        if _def in positive_guidelines
-                        and self.ensure_positives_on_train
+                        if _def in positive_guidelines and self.ensure_positives_on_train
                         else 0.0
                     )
                     for _def in self.task_definitions

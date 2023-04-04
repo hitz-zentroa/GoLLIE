@@ -67,9 +67,7 @@ def mask_escape(text: str) -> str:
     Returns:
         str: masked string.
     """
-    return (
-        text.replace("&amp;", "ҪҪҪҪҪ").replace("&lt;", "ҚҚҚҚ").replace("&gt;", "ҺҺҺҺ")
-    )
+    return text.replace("&amp;", "ҪҪҪҪҪ").replace("&lt;", "ҚҚҚҚ").replace("&gt;", "ҺҺҺҺ")
 
 
 def unmask_escape(text: str) -> str:
@@ -81,9 +79,7 @@ def unmask_escape(text: str) -> str:
     Returns:
         str: unmasked string.
     """
-    return (
-        text.replace("ҪҪҪҪҪ", "&amp;").replace("ҚҚҚҚ", "&lt;").replace("ҺҺҺҺ", "&gt;")
-    )
+    return text.replace("ҪҪҪҪҪ", "&amp;").replace("ҚҚҚҚ", "&lt;").replace("ҺҺҺҺ", "&gt;")
 
 
 def recover_escape(text: str) -> str:
@@ -497,9 +493,7 @@ def read_sgm_file(path: str, language: str = "english") -> List[Tuple[str, int, 
         chunk_offset += len(chunk)
 
     # Re-tokenize sentences
-    sentences = [
-        s for sent in sentences for s in sent_tokenize(sent, language=language)
-    ]
+    sentences = [s for sent in sentences for s in sent_tokenize(sent, language=language)]
 
     return sentences
 
@@ -1120,9 +1114,7 @@ def convert_to_event_only(input_path: str, output_path: str):
                         if event_type in arg_name_mapping:
                             if arg["role"] in arg_name_mapping[event_type]:
                                 new_role = arg_name_mapping[event_type][arg["role"]]
-                                if (
-                                    new_role == None
-                                ):  # arg type isn't in ontology at all
+                                if new_role == None:  # arg type isn't in ontology at all
                                     continue  # delete it from data
                                 else:  # arg type is in ontology, but misnamed in data
                                     arg["role"] = new_role  # update its name
@@ -1193,9 +1185,7 @@ def split_data(input_file: str, output_dir: str, split_path: str):
     # split the dataset
     with open(input_file, "r", encoding="utf-8") as r, open(
         os.path.join(output_dir, "train.sentence.json"), "w"
-    ) as w_train, open(
-        os.path.join(output_dir, "dev.sentence.json"), "w"
-    ) as w_dev, open(
+    ) as w_train, open(os.path.join(output_dir, "dev.sentence.json"), "w") as w_dev, open(
         os.path.join(output_dir, "test.sentence.json"), "w"
     ) as w_test:
         for line in r:
