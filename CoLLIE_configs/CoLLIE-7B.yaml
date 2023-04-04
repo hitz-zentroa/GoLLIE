@@ -15,7 +15,7 @@ validation_tasks:
 test_tasks:
   - ace05.ner
 max_seq_length: 2048
-generation_max_length: 512
+generation_max_length: 2048
 ignore_pad_token_for_loss: false
 
 # checkpoint settings
@@ -30,7 +30,7 @@ do_train: true
 do_eval: true
 do_predict: true
 evaluation_strategy: "epoch"
-eval_delay: 3
+eval_delay: 0
 predict_with_generate: true
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
@@ -43,7 +43,7 @@ generation_num_beams: 1
 optim: adamw_torch
 learning_rate: 0.00005
 weight_decay: 0
-num_train_epochs: 5
+num_train_epochs: 1
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 
