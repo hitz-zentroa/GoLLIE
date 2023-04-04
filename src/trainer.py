@@ -96,6 +96,7 @@ def train_collie(
 
     trainer.save_model()
 
+    model.config.save_pretrained(training_args.output_dir)
     model.save_pretrained(training_args.output_dir)
     tokenizer.save_pretrained(training_args.output_dir)
 
