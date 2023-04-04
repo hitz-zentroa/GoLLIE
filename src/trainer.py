@@ -124,9 +124,13 @@ def inference_collie(
         weights_path=model_path,
         int8_quantization=model_args.int8_quantization,
         lora_weights_name_or_path=(
-            model_args.lora_weights_name_or_path
-            if model_args.lora_weights_name_or_path is not None
-            else model_path
+            (
+                model_args.lora_weights_name_or_path
+                if model_args.lora_weights_name_or_path is not None
+                else model_path
+            )
+            if model_args.use_lora
+            else None
         ),
     )
 
@@ -160,8 +164,16 @@ def inference_collie(
 
         with open(output_name, "w", encoding="utf8") as f:
             logging.info(f"Writing predictions to {output_name}")
-            for prediction in predictions.predictions:
-                print(tokenizer.decode(prediction, skip_special_tokens=True), file=f)
+            for i in range(len(predictions.predictions)):
+                prediction = predictions.predictions[i]
+                prompt = test_dataset[i]["source_ids"]
+                prediction = tokenizer.decode(
+                    [x for x in prediction if x != -100], skip_special_tokens=True
+                )
+                prompt = tokenizer.decode(
+                    [x for x in prompt if x != -100], skip_special_tokens=True
+                )
+                print(f"{prompt}{prediction}", file=f)
 
 
 if __name__ == "__main__":

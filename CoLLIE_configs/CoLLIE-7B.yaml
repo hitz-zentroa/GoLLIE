@@ -15,6 +15,7 @@ validation_files:
 test_files:
   - ace05.ner
 max_seq_length: 2048
+generation_max_length: 512
 ignore_pad_token_for_loss: false
 
 # checkpoint settings
@@ -40,9 +41,9 @@ generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch
-learning_rate: 0.0003
+learning_rate: 0.00005
 weight_decay: 0
-num_train_epochs: 10
+num_train_epochs: 5
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 
@@ -67,5 +68,5 @@ resume_from_checkpoint: false
 # performance
 bf16: false
 fp16: true
-torch_compile: true
+torch_compile: false
 ddp_find_unused_parameters: false

@@ -45,8 +45,10 @@ def prepare_data(
     """
 
     if is_encoder_decoder:
-        prompt, result = example.split("result = [")
-        prompt = prompt + "result = ["
+        prompt, result = example.split("result =")
+        prompt = prompt + "result ="
+        prompt = prompt.strip()
+        result = result.strip()
 
         model_inputs = tokenizer(
             text=prompt,
@@ -68,7 +70,7 @@ def prepare_data(
 
     else:
         if inference:
-            prompt = example.split("result = [")[0] + "result = ["
+            prompt = example.split("result =")[0] + "result ="
             model_inputs = tokenizer(
                 text=prompt,
                 max_length=max_length,
@@ -76,7 +78,13 @@ def prepare_data(
                 padding="max_length" if pad_to_max_length else False,
                 return_tensors=None,
                 add_special_tokens=True,
+                add_eos_token=False,
             )
+
+            # Remove the last token if it is an eos token
+            if model_inputs["input_ids"][-1] == tokenizer.eos_token_id:
+                model_inputs["input_ids"] = model_inputs["input_ids"][:-1]
+                model_inputs["attention_mask"] = model_inputs["attention_mask"][:-1]
 
         else:
             model_inputs = tokenizer(
