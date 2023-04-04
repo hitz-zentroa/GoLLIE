@@ -173,7 +173,7 @@ class Discussion(Event):
     """A Discussion (contact) Event occurs when some Participants discuss at some
     place.
 
-    The possible Event subtypes are: "Corresponde", "Meet" or None.
+    The possible Event subtypes are: "Correspondence", "Meet" or None.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
