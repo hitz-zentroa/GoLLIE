@@ -100,7 +100,7 @@ def main(args):
                 )
 
                 output_name = (
-                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
+                    f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
                 )
                 with open(
                     os.path.join(args.output_dir, output_name), "w"
@@ -131,7 +131,7 @@ def main(args):
                 )
 
                 output_name = (
-                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
+                    f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
                 )
                 with open(
                     os.path.join(args.output_dir, output_name), "w"
