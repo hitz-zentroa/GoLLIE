@@ -28,3 +28,25 @@ class TestDataLoaders(unittest.TestCase):
             print(sample["text"])
             if i > 3:
                 break
+
+    @unittest.skipIf(
+        not os.path.exists("data/rams/dev.jsonlines"), "No RAMS data available"
+    )
+    def test_RAMS(self):
+        from src.tasks.rams.data_loader import RAMSDatasetLoader, RAMSSampler
+
+        with open("configs/rams_config.json") as f:
+            config = json.load(f)
+
+        dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
+
+        print(dataloader[2])
+
+        train_sampler = RAMSSampler(
+            dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]
+        )
+
+        for i, sample in enumerate(train_sampler):
+            print(sample["text"])
+            if i > 3:
+                break

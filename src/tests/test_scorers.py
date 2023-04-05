@@ -1,16 +1,16 @@
 import unittest
 
+from src.tasks.rams.prompts import TransferOwnership, Yield
 
-class TestEntityScorers(unittest.TestCase):
-    def test_ACE(self):
-        from src.tasks.ace.scorer import ACEEntityScorer, ACEEventScorer
+
+class TestACEScorers(unittest.TestCase):
+    def test_entity_scorer(self):
+        from src.tasks.ace.scorer import ACEEntityScorer
         from src.tasks.ace.prompts import (
             Person,
             Organization,
             GPE,
             Location,
-            BeBorn,
-            Marry,
         )
 
         reference = [
@@ -36,8 +36,15 @@ class TestEntityScorers(unittest.TestCase):
         # recall -> 2 / 5 = 0.4
         # F1 -> 2 * 0.5 * 0.4 / (0.5 + 0.4) = 0.5
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions),
+            scorer(reference=reference, predictions=predictions)["entities"],
             {"precision": 0.5, "recall": 0.4, "f1-score": 0.4444444444444445},
+        )
+
+    def test_event_scorer(self):
+        from src.tasks.ace.scorer import ACEEventScorer
+        from src.tasks.ace.prompts import (
+            BeBorn,
+            Marry,
         )
 
         reference = [
@@ -80,4 +87,86 @@ class TestEntityScorers(unittest.TestCase):
         self.assertDictEqual(
             scorer(reference=reference, predictions=predictions)["arguments"],
             {"precision": 0.6666666666666666, "recall": 0.4, "f1-score": 0.5},
+        )
+
+
+class TestRAMSScorers(unittest.TestCase):
+    def test_event_scorer(self):
+        from src.tasks.rams.scorer import RAMSEventScorer
+
+        scorer = RAMSEventScorer()
+
+        reference = [
+            TransferOwnership(
+                mention="bought",
+                subtype=None,
+                giver=["commodities trader"],
+                recipient=[],
+                beneficiary=[],
+                artifact=["appointment"],
+                preventer=[],
+                place=[],
+            ),
+            Yield(
+                mention="surrendered",
+                subtype=None,
+                agent=["Japan"],
+                recipient=[],
+                place=[],
+                origin=[],
+                destination=[],
+            ),
+        ]
+
+        # Perfect alingment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=reference)["arguments"],
+            {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
+        )
+
+        # No alignment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=[])["arguments"],
+            {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
+        )
+
+        predictions = [
+            TransferOwnership(
+                mention="bought",
+                subtype=None,
+                giver=[],
+                recipient=["commodities trader"],
+                beneficiary=[],
+                artifact=["appointment"],
+                preventer=[],
+                place=[],
+            ),
+            Yield(
+                mention="surrendered",
+                subtype=None,
+                agent=["Japan"],
+                recipient=[],
+                place=[],
+                origin=[],
+                destination=[],
+            ),
+        ]
+
+        # Partially aligned
+        # TP = 2 (artifact("apointment"), agent("Japan"))
+        # FP = 1 (recipient("commodities trader"))
+        # FN = 1 (giver("commodities trader"))
+
+        # precision -> 2 / 3 = 0.6666666666666666
+        # recall -> 2 / 3 = 0.6666666666666666
+        # F1 -> 2 * (0.6666666666666666 * 0.6666666666666666) / (0.6666666666666666 + 0.6666666666666666) = 0.6666666666666666
+
+        # No alignment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=predictions)["arguments"],
+            {
+                "precision": 0.6666666666666666,
+                "recall": 0.6666666666666666,
+                "f1-score": 0.6666666666666666,
+            },
         )

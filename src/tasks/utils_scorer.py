@@ -1,5 +1,19 @@
 from typing import Any, Dict, List, Type, Union
-from .utils_typing import Event, Relation, Scorer, Entity, Value
+from .utils_typing import Event, Relation, Entity, Value
+
+
+class Scorer:
+    """An abstract class for scorers."""
+
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
+        raise NotImplementedError("This method must be implemented.")
+
+    def _filter_valid_types(self, elems: List[Any]) -> List[Union[Entity, Value]]:
+        return [
+            elem
+            for elem in elems
+            if any(isinstance(elem, _type) for _type in self.valid_types)
+        ]
 
 
 class SpanScorer(Scorer):
@@ -13,10 +27,12 @@ class SpanScorer(Scorer):
         self,
         reference: List[Union[Entity, Value]],
         predictions: List[Union[Entity, Value]],
-    ) -> Dict[str, float]:
-        if len(reference) and not isinstance(reference[0], list):
+    ) -> Dict[str, Dict[str, float]]:
+        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
-        if len(predictions) and not isinstance(predictions[0], list):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(predictions), (
@@ -44,7 +60,7 @@ class SpanScorer(Scorer):
             else 0.0
         )
 
-        return {"precision": precision, "recall": recall, "f1-score": f1_score}
+        return {"spans": {"precision": precision, "recall": recall, "f1-score": f1_score}}
 
 
 class RelationScorer(SpanScorer):
@@ -54,16 +70,24 @@ class RelationScorer(SpanScorer):
 
     valid_types: List[Type] = [Relation]
 
+    def __call__(
+        self, reference: List[Relation], predictions: List[Relation]
+    ) -> Dict[str, Dict[str, float]]:
+        output = super().__call__(reference, predictions)
+        return {"relations": output["spans"]}
+
 
 class EventScorer(Scorer):
     """A general scorer implementation for event and argument extraction."""
 
     valid_types: List[Type] = [Event]
 
-    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
-        if len(reference) and not isinstance(reference[0], list):
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
+        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
-        if len(predictions) and not isinstance(predictions[0], list):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(predictions), (
@@ -84,7 +108,7 @@ class EventScorer(Scorer):
             for pre_event in pre:
                 a_total_pre += len(pre_event)
                 if pre_event in ref:
-                    ref_event = ref.pop(ref.index(event))
+                    ref_event = ref.pop(ref.index(pre_event))
                     e_tp += 1
                     a_tp += len(ref_event & pre_event)
 
