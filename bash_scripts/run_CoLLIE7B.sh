@@ -3,8 +3,8 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=CoLLIE7B.out.txt
-#SBATCH --error=CoLLIE7B.err.txt
+#SBATCH --output=.slurm/CoLLIE7B.out.txt
+#SBATCH --error=.slurm/CoLLIE7B.err.txt
 
 source /ikerlariak/igarcia945/envs/pytorch2/bin/activate
 
