@@ -64,6 +64,11 @@ def load_model_for_training(
         torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
     )
 
+    tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
+        model_weights_name_or_path,
+        add_eos_token=True,
+    )
+
     if config.is_encoder_decoder:
         logging.warning(
             f"Model {model_weights_name_or_path} is a encoder-decoder model. We will"
@@ -87,10 +92,9 @@ def load_model_for_training(
             device_map=device_map if int8_quantization else None,
         )
 
-    tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
-        model_weights_name_or_path,
-        add_eos_token=True,
-    )
+        tokenizer.padding_side = (  # Ensure that the padding token is added to the left of the input sequence.
+            "left"
+        )
 
     if tokenizer.pad_token_id is None:
         logging.warning(
@@ -179,6 +183,11 @@ def load_model_for_inference(
         torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
     )
 
+    tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
+        weights_path,
+        add_eos_token=True,
+    )
+
     if config.is_encoder_decoder:
         logging.warning(
             f"Model {weights_path} is a encoder-decoder model. We will"
@@ -203,10 +212,9 @@ def load_model_for_inference(
             torch_dtype=torch_dtype,
         )
 
-    tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
-        weights_path,
-        add_eos_token=True,
-    )
+        tokenizer.padding_side = (  # Ensure that the padding token is added to the left of the input sequence.
+            "left"
+        )
 
     if tokenizer.pad_token_id is None:
         logging.warning(

@@ -111,10 +111,15 @@ def inference_collie(
             "You are doing inference after training a model! We will load the "
             f"pretrained model saved in {training_args.output_dir}."
         )
-
-        model_path = training_args.output_dir
+        if model_args.use_lora:
+            model_path = model_args.model_name_or_path
+            lora_weights_name_or_path = training_args.output_dir
+        else:
+            model_path = training_args.output_dir
+            lora_weights_name_or_path = None
     else:
         model_path = model_args.model_name_or_path
+        lora_weights_name_or_path = model_args.lora_weights_name_or_path
 
     if model_args.use_lora and model_args.lora_weights_name_or_path is None:
         logging.warning(
@@ -126,15 +131,7 @@ def inference_collie(
     model, tokenizer = load_model_for_inference(
         weights_path=model_path,
         int8_quantization=model_args.int8_quantization,
-        lora_weights_name_or_path=(
-            (
-                model_args.lora_weights_name_or_path
-                if model_args.lora_weights_name_or_path is not None
-                else model_path
-            )
-            if model_args.use_lora
-            else None
-        ),
+        lora_weights_name_or_path=lora_weights_name_or_path,
     )
 
     trainer = Seq2SeqTrainer(
