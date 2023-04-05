@@ -56,6 +56,7 @@ def main(args):
                 sampler = sampler_cls(
                     dataloader,
                     task=task,
+                    split="train",
                     **config,
                     **config["task_configuration"][task],
                 )
@@ -97,6 +98,7 @@ def main(args):
                 sampler = sampler_cls(
                     dataloader,
                     task=task,
+                    split="dev",
                     **config,
                     **config["task_configuration"][task],
                 )
@@ -138,6 +140,7 @@ def main(args):
                 sampler = sampler_cls(
                     dataloader,
                     task=task,
+                    split="test",
                     **config,
                     **config["task_configuration"][task],
                 )
