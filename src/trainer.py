@@ -156,6 +156,7 @@ def inference_collie(
             inference=True,
         )
 
+        logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
 
         output_name = (
