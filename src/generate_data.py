@@ -66,7 +66,7 @@ def main(args):
                 )
 
                 if (
-                    os.path.join(args.output_dir, output_name)
+                    os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
                     logging.warning(
@@ -108,7 +108,7 @@ def main(args):
                 )
 
                 if (
-                    os.path.join(args.output_dir, output_name)
+                    os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
                     logging.warning(
@@ -150,7 +150,7 @@ def main(args):
                 )
 
                 if (
-                    os.path.join(args.output_dir, output_name)
+                    os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
                     logging.warning(
