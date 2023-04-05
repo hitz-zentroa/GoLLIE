@@ -167,7 +167,7 @@ def inference_collie(
             logging.info(f"Writing predictions to {output_name}")
             for i in range(len(predictions.predictions)):
                 prediction = predictions.predictions[i]
-                prompt = test_dataset[i]["source_ids"]
+                prompt = test_dataset[i]["input_ids"]
                 prediction = tokenizer.decode(
                     [x for x in prediction if x != -100], skip_special_tokens=True
                 )
