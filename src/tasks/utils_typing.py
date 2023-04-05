@@ -87,13 +87,19 @@ class Event:
                         attrs[attr].append(value)
                         other_values.pop(other_values.index(value))
 
-        return type(self)(mention=self.mention, **attrs)
+        pos_args = []
+        if hasattr(self, "mention"):
+            pos_args.append(self.mention)
+        if hasattr(self, "subtype"):
+            pos_args.append(self.subtype)
+
+        return type(self)(*pos_args, **attrs)
 
     def __len__(self: Event) -> int:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr == "mention")
+            if not (attr.startswith("__") or attr in ["mention", "subtype"])
         }
         _len = 0
         for values in attrs.values():

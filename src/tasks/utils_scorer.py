@@ -28,9 +28,11 @@ class SpanScorer(Scorer):
         reference: List[Union[Entity, Value]],
         predictions: List[Union[Entity, Value]],
     ) -> Dict[str, Dict[str, float]]:
-        if len(reference) and not isinstance(reference[0], list):
+        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
-        if len(predictions) and not isinstance(predictions[0], list):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(predictions), (
@@ -81,9 +83,11 @@ class EventScorer(Scorer):
     valid_types: List[Type] = [Event]
 
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
-        if len(reference) and not isinstance(reference[0], list):
+        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
-        if len(predictions) and not isinstance(predictions[0], list):
+        if not len(predictions) or (
+            len(predictions) and not isinstance(predictions[0], list)
+        ):
             predictions = [predictions]
 
         assert len(reference) == len(predictions), (
@@ -104,7 +108,7 @@ class EventScorer(Scorer):
             for pre_event in pre:
                 a_total_pre += len(pre_event)
                 if pre_event in ref:
-                    ref_event = ref.pop(ref.index(event))
+                    ref_event = ref.pop(ref.index(pre_event))
                     e_tp += 1
                     a_tp += len(ref_event & pre_event)
 

@@ -2,8 +2,8 @@ from typing import Dict, List, Type
 
 from src.tasks.utils_typing import Entity, Value
 
-from .prompts import ENTITY_DEFINITIONS, VALUE_DEFINITIONS, EVENT_DEFINITIONS
-from ..utils_scorer import RelationScorer, SpanScorer, EventScorer
+from src.tasks.ace.prompts import ENTITY_DEFINITIONS, VALUE_DEFINITIONS, EVENT_DEFINITIONS
+from src.tasks.utils_scorer import RelationScorer, SpanScorer, EventScorer
 
 
 class ACEEntityScorer(SpanScorer):
