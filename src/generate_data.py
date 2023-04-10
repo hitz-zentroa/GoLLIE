@@ -56,6 +56,7 @@ def main(args):
                 sampler = sampler_cls(
                     dataloader,
                     task=task,
+                    split="train",
                     **config,
                     **config["task_configuration"][task],
                 )
@@ -65,7 +66,7 @@ def main(args):
                 )
 
                 if (
-                    os.path.join(args.output_dir, output_name)
+                    os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
                     logging.warning(
@@ -97,6 +98,7 @@ def main(args):
                 sampler = sampler_cls(
                     dataloader,
                     task=task,
+                    split="dev",
                     **config,
                     **config["task_configuration"][task],
                 )
@@ -106,7 +108,7 @@ def main(args):
                 )
 
                 if (
-                    os.path.join(args.output_dir, output_name)
+                    os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
                     logging.warning(
@@ -138,6 +140,7 @@ def main(args):
                 sampler = sampler_cls(
                     dataloader,
                     task=task,
+                    split="test",
                     **config,
                     **config["task_configuration"][task],
                 )
@@ -147,7 +150,7 @@ def main(args):
                 )
 
                 if (
-                    os.path.join(args.output_dir, output_name)
+                    os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
                     logging.warning(
