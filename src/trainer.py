@@ -121,7 +121,7 @@ def inference_collie(
         model_path = model_args.model_name_or_path
         lora_weights_name_or_path = model_args.lora_weights_name_or_path
 
-    if model_args.use_lora and model_args.lora_weights_name_or_path is None:
+    if model_args.use_lora and lora_weights_name_or_path is None:
         logging.warning(
             "You are have specified to use LORA, but have not specified a path to the "
             "LORA weights. We will attempt to load the LORA weights from the same "
