@@ -12,7 +12,7 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export TOKENIZERS_PARALLELISM=true
-export TRANSFORMERS_NO_ADVISORY_WARNINGS="true"
+export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_PROJECT=CoLLIE
 
 cd ../src || exit
