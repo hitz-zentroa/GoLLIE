@@ -69,9 +69,7 @@ def main(args):
                     os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
-                    logging.warning(
-                        f"Skipping {output_name} because it already exists."
-                    )
+                    logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
                 with open(
@@ -103,17 +101,13 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
-                output_name = (
-                    f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
-                )
+                output_name = f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
 
                 if (
                     os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
-                    logging.warning(
-                        f"Skipping {output_name} because it already exists."
-                    )
+                    logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
                 with open(
@@ -153,9 +147,7 @@ def main(args):
                     os.path.exists(os.path.join(args.output_dir, output_name))
                     and not args.overwrite_output_dir
                 ):
-                    logging.warning(
-                        f"Skipping {output_name} because it already exists."
-                    )
+                    logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
                 with open(

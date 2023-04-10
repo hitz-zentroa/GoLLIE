@@ -1,6 +1,7 @@
 .slurm/*
 .vscode/*
 data/*
+wandb/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -133,3 +134,5 @@ dmypy.json
 .pyre/
 
 .idea/
+
+pretrained_models/
