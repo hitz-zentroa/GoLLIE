@@ -6,13 +6,14 @@
 #SBATCH --output=.slurm/CoLLIE7B.out.txt
 #SBATCH --error=.slurm/CoLLIE7B.err.txt
 
-source /ikerlariak/igarcia945/envs/pytorch2/bin/activate
+source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export TOKENIZERS_PARALLELISM=true
 export TRANSFORMERS_NO_ADVISORY_WARNINGS="true"
+export WANDB_PROJECT=CoLLIE
 
 cd ../src || exit
 
