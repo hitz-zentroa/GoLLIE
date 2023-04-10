@@ -15,8 +15,12 @@ export TOKENIZERS_PARALLELISM=true
 export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_PROJECT=CoLLIE
 
-cd ../src || exit
 
-python3 trainer.py ../CoLLIE_configs/CoLLIE-7B.yaml
+CONFIGS_FOLDER="configs/model_configs"
+
+# cd ../src || exit
+
+# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
+python3 trainer.py ${CONFIGS_FOLDER}/CoLLIE-7B.yaml
 
 # python3 trainer.py ../CoLLIE_configs/CoLLIE-7B_eval.yaml

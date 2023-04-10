@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_DIR="configs"
+CONFIG_DIR="configs/data_configs"
 OUTPUT_DIR="data/processed"
 
 python -m src.generate_data \
