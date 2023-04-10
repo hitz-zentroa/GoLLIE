@@ -95,13 +95,9 @@ def train_collie(
     trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
 
     # Save the model
+    trainer.save_model()
     model.save_pretrained(training_args.output_dir)
     model.config.save_pretrained(training_args.output_dir)
-    tokenizer.save_pretrained(training_args.output_dir)
-    # trainer.save_model()
-    # model.config.save_pretrained(training_args.output_dir)  # Not saved by the trainer
-
-    model.save_pretrained(training_args.output_dir)
     tokenizer.save_pretrained(training_args.output_dir)
 
 
