@@ -139,9 +139,7 @@ def load_model_for_training(
 
             model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
 
-    trainable_params, total_params, trainable_percentage = get_trainable_parameters(
-        model
-    )
+    trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
     logging.info(
         f"---> Trainable params: {trainable_params} || all params: {total_params} ||"
         f" trainable%: {round(trainable_percentage,6)}\n"
@@ -225,9 +223,7 @@ def load_model_for_inference(
     if lora_weights_name_or_path:
         from peft import PeftModel
 
-        logging.info(
-            f"Loading pretrained LORA weights from {lora_weights_name_or_path}"
-        )
+        logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
         model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
 
     return model, tokenizer

@@ -108,9 +108,7 @@ def run_training_test(
 
     if int8_quantization:
         if optimizer_name != "adamW":
-            raise ValueError(
-                "Int8 quantization is only supported with adamW optimizer."
-            )
+            raise ValueError("Int8 quantization is only supported with adamW optimizer.")
         optimizer = bnb.optim.AdamW8bit(
             model.parameters(),
             lr=learning_rate,
@@ -261,9 +259,7 @@ def main():
                 else:
                     raise e
 
-    table = tabulate(
-        tabular_data=result_matrix, headers=batch_sizes, showindex=seq_lens
-    )
+    table = tabulate(tabular_data=result_matrix, headers=batch_sizes, showindex=seq_lens)
     print(table)
 
 
