@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE7B
+#SBATCH --job-name=CoLLIE7B_hparams
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE7B.out.txt
-#SBATCH --error=.slurm/CoLLIE7B.err.txt
+#SBATCH --output=.slurm/CoLLIE7B_hparams.out
+#SBATCH --error=.slurm/CoLLIE7B_hparams.err
 
 source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
