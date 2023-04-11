@@ -18,7 +18,7 @@ def load_model_for_training(
     int8_quantization: bool = False,
     use_lora: bool = False,
     lora_weights_name_or_path: Optional[str] = None,
-    target_modules: Optional[List[str]] = None,
+    lora_target_modules: Optional[List[str]] = None,
     lora_r: Optional[int] = 8,
     lora_alpha: Optional[int] = 16,
     lora_dropout: Optional[float] = 0.05,
@@ -35,6 +35,7 @@ def load_model_for_training(
     :param lora_weights_name_or_path: The name or path to the pre-trained LORA model weights. You can also provide a
                                       huggingface hub model name to load the weights from there. If not provided, the
                                       weights will be initialized randomly, this requires training the model.
+    :param lora_target_modules: The list of modules to apply LORA to. If not provided, we will use PEFT default modules.
     :param lora_r: Lora attention dimension.
     :param lora_alpha: The alpha parameter for Lora scaling.
     :param lora_dropout: The dropout probability for Lora layers.
@@ -118,14 +119,14 @@ def load_model_for_training(
                 " randomly."
             )
 
-            if target_modules is None or (
-                target_modules is not None and len(target_modules) == 0
+            if lora_target_modules is None or (
+                lora_target_modules is not None and len(lora_target_modules) == 0
             ):
                 logging.warning(
                     "No target modules provided,  will use the default modules for the"
                     " model in huggingface PEFT library. "
                 )
-                target_modules = None
+                lora_target_modules = None
 
             config = LoraConfig(
                 r=lora_r,
@@ -133,7 +134,7 @@ def load_model_for_training(
                 lora_dropout=lora_dropout,
                 bias="none",
                 task_type=TaskType.CAUSAL_LM,
-                target_modules=target_modules,
+                target_modules=lora_target_modules,
             )
 
             model = get_peft_model(model, config)

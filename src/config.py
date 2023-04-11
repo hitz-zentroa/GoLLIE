@@ -73,7 +73,7 @@ class ModelArguments:
         metadata={"help": "The dropout probability for Lora layers."},
     )
 
-    target_modules: Optional[List[str]] = field(
+    lora_target_modules: Optional[List[str]] = field(
         default_factory=list,
         metadata={
             "help": (

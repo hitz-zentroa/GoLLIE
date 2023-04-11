@@ -24,11 +24,12 @@ CONFIGS_FOLDER="configs/model_configs/hparams"
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
 # COSINE SCHEDULER
-python3 src/trainer.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_5e5_cosine.yaml
 python3 src/trainer.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine.yaml
 
+#Big Lora
+python3 src/trainer.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_bigLora.yaml
+
 #CONSTANT SCHEDULER
-python3 src/trainer.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_5e5_constant.yaml
 python3 src/trainer.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant.yaml
 
 # OTHER OPTIMIZERS
