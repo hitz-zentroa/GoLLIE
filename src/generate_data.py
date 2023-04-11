@@ -85,7 +85,7 @@ def main(args):
                     )
                     ids = []
                     for elem in sampler:
-                        _file.write(f"{json.dumps(elem)}\n")
+                        _file.write(f"{json.dumps(elem, ensure_ascii=False)}\n")
                         if ids != elem["ids"]:
                             ids = elem["ids"]
                             progress.update(task, advance=len(ids))
@@ -123,7 +123,7 @@ def main(args):
                     )
                     ids = []
                     for elem in sampler:
-                        _file.write(f"{json.dumps(elem)}\n")
+                        _file.write(f"{json.dumps(elem, ensure_ascii=False)}\n")
                         if ids != elem["ids"]:
                             ids = elem["ids"]
                             progress.update(task, advance=len(ids))
@@ -163,7 +163,7 @@ def main(args):
                     )
                     ids = []
                     for elem in sampler:
-                        _file.write(f"{json.dumps(elem)}\n")
+                        _file.write(f"{json.dumps(elem, ensure_ascii=False)}\n")
                         if ids != elem["ids"]:
                             ids = elem["ids"]
                             progress.update(task, advance=len(ids))
