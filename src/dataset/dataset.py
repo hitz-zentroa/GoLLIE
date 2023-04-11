@@ -231,4 +231,4 @@ class CollieDataset(Dataset):
         return len(self.tokenized_examples)
 
     def __getitem__(self, idx):
-        return self.tokenized_examples[idx]
+        return self.tokenized_examples[idx].copy()

@@ -27,6 +27,7 @@ def train_collie(
         model_weights_name_or_path=model_args.model_name_or_path,
         int8_quantization=model_args.int8_quantization,
         use_lora=model_args.use_lora,
+        target_modules=model_args.target_modules,
         torch_dtype=model_args.torch_dtype,
     )
 

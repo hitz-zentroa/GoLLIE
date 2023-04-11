@@ -73,6 +73,16 @@ class ModelArguments:
         metadata={"help": "The dropout probability for Lora layers."},
     )
 
+    target_modules: Optional[List[str]] = field(
+        default_factory=list,
+        metadata={
+            "help": (
+                "The target modules to which LoRA will be applied. If not specified, We"
+                " will use the default modules for the model in huggingface PEFT library."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:

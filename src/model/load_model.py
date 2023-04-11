@@ -6,7 +6,7 @@ from transformers import (
     PreTrainedModel,
     AutoConfig,
 )
-from typing import Optional
+from typing import Optional, List
 import logging
 from .model_utils import get_trainable_parameters
 import os
@@ -18,6 +18,7 @@ def load_model_for_training(
     int8_quantization: bool = False,
     use_lora: bool = False,
     lora_weights_name_or_path: Optional[str] = None,
+    target_modules: Optional[List[str]] = None,
     lora_r: Optional[int] = 8,
     lora_alpha: Optional[int] = 16,
     lora_dropout: Optional[float] = 0.05,
@@ -117,27 +118,34 @@ def load_model_for_training(
                 " randomly."
             )
 
+            if target_modules is None or (
+                target_modules is not None and len(target_modules) == 0
+            ):
+                logging.warning(
+                    "No target modules provided,  will use the default modules for the"
+                    " model in huggingface PEFT library. "
+                )
+                target_modules = None
+
             config = LoraConfig(
                 r=lora_r,
                 lora_alpha=lora_alpha,
                 lora_dropout=lora_dropout,
                 bias="none",
-                target_modules=(
-                    ["q_proj", "v_proj"]
-                    if model.config.model_type == "llama"
-                    else None  # Use PEFT default target modules. We specify here for Llama because the
-                    # current version of PEFT does not have the Llama target modules yet.
-                ),
                 task_type=TaskType.CAUSAL_LM,
+                target_modules=target_modules,
             )
 
             model = get_peft_model(model, config)
+
         else:
             logging.info(
                 f"Loading pretrained LORA weights from {lora_weights_name_or_path}"
             )
 
             model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+
+        logging.info(f"\nLoRA config:\n{model.peft_config}\n")
 
     trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
     logging.info(
