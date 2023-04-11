@@ -1,3 +1,5 @@
+import json
+
 from transformers import (
     Seq2SeqTrainingArguments,
     HfArgumentParser,
@@ -95,10 +97,10 @@ def train_collie(
     trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
 
     # Save the model
-    trainer.save_model()
+    # trainer.save_model()
     model.save_pretrained(training_args.output_dir)
-    model.config.save_pretrained(training_args.output_dir)
-    tokenizer.save_pretrained(training_args.output_dir)
+    # model.config.save_pretrained(training_args.output_dir)
+    # tokenizer.save_pretrained(training_args.output_dir)
 
 
 def inference_collie(
@@ -160,21 +162,18 @@ def inference_collie(
         predictions = trainer.predict(test_dataset)
 
         output_name = (
-            f"{os.path.join(training_args.output_dir,test_task)}.predictions.txt"
+            f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
         )
 
         with open(output_name, "w", encoding="utf8") as f:
             logging.info(f"Writing predictions to {output_name}")
-            for i in range(len(predictions.predictions)):
-                prediction = predictions.predictions[i]
-                prompt = test_dataset[i]["input_ids"]
-                prediction = tokenizer.decode(
-                    [x for x in prediction if x != -100], skip_special_tokens=True
+            predictions = predictions.predictions
+            predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+            for prediction in predictions:
+                print(
+                    json.dumps({"model_prediction": prediction}, ensure_ascii=False),
+                    file=f,
                 )
-                prompt = tokenizer.decode(
-                    [x for x in prompt if x != -100], skip_special_tokens=True
-                )
-                print(f"{prompt}{prediction}", file=f)
 
 
 if __name__ == "__main__":
