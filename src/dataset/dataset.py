@@ -78,7 +78,6 @@ def prepare_data(
                 padding="max_length" if pad_to_max_length else False,
                 return_tensors=None,
                 add_special_tokens=True,
-                add_eos_token=False,
             )
 
             # Remove the last token if it is an eos token
