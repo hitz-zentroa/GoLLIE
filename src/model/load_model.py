@@ -45,7 +45,7 @@ def load_model_for_training(
     """
 
     if int8_quantization and not use_lora:
-        raise ValueError(
+        logging.warning(
             "Training with Int8 quantization is only supported with LoRA. If you want"
             " to train in Int8, please add the flag --use_lora. You can only evaluate"
             " in Int8 without LoRA."
