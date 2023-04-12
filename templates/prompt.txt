@@ -9,6 +9,6 @@ text = "{{ text }}"
 # The annotation instances that take place in the text above are listed here
 result = [
 {%- for ann in annotations %}
-    {{ ann }}
+    {{ ann }},
 {%- endfor %}
 ]

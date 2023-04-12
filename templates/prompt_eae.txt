@@ -13,6 +13,6 @@ text = "{{ text }}"
 # 
 result = [
 {%- for ann in annotations %}
-    {{ ann }}
+    {{ ann }},
 {%- endfor %}
 ]
