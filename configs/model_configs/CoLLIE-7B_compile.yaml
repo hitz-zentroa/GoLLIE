@@ -68,5 +68,5 @@ resume_from_checkpoint: false
 # performance
 bf16: false
 fp16: true
-torch_compile: false
+torch_compile: true
 ddp_find_unused_parameters: false

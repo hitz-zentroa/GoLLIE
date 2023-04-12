@@ -73,6 +73,16 @@ class ModelArguments:
         metadata={"help": "The dropout probability for Lora layers."},
     )
 
+    lora_target_modules: Optional[List[str]] = field(
+        default_factory=list,
+        metadata={
+            "help": (
+                "The target modules to which LoRA will be applied. If not specified, We"
+                " will use the default modules for the model in huggingface PEFT library."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:
@@ -124,6 +134,15 @@ class DataTrainingArguments:
             "help": (
                 "Whether to ignore the tokens corresponding to padded labels in the"
                 " loss computation or not."
+            )
+        },
+    )
+
+    use_dev_inference: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Use the development set for inference instead of the test set."
             )
         },
     )

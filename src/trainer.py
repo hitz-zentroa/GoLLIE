@@ -1,3 +1,5 @@
+import json
+
 from transformers import (
     Seq2SeqTrainingArguments,
     HfArgumentParser,
@@ -25,6 +27,7 @@ def train_collie(
         model_weights_name_or_path=model_args.model_name_or_path,
         int8_quantization=model_args.int8_quantization,
         use_lora=model_args.use_lora,
+        lora_target_modules=model_args.lora_target_modules,
         torch_dtype=model_args.torch_dtype,
     )
 
@@ -95,10 +98,10 @@ def train_collie(
     trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
 
     # Save the model
-    trainer.save_model()
+    # trainer.save_model()
     model.save_pretrained(training_args.output_dir)
-    model.config.save_pretrained(training_args.output_dir)
-    tokenizer.save_pretrained(training_args.output_dir)
+    # model.config.save_pretrained(training_args.output_dir)
+    # tokenizer.save_pretrained(training_args.output_dir)
 
 
 def inference_collie(
@@ -106,6 +109,22 @@ def inference_collie(
     data_args: DataTrainingArguments,
     training_args: Seq2SeqTrainingArguments,
 ):
+    if not training_args.predict_with_generate:
+        logging.warning(
+            f"You have set predict_with_generate to False. We will only compute the loss"
+            f" on the test set. If you want to generate predictions, set"
+            f" predict_with_generate to True."
+        )
+
+        if not training_args.prediction_loss_only:
+            logging.warning(
+                f"You have set predict_with_generate to False, so you only "
+                f"want to compute the loss on the test set. But you have set "
+                f"prediction_loss_only to False. This is contradictory, please "
+                f"review you configuration. We will attempt to continue but "
+                f"you might get unexpected results."
+            )
+
     if training_args.do_train:
         logging.warning(
             "You are doing inference after training a model! We will load the "
@@ -121,7 +140,7 @@ def inference_collie(
         model_path = model_args.model_name_or_path
         lora_weights_name_or_path = model_args.lora_weights_name_or_path
 
-    if model_args.use_lora and model_args.lora_weights_name_or_path is None:
+    if model_args.use_lora and lora_weights_name_or_path is None:
         logging.warning(
             "You are have specified to use LORA, but have not specified a path to the "
             "LORA weights. We will attempt to load the LORA weights from the same "
@@ -146,35 +165,45 @@ def inference_collie(
     )
 
     for test_task in data_args.test_tasks:
-        test_dataset = os.path.join(data_args.dataset_dir, f"{test_task}.test.jsonl")
+        test_dataset = os.path.join(
+            data_args.dataset_dir,
+            f"{test_task}.{'test' if not data_args.use_dev_inference else 'dev'}.jsonl",
+        )
         test_dataset = CollieDataset(
             tokenizer=tokenizer,
             dataset_path=test_dataset,
             max_length=data_args.max_seq_length,
             pad_to_max_length=False,
             is_encoder_decoder=model.config.is_encoder_decoder,
-            inference=True,
+            inference=True if training_args.predict_with_generate else False,
         )
 
         logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
 
-        output_name = (
-            f"{os.path.join(training_args.output_dir,test_task)}.predictions.txt"
-        )
+        if training_args.predict_with_generate:
+            output_name = (
+                f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
+            )
 
-        with open(output_name, "w", encoding="utf8") as f:
-            logging.info(f"Writing predictions to {output_name}")
-            for i in range(len(predictions.predictions)):
-                prediction = predictions.predictions[i]
-                prompt = test_dataset[i]["input_ids"]
-                prediction = tokenizer.decode(
-                    [x for x in prediction if x != -100], skip_special_tokens=True
+            with open(output_name, "w", encoding="utf8") as f:
+                logging.info(f"Writing predictions to {output_name}")
+                predictions = predictions.predictions
+                predictions = tokenizer.batch_decode(
+                    predictions, skip_special_tokens=True
                 )
-                prompt = tokenizer.decode(
-                    [x for x in prompt if x != -100], skip_special_tokens=True
-                )
-                print(f"{prompt}{prediction}", file=f)
+                for prediction in predictions:
+                    print(
+                        json.dumps({"model_prediction": prediction}, ensure_ascii=False),
+                        file=f,
+                    )
+        else:
+            metrics_name = (
+                f"{os.path.join(training_args.output_dir,test_task)}.metrics.json"
+            )
+            with open(metrics_name, "w", encoding="utf8") as f:
+                logging.info(f"Writing metrics to {metrics_name}")
+                json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
