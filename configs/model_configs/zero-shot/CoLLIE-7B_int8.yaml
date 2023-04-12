@@ -8,9 +8,7 @@ int8_quantization: true
 # dataset arguments
 dataset_dir:
   /gscratch4/users/osainz006/CoLLIE/data/processed
-train_tasks:
-  - ace05.ner
-validation_tasks:
+test_tasks:
   - ace05.ner
 max_seq_length: 2048
 generation_max_length: 2048
@@ -25,11 +23,14 @@ save_total_limit: 0
 
 # evaluation
 do_train: false
-do_eval: true
+do_eval: false
+do_predict: true
 evaluation_strategy: "steps"
 eval_steps: 100
 eval_delay: 0
 predict_with_generate: false
+prediction_loss_only: true
+use_dev_inference: true
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
 per_device_train_batch_size: 32

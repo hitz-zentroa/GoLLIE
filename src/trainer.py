@@ -109,6 +109,22 @@ def inference_collie(
     data_args: DataTrainingArguments,
     training_args: Seq2SeqTrainingArguments,
 ):
+    if not training_args.predict_with_generate:
+        logging.warning(
+            f"You have set predict_with_generate to False. We will only compute the loss"
+            f" on the test set. If you want to generate predictions, set"
+            f" predict_with_generate to True."
+        )
+
+        if not training_args.prediction_loss_only:
+            logging.warning(
+                f"You have set predict_with_generate to False, so you only "
+                f"want to compute the loss on the test set. But you have set "
+                f"prediction_loss_only to False. This is contradictory, please "
+                f"review you configuration. We will attempt to continue but "
+                f"you might get unexpected results."
+            )
+
     if training_args.do_train:
         logging.warning(
             "You are doing inference after training a model! We will load the "
@@ -149,32 +165,45 @@ def inference_collie(
     )
 
     for test_task in data_args.test_tasks:
-        test_dataset = os.path.join(data_args.dataset_dir, f"{test_task}.test.jsonl")
+        test_dataset = os.path.join(
+            data_args.dataset_dir,
+            f"{test_task}.{'test' if not data_args.use_dev_inference else 'dev'}.jsonl",
+        )
         test_dataset = CollieDataset(
             tokenizer=tokenizer,
             dataset_path=test_dataset,
             max_length=data_args.max_seq_length,
             pad_to_max_length=False,
             is_encoder_decoder=model.config.is_encoder_decoder,
-            inference=True,
+            inference=True if training_args.predict_with_generate else False,
         )
 
         logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
 
-        output_name = (
-            f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
-        )
+        if training_args.predict_with_generate:
+            output_name = (
+                f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
+            )
 
-        with open(output_name, "w", encoding="utf8") as f:
-            logging.info(f"Writing predictions to {output_name}")
-            predictions = predictions.predictions
-            predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-            for prediction in predictions:
-                print(
-                    json.dumps({"model_prediction": prediction}, ensure_ascii=False),
-                    file=f,
+            with open(output_name, "w", encoding="utf8") as f:
+                logging.info(f"Writing predictions to {output_name}")
+                predictions = predictions.predictions
+                predictions = tokenizer.batch_decode(
+                    predictions, skip_special_tokens=True
                 )
+                for prediction in predictions:
+                    print(
+                        json.dumps({"model_prediction": prediction}, ensure_ascii=False),
+                        file=f,
+                    )
+        else:
+            metrics_name = (
+                f"{os.path.join(training_args.output_dir,test_task)}.metrics.json"
+            )
+            with open(metrics_name, "w", encoding="utf8") as f:
+                logging.info(f"Writing metrics to {metrics_name}")
+                json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
 
 if __name__ == "__main__":
