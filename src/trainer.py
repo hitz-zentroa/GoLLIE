@@ -16,6 +16,8 @@ import os
 import torch.utils.data
 import logging
 
+from evaluate import evaluate
+
 
 def train_collie(
     model_args: ModelArguments,
@@ -182,9 +184,8 @@ def inference_collie(
         predictions = trainer.predict(test_dataset)
 
         if training_args.predict_with_generate:
-            output_name = (
-                f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
-            )
+            output_name = os.path.join(training_args.output_dir, "predictions")
+            output_name = f"{os.path.join(output_name, test_task)}.predictions.jsonl"
 
             with open(output_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing predictions to {output_name}")
@@ -204,6 +205,9 @@ def inference_collie(
             with open(metrics_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing metrics to {metrics_name}")
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
+
+    if training_args.predict_with_generate:
+        evaluate(model_args, data_args, training_args)
 
 
 if __name__ == "__main__":
@@ -238,7 +242,7 @@ if __name__ == "__main__":
             training_args,
         )
 
-    if data_args.test_tasks is not None:
+    if data_args.test_tasks is not None and training_args.do_predict:
         inference_collie(
             model_args,
             data_args,

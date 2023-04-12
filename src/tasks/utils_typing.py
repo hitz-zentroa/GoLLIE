@@ -35,7 +35,12 @@ class Entity:
     span: str
 
     def __eq__(self: Entity, other: Entity) -> bool:
-        return type(self) == type(other) and self.span == other.span
+        self_span = self.span.lower().strip()
+        other_span = other.span.lower().strip()
+        return type(self) == type(other) and self_span == other_span
+    
+    def exists_in(self, text: str) -> bool:
+        return self.span.lower() in text.lower()
 
 
 @dataclass
