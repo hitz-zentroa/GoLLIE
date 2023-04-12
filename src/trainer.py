@@ -4,8 +4,10 @@ from transformers import (
     Seq2SeqTrainingArguments,
     HfArgumentParser,
     DataCollatorForSeq2Seq,
-    Seq2SeqTrainer,
 )
+
+from collie_trainer import CollieTrainer
+
 from datasets import DatasetDict
 
 from dataset.dataset import CollieDataset
@@ -79,7 +81,7 @@ def train_collie(
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
-    trainer = Seq2SeqTrainer(
+    trainer = CollieTrainer(
         model=model,
         train_dataset=train_dataset,
         eval_dataset=dev_datasets,
@@ -153,7 +155,7 @@ def inference_collie(
         lora_weights_name_or_path=lora_weights_name_or_path,
     )
 
-    trainer = Seq2SeqTrainer(
+    trainer = CollieTrainer(
         model=model,
         args=training_args,
         data_collator=DataCollatorForSeq2Seq(
