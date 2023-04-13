@@ -58,7 +58,7 @@ result = [
         project_name=["Pangean Reunification Facility"]
     ),
 ]"""
-    with tempfile.TemporaryFile() as tmpdirname:
+    with tempfile.TemporaryDirectory() as tmpdirname:
         with open(os.path.join(tmpdirname, "test.jsonl"), "w", encoding="utf8") as f:
             print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
