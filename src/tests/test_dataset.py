@@ -79,9 +79,12 @@ class TestCollieDataset(unittest.TestCase):
         from transformers import AutoTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained(
-            "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
-            if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
-            else "EleutherAI/gpt-neo-125m"
+            (
+                "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+                if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+                else "EleutherAI/gpt-neo-125m"
+            ),
+            add_eos_token=True,
         )
 
         if tokenizer.pad_token_id is None:
@@ -231,9 +234,12 @@ class TestCollieDataset(unittest.TestCase):
         from torch.utils.data import DataLoader
 
         tokenizer = AutoTokenizer.from_pretrained(
-            "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
-            if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
-            else "EleutherAI/gpt-neo-125m"
+            (
+                "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+                if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+                else "EleutherAI/gpt-neo-125m"
+            ),
+            add_eos_token=True,
         )
 
         if tokenizer.pad_token_id is None:

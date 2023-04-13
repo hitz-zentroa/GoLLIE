@@ -69,7 +69,6 @@ def load_model_for_training(
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
-        use_fast=False,  # TODO: #13 There is a bug with fast tokenizer and unk token
     )
 
     if config.is_encoder_decoder:
