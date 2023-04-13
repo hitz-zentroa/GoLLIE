@@ -9,7 +9,6 @@ import tempfile
 def get_dataset(
     tokenizer: PreTrainedTokenizerBase,
     is_encoder_decoder: bool,
-    pad_to_max_length: bool,
     inference: bool,
 ) -> (CollieDataset, str, str):
     text = """@dataclass
@@ -67,7 +66,6 @@ result = [
             dataset_path=os.path.join(tmpdirname, "test.jsonl"),
             is_encoder_decoder=is_encoder_decoder,
             max_length=2048,
-            pad_to_max_length=pad_to_max_length,
             inference=inference,
         )
 
@@ -94,7 +92,6 @@ class TestCollieDataset(unittest.TestCase):
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
             is_encoder_decoder=False,
-            pad_to_max_length=False,
             inference=False,
         )
 
@@ -112,7 +109,6 @@ class TestCollieDataset(unittest.TestCase):
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
             is_encoder_decoder=False,
-            pad_to_max_length=False,
             inference=True,
         )
 
@@ -124,25 +120,6 @@ class TestCollieDataset(unittest.TestCase):
             ),
             prompt,
         )
-
-        #  Test train with pad_to_max_length
-        dataset, prompt, result = get_dataset(
-            tokenizer=tokenizer,
-            is_encoder_decoder=False,
-            pad_to_max_length=True,
-            inference=False,
-        )
-
-        model_input = dataset[0]["input_ids"]
-        labels = dataset[0]["labels"]
-        self.assertEqual(model_input, labels)
-        self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
-            prompt + result,
-        )
-        self.assertTrue(len(model_input) == 2048)
 
     """
     We do not support encoder-decoder models yet. T5/mT5/FlanT5 lack the representation for '\n' or multiple whitespaces
@@ -249,13 +226,12 @@ class TestCollieDataset(unittest.TestCase):
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
             is_encoder_decoder=False,
-            pad_to_max_length=True,
             inference=False,
         )
 
         datacollator = DataCollatorForSeq2Seq(
             tokenizer,
-            pad_to_multiple_of=8,
+            pad_to_multiple_of=2048,
             return_tensors="pt",
             padding=True,
             label_pad_token_id=-100,
@@ -275,13 +251,11 @@ class TestCollieDataset(unittest.TestCase):
             ),
             prompt + result,
         )
-
-        self.assertTrue(len(model_input) == 2048)
         self.assertEqual(model_input[0], -100)
 
         datacollator = DataCollatorForSeq2Seq(
             tokenizer,
-            pad_to_multiple_of=8,
+            pad_to_multiple_of=2048,
             return_tensors="pt",
             padding=True,
             label_pad_token_id=tokenizer.pad_token_id,
@@ -302,5 +276,4 @@ class TestCollieDataset(unittest.TestCase):
             prompt + result,
         )
 
-        self.assertTrue(len(model_input) == 2048)
         self.assertEqual(model_input[0], tokenizer.pad_token_id)

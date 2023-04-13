@@ -60,7 +60,6 @@ def train_collie(
             tokenizer=tokenizer,
             dataset_path=train_path,
             max_length=data_args.max_seq_length,
-            pad_to_max_length=False,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
         )
@@ -75,7 +74,6 @@ def train_collie(
             tokenizer=tokenizer,
             dataset_path=dev_path,
             max_length=data_args.max_seq_length,
-            pad_to_max_length=False,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
         )
@@ -176,7 +174,6 @@ def inference_collie(
             tokenizer=tokenizer,
             dataset_path=test_dataset,
             max_length=data_args.max_seq_length,
-            pad_to_max_length=False,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
         )

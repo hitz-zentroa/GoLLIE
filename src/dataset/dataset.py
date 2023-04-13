@@ -29,7 +29,6 @@ def prepare_data(
     tokenizer: PreTrainedTokenizerBase,
     is_encoder_decoder: bool = False,
     max_length: int = 2048,
-    pad_to_max_length: bool = False,
     inference: bool = False,
 ) -> BatchEncoding:
     """
@@ -54,7 +53,7 @@ def prepare_data(
             text=prompt,
             max_length=max_length,
             truncation=True,
-            padding="max_length" if pad_to_max_length else False,
+            padding=False,
             return_tensors=None,
             add_special_tokens=True,
         )
@@ -63,7 +62,7 @@ def prepare_data(
                 text_target=result,
                 max_length=max_length,
                 truncation=True,
-                padding="max_length" if pad_to_max_length else False,
+                padding=False,
                 return_tensors=None,
                 add_special_tokens=True,
             )["input_ids"]
@@ -75,7 +74,7 @@ def prepare_data(
                 text=prompt,
                 max_length=max_length,
                 truncation=True,
-                padding="max_length" if pad_to_max_length else False,
+                padding=False,
                 return_tensors=None,
                 add_special_tokens=True,
             )
@@ -90,7 +89,7 @@ def prepare_data(
                 text=example,
                 max_length=max_length,
                 truncation=True,
-                padding="max_length" if pad_to_max_length else False,
+                padding=False,
                 return_tensors=None,
                 add_special_tokens=True,
             )
@@ -105,7 +104,6 @@ def batch_tokenization(
     dataset_name: str,
     is_encoder_decoder: bool,
     max_length: int,
-    pad_to_max_length: bool,
     inference: bool,
     examples: List[str],
     process_no: int,
@@ -115,7 +113,6 @@ def batch_tokenization(
     :param tokenizer: The tokenizer to use.
     :param is_encoder_decoder: Whether the model is an encoder-decoder model.
     :param max_length: The maximum length of the input.
-    :param pad_to_max_length: Whether to pad the input to the maximum length.
     :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
                         will be truncated to don't include the results section of the example. Labels will still
                         include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
@@ -137,7 +134,6 @@ def batch_tokenization(
                         tokenizer,
                         is_encoder_decoder,
                         max_length,
-                        pad_to_max_length,
                         inference,
                     )
                 )
@@ -169,7 +165,6 @@ class CollieDataset(Dataset):
         dataset_path: str,
         is_encoder_decoder: bool = False,
         max_length: int = 2048,
-        pad_to_max_length: bool = False,
         inference: bool = False,
         num_workers: int = min(os.cpu_count(), 16),
     ):
@@ -178,7 +173,6 @@ class CollieDataset(Dataset):
         :param dataset_path: The path to the jsonl file containing the dataset.
         :param is_encoder_decoder: Whether the model is an encoder-decoder model.
         :param max_length: The maximum length of the input.
-        :param pad_to_max_length: Whether to pad the input to the maximum length.
         :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
                             will be truncated to don't include the results section of the example. Labels will still
                             include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
@@ -199,7 +193,6 @@ class CollieDataset(Dataset):
                 self.dataset_name,
                 is_encoder_decoder,
                 max_length,
-                pad_to_max_length,
                 inference,
                 examples,
                 0,
@@ -211,7 +204,6 @@ class CollieDataset(Dataset):
                 self.dataset_name,
                 is_encoder_decoder,
                 max_length,
-                pad_to_max_length,
                 inference,
             )
             with Pool(num_workers) as p:
