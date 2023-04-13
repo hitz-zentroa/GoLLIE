@@ -45,8 +45,8 @@ def prepare_data(
     """
 
     if is_encoder_decoder:
-        prompt, result = example.split("result =")
-        prompt = prompt + "result ="
+        prompt, result = example.split("result = [\n")
+        prompt = prompt + "result = [\n"
         prompt = prompt.strip()
         result = result.strip()
 
@@ -70,7 +70,7 @@ def prepare_data(
 
     else:
         if inference:
-            prompt = example.split("result =")[0] + "result ="
+            prompt = example.split("result = [\n")[0] + "result = [\n"
             model_inputs = tokenizer(
                 text=prompt,
                 max_length=max_length,
