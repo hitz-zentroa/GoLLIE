@@ -53,7 +53,7 @@ class RichProgressCallback(TrainerCallback):
                 self.prediction_task = self.prediction_bar.add_task(
                     "[cyan]Predicting: ", total=len(eval_dataloader)
                 )
-            self.prediction_bar.update(self.prediction_task, 1)
+            self.prediction_bar.update(self.prediction_task, advance=1)
 
     def on_evaluate(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
