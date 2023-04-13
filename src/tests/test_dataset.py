@@ -244,14 +244,22 @@ class TestCollieDataset(unittest.TestCase):
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
-        self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(
                 model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
             ),
             prompt + result,
         )
-        self.assertEqual(model_input[0], -100)
+        self.assertEqual(
+            tokenizer.decode(
+                [x for x in labels if x != -100],
+                skip_special_tokens=True,
+                clean_up_tokenization_spaces=False,
+            ),
+            prompt + result,
+        )
+        self.assertEqual(model_input[0], tokenizer.pad_token_id)
+        self.assertEqual(labels[0], -100)
 
         datacollator = DataCollatorForSeq2Seq(
             tokenizer,
@@ -277,3 +285,4 @@ class TestCollieDataset(unittest.TestCase):
         )
 
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
+        self.assertEqual(labels[0], tokenizer.pad_token_id)
