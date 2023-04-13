@@ -219,6 +219,8 @@ class TestCollieDataset(unittest.TestCase):
             add_eos_token=True,
         )
 
+        tokenizer.padding_side = "left"
+
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token_id = tokenizer.unk_token_id
 
