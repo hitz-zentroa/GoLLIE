@@ -147,6 +147,9 @@ class TestCollieDataset(unittest.TestCase):
         tokenizer = AutoTokenizer.from_pretrained("google/mt5-small")
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token_id = tokenizer.unk_token_id
+        if tokenizer.decode(tokenizer.encode("\n", add_special_tokens=False)) != "\n":
+            """T5 does not have a newline token, so we add one"""
+            tokenizer.add_tokens("\n")
         # Test Train
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
