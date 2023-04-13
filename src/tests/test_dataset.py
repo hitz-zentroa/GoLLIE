@@ -75,16 +75,17 @@ result = [
 
 
 class TestCollieDataset(unittest.TestCase):
-    @unittest.skipIf(
-        not os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B"),
-        "No LLaMA model available",
-    )
     def test_encoder(self):
         from transformers import AutoTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained(
             "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+            if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+            else "EleutherAI/gpt-neo-125m"
         )
+
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
 
         # Test Train
         dataset, prompt, result = get_dataset(
@@ -144,7 +145,8 @@ class TestCollieDataset(unittest.TestCase):
         from transformers import AutoTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained("google/mt5-small")
-
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
         # Test Train
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
@@ -221,7 +223,12 @@ class TestCollieDataset(unittest.TestCase):
 
         tokenizer = AutoTokenizer.from_pretrained(
             "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+            if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+            else "EleutherAI/gpt-neo-125m"
         )
+
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
 
         # Test Train
         dataset, prompt, result = get_dataset(
