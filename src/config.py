@@ -141,8 +141,6 @@ class DataTrainingArguments:
     use_dev_inference: bool = field(
         default=False,
         metadata={
-            "help": (
-                "Use the development set for inference instead of the test set."
-            )
+            "help": "Use the development set for inference instead of the test set."
         },
     )

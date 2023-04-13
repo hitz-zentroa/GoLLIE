@@ -76,21 +76,31 @@ def load_model_for_training(
             f"Model {model_weights_name_or_path} is a encoder-decoder model. We will"
             " load it as a Seq2SeqLM model."
         )
+
+        if config.model_type == "t5" or config.model_type == "mt5":
+            logging.warning(
+                f"PLEASE READ!!! Model {model_weights_name_or_path} is a T5 model."
+                " T5/mT5/Flan-T5/UL2/Flan-UL2 released by google lack the token"
+                " representation for new line tokens and multiple spaces, they are"
+                " currently NOT supported in CoLLIE. We will attempt to load the model"
+                " anyway but you might encounter unexpected behavior or errors."
+            )
+
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=int8_quantization,
+            load_in_8bit=int8_quantization and use_lora,
             device_map=device_map if int8_quantization else None,
             torch_dtype=torch_dtype,
         )
 
     else:
         logging.warning(
-            f"Model {model_weights_name_or_path} is an encoder-only model. We will"
+            f"Model {model_weights_name_or_path} is an decoder-only model. We will"
             " load it as a CausalLM model."
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=int8_quantization,
+            load_in_8bit=int8_quantization and use_lora,
             device_map=device_map if int8_quantization else None,
         )
 
