@@ -23,19 +23,26 @@ class CollieTrainer(Seq2SeqTrainer):
         # They can then be reloaded using `from_pretrained()
 
         # Find out if the model is a LoRA Peft Model
+        # try:
+        #     from peft import PeftModel, LoraModel
+
+        #     if isinstance(unwrap_model(self.model), PeftModel):
+        #         if isinstance(unwrap_model(self.model).base_model, LoraModel):
+        #             unwrap_model(self.model).save_pretrained(
+        #                 output_dir,
+        #             )
+        #             return
+        # except ImportError:
+        #     pass
+
         try:
-            from peft import PeftModel, LoraModel
-
-            if isinstance(unwrap_model(self.model), PeftModel):
-                if isinstance(unwrap_model(self.model).base_model, LoraModel):
-                    unwrap_model(self.model).save_pretrained(
-                        output_dir,
-                    )
-                    return
+            from peft import PeftModel
         except ImportError:
-            pass
+            PeftModel = None
 
-        if not isinstance(self.model, PreTrainedModel):
+        if not isinstance(self.model, PreTrainedModel) and not (
+            PeftModel and isinstance(self.model, PeftModel)
+        ):
             if state_dict is None:
                 state_dict = self.model.state_dict()
 

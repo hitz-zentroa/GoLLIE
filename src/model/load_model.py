@@ -69,6 +69,7 @@ def load_model_for_training(
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
+        use_fast=False,  # TODO: #13 There is a bug with fast tokenizer and unk token
     )
 
     if config.is_encoder_decoder:
@@ -78,19 +79,19 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=int8_quantization,
+            load_in_8bit=int8_quantization and use_lora,
             device_map=device_map if int8_quantization else None,
             torch_dtype=torch_dtype,
         )
 
     else:
         logging.warning(
-            f"Model {model_weights_name_or_path} is an encoder-only model. We will"
+            f"Model {model_weights_name_or_path} is an decoder-only model. We will"
             " load it as a CausalLM model."
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=int8_quantization,
+            load_in_8bit=int8_quantization and use_lora,
             device_map=device_map if int8_quantization else None,
         )
 
