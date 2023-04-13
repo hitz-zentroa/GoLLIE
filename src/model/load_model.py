@@ -31,7 +31,6 @@ def load_model_for_training(
                               Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
     :param use_lora: Whether to use LORA. See https://arxiv.org/pdf/2106.09685.pdf for more details.
                      Requires huggingface PEFT library: https://github.com/huggingface/peft
-    :param model_class: The model class to load. CausalLM or Seq2Seq
     :param lora_weights_name_or_path: The name or path to the pre-trained LORA model weights. You can also provide a
                                       huggingface hub model name to load the weights from there. If not provided, the
                                       weights will be initialized randomly, this requires training the model.
