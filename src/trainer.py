@@ -32,6 +32,7 @@ class RichProgressCallback(TrainerCallback):
             self.training_bar = Progress(
                 SpinnerColumn(), *Progress.get_default_columns(), TimeElapsedColumn()
             )
+            self.training_bar.start()
             self.training_task = self.training_bar.add_task(
                 "[cyan]Training: ", total=state.max_steps
             )
@@ -50,6 +51,7 @@ class RichProgressCallback(TrainerCallback):
                 self.prediction_bar = Progress(
                     SpinnerColumn(), *Progress.get_default_columns(), TimeElapsedColumn()
                 )
+                self.prediction_bar.start()
                 self.prediction_task = self.prediction_bar.add_task(
                     "[cyan]Predicting: ", total=len(eval_dataloader)
                 )
@@ -58,14 +60,14 @@ class RichProgressCallback(TrainerCallback):
     def on_evaluate(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
             if self.prediction_bar is not None:
-                self.prediction_bar.close()
+                self.prediction_bar.stop()
             self.prediction_bar = None
             self.prediction_task = None
 
     def on_predict(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
             if self.prediction_bar is not None:
-                self.prediction_bar.close()
+                self.prediction_bar.stop()
             self.prediction_bar = None
             self.prediction_task = None
 
@@ -74,7 +76,7 @@ class RichProgressCallback(TrainerCallback):
 
     def on_train_end(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
-            self.training_bar.close()
+            self.training_bar.stop()
             self.training_bar = None
             self.training_task = None
 
