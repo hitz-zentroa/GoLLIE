@@ -141,6 +141,11 @@ class TestCollieDataset(unittest.TestCase):
         )
         self.assertTrue(len(model_input) == 2048)
 
+    """
+    We do not support encoder-decoder models yet. T5/mT5/FlanT5 lack the representation for '\n' or multiple whitespaces
+    so they cannot be used with CoLLIE prompt encoding. 
+    
+    
     def test_encoder_decoder(self):
         from transformers import AutoTokenizer
 
@@ -148,7 +153,7 @@ class TestCollieDataset(unittest.TestCase):
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token_id = tokenizer.unk_token_id
         if tokenizer.decode(tokenizer.encode("\n", add_special_tokens=False)) != "\n":
-            """T5 does not have a newline token, so we add one"""
+            #T5 does not have a newline token, so we add one
             tokenizer.add_tokens("\n")
         # Test Train
         dataset, prompt, result = get_dataset(
@@ -219,6 +224,7 @@ class TestCollieDataset(unittest.TestCase):
             result,
         )
         self.assertTrue(len(model_input) == 2048)
+    """
 
     def test_dataloader(self):
         from transformers import DataCollatorForSeq2Seq, AutoTokenizer
