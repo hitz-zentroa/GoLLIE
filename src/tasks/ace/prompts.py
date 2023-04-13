@@ -63,7 +63,34 @@ class Facility(Entity):
     span: str
 
 
-ENTITY_DEFINITIONS: List[Entity] = [Person, Organization, GPE, Location, Facility]
+@dataclass
+class Weapon(Entity):
+    """A Weapon entity refers to instruments that can be used to deal physical damage,
+    destroy something or kill someone. For example: 'bomb', 'm-16s', 'missile', ...
+    """
+
+    span: str
+
+
+@dataclass
+class Vehicle(Entity):
+    """A Vehicle entity refers to vehicles that are used for transportation. The
+    vehicles can transport either persons or artifacts. For example: 'car', 'plane',
+    'cabin', ...
+    """
+
+    span: str
+
+
+ENTITY_DEFINITIONS: List[Entity] = [
+    Person,
+    Organization,
+    GPE,
+    Location,
+    Facility,
+    Weapon,
+    Vehicle,
+]
 
 
 """Value definitions
@@ -102,15 +129,6 @@ class JobTitle(Value):
 
 
 @dataclass
-class Weapon(Value):
-    """A Weapon value refers to instruments that can be used to deal physical damage,
-    destroy something or kill someone. For example: 'bomb', 'm-16s', 'missile', ...
-    """
-
-    span: str
-
-
-@dataclass
 class Crime(Value):
     """A Crime value refers to the specific reason (crime) that a Person entity can
     be judged or sentenced for. For example: 'raping', 'murder', 'drug', ...
@@ -137,21 +155,10 @@ class ContactInfo(Value):
     span: str
 
 
-@dataclass
-class Vehicle(Value):
-    """A Vehicle value refers to vehicles that are used for transportation. The
-    vehicles can transport either persons or artifacts. For example: 'car', 'plane',
-    'cabin', ...
-    """
-
-    span: str
-
-
 VALUE_DEFINITIONS: List[Value] = [
     Time,
     Numeric,
     JobTitle,
-    Weapon,
     Crime,
     Sentence,
     ContactInfo,
