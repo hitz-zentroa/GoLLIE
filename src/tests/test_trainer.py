@@ -13,7 +13,7 @@ class TestCollieTrainer(unittest.TestCase):
     @require_torch_gpu
     @require_bitsandbytes
     def test_save(self):
-        from src.collie_trainer import CollieTrainer
+        from src.trainer import CollieTrainer
         from src.config import ModelArguments
         from transformers import Seq2SeqTrainingArguments
         from tempfile import TemporaryDirectory

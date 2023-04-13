@@ -1,249 +1,77 @@
-import json
-
-from transformers import (
-    Seq2SeqTrainingArguments,
-    HfArgumentParser,
-    DataCollatorForSeq2Seq,
-)
-
-from collie_trainer import CollieTrainer
-
-from datasets import DatasetDict
-
-from dataset.dataset import CollieDataset
-from model.load_model import load_model_for_training, load_model_for_inference
-from config import ModelArguments, DataTrainingArguments
-import sys
+from transformers import Seq2SeqTrainer, PreTrainedModel
+from transformers.modeling_utils import unwrap_model
 import os
-import torch.utils.data
-import logging
+import torch
+from typing import Optional
+from transformers.trainer import logger, TRAINING_ARGS_NAME
+from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_available
+
+if is_safetensors_available():
+    import safetensors.torch
 
 
-def train_collie(
-    model_args: ModelArguments,
-    data_args: DataTrainingArguments,
-    training_args: Seq2SeqTrainingArguments,
-):
-    logging.info(f"Loading {model_args.model_name_or_path} model...")
-    model, tokenizer = load_model_for_training(
-        model_weights_name_or_path=model_args.model_name_or_path,
-        int8_quantization=model_args.int8_quantization,
-        use_lora=model_args.use_lora,
-        lora_target_modules=model_args.lora_target_modules,
-        torch_dtype=model_args.torch_dtype,
-    )
+class CollieTrainer(Seq2SeqTrainer):
+    # Modify the Seq2SeqTrainer from transformers to only save the LoRA weights if we are using a LoRA model
+    # Original trainer saves the full state dict. It doesn't make sense for us to create a full copy
+    # of LLaMA weights each time we save a checkpoint since we do not modify them.
+    def _save(self, output_dir: Optional[str] = None, state_dict=None):
+        # If we are executing this function, we are the process zero, so we don't check for that.
+        output_dir = output_dir if output_dir is not None else self.args.output_dir
+        os.makedirs(output_dir, exist_ok=True)
+        logger.info(f"Saving model checkpoint to {output_dir}")
+        # Save a trained model and configuration using `save_pretrained()`.
+        # They can then be reloaded using `from_pretrained()
 
-    logging.info("Loading datasets...")
-    training_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl"
-        for task in data_args.train_tasks
-    ]
-    development_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl"
-        for task in data_args.validation_tasks
-    ]
+        # Find out if the model is a LoRA Peft Model
+        # try:
+        #     from peft import PeftModel, LoraModel
 
-    logging.info(
-        f"We will train CoLLIE on {len(training_datasets_path)} datasets:"
-        f" {', '.join(training_datasets_path)}"
-    )
+        #     if isinstance(unwrap_model(self.model), PeftModel):
+        #         if isinstance(unwrap_model(self.model).base_model, LoraModel):
+        #             unwrap_model(self.model).save_pretrained(
+        #                 output_dir,
+        #             )
+        #             return
+        # except ImportError:
+        #     pass
 
-    logging.info(
-        f"We will validate CoLLIE on {len(development_datasets_path)} datasets:"
-        f" {', '.join(development_datasets_path)}"
-    )
+        try:
+            from peft import PeftModel
+        except ImportError:
+            PeftModel = None
 
-    training_datasets = []
-    for train_task in data_args.train_tasks:
-        train_path = os.path.join(data_args.dataset_dir, f"{train_task}.train.jsonl")
-        train_dataset = CollieDataset(
-            tokenizer=tokenizer,
-            dataset_path=train_path,
-            max_length=data_args.max_seq_length,
-            pad_to_max_length=False,
-            is_encoder_decoder=model.config.is_encoder_decoder,
-            inference=False,
-        )
-        training_datasets.append(train_dataset)
+        if not isinstance(self.model, PreTrainedModel) and not (
+            PeftModel and isinstance(self.model, PeftModel)
+        ):
+            if state_dict is None:
+                state_dict = self.model.state_dict()
 
-    train_dataset = torch.utils.data.ConcatDataset(training_datasets)
-
-    dev_datasets = DatasetDict()
-    for dev_task in data_args.validation_tasks:
-        dev_path = os.path.join(data_args.dataset_dir, f"{dev_task}.dev.jsonl")
-        dev_dataset = CollieDataset(
-            tokenizer=tokenizer,
-            dataset_path=dev_path,
-            max_length=data_args.max_seq_length,
-            pad_to_max_length=False,
-            is_encoder_decoder=model.config.is_encoder_decoder,
-            inference=False,
-        )
-        dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
-
-    trainer = CollieTrainer(
-        model=model,
-        train_dataset=train_dataset,
-        eval_dataset=dev_datasets,
-        args=training_args,
-        data_collator=DataCollatorForSeq2Seq(
-            tokenizer,
-            pad_to_multiple_of=8,
-            return_tensors="pt",
-            padding=True,
-            label_pad_token_id=(
-                -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
-            ),
-        ),
-    )
-
-    trainer.train(resume_from_checkpoint=training_args.resume_from_checkpoint)
-
-    # Save the model
-    trainer.save_model()
-
-    # model.save_pretrained(training_args.output_dir)
-    # model.config.save_pretrained(training_args.output_dir)
-    # tokenizer.save_pretrained(training_args.output_dir)
-
-
-def inference_collie(
-    model_args: ModelArguments,
-    data_args: DataTrainingArguments,
-    training_args: Seq2SeqTrainingArguments,
-):
-    if not training_args.predict_with_generate:
-        logging.warning(
-            f"You have set predict_with_generate to False. We will only compute the loss"
-            f" on the test set. If you want to generate predictions, set"
-            f" predict_with_generate to True."
-        )
-
-        if not training_args.prediction_loss_only:
-            logging.warning(
-                f"You have set predict_with_generate to False, so you only "
-                f"want to compute the loss on the test set. But you have set "
-                f"prediction_loss_only to False. This is contradictory, please "
-                f"review you configuration. We will attempt to continue but "
-                f"you might get unexpected results."
-            )
-
-    if training_args.do_train:
-        logging.warning(
-            "You are doing inference after training a model! We will load the "
-            f"pretrained model saved in {training_args.output_dir}."
-        )
-        if model_args.use_lora:
-            model_path = model_args.model_name_or_path
-            lora_weights_name_or_path = training_args.output_dir
-        else:
-            model_path = training_args.output_dir
-            lora_weights_name_or_path = None
-    else:
-        model_path = model_args.model_name_or_path
-        lora_weights_name_or_path = model_args.lora_weights_name_or_path
-
-    if model_args.use_lora and lora_weights_name_or_path is None:
-        logging.warning(
-            "You are have specified to use LORA, but have not specified a path to the "
-            "LORA weights. We will attempt to load the LORA weights from the same "
-            f"path as the model weights: {model_path}."
-        )
-
-    model, tokenizer = load_model_for_inference(
-        weights_path=model_path,
-        int8_quantization=model_args.int8_quantization,
-        lora_weights_name_or_path=lora_weights_name_or_path,
-    )
-
-    trainer = CollieTrainer(
-        model=model,
-        args=training_args,
-        data_collator=DataCollatorForSeq2Seq(
-            tokenizer,
-            pad_to_multiple_of=8,
-            return_tensors="pt",
-            padding=True,
-        ),
-    )
-
-    for test_task in data_args.test_tasks:
-        test_dataset = os.path.join(
-            data_args.dataset_dir,
-            f"{test_task}.{'test' if not data_args.use_dev_inference else 'dev'}.jsonl",
-        )
-        test_dataset = CollieDataset(
-            tokenizer=tokenizer,
-            dataset_path=test_dataset,
-            max_length=data_args.max_seq_length,
-            pad_to_max_length=False,
-            is_encoder_decoder=model.config.is_encoder_decoder,
-            inference=True if training_args.predict_with_generate else False,
-        )
-
-        logging.info(f"Running inference on {test_task}...")
-        predictions = trainer.predict(test_dataset)
-
-        if training_args.predict_with_generate:
-            output_name = (
-                f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
-            )
-
-            with open(output_name, "w", encoding="utf8") as f:
-                logging.info(f"Writing predictions to {output_name}")
-                predictions = predictions.predictions
-                predictions = tokenizer.batch_decode(
-                    predictions, skip_special_tokens=True
+            if isinstance(unwrap_model(self.model), PreTrainedModel):
+                unwrap_model(self.model).save_pretrained(
+                    output_dir,
+                    state_dict=state_dict,
+                    safe_serialization=self.args.save_safetensors,
                 )
-                for prediction in predictions:
-                    print(
-                        json.dumps({"model_prediction": prediction}, ensure_ascii=False),
-                        file=f,
+            else:
+                logger.info(
+                    "Trainer.model is not a `PreTrainedModel`, only saving its state"
+                    " dict."
+                )
+                if self.args.save_safetensors:
+                    safetensors.torch.save_file(
+                        state_dict, os.path.join(output_dir, SAFE_WEIGHTS_NAME)
                     )
+                else:
+                    torch.save(state_dict, os.path.join(output_dir, WEIGHTS_NAME))
         else:
-            metrics_name = (
-                f"{os.path.join(training_args.output_dir,test_task)}.metrics.json"
+            self.model.save_pretrained(
+                output_dir,
+                state_dict=state_dict,
+                safe_serialization=self.args.save_safetensors,
             )
-            with open(metrics_name, "w", encoding="utf8") as f:
-                logging.info(f"Writing metrics to {metrics_name}")
-                json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
+        if self.tokenizer is not None:
+            self.tokenizer.save_pretrained(output_dir)
 
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-
-    parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
-    )
-    print(sys.argv)
-    print(len(sys.argv))
-    print(sys.argv[1].endswith(".yaml"))
-    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-        # If we pass only one argument to the script and it's the path to a json file,
-        # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
-        )
-
-    elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
-        # If we pass only one argument to the script and it's the path to a yaml file,
-        # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(
-            yaml_file=os.path.abspath(sys.argv[1])
-        )
-    else:
-        model_args, data_args, training_args = parser.parse_args_into_dataclasses()
-
-    if data_args.train_tasks is not None:
-        train_collie(
-            model_args,
-            data_args,
-            training_args,
-        )
-
-    if data_args.test_tasks is not None:
-        inference_collie(
-            model_args,
-            data_args,
-            training_args,
-        )
+        # Good practice: save your training arguments together with the trained model
+        torch.save(self.args, os.path.join(output_dir, TRAINING_ARGS_NAME))
