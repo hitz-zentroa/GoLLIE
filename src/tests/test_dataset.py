@@ -266,8 +266,8 @@ class TestCollieDataset(unittest.TestCase):
         )
         batch = [x for x in dataloder][0]
 
-        model_input = batch["input_ids"][0]
-        labels = batch["labels"][0]
+        model_input = batch["input_ids"][0].tolist()
+        labels = batch["labels"][0].tolist()
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(
@@ -290,10 +290,10 @@ class TestCollieDataset(unittest.TestCase):
         dataloder = DataLoader(
             dataset, batch_size=1, collate_fn=datacollator, shuffle=False
         )
-        batch = [x for x in dataloder]
+        batch = [x for x in dataloder][0]
 
-        model_input = batch[0]["input_ids"][0]
-        labels = batch[0]["labels"][0]
+        model_input = batch["input_ids"][0].tolist()
+        labels = batch["labels"][0].tolist()
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(
