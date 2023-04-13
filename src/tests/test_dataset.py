@@ -264,7 +264,7 @@ class TestCollieDataset(unittest.TestCase):
         dataloder = DataLoader(
             dataset, batch_size=1, collate_fn=datacollator, shuffle=False
         )
-        batch = [x for x in dataloder]
+        batch = [x for x in dataloder][0]
 
         model_input = batch["input_ids"][0]
         labels = batch["labels"][0]
