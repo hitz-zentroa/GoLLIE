@@ -16,13 +16,14 @@ def batch(iterable: Sized, n=1) -> Iterator:
     Yield successive n-sized chunks from iterable.
 
     Args:
-        iterable (`Sized`): 
+        iterable (`Sized`):
             The iterable to split.
-        n (`int`, optional): 
+        n (`int`, optional):
             The size of the chunks. Defaults to `1`.
 
     Yields:
-        `Iterator`: An iterator with the chunks.
+        `Iterator`: 
+            An iterator with the chunks.
     """
     l: int = len(iterable)
     p: int = math.ceil(l / n)
@@ -149,7 +150,8 @@ def batch_tokenization(
             The process number.
 
     Returns:
-        `List[BatchEncoding]`: List of BatchEncoding with the prepared data.
+        `List[BatchEncoding]`: 
+            List of BatchEncoding with the prepared data.
     """
     tokenized_examples: List[BatchEncoding] = []
     if process_no == 0:

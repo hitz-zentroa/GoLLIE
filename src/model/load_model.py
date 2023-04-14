@@ -6,7 +6,7 @@ from transformers import (
     PreTrainedModel,
     AutoConfig,
 )
-from typing import Optional, List
+from typing import Optional, List, Tuple
 import logging
 from .model_utils import get_trainable_parameters
 import os
@@ -23,24 +23,49 @@ def load_model_for_training(
     lora_alpha: Optional[int] = 16,
     lora_dropout: Optional[float] = 0.05,
     torch_dtype: Optional[str] = None,
-) -> (PreTrainedModel, PreTrainedTokenizerBase):
+) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
-    :param model_weights_name_or_path: The path to your local model weights and tokenizer or huggingface model name.
-    :param int8_quantization: Whether to use int8 quantization.
-                              Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
-    :param use_lora: Whether to use LORA. See https://arxiv.org/pdf/2106.09685.pdf for more details.
-                     Requires huggingface PEFT library: https://github.com/huggingface/peft
-    :param lora_weights_name_or_path: The name or path to the pre-trained LORA model weights. You can also provide a
-                                      huggingface hub model name to load the weights from there. If not provided, the
-                                      weights will be initialized randomly, this requires training the model.
-    :param lora_target_modules: The list of modules to apply LORA to. If not provided, we will use PEFT default modules.
-    :param lora_r: Lora attention dimension.
-    :param lora_alpha: The alpha parameter for Lora scaling.
-    :param lora_dropout: The dropout probability for Lora layers.
-    :param torch_dtype: Override the default `torch.dtype` and load the model under this dtype. If `auto` is passed, the
-                        dtype will be automatically derived from the model's weights.
-    :return: The loaded model and tokenizer.
+
+    Args:
+        model_weights_name_or_path (`str`):
+            The path to your local model weights and tokenizer or huggingface model name.
+        int8_quantization (`bool`, optional):
+            Whether to use int8 quantization. Defaults to `False`.
+
+            Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
+        use_lora (`bool`, optional):
+            Whether to use LORA. Defaults to False.
+
+            See https://arxiv.org/pdf/2106.09685.pdf for more details.
+
+            Requires huggingface PEFT library: https://github.com/huggingface/peft
+        lora_weights_name_or_path (`Optional[str]`, optional):
+            The name or path to the pre-trained LORA model weights. You can also provide
+            a huggingface hub model name to load the weights from there. If not provided,
+            the weights will be initialized randomly, this requires training the model.
+            Defaults to `None`.
+        lora_target_modules (`Optional[List[str]]`, optional):
+            The list of modules to apply LORA to. If not provided, we will use PEFT
+            default modules. Defaults to `None`.
+        lora_r (`Optional[int]`, optional):
+            Lora attention dimension. Defaults to `8`.
+        lora_alpha (`Optional[int]`, optional):
+            The alpha parameter for Lora scaling. Defaults to `16`.
+        lora_dropout (`Optional[float]`, optional):
+            The dropout probability for Lora layers. Defaults to 0.05.
+        torch_dtype (`Optional[str]`, optional):
+            Override the default `torch.dtype` and load the model under this dtype. If
+            `auto` is passed, the dtype will be automatically derived from the model's
+            weights. Defaults to `None`.
+
+    Raises:
+        `ValueError`:
+            is raised when `int8_quantization=True` but `use_lora=False`.
+
+    Returns:
+        `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
+            The loaded model and tokenizer.
     """
 
     if int8_quantization and not use_lora:
@@ -103,9 +128,8 @@ def load_model_for_training(
             device_map=device_map if int8_quantization else None,
         )
 
-        tokenizer.padding_side = (  # Ensure that the padding token is added to the left of the input sequence.
-            "left"
-        )
+        # Ensure that the padding token is added to the left of the input sequence.
+        tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
         logging.warning(
@@ -171,17 +195,28 @@ def load_model_for_inference(
     int8_quantization: bool = False,
     lora_weights_name_or_path: Optional[str] = None,
     torch_dtype: Optional[str] = None,
-) -> (PreTrainedModel, PreTrainedTokenizerBase):
+) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
-    :param weights_path: The path to your local model weights and tokenizer.
-                                You can also provide a huggingface hub model name.
-    :param int8_quantization: Whether to use int8 quantization.
-                              Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
-    :param lora_weights_name_or_path: If the model has been trained with LoRA, path or huggingface hub name to the
-                                      pretrained weights.
-    :param torch_dtype: The torch dtype to use for the model. If set to "auto", the dtype will be automatically derived
-    :return: The loaded model and tokenizer.
+
+    Args:
+        weights_path (`str`):
+            The path to your local model weights and tokenizer. You can also provide a
+            huggingface hub model name.
+        int8_quantization (`bool`, optional):
+            Whether to use int8 quantization. Defaults to `False`.
+
+            Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
+        lora_weights_name_or_path (`Optional[str]`, optional):
+            If the model has been trained with LoRA, path or huggingface hub name to the
+            pretrained weights. Defaults to `None`.
+        torch_dtype (`Optional[str]`, optional):
+            The torch dtype to use for the model. If set to `"auto"`, the dtype will be
+            automatically derived. Defaults to `None`.
+
+    Returns:
+        `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
+            The loaded model and tokenizer.
     """
 
     device_map = "auto"
@@ -228,9 +263,8 @@ def load_model_for_inference(
             torch_dtype=torch_dtype,
         )
 
-        tokenizer.padding_side = (  # Ensure that the padding token is added to the left of the input sequence.
-            "left"
-        )
+        # Ensure that the padding token is added to the left of the input sequence.
+        tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
         logging.warning(
