@@ -195,9 +195,9 @@ class CollieTrainer(Seq2SeqTrainer):
             preprocess_logits_for_metrics=preprocess_logits_for_metrics,
         )
         # Change the tqdm progress callback with `RichProgressCallback`
-        _prev_progress_callback = self.pop_callback(ProgressCallback)
-        if _prev_progress_callback:
-            self.add_callback(RichProgressCallback)
+        # _prev_progress_callback = self.pop_callback(ProgressCallback)
+        # if _prev_progress_callback:
+        #    self.add_callback(RichProgressCallback)
 
     # Modify the Seq2SeqTrainer from transformers to only save the LoRA weights if we are using a LoRA model
     # Original trainer saves the full state dict. It doesn't make sense for us to create a full copy
