@@ -10,14 +10,14 @@ from src.trainer import CollieTrainer
 
 from datasets import DatasetDict
 
-from dataset.dataset import CollieDataset
-from model.load_model import load_model_for_training, load_model_for_inference
-from config import ModelArguments, DataTrainingArguments
+from src.dataset.dataset import CollieDataset
+from src.model.load_model import load_model_for_training, load_model_for_inference
+from src.config import ModelArguments, DataTrainingArguments
 import sys
 import os
 import torch.utils.data
 import logging
-from evaluate import evaluate
+from src.evaluate import evaluate
 
 
 def train_collie(
