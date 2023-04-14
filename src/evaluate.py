@@ -1,7 +1,7 @@
 import json
 import os
 import sys
-from typing import Dict, Type
+from typing import Dict, Type, List, Any
 from transformers import HfArgumentParser, Seq2SeqTrainingArguments
 
 import logging
@@ -56,6 +56,24 @@ def fix_prompt_outputs(text: str) -> str:
     return text
 
 
+def remove_remove_hallucinations(
+    unlabelled_sentence: str, predictions: List[Any]
+) -> List[Any]:
+    """Removes predictions that are not in the unlabelled sentence.
+    Args:
+        unlabelled_sentence (str): The unlabelled sentence.
+        predictions (List[Any]): The list of predictions.
+    Returns:
+        List[Any]: The list of predictions that are in the unlabelled sentence.
+    """
+    accepted_list: List[Any] = []
+    lower_unlabelled_sentence = unlabelled_sentence.lower()
+    for prediction in predictions:
+        if prediction.span.lower() in lower_unlabelled_sentence:
+            accepted_list.append(prediction)
+    return accepted_list
+
+
 def evaluate(
     model_args: ModelArguments,
     data_args: DataTrainingArguments,
@@ -94,16 +112,16 @@ def evaluate(
 
         labels = []
         predictions = []
+        impossible_to_parse: int = 0
+        valid_predictions: int = 0
+        hallucinated_predictions: int = 0
         with open(gold_path, "rt") as gold_f, open(pred_path, "rt") as pred_f:
-            for gold_line, pred_line in zip(gold_f, pred_f):
+            for sentence_no, (gold_line, pred_line) in enumerate(zip(gold_f, pred_f)):
                 gold_line = json.loads(gold_line)
                 pred_line = json.loads(pred_line)
 
-                # TODO: Filtrar por spans que aparezcan en la frase
-
-
                 if not task_module:
-                    task_module = TASK_ID_TO_TASKS[gold_line['task_id']] + ".prompts"
+                    task_module = TASK_ID_TO_TASKS[gold_line["task_id"]] + ".prompts"
                     import_prompts(task_module)
 
                 if not scorer:
@@ -112,9 +130,13 @@ def evaluate(
                 try:
                     gold_labels = fix_prompt_outputs(str(gold_line["labels"]))
                     gold_labels = [eval(item) for item in eval(gold_labels)]
-                except Exception:
-                    # TODO: Guardar los bugs
-                    logging.warn("Found an incorrect formated gold file!")
+                except Exception as e:
+                    logging.warning(
+                        "Found an incorrect formatted gold file! This should not happen!"
+                        f" Please check the gold file {gold_path} at line"
+                        f" {sentence_no+1}.\nThe gold line is: {gold_line}\n"
+                        f"The error is: {e}"
+                    )
                     gold_labels = []
 
                 try:
@@ -122,9 +144,17 @@ def evaluate(
                         pred_line["model_prediction"].strip().split("result = ")[-1]
                     )
                     pred_labels = eval(pred_labels)
-                except Exception:
-                    logging.warn("Found an incorrect formated pred file!")
+                except Exception as e:
+                    # logging.warning("Found an incorrect formated pred file!")
                     pred_labels = []
+                    impossible_to_parse += 1
+
+                filtered_pred_labels = remove_remove_hallucinations(
+                    gold_line["unlabelled_sentence"], pred_labels
+                )
+
+                valid_predictions += len(filtered_pred_labels)
+                hallucinated_predictions += len(pred_labels) - len(filtered_pred_labels)
 
                 labels.append(gold_labels)
                 predictions.append(pred_labels)
@@ -133,9 +163,30 @@ def evaluate(
 
         scores = scorer(reference=labels, predictions=predictions)
         all_scores[task] = scores
+        all_scores[task]["prediction_stats"]["impossible_to_parse"][
+            "total"
+        ] = impossible_to_parse
+        all_scores[task]["prediction_stats"]["impossible_to_parse"]["percentage"] = (
+            impossible_to_parse / len(predictions)
+        )
+        all_scores[task]["prediction_stats"]["valid_predictions"][
+            "total"
+        ] = valid_predictions
+        all_scores[task]["prediction_stats"]["valid_predictions"]["percentage"] = (
+            valid_predictions / len(predictions)
+        )
+        all_scores[task]["prediction_stats"]["hallucinated_predictions"][
+            "total"
+        ] = hallucinated_predictions
+        all_scores[task]["prediction_stats"]["hallucinated_predictions"]["percentage"] = (
+            hallucinated_predictions / len(predictions)
+        )
 
-    scores_file_name = os.path.join(training_args.output_dir, 'task_scores.json')
-    with open(scores_file_name, 'wt') as f:
+        all_scores[task]["prediction_stats"]["total"]["predictions"] = len(predictions)
+        all_scores[task]["prediction_stats"]["total"]["gold"] = len(labels)
+
+    scores_file_name = os.path.join(training_args.output_dir, "task_scores.json")
+    with open(scores_file_name, "wt") as f:
         json.dump(all_scores, f, indent=4, ensure_ascii=False)
     logging.info(f"Scores saved in: {scores_file_name}")
 
