@@ -11,6 +11,8 @@ from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_a
 from transformers.trainer_callback import TrainerCallback, ProgressCallback
 from transformers.trainer_utils import has_length, EvalPrediction
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
+from rich.console import Console
+import sys
 
 if is_safetensors_available():
     import safetensors.torch
@@ -30,8 +32,13 @@ class RichProgressCallback(TrainerCallback):
     def on_train_begin(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
             self.training_bar = Progress(
-                SpinnerColumn(), *Progress.get_default_columns(), TimeElapsedColumn()
+                SpinnerColumn(),
+                *Progress.get_default_columns(),
+                TimeElapsedColumn(),
+                auto_refresh=False,
+                console=Console(file=sys.stderr, force_jupyter=True),
             )
+
             self.training_bar.start()
             self.training_task = self.training_bar.add_task(
                 "[cyan]Training: ", total=state.max_steps
@@ -51,7 +58,11 @@ class RichProgressCallback(TrainerCallback):
         if state.is_local_process_zero and has_length(eval_dataloader):
             if self.prediction_bar is None:
                 self.prediction_bar = Progress(
-                    SpinnerColumn(), *Progress.get_default_columns(), TimeElapsedColumn()
+                    SpinnerColumn(),
+                    *Progress.get_default_columns(),
+                    TimeElapsedColumn(),
+                    auto_refresh=False,
+                    console=Console(file=sys.stderr, force_jupyter=True),
                 )
                 self.prediction_bar.start()
                 self.prediction_task = self.prediction_bar.add_task(

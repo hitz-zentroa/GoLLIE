@@ -214,6 +214,9 @@ def inference_collie(
             with open(output_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing predictions to {output_name}")
                 predictions = predictions.predictions
+                # Switch all -100 to tokenizer.pad_token_id, so we can decode the predictions
+                predictions[predictions == -100] = tokenizer.pad_token_id
+
                 try:
                     predictions = tokenizer.batch_decode(
                         predictions, skip_special_tokens=True
