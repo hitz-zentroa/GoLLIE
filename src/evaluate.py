@@ -200,6 +200,8 @@ def evaluate(
         json.dump(all_scores, f, indent=4, ensure_ascii=False)
     logging.info(f"Scores saved in: {scores_file_name}")
 
+    return all_scores
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
