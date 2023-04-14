@@ -163,6 +163,7 @@ def inference_collie(
             pad_to_multiple_of=8,
             return_tensors="pt",
             padding=True,
+            label_pad_token_id=tokenizer.pad_token_id,
         ),
     )
 
