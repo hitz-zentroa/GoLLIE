@@ -235,11 +235,9 @@ if __name__ == "__main__":
             )
         else:
             checkpoints = list(
-                os.path.dirname(c)
-                for c in sorted(
-                    glob.glob(
-                        os.path.join(training_args.output_dir, "checkpoint-*"),
-                    )
+                c
+                for c in glob.glob(
+                    os.path.join(training_args.output_dir, "checkpoint-*"),
                 )
                 if os.path.isdir(c)
             )
