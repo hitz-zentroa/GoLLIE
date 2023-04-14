@@ -239,6 +239,7 @@ def inference_collie(
                         json.dumps({"model_prediction": prediction}, ensure_ascii=False),
                         file=f,
                     )
+
         else:
             metrics_name = f"{os.path.join(output_dir,test_task)}.metrics.json"
             with open(metrics_name, "w", encoding="utf8") as f:
@@ -246,7 +247,7 @@ def inference_collie(
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
     if training_args.predict_with_generate:
-        evaluate(model_args, data_args, training_args)
+        evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
 
 
 if __name__ == "__main__":
