@@ -67,9 +67,8 @@ def remove_remove_hallucinations(
         List[Any]: The list of predictions that are in the unlabelled sentence.
     """
     accepted_list: List[Any] = []
-    lower_unlabelled_sentence = unlabelled_sentence.lower()
     for prediction in predictions:
-        if prediction.span.lower() in lower_unlabelled_sentence:
+        if prediction.exists_in(unlabelled_sentence):
             accepted_list.append(prediction)
     return accepted_list
 
