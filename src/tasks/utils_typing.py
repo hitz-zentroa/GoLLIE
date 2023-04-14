@@ -83,8 +83,8 @@ class Event:
     def __and__(self: Event, other: Event) -> Event:
         attrs = {
             attr: []
-            for attr, _ in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"])
+            for attr, values in inspect.getmembers(self)
+            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         if self == other:
             for attr in attrs.keys():
@@ -107,7 +107,7 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"])
+            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         _len = 0
         for values in attrs.values():
