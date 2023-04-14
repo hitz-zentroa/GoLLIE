@@ -10,13 +10,14 @@ from src.trainer import CollieTrainer
 
 from datasets import DatasetDict
 
-from dataset.dataset import CollieDataset
-from model.load_model import load_model_for_training, load_model_for_inference
-from config import ModelArguments, DataTrainingArguments
+from src.dataset.dataset import CollieDataset
+from src.model.load_model import load_model_for_training, load_model_for_inference
+from src.config import ModelArguments, DataTrainingArguments
 import sys
 import os
 import torch.utils.data
 import logging
+from src.evaluate import evaluate
 
 
 def train_collie(
@@ -162,6 +163,7 @@ def inference_collie(
             pad_to_multiple_of=8,
             return_tensors="pt",
             padding=True,
+            label_pad_token_id=tokenizer.pad_token_id,
         ),
     )
 
@@ -204,6 +206,9 @@ def inference_collie(
             with open(metrics_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing metrics to {metrics_name}")
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
+
+    if training_args.predict_with_generate:
+        evaluate(model_args, data_args, training_args)
 
 
 if __name__ == "__main__":

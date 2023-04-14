@@ -37,7 +37,6 @@ def prepare_data(
     :param tokenizer: The tokenizer to use.
     :param is_encoder_decoder: Whether the model is an encoder-decoder model.
     :param max_length: The maximum length of the input.
-    :param pad_to_max_length: Whether to pad the input to the maximum length.
     :param inference: Whether to prepare the data for inference.
                     During inference labels are not included in model inputs.
     :return: BatchEncoding with the prepared data.
@@ -96,6 +95,10 @@ def prepare_data(
 
             model_inputs["labels"] = model_inputs["input_ids"].copy()
 
+    if "token_type_ids" in model_inputs:
+        # LLaMa tokenizer adds token type ids, but we don't need them
+        model_inputs.pop("token_type_ids")
+
     return model_inputs
 
 
@@ -111,11 +114,14 @@ def batch_tokenization(
     """
     Batch tokenization function.
     :param tokenizer: The tokenizer to use.
+    :param dataset_name: The name of the dataset.
     :param is_encoder_decoder: Whether the model is an encoder-decoder model.
     :param max_length: The maximum length of the input.
     :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
                         will be truncated to don't include the results section of the example. Labels will still
                         include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
+    :param examples: The examples to tokenize.
+    :param process_no: The process number.
     :return: List of BatchEncoding with the prepared data.
     """
     tokenized_examples: List[BatchEncoding] = []
@@ -145,7 +151,6 @@ def batch_tokenization(
                 tokenizer,
                 is_encoder_decoder,
                 max_length,
-                pad_to_max_length,
                 inference,
             )
             for example in examples
@@ -181,7 +186,6 @@ class CollieDataset(Dataset):
 
         self.dataset_name = os.path.splitext(os.path.basename(dataset_path))[0]
 
-        examples: List[str] = []
         with open(dataset_path, "r", encoding="utf8") as f:
             examples = f.readlines()
 

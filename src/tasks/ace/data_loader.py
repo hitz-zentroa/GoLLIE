@@ -82,6 +82,8 @@ class ACEDatasetLoader(DatasetLoader):
         "LOC": Location,
         "ORG": Organization,
         "PER": Person,
+        "VEH": Vehicle,
+        "WEA": Weapon,
     }
     VALUE_TO_CLASS_MAPPING = {
         "Contact-Info": ContactInfo,
@@ -90,8 +92,6 @@ class ACEDatasetLoader(DatasetLoader):
         "Numeric": Numeric,
         "Sentence": Sentence,
         "TIME": Time,
-        "VEH": Vehicle,
-        "WEA": Weapon,
     }
     RELATION_TO_CLASS_MAPPING = {
         "ART:User-Owner-Inventor-Manufacturer": UserOwnerInventorManufacturer,
