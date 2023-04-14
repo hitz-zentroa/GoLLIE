@@ -8,8 +8,8 @@ import logging
 import importlib
 import rich
 
-from src.config import DataTrainingArguments, ModelArguments
-from src.tasks import TASK_ID_TO_TASKS
+from config import DataTrainingArguments, ModelArguments
+from tasks import TASK_ID_TO_TASKS
 
 
 def import_prompts(task_module: str) -> None:
