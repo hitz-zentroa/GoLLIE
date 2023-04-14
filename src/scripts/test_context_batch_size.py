@@ -24,11 +24,11 @@ def generate_random_sentence(sentence_length: int = 5120) -> str:
     Generates a random string of specific length with ascii characters.
 
     Args:
-        sentence_length (`int`, optional): 
+        sentence_length (`int`, optional):
             Length of the sentence. Defaults to `5120`.
 
     Returns:
-        str: 
+        str:
             A random sentence of length `sentence_length`.
     """
     sentence = ""
@@ -53,6 +53,7 @@ class TestDataset(Dataset):
         data_len (`int`):
             The length of the data.
     """
+
     def __init__(self, tokenizer: PreTrainedTokenizerBase, seq_len: int, data_len: int):
         self.data = []
         for i in range(data_len):
@@ -97,7 +98,7 @@ def get_dataloader(
     A function that returns a `DataLoader` instance
 
     Args:
-        tokenizer (`PreTrainedTokenizerBase`): 
+        tokenizer (`PreTrainedTokenizerBase`):
             The pre-trained tokenizer.
         batch_size (`int`):
             The size of the batch.
@@ -140,7 +141,7 @@ def run_training_test(
             The model to be tested.
         tokenizer (`PreTrainedTokenizerBase`):
             The tokenizer of the model to be tested.
-        accelerator (`Accelerator`): 
+        accelerator (`Accelerator`):
             The accelerator instance.
         seq_len (`int`):
             The length of the sequence.
