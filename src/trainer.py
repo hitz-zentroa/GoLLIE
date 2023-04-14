@@ -11,8 +11,6 @@ from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_a
 from transformers.trainer_callback import TrainerCallback, ProgressCallback
 from transformers.trainer_utils import has_length, EvalPrediction
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
-from rich.console import Console
-import sys
 
 if is_safetensors_available():
     import safetensors.torch
@@ -36,7 +34,6 @@ class RichProgressCallback(TrainerCallback):
                 *Progress.get_default_columns(),
                 TimeElapsedColumn(),
                 auto_refresh=False,
-                console=Console(file=sys.stderr, force_jupyter=True),
             )
 
             self.training_bar.start()
@@ -62,7 +59,6 @@ class RichProgressCallback(TrainerCallback):
                     *Progress.get_default_columns(),
                     TimeElapsedColumn(),
                     auto_refresh=False,
-                    console=Console(file=sys.stderr, force_jupyter=True),
                 )
                 self.prediction_bar.start()
                 self.prediction_task = self.prediction_bar.add_task(
