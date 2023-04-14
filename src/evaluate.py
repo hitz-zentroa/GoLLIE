@@ -171,6 +171,7 @@ def evaluate(
 
         scores = scorer(reference=labels, predictions=predictions)
         all_scores[task] = scores
+        all_scores[task]["prediction_stats"] = {}
         all_scores[task]["prediction_stats"]["impossible_to_parse"][
             "total"
         ] = impossible_to_parse

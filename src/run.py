@@ -209,7 +209,9 @@ def inference_collie(
             training_args.output_dir if checkpoint_path is None else checkpoint_path
         )
         if training_args.predict_with_generate:
-            output_name = f"{os.path.join(output_dir,test_task)}.predictions.jsonl"
+            output_name = (
+                f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
+            )
 
             with open(output_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing predictions to {output_name}")
