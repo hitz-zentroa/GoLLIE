@@ -6,7 +6,7 @@ from transformers import (
     DataCollatorForSeq2Seq,
 )
 
-from trainer import CollieTrainer
+from src.trainer import CollieTrainer
 
 from datasets import DatasetDict
 
