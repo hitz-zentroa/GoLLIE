@@ -113,6 +113,7 @@ class Sampler:
                         text=_text,
                         annotations=_ann,
                     ),
+                    "unlabelled_sentence": _text,
                 }
         elif self.split == "train":
             positive_guidelines = {
@@ -164,6 +165,7 @@ class Sampler:
                     text=_text,
                     annotations=_ann,
                 ),
+                "unlabelled_sentence": _text,
             }
         else:
             guidelines = [definition for definition in self.task_definitions]
@@ -193,6 +195,7 @@ class Sampler:
                         text=_text,
                         annotations=_ann,
                     ),
+                    "unlabelled_sentence": _text,
                 }
 
     def __iter__(self):
