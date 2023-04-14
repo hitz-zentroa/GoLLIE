@@ -115,6 +115,8 @@ def evaluate(
         impossible_to_parse: int = 0
         valid_predictions: int = 0
         hallucinated_predictions: int = 0
+        total_predictions: int = 0
+
         with open(gold_path, "rt") as gold_f, open(pred_path, "rt") as pred_f:
             for sentence_no, (gold_line, pred_line) in enumerate(zip(gold_f, pred_f)):
                 gold_line = json.loads(gold_line)
@@ -155,6 +157,7 @@ def evaluate(
 
                 valid_predictions += len(filtered_pred_labels)
                 hallucinated_predictions += len(pred_labels) - len(filtered_pred_labels)
+                total_predictions += len(pred_labels)
 
                 labels.append(gold_labels)
                 predictions.append(pred_labels)
@@ -169,21 +172,18 @@ def evaluate(
         all_scores[task]["prediction_stats"]["impossible_to_parse"]["percentage"] = (
             impossible_to_parse / len(predictions)
         )
-        all_scores[task]["prediction_stats"]["valid_predictions"][
-            "total"
-        ] = valid_predictions
-        all_scores[task]["prediction_stats"]["valid_predictions"]["percentage"] = (
-            valid_predictions / len(predictions)
-        )
         all_scores[task]["prediction_stats"]["hallucinated_predictions"][
             "total"
         ] = hallucinated_predictions
         all_scores[task]["prediction_stats"]["hallucinated_predictions"]["percentage"] = (
-            hallucinated_predictions / len(predictions)
+            hallucinated_predictions / total_predictions
         )
-
-        all_scores[task]["prediction_stats"]["total"]["predictions"] = len(predictions)
-        all_scores[task]["prediction_stats"]["total"]["gold"] = len(labels)
+        all_scores[task]["prediction_stats"]["total"]["predictions"] = sum(
+            [len(x) for x in predictions]
+        )
+        all_scores[task]["prediction_stats"]["total"]["gold"] = sum(
+            [len(x) for x in labels]
+        )
 
     scores_file_name = os.path.join(training_args.output_dir, "task_scores.json")
     with open(scores_file_name, "wt") as f:
