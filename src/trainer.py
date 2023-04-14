@@ -41,7 +41,9 @@ class RichProgressCallback(TrainerCallback):
     def on_step_end(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
             self.training_bar.update(
-                self.training_task, advance=state.global_step - self.current_step
+                self.training_task,
+                advance=state.global_step - self.current_step,
+                refresh=True,
             )
             self.current_step = state.global_step
 
@@ -55,7 +57,7 @@ class RichProgressCallback(TrainerCallback):
                 self.prediction_task = self.prediction_bar.add_task(
                     "[cyan]Predicting: ", total=len(eval_dataloader)
                 )
-            self.prediction_bar.update(self.prediction_task, advance=1)
+            self.prediction_bar.update(self.prediction_task, advance=1, refresh=True)
 
     def on_evaluate(self, args, state, control, **kwargs):
         if state.is_local_process_zero:
