@@ -55,6 +55,12 @@ def train_collie(
         f" {', '.join(development_datasets_path)}"
     )
 
+    logging.info(
+        "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
+        f" {data_args.ignore_pad_token_for_loss} and 'ignore_pad_token_for_loss':"
+        f" {data_args.ignore_pad_token_for_loss}"
+    )
+
     training_datasets = []
     for train_task in data_args.train_tasks:
         train_path = os.path.join(data_args.dataset_dir, f"{train_task}.train.jsonl")
@@ -64,6 +70,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
+            ignore_prompt_loss=data_args.ignore_pad_token_for_loss,
         )
         training_datasets.append(train_dataset)
 
@@ -78,6 +85,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
+            ignore_prompt_loss=data_args.ignore_pad_token_for_loss,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -286,8 +294,7 @@ if __name__ == "__main__":
                 os.path.dirname(c)
                 for c in sorted(
                     glob.glob(
-                        os.path.join(training_args.output_dir, "**", "checkpoint*"),
-                        recursive=True,
+                        os.path.join(training_args.output_dir, "checkpoint-*"),
                     )
                 )
                 if os.path.isdir(c)

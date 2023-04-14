@@ -15,6 +15,7 @@ validation_tasks:
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
+ignore_prompt_loss: false
 
 # checkpoint settings
 output_dir: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7B_optim_FusedAdamW_lr_3e4_cosine

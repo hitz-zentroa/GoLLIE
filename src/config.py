@@ -149,3 +149,10 @@ class DataTrainingArguments:
         default=False,
         metadata={"help": "Evaluate all checkpoints in the model directory."},
     )
+
+    ignore_prompt_loss: bool = field(
+        default=False,
+        metadata={
+            "help": "Whether to ignore the prompt tokens in the loss computation or not"
+        },
+    )

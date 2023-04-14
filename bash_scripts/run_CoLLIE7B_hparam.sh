@@ -25,12 +25,16 @@ CONFIGS_FOLDER="configs/model_configs/hparams"
 
 # COSINE SCHEDULER
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine.yaml
-
-#Big Lora
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_bigLora.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_ignore_prompt_loss.yaml
 
 #CONSTANT SCHEDULER
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant_ignore_prompt_loss.yaml
+
+#Big Lora
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_bigLora.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_bigLora_ignore_prompt_loss.yaml
+
 
 # OTHER OPTIMIZERS
 #python3 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_FusedAdamW_lr_3e4_cosine.yaml

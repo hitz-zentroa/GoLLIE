@@ -30,6 +30,7 @@ def prepare_data(
     is_encoder_decoder: bool = False,
     max_length: int = 2048,
     inference: bool = False,
+    ignore_prompt_loss: bool = False,
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
@@ -39,6 +40,7 @@ def prepare_data(
     :param max_length: The maximum length of the input.
     :param inference: Whether to prepare the data for inference.
                     During inference labels are not included in model inputs.
+    :param ignore_prompt_loss: Whether to ignore the prompt tokens when calculating the loss (set to -100).
     :return: BatchEncoding with the prepared data.
     """
 
@@ -92,8 +94,28 @@ def prepare_data(
                 return_tensors=None,
                 add_special_tokens=True,
             )
+            if ignore_prompt_loss:
+                prompt = example.split("result = [\n")[0] + "result = [\n"
+                prompt = tokenizer(
+                    text=prompt,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
 
-            model_inputs["labels"] = model_inputs["input_ids"].copy()
+                # Remove the last token if it is an eos token
+                if prompt[-1] == tokenizer.eos_token_id:
+                    prompt = prompt[:-1]
+
+                model_inputs["labels"] = model_inputs["input_ids"].copy()
+                # Set labels to -100 for prompt tokens
+                for i in range(len(prompt)):
+                    model_inputs["labels"][i] = -100
+
+            else:
+                model_inputs["labels"] = model_inputs["input_ids"].copy()
 
     if "token_type_ids" in model_inputs:
         # LLaMa tokenizer adds token type ids, but we don't need them
@@ -108,6 +130,7 @@ def batch_tokenization(
     is_encoder_decoder: bool,
     max_length: int,
     inference: bool,
+    ignore_prompt_loss: bool,
     examples: List[str],
     process_no: int,
 ) -> List[BatchEncoding]:
@@ -120,6 +143,7 @@ def batch_tokenization(
     :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
                         will be truncated to don't include the results section of the example. Labels will still
                         include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
+    :param ignore_prompt_loss: Whether to ignore the prompt tokens when calculating the loss (set to -100).
     :param examples: The examples to tokenize.
     :param process_no: The process number.
     :return: List of BatchEncoding with the prepared data.
@@ -136,22 +160,24 @@ def batch_tokenization(
             for example in examples:
                 tokenized_examples.append(
                     prepare_data(
-                        example,
-                        tokenizer,
-                        is_encoder_decoder,
-                        max_length,
-                        inference,
+                        example=example,
+                        tokenizer=tokenizer,
+                        is_encoder_decoder=is_encoder_decoder,
+                        max_length=max_length,
+                        inference=inference,
+                        ignore_prompt_loss=ignore_prompt_loss,
                     )
                 )
                 progress.update(task, advance=1)
     else:
         tokenized_examples = [
             prepare_data(
-                example,
-                tokenizer,
-                is_encoder_decoder,
-                max_length,
-                inference,
+                example=example,
+                tokenizer=tokenizer,
+                is_encoder_decoder=is_encoder_decoder,
+                max_length=max_length,
+                inference=inference,
+                ignore_prompt_loss=ignore_prompt_loss,
             )
             for example in examples
         ]
@@ -171,6 +197,7 @@ class CollieDataset(Dataset):
         is_encoder_decoder: bool = False,
         max_length: int = 2048,
         inference: bool = False,
+        ignore_prompt_loss: bool = False,
         num_workers: int = min(os.cpu_count(), 16),
     ):
         """
@@ -181,6 +208,7 @@ class CollieDataset(Dataset):
         :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
                             will be truncated to don't include the results section of the example. Labels will still
                             include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
+        :param ignore_prompt_loss: Whether to ignore the prompt tokens when calculating the loss (set to -100).
         :param num_workers: The number of workers to use for tokenization.
         """
 
@@ -193,13 +221,14 @@ class CollieDataset(Dataset):
 
         if num_workers <= 1:
             self.tokenized_examples = batch_tokenization(
-                tokenizer,
-                self.dataset_name,
-                is_encoder_decoder,
-                max_length,
-                inference,
-                examples,
-                0,
+                tokenizer=tokenizer,
+                dataset_name=self.dataset_name,
+                is_encoder_decoder=is_encoder_decoder,
+                max_length=max_length,
+                inference=inference,
+                ignore_prompt_loss=ignore_prompt_loss,
+                examples=examples,
+                process_no=0,
             )
         else:
             tokenizer_fn = partial(
@@ -209,6 +238,7 @@ class CollieDataset(Dataset):
                 is_encoder_decoder,
                 max_length,
                 inference,
+                ignore_prompt_loss,
             )
             with Pool(num_workers) as p:
                 self.tokenized_examples = p.starmap(

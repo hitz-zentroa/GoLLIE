@@ -10,6 +10,7 @@ def get_dataset(
     tokenizer: PreTrainedTokenizerBase,
     is_encoder_decoder: bool,
     inference: bool,
+    ignore_prompt_loss: bool,
 ) -> (CollieDataset, str, str):
     text = """@dataclass
 class EnergyAndInfrastructureEvent:
@@ -67,6 +68,7 @@ result = [
             is_encoder_decoder=is_encoder_decoder,
             max_length=2048,
             inference=inference,
+            ignore_prompt_loss=ignore_prompt_loss,
         )
 
     return dataset, prompt, result
@@ -93,6 +95,7 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
+            ignore_prompt_loss=False,
         )
 
         model_input = dataset[0]["input_ids"]
@@ -105,11 +108,41 @@ class TestCollieDataset(unittest.TestCase):
             prompt + result,
         )
 
+        # Test Train with ignore_prompt_loss
+        dataset, prompt, result = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=True,
+        )
+
+        model_input = dataset[0]["input_ids"]
+        labels = dataset[0]["labels"]
+        self.assertNotEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(
+                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
+            ),
+            prompt + result,
+        )
+
+        self.assertTrue(-100 in labels)
+
+        labels = [x for x in labels if x != -100]
+
+        self.assertEqual(
+            tokenizer.decode(
+                labels, skip_special_tokens=True, clean_up_tokenization_spaces=False
+            ),
+            result,
+        )
+
         # Test Inference
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=True,
+            ignore_prompt_loss=False,
         )
 
         model_input = dataset[0]["input_ids"]
@@ -229,6 +262,7 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
+            ignore_prompt_loss=False,
         )
 
         datacollator = DataCollatorForSeq2Seq(
@@ -288,3 +322,49 @@ class TestCollieDataset(unittest.TestCase):
 
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
         self.assertEqual(labels[0], tokenizer.pad_token_id)
+
+        # Test Train with ignore_prompt_loss
+        dataset, prompt, result = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=True,
+        )
+
+        datacollator = DataCollatorForSeq2Seq(
+            tokenizer,
+            pad_to_multiple_of=2048,
+            return_tensors="pt",
+            padding=True,
+            label_pad_token_id=-100,
+        )
+
+        dataloder = DataLoader(
+            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
+        )
+        batch = [x for x in dataloder][0]
+
+        model_input = batch["input_ids"][0].tolist()
+        labels = batch["labels"][0].tolist()
+
+        self.assertEqual(model_input[0], tokenizer.pad_token_id)
+        self.assertEqual(labels[0], -100)
+
+        self.assertNotEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(
+                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
+            ),
+            prompt + result,
+        )
+
+        self.assertTrue(-100 in labels)
+
+        labels = [x for x in labels if x != -100]
+
+        self.assertEqual(
+            tokenizer.decode(
+                labels, skip_special_tokens=True, clean_up_tokenization_spaces=False
+            ),
+            result,
+        )
