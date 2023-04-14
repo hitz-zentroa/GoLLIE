@@ -22,7 +22,7 @@ def batch(iterable: Sized, n=1) -> Iterator:
             The size of the chunks. Defaults to `1`.
 
     Yields:
-        `Iterator`: 
+        `Iterator`:
             An iterator with the chunks.
     """
     l: int = len(iterable)
@@ -150,7 +150,7 @@ def batch_tokenization(
             The process number.
 
     Returns:
-        `List[BatchEncoding]`: 
+        `List[BatchEncoding]`:
             List of BatchEncoding with the prepared data.
     """
     tokenized_examples: List[BatchEncoding] = []
