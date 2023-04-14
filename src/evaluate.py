@@ -56,9 +56,7 @@ def fix_prompt_outputs(text: str) -> str:
     return text
 
 
-def remove_hallucinations(
-    unlabelled_sentence: str, predictions: List[Any]
-) -> List[Any]:
+def remove_hallucinations(unlabelled_sentence: str, predictions: List[Any]) -> List[Any]:
     """Removes predictions that are not in the unlabelled sentence.
     Args:
         unlabelled_sentence (str): The unlabelled sentence.
