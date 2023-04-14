@@ -57,8 +57,8 @@ def train_collie(
 
     logging.info(
         "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
-        f" {data_args.ignore_pad_token_for_loss} and 'ignore_pad_token_for_loss':"
-        f" {data_args.ignore_pad_token_for_loss}"
+        f" {data_args.ignore_pad_token_for_loss} and 'ignore_prompt_loss':"
+        f" {data_args.ignore_prompt_loss}"
     )
 
     training_datasets = []
@@ -70,7 +70,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
-            ignore_prompt_loss=data_args.ignore_pad_token_for_loss,
+            ignore_prompt_loss=data_args.ignore_prompt_loss,
         )
         training_datasets.append(train_dataset)
 
