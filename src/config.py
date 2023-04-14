@@ -144,3 +144,8 @@ class DataTrainingArguments:
             "help": "Use the development set for inference instead of the test set."
         },
     )
+
+    evaluate_all_checkpoints: bool = field(
+        default=False,
+        metadata={"help": "Evaluate all checkpoints in the model directory."},
+    )

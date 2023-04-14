@@ -8,6 +8,8 @@ import logging
 import importlib
 import rich
 
+import glob
+
 from src.config import DataTrainingArguments, ModelArguments
 from src.tasks import TASK_ID_TO_TASKS
 
@@ -75,6 +77,7 @@ def evaluate(
     model_args: ModelArguments,
     data_args: DataTrainingArguments,
     training_args: Seq2SeqTrainingArguments,
+    checkpoint_path: str = None,
 ) -> Dict[str, Dict[str, float]]:
     """This function evaluates the output of a model.
 
@@ -86,8 +89,13 @@ def evaluate(
         Dict[str, Dict[str, float]]: A dictionary containing the scores for each task
         present in the dataset.
     """
+    if checkpoint_path is None:
+        output_dir = training_args.output_dir
+    else:
+        output_dir = checkpoint_path
 
-    predictions_dir = os.path.join(model_args.lora_weights_name_or_path, "predictions")
+    predictions_dir = os.path.join(output_dir, "predictions")
+
     gold_data_dir = data_args.dataset_dir
     all_scores = {}
 
@@ -182,7 +190,7 @@ def evaluate(
             [len(x) for x in labels]
         )
 
-    scores_file_name = os.path.join(training_args.output_dir, "task_scores.json")
+    scores_file_name = os.path.join(output_dir, "task_scores.json")
     with open(scores_file_name, "wt") as f:
         json.dump(all_scores, f, indent=4, ensure_ascii=False)
     logging.info(f"Scores saved in: {scores_file_name}")
@@ -212,8 +220,34 @@ if __name__ == "__main__":
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     if data_args.test_tasks is not None:
-        evaluate(
-            model_args,
-            data_args,
-            training_args,
-        )
+        if not data_args.evaluate_all_checkpoints:
+            evaluate(
+                model_args,
+                data_args,
+                training_args,
+            )
+        else:
+            checkpoints = list(
+                os.path.dirname(c)
+                for c in sorted(
+                    glob.glob(
+                        os.path.join(training_args.output_dir, "**", "checkpoint*"),
+                        recursive=True,
+                    )
+                )
+                if os.path.isdir(c)
+            )
+
+            logging.info(
+                f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
+                f" {checkpoints} . We will evaluate each of them."
+            )
+
+            for checkpoint in checkpoints:
+                logging.info(f"Evaluating {checkpoint}")
+                evaluate(
+                    model_args,
+                    data_args,
+                    training_args,
+                    checkpoint_path=checkpoint,
+                )
