@@ -887,3 +887,5 @@ EVENT_DEFINITIONS: List[Event] = [
     Pardon,
     Appeal,
 ]
+
+__all__ = list(map(str, [*ENTITY_DEFINITIONS, *RELATION_DEFINITIONS, *EVENT_DEFINITIONS]))
