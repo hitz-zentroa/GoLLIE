@@ -17,6 +17,7 @@ import sys
 import os
 import torch.utils.data
 import logging
+from evaluate import evaluate
 
 
 def train_collie(
@@ -204,6 +205,9 @@ def inference_collie(
             with open(metrics_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing metrics to {metrics_name}")
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
+
+    if training_args.predict_with_generate:
+        evaluate(model_args, data_args, training_args)
 
 
 if __name__ == "__main__":
