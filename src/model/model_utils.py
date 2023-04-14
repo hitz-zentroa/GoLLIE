@@ -1,11 +1,19 @@
 from transformers import PreTrainedModel
+from typing import Tuple
 
 
-def get_trainable_parameters(model: PreTrainedModel) -> (int, int, float):
+def get_trainable_parameters(model: PreTrainedModel) -> Tuple[int, int, float]:
     """
     Prints the number of trainable parameters in the model.
-    :param model: The model to print the number of trainable parameters for.
-    :return: The number of trainable parameters, the total number of parameters and the percentage of trainable parameters.
+
+    Args:
+        model (`PreTrainedModel`):
+            The model to print the number of trainable parameters for.
+
+    Returns:
+        `Tuple[int, int, float]`:
+            The number of trainable parameters, the total number of parameters and the
+            percentage of trainable parameters.
     """
     trainable_params = 0
     all_param = 0

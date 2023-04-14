@@ -19,7 +19,18 @@ import logging
 import sys
 
 
-def generate_random_sentence(sentence_length: int = 5120):
+def generate_random_sentence(sentence_length: int = 5120) -> str:
+    """
+    Generates a random string of specific length with ascii characters.
+
+    Args:
+        sentence_length (`int`, optional):
+            Length of the sentence. Defaults to `5120`.
+
+    Returns:
+        str:
+            A random sentence of length `sentence_length`.
+    """
     sentence = ""
     for i in range(sentence_length):
         # generate a random word of length between 1 and 10 characters
@@ -31,6 +42,18 @@ def generate_random_sentence(sentence_length: int = 5120):
 
 
 class TestDataset(Dataset):
+    """
+    A dummy dataset used for testing.
+
+    Args:
+        tokenizer (`PreTrainedTokenizerBase`):
+            The pre-trained tokenizer.
+        seq_len (`int`):
+            The length of the sentences.
+        data_len (`int`):
+            The length of the data.
+    """
+
     def __init__(self, tokenizer: PreTrainedTokenizerBase, seq_len: int, data_len: int):
         self.data = []
         for i in range(data_len):
@@ -70,7 +93,22 @@ def get_dataloader(
     tokenizer: PreTrainedTokenizerBase,
     batch_size: int,
     seq_len: int,
-):
+) -> DataLoader:
+    """
+    A function that returns a `DataLoader` instance
+
+    Args:
+        tokenizer (`PreTrainedTokenizerBase`):
+            The pre-trained tokenizer.
+        batch_size (`int`):
+            The size of the batch.
+        seq_len (`int`):
+            The size of the sequence.
+
+    Returns:
+        `DataLoader`:
+            The dataloader that fits the configuration given.
+    """
     dataset = TestDataset(tokenizer=tokenizer, seq_len=seq_len, data_len=batch_size)
     data_collator = DataCollatorForSeq2Seq(
         tokenizer, padding=True, pad_to_multiple_of=8, return_tensors="pt"
@@ -95,6 +133,33 @@ def run_training_test(
     optimizer_name: str,
     learning_rate: float,
 ):
+    """
+    Runs the stress test to check if the current hardware allows it.
+
+    Args:
+        model (`PreTrainedModel`):
+            The model to be tested.
+        tokenizer (`PreTrainedTokenizerBase`):
+            The tokenizer of the model to be tested.
+        accelerator (`Accelerator`):
+            The accelerator instance.
+        seq_len (`int`):
+            The length of the sequence.
+        batch_size (`int`):
+            The length of the batch.
+        use_lora (`bool`):
+            Whether to use LoRA or not.
+        int8_quantization (`bool`):
+            Whether to use Int8 quantization or not.
+        optimizer_name (`str`):
+            The optimizer to use on the test.
+        learning_rate (`float`):
+            The learning rate to use on the test.
+
+    Raises:
+        `ValueError`:
+            raised when `optimizer_name!="adamW"` and `int8_quantization=True`.
+    """
     assert optimizer_name in [
         "adamW",
         "AdaFactor",

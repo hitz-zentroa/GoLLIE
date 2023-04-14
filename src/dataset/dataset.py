@@ -14,9 +14,16 @@ from itertools import chain
 def batch(iterable: Sized, n=1) -> Iterator:
     """
     Yield successive n-sized chunks from iterable.
-    :param iterable: The iterable to split.
-    :param n: The size of the chunks.
-    :return: An iterator with the chunks.
+
+    Args:
+        iterable (`Sized`):
+            The iterable to split.
+        n (`int`, optional):
+            The size of the chunks. Defaults to `1`.
+
+    Yields:
+        `Iterator`:
+            An iterator with the chunks.
     """
     l: int = len(iterable)
     p: int = math.ceil(l / n)
@@ -33,13 +40,22 @@ def prepare_data(
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
-    :param example:  The example to prepare.
-    :param tokenizer: The tokenizer to use.
-    :param is_encoder_decoder: Whether the model is an encoder-decoder model.
-    :param max_length: The maximum length of the input.
-    :param inference: Whether to prepare the data for inference.
-                    During inference labels are not included in model inputs.
-    :return: BatchEncoding with the prepared data.
+
+    Args:
+        example (`str`):
+            The example to prepare.
+        tokenizer (`PreTrainedTokenizerBase`):
+            The tokenizer to use.
+        is_encoder_decoder (`bool`, optional):
+            Whether the model is an encoder-decoder model. Defaults to `False`.
+        max_length (`int`, optional):
+            The maximum length of the input. Defaults to `2048`.
+        inference (`bool`, optional):
+            Whether to prepare the data for inference. During inference labels
+            are not included in model inputs. Defaults to `False`.
+
+    Returns:
+        `BatchEncoding`: `BatchEncoding` with the prepared data.
     """
 
     if is_encoder_decoder:
@@ -113,16 +129,29 @@ def batch_tokenization(
 ) -> List[BatchEncoding]:
     """
     Batch tokenization function.
-    :param tokenizer: The tokenizer to use.
-    :param dataset_name: The name of the dataset.
-    :param is_encoder_decoder: Whether the model is an encoder-decoder model.
-    :param max_length: The maximum length of the input.
-    :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
-                        will be truncated to don't include the results section of the example. Labels will still
-                        include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
-    :param examples: The examples to tokenize.
-    :param process_no: The process number.
-    :return: List of BatchEncoding with the prepared data.
+
+    Args:
+        tokenizer (`PreTrainedTokenizerBase`):
+            The tokenizer to use.
+        dataset_name (`str`):
+            The name of the dataset.
+        is_encoder_decoder (`bool`):
+            Whether the model is an encoder-decoder model.
+        max_length (`int`):
+            The maximum length of the input.
+        inference (`bool`):
+            Whether to prepare the data for inference. If model
+            `is_encoder_decoder=False`, inputs ids will be truncated to don't include the
+            results section of the example. Labels will still include the full correct
+            example. If model `is_encoder_decoder=True`, this parameter is ignored.
+        examples (`List[str]`):
+            The examples to tokenize.
+        process_no (`int`):
+            The process number.
+
+    Returns:
+        `List[BatchEncoding]`:
+            List of BatchEncoding with the prepared data.
     """
     tokenized_examples: List[BatchEncoding] = []
     if process_no == 0:
@@ -162,6 +191,25 @@ def batch_tokenization(
 class CollieDataset(Dataset):
     """
     Dataset for Collie.
+
+    Args:
+        tokenizer (`PreTrainedTokenizerBase`):
+            The tokenizer to use.
+        dataset_path (`str`):
+            The path to the jsonl file containing the dataset.
+        is_encoder_decoder (`bool`, optional):
+            Whether the model is an encoder-decoder model. Defaults to `False`.
+        max_length (`int`, optional):
+            The maximum length of the input. Defaults to `2048`.
+        inference (`bool`, optional):
+            Whether to prepare the data for inference. If model
+            `is_encoder_decoder=False`, inputs ids will be truncated to don't include
+            the results section of the example. Labels will still include the full
+            correct example. If model `is_encoder_decoder=True`, this parameter is
+            ignored. Defaults to `False`.
+        num_workers (`int`, optional):
+            The number of workers to use for tokenization. Defaults to
+            `min(os.cpu_count(), 16)`.
     """
 
     def __init__(
@@ -173,17 +221,6 @@ class CollieDataset(Dataset):
         inference: bool = False,
         num_workers: int = min(os.cpu_count(), 16),
     ):
-        """
-        :param tokenizer: The tokenizer to use.
-        :param dataset_path: The path to the jsonl file containing the dataset.
-        :param is_encoder_decoder: Whether the model is an encoder-decoder model.
-        :param max_length: The maximum length of the input.
-        :param inference: Whether to prepare the data for inference. If model is_encoder_decoder=False, inputs ids
-                            will be truncated to don't include the results section of the example. Labels will still
-                            include the full correct example. If model is_encoder_decoder=True, this parameter is ignored.
-        :param num_workers: The number of workers to use for tokenization.
-        """
-
         self.dataset_name = os.path.splitext(os.path.basename(dataset_path))[0]
 
         with open(dataset_path, "r", encoding="utf8") as f:
@@ -223,8 +260,8 @@ class CollieDataset(Dataset):
             f"Loaded {len(self.tokenized_examples)} examples from {self.dataset_name}"
         )
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.tokenized_examples)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> List[BatchEncoding]:
         return self.tokenized_examples[idx].copy()
