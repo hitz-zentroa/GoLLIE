@@ -1,15 +1,43 @@
 from typing import Any, Dict, List, Type, Union
+from typing_extensions import override
 from .utils_typing import Event, Relation, Entity, Value
-import rich
 
 
 class Scorer:
     """An abstract class for scorers."""
 
-    def __call__(self, reference: Any, predictions: Any) -> Dict[str, float]:
+    def __call__(
+        self, reference: List[Any], predictions: List[Any]
+    ) -> Dict[str, Dict[str, float]]:
+        """
+        Computes the scores for the given reference and predictions.
+
+        Args:
+            reference (`List[Any]`):
+                The list of reference or gold annotations.
+            predictions (`List[Any]`):
+                The list of predicted annotations.
+
+        Returns:
+            Dict[str, Dict[str, float]]:
+                A `dict` object that contains the scores (usually Precision, Recall and
+                F1-score) for the evaluated tasks.
+        """
         raise NotImplementedError("This method must be implemented.")
 
-    def _filter_valid_types(self, elems: List[Any]) -> List[Union[Entity, Value]]:
+    def _filter_valid_types(self, elems: List[Any]) -> List[Any]:
+        """
+        Filters the non-valid annotations for a given task.
+
+        Args:
+            elems (`List[Any]`):
+                List of annotations to filter based on the predefined valid types.
+
+        Returns:
+            `List[Union[Entity, Value]]`:
+                List of the filtered annotations to keep only the ones defined by the
+                valid types.
+        """
         return [
             elem
             for elem in elems
@@ -24,6 +52,7 @@ class SpanScorer(Scorer):
 
     valid_types: List[Type] = [Entity, Value]
 
+    @override
     def __call__(
         self,
         reference: List[Union[Entity, Value]],
@@ -71,6 +100,7 @@ class RelationScorer(SpanScorer):
 
     valid_types: List[Type] = [Relation]
 
+    @override
     def __call__(
         self, reference: List[Relation], predictions: List[Relation]
     ) -> Dict[str, Dict[str, float]]:
@@ -83,6 +113,7 @@ class EventScorer(Scorer):
 
     valid_types: List[Type] = [Event]
 
+    @override
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
         if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
