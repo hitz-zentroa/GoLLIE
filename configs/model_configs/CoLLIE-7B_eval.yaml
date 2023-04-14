@@ -1,6 +1,6 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
-lora_weights_name_or_path: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7B/
+lora_weights_name_or_path: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7B_optim_AdamW_lr_3e4_constant/
 torch_dtype: "auto"
 use_lora: true
 int8_quantization: true
@@ -12,11 +12,11 @@ test_tasks:
   - ace05.ner
 max_seq_length: 2048
 generation_max_length: 2048
-ignore_pad_token_for_loss: false
+ignore_pad_token_for_loss: true
 
 # checkpoint settings
-output_dir: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7B
-overwrite_output_dir: true
+output_dir: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7B_optim_AdamW_lr_3e4_constant
+overwrite_output_dir: false
 load_best_model_at_end: false
 save_strategy: "no"
 save_total_limit: 0

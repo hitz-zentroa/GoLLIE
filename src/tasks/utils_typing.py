@@ -35,7 +35,12 @@ class Entity:
     span: str
 
     def __eq__(self: Entity, other: Entity) -> bool:
-        return type(self) == type(other) and self.span == other.span
+        self_span = self.span.lower().strip()
+        other_span = other.span.lower().strip()
+        return type(self) == type(other) and self_span == other_span
+
+    def exists_in(self, text: str) -> bool:
+        return self.span.lower() in text.lower()
 
 
 @dataclass
@@ -62,6 +67,9 @@ class Relation:
             and self.arg2 == other.arg2
         )
 
+    def exists_in(self, text: str) -> bool:
+        return self.arg1.lower() in text.lower() and self.arg2.lower() in text.lower()
+
 
 @dataclass
 class Event:
@@ -75,8 +83,12 @@ class Event:
     def __and__(self: Event, other: Event) -> Event:
         attrs = {
             attr: []
-            for attr, _ in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"])
+            for attr, values in inspect.getmembers(self)
+            if not (
+                attr.startswith("__")
+                or attr in ["mention", "subtype"]
+                or inspect.ismethod(values)
+            )
         }
         if self == other:
             for attr in attrs.keys():
@@ -99,10 +111,17 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"])
+            if not (
+                attr.startswith("__")
+                or attr in ["mention", "subtype"]
+                or inspect.ismethod(values)
+            )
         }
         _len = 0
         for values in attrs.values():
             _len += len(values)
 
         return _len
+
+    def exists_in(self, text: str) -> bool:
+        return True  # TODO: implement exists_in for Event

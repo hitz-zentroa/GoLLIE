@@ -840,3 +840,5 @@ EVENT_DEFINITIONS: List[Event] = [
     TransferMoney,
     TransferOwnership,
 ]
+
+__all__ = list(map(str, [*EVENT_DEFINITIONS]))

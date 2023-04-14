@@ -1,5 +1,6 @@
 from typing import Any, Dict, List, Type, Union
 from .utils_typing import Event, Relation, Entity, Value
+import rich
 
 
 class Scorer:
