@@ -243,6 +243,10 @@ def load_model_for_inference(
 
         logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
         model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
-        model = model.merge_and_unload()
+
+        if not int8_quantization:
+            # If we are not using int8 quantization, we need to merge the LoRA layers into the model
+            # This is not possible if we are using int8 quantization.
+            model = model.merge_and_unload()
 
     return model, tokenizer
