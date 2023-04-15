@@ -243,5 +243,6 @@ def load_model_for_inference(
 
         logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
         model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+        model = model.merge_and_unload()
 
     return model, tokenizer
