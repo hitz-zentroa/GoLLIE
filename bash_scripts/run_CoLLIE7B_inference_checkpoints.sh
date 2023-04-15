@@ -17,11 +17,12 @@ export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=CoLLIE
 
 
-CONFIGS_FOLDER="configs/model_configs"
+CONFIGS_FOLDER="configs/model_configs/tmp"
 
 # cd ../src || exit
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_evalcheckpoints.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_ignore_prompt_loss.yaml
 
 # python3 trainer.py ../CoLLIE_configs/CoLLIE-7B_eval.yaml
