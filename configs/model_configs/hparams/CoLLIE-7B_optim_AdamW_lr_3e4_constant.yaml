@@ -12,6 +12,8 @@ train_tasks:
   - ace05.ner
 validation_tasks:
   - ace05.ner
+test_tasks:
+  - ace05.ner
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
@@ -28,6 +30,7 @@ save_total_limit: 999
 # evaluation
 do_train: true
 do_eval: true
+do_predict: true
 evaluation_strategy: "steps"
 eval_steps: 100
 eval_delay: 0
