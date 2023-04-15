@@ -221,6 +221,8 @@ def inference_collie(
                 f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
             )
 
+            os.makedirs(os.path.join(output_dir, "predictions"), exist_ok=True)
+
             with open(output_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing predictions to {output_name}")
                 predictions = predictions.predictions
