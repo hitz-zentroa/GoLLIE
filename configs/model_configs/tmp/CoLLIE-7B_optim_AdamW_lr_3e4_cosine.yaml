@@ -39,6 +39,7 @@ per_device_train_batch_size: 32
 per_device_eval_batch_size: 32
 gradient_accumulation_steps: 1
 generation_num_beams: 1
+auto_find_batch_size: true
 
 # optimizer settings
 optim: adamw_torch
