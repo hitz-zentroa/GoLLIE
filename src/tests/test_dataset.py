@@ -1,6 +1,5 @@
 import os
 import unittest
-import rich
 from transformers import PreTrainedTokenizerBase
 from src.dataset.dataset import CollieDataset
 from typing import Tuple
@@ -87,15 +86,13 @@ class TestCollieDataset(unittest.TestCase):
                 else "EleutherAI/gpt-neo-125m"
             ),
             add_eos_token=True,
-            use_fast=True
+            use_fast=True,
         )
 
         simple_sentence = "This is a sentence to test if the tokenizer adds eos token."
-        simple_sentence_ids = tokenizer(
-            simple_sentence, add_special_tokens=True
-        )
-        if simple_sentence_ids['input_ids'][-1] != tokenizer.eos_token_id:
-            simple_sentence_ids['input_ids'].append(tokenizer.eos_token_id)
+        simple_sentence_ids = tokenizer(simple_sentence, add_special_tokens=True)
+        if simple_sentence_ids["input_ids"][-1] != tokenizer.eos_token_id:
+            simple_sentence_ids["input_ids"].append(tokenizer.eos_token_id)
             simple_sentence_ids["attention_mask"].append(1)
             print(simple_sentence_ids)
 

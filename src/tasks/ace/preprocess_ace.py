@@ -21,7 +21,13 @@ from nltk import (
 TAG_PATTERN = re.compile("<[^<>]+>", re.MULTILINE)
 
 DOCS_TO_REVISE_SENT = {
-    "CNN_ENG_20030529_130011.6": [(461, 504), (668, 859), (984, 1074), (1577, 1632)],
+    "CNN_ENG_20030529_130011.6": [
+        (209, 254),
+        (461, 504),
+        (668, 859),
+        (984, 1074),
+        (1577, 1632),
+    ],
     "CNN_ENG_20030626_203133.11": [(1497, 1527)],
     "CNN_ENG_20030526_180540.6": [(67, 99)],
     "CNNHL_ENG_20030523_221118.14": [(136, 174)],
@@ -41,13 +47,6 @@ DOCS_TO_REVISE_SENT = {
     "CNN_CF_20030304.1900.04": [(522, 575), (5193, 5210), (5461, 5542)],
     "CNN_IP_20030403.1600.00-3": [(1487, 1493)],
     "soc.history.war.world-war-ii_20050127.2403": [(414, 441)],
-    "CNN_ENG_20030529_130011.6": [
-        (209, 254),
-        (461, 504),
-        (668, 859),
-        (984, 1074),
-        (1577, 1632),
-    ],
 }
 
 # Inconsistency between data and annotation guideline argument names
@@ -551,7 +550,7 @@ def read_apf_file(
     if time_and_val:
         # entities: value
         for entity in doc.find_all("value"):
-            enitty_id = entity["ID"]
+            entity_id = entity["ID"]
             entity_type = entity["TYPE"]
             entity_subtype = entity.get("SUBTYPE", None)
             for entity_mention in entity.find_all("value_mention"):
@@ -575,7 +574,7 @@ def read_apf_file(
         # entities: timex
         for entity in doc.find_all("timex2"):
             entity_id = entity["ID"]
-            enitty_type = entity_subtype = "TIME"
+            entity_subtype = "TIME"
             value = entity.get("VAL", None)
             for entity_mention in entity.find_all("timex2_mention"):
                 mention_id = entity_mention["ID"]
@@ -598,7 +597,7 @@ def read_apf_file(
 
     # relations
     for relation in doc.find_all("relation"):
-        relation_id = relation["ID"]
+        relation["ID"]
         relation_type = relation["TYPE"]
         if relation_type == "METONYMY":
             continue
@@ -624,10 +623,6 @@ def read_apf_file(
         event_id = event["ID"]
         event_type = event["TYPE"]
         event_subtype = event["SUBTYPE"]
-        event_modality = event["MODALITY"]
-        event_polarity = event["POLARITY"]
-        event_genericity = event["GENERICITY"]
-        event_tense = event["TENSE"]
         for event_mention in event.find_all("event_mention"):
             mention_id = event_mention["ID"]
             trigger = event_mention.find("anchor").find("charseq")
@@ -679,7 +674,6 @@ def process_entities(
         for i, (_, s, e) in enumerate(sentences):
             if start >= s and end <= e:
                 sentence_entities[i].append(entity)
-                assigned = True
                 break
 
     # remove overlapping entities
@@ -1114,7 +1108,7 @@ def convert_to_event_only(input_path: str, output_path: str):
                         if event_type in arg_name_mapping:
                             if arg["role"] in arg_name_mapping[event_type]:
                                 new_role = arg_name_mapping[event_type][arg["role"]]
-                                if new_role == None:  # arg type isn't in ontology at all
+                                if new_role is None:  # arg type isn't in ontology at all
                                     continue  # delete it from data
                                 else:  # arg type is in ontology, but misnamed in data
                                     arg["role"] = new_role  # update its name
@@ -1155,7 +1149,10 @@ def convert_to_event_only(input_path: str, output_path: str):
 
 
 def simplify_arg_role_name(role_name: str):
-    """Converts the name of the argument role to the simple form (e.g. "Time-Within" to "Time")."""
+    """
+    Converts the name of the argument role to the simple form (e.g. "Time-Within" to 
+    "Time").
+    """
     cols = role_name.split("-")
     if len(cols) > 1 and cols[0] != "Time":
         print(cols)

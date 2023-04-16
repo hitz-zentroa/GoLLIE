@@ -556,7 +556,7 @@ class RAMSDatasetLoader(DatasetLoader):
 
                         try:
                             _inst[value].append(arg_text)
-                        except KeyError as e:
+                        except KeyError:
                             raise KeyError(f"{event_type}-{value}")
 
                     events.append(info["class"](**_inst))

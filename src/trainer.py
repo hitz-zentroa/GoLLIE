@@ -8,7 +8,7 @@ from typing import Callable, Dict, List, Optional, Tuple, Union
 from transformers import TrainingArguments, DataCollator, PreTrainedTokenizerBase
 from transformers.trainer import logger, TRAINING_ARGS_NAME
 from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_available
-from transformers.trainer_callback import TrainerCallback, ProgressCallback
+from transformers.trainer_callback import TrainerCallback
 from transformers.trainer_utils import has_length, EvalPrediction
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 

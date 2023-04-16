@@ -8,3 +8,6 @@ extend-exclude = '''
 )/
 '''
 preview = true
+
+[tool.ruff]
+line-length = 90

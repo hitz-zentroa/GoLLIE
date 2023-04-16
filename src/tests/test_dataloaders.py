@@ -17,9 +17,7 @@ class TestDataLoaders(unittest.TestCase):
             "data/ace05/english.sentence.json", group_by="sentence"
         )
 
-        train_sampler = ACESampler(
-            dataloader, task="EE", **config, **config["task_configuration"]["EE"]
-        )
+        ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"])
 
         # TODO: Implement a better TEST
 
@@ -34,7 +32,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
-        train_sampler = RAMSSampler(
+        RAMSSampler(
             dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]
         )
 

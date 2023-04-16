@@ -16,7 +16,6 @@ import argparse
 import torch
 import string
 import logging
-import sys
 
 
 def generate_random_sentence(sentence_length: int = 5120) -> str:
@@ -274,7 +273,7 @@ def main():
 
     result_matrix = [[0 for i in range(len(batch_sizes))] for j in range(len(seq_lens))]
 
-    logging.info(f"***** Experiment parameters *****")
+    logging.info("***** Experiment parameters *****")
     logging.info(f"Model name or path: {args.model_name_or_path}")
     logging.info(f"Sequence lengths: {seq_lens}")
     logging.info(f"Batch sizes: {batch_sizes}")
@@ -282,7 +281,7 @@ def main():
     logging.info(f"Use int8 quantization: {args.int8_quantization}")
     logging.info(f"Optimizer: {args.optimizer_name}")
     logging.info(f"Learning rate: {args.learning_rate}")
-    logging.info(f"*********************************")
+    logging.info("*********************************")
     logging.info(f"Loading model {args.model_name_or_path}...")
     model, tokenizer = load_model_for_training(
         model_weights_name_or_path=args.model_name_or_path,

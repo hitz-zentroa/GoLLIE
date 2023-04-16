@@ -123,18 +123,18 @@ def inference_collie(
 ):
     if not training_args.predict_with_generate:
         logging.warning(
-            f"You have set predict_with_generate to False. We will only compute the loss"
-            f" on the test set. If you want to generate predictions, set"
-            f" predict_with_generate to True."
+            "You have set predict_with_generate to False. We will only compute the loss"
+            " on the test set. If you want to generate predictions, set"
+            " predict_with_generate to True."
         )
 
         if not training_args.prediction_loss_only:
             logging.warning(
-                f"You have set predict_with_generate to False, so you only "
-                f"want to compute the loss on the test set. But you have set "
-                f"prediction_loss_only to False. This is contradictory, please "
-                f"review you configuration. We will attempt to continue but "
-                f"you might get unexpected results."
+                "You have set predict_with_generate to False, so you only "
+                "want to compute the loss on the test set. But you have set "
+                "prediction_loss_only to False. This is contradictory, please "
+                "review you configuration. We will attempt to continue but "
+                "you might get unexpected results."
             )
 
     if training_args.do_train:

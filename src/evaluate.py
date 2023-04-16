@@ -6,7 +6,6 @@ from transformers import HfArgumentParser, Seq2SeqTrainingArguments
 
 import logging
 import importlib
-import rich
 
 import glob
 
@@ -151,7 +150,7 @@ def evaluate(
                         pred_line["model_prediction"].strip().split("result = ")[-1]
                     )
                     pred_labels = eval(pred_labels)
-                except Exception as e:
+                except Exception:
                     # logging.warning("Found an incorrect formated pred file!")
                     pred_labels = []
                     impossible_to_parse += 1
