@@ -85,7 +85,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
-            ignore_prompt_loss=data_args.ignore_pad_token_for_loss,
+            ignore_prompt_loss=data_args.ignore_prompt_loss,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
