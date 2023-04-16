@@ -54,6 +54,9 @@ def prepare_data(
         inference (`bool`, optional):
             Whether to prepare the data for inference. During inference labels
             are not included in model inputs. Defaults to `False`.
+        ignore_prompt_loss (`bool`, optional):
+            Whether to ignore the prompt tokens when calculating the loss (set to -100).
+            Defaults to `False`
 
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
@@ -166,6 +169,9 @@ def batch_tokenization(
             `is_encoder_decoder=False`, inputs ids will be truncated to don't include the
             results section of the example. Labels will still include the full correct
             example. If model `is_encoder_decoder=True`, this parameter is ignored.
+        ignore_prompt_loss (`bool`, optional):
+            Whether to ignore the prompt tokens when calculating the loss (set to -100).
+            Defaults to `False`
         examples (`List[str]`):
             The examples to tokenize.
         process_no (`int`):
@@ -231,6 +237,9 @@ class CollieDataset(Dataset):
             the results section of the example. Labels will still include the full
             correct example. If model `is_encoder_decoder=True`, this parameter is
             ignored. Defaults to `False`.
+        ignore_prompt_loss (`bool`, optional):
+            Whether to ignore the prompt tokens when calculating the loss (set to -100).
+            Defaults to `False`
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
