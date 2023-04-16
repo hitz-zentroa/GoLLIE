@@ -25,7 +25,55 @@ class DatasetLoader:
 
 
 class Sampler:
-    """An abstract class for example sampling."""
+    """
+    A generic data `Sampler` class.
+
+    Args:
+        dataset_loader (`DatasetLoader`):
+            The dataset loader that contains the data information.
+        task (`str`, optional):
+            The task to sample. Defaults to `None`.
+        split (`str`, optional):
+            The split to sample. It must be one of the following: "train", "dev" or
+            "test". Depending on the split the sampling strategy differs. Defaults to
+            `"train"`.
+        parallel_instances (`Union[int, Tuple[int, int]]`, optional):
+            The number of sentences sampled in parallel. Options:
+
+                * **`int`**: The amount of elements that will be sampled in parallel.
+                * **`tuple`**: The range of elements that will be sampled in parallel.
+
+            Defaults to 1.
+        max_guidelines (`int`, optional):
+            The number of guidelines to append to the example at the same time. If `-1`
+            is given then all the guidelines are appended. Defaults to `-1`.
+        guideline_dropout (`float`, optional):
+            The probability to dropout a guideline definition for the given example. This
+            is only applied on training. Defaults to `0.0`.
+        seed (`float`, optional):
+            The seed to sample the examples. Defaults to `0`.
+        prompt_template (`str`, optional):
+            The path to the prompt template. Defaults to `"templates/prompt_eae.txt"`.
+        ensure_positives_on_train (bool, optional):
+            Whether to ensure that the guidelines of annotated examples are not removed.
+            Defaults to `True`.
+        dataset_name (str, optional):
+            The name of the dataset. Defaults to `None`.
+        scorer (`str`, optional):
+           The scorer class import string. Defaults to `None`.
+        sample_only_gold_guidelines (`bool`, optional):
+            Whether to sample only guidelines of present annotations. Defaults to `False`.
+        task_definitions (`List[Type]`, optional):
+            The task definitions or guidelines. Defaults to `None`.
+        task_target (`str`, optional):
+            The key of the target task annotations in the dict outputed by the
+            `DatasetLoader`. This is useful when the `DataLoader` returns annotations for
+            different tasks. Defaults to "labels".
+
+    Raises:
+        ValueError:
+            raised when no task definitions are given.
+    """
 
     def __init__(
         self,

@@ -3,8 +3,6 @@ from dataclasses import dataclass as org_dataclass
 import inspect
 from copy import deepcopy
 
-import numpy as np
-
 
 def dataclass(
     cls=None,
@@ -40,6 +38,18 @@ class Entity:
         return type(self) == type(other) and self_span == other_span
 
     def exists_in(self, text: str) -> bool:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
         return self.span.lower() in text.lower()
 
 
@@ -51,6 +61,21 @@ class Value:
 
     def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.span == other.span
+
+    def exists_in(self, text: str) -> bool:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
+        return self.span.lower() in text.lower()
 
 
 @dataclass
@@ -68,6 +93,18 @@ class Relation:
         )
 
     def exists_in(self, text: str) -> bool:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
         return self.arg1.lower() in text.lower() and self.arg2.lower() in text.lower()
 
 
@@ -124,4 +161,16 @@ class Event:
         return _len
 
     def exists_in(self, text: str) -> bool:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
         return True  # TODO: implement exists_in for Event
