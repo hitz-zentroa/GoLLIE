@@ -5,13 +5,13 @@ from src.tasks.rams.prompts import TransferOwnership, Yield
 
 class TestACEScorers(unittest.TestCase):
     def test_entity_scorer(self):
-        from src.tasks.ace.scorer import ACEEntityScorer
         from src.tasks.ace.prompts import (
-            Person,
-            Organization,
             GPE,
             Location,
+            Organization,
+            Person,
         )
+        from src.tasks.ace.scorer import ACEEntityScorer
 
         reference = [
             Person("Peter"),
@@ -41,11 +41,11 @@ class TestACEScorers(unittest.TestCase):
         )
 
     def test_event_scorer(self):
-        from src.tasks.ace.scorer import ACEEventScorer
         from src.tasks.ace.prompts import (
             BeBorn,
             Marry,
         )
+        from src.tasks.ace.scorer import ACEEventScorer
 
         reference = [
             BeBorn("born", person=["Peter"], time=[], place=["Donosti"]),

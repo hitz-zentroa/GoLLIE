@@ -1,9 +1,10 @@
-import logging
-from argparse import ArgumentParser
 import json
-from typing import Type
+import logging
 import os
-from rich.progress import Progress, TimeElapsedColumn, SpinnerColumn
+from argparse import ArgumentParser
+from typing import Type
+
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 
 
 parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
@@ -61,20 +62,13 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
-                output_name = (
-                    f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
-                )
+                output_name = f"{config['dataset_name'].lower()}.{task.lower()}.train.jsonl"
 
-                if (
-                    os.path.exists(os.path.join(args.output_dir, output_name))
-                    and not args.overwrite_output_dir
-                ):
+                if os.path.exists(os.path.join(args.output_dir, output_name)) and not args.overwrite_output_dir:
                     logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
-                with open(
-                    os.path.join(args.output_dir, output_name), "w"
-                ) as _file, Progress(
+                with open(os.path.join(args.output_dir, output_name), "w") as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
                     TimeElapsedColumn(),
@@ -103,16 +97,11 @@ def main(args):
 
                 output_name = f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
 
-                if (
-                    os.path.exists(os.path.join(args.output_dir, output_name))
-                    and not args.overwrite_output_dir
-                ):
+                if os.path.exists(os.path.join(args.output_dir, output_name)) and not args.overwrite_output_dir:
                     logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
-                with open(
-                    os.path.join(args.output_dir, output_name), "w"
-                ) as _file, Progress(
+                with open(os.path.join(args.output_dir, output_name), "w") as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
                     TimeElapsedColumn(),
@@ -139,20 +128,13 @@ def main(args):
                     **config["task_configuration"][task],
                 )
 
-                output_name = (
-                    f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
-                )
+                output_name = f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
 
-                if (
-                    os.path.exists(os.path.join(args.output_dir, output_name))
-                    and not args.overwrite_output_dir
-                ):
+                if os.path.exists(os.path.join(args.output_dir, output_name)) and not args.overwrite_output_dir:
                     logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
-                with open(
-                    os.path.join(args.output_dir, output_name), "w"
-                ) as _file, Progress(
+                with open(os.path.join(args.output_dir, output_name), "w") as _file, Progress(
                     SpinnerColumn(),
                     *Progress.get_default_columns(),
                     TimeElapsedColumn(),

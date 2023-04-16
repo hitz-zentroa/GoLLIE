@@ -1,23 +1,22 @@
+import glob
 import json
+import logging
+import os
+import sys
 
-from transformers import (
-    Seq2SeqTrainingArguments,
-    HfArgumentParser,
-    DataCollatorForSeq2Seq,
-)
-
-from src.trainer import CollieTrainer
-
+import torch.utils.data
 from datasets import DatasetDict
 
+from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset
-from src.model.load_model import load_model_for_training, load_model_for_inference
-from src.config import ModelArguments, DataTrainingArguments
-import sys
-import os
-import torch.utils.data
-import logging
 from src.evaluate import evaluate
+from src.model.load_model import load_model_for_inference, load_model_for_training
+from src.trainer import CollieTrainer
+from transformers import (
+    DataCollatorForSeq2Seq,
+    HfArgumentParser,
+    Seq2SeqTrainingArguments,
+)
 
 
 def train_collie(
@@ -36,22 +35,24 @@ def train_collie(
 
     logging.info("Loading datasets...")
     training_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl"
-        for task in data_args.train_tasks
+        f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl" for task in data_args.train_tasks
     ]
     development_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl"
-        for task in data_args.validation_tasks
+        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl" for task in data_args.validation_tasks
     ]
 
     logging.info(
-        f"We will train CoLLIE on {len(training_datasets_path)} datasets:"
-        f" {', '.join(training_datasets_path)}"
+        f"We will train CoLLIE on {len(training_datasets_path)} datasets: {', '.join(training_datasets_path)}"
     )
 
     logging.info(
-        f"We will validate CoLLIE on {len(development_datasets_path)} datasets:"
-        f" {', '.join(development_datasets_path)}"
+        f"We will validate CoLLIE on {len(development_datasets_path)} datasets: {', '.join(development_datasets_path)}"
+    )
+
+    logging.info(
+        "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
+        f" {data_args.ignore_pad_token_for_loss} and 'ignore_prompt_loss':"
+        f" {data_args.ignore_prompt_loss}"
     )
 
     training_datasets = []
@@ -63,6 +64,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
+            ignore_prompt_loss=data_args.ignore_prompt_loss,
         )
         training_datasets.append(train_dataset)
 
@@ -77,6 +79,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
+            ignore_prompt_loss=data_args.ignore_prompt_loss,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -90,9 +93,7 @@ def train_collie(
             pad_to_multiple_of=8,
             return_tensors="pt",
             padding=True,
-            label_pad_token_id=(
-                -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
-            ),
+            label_pad_token_id=(-100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id),
         ),
     )
 
@@ -110,37 +111,58 @@ def inference_collie(
     model_args: ModelArguments,
     data_args: DataTrainingArguments,
     training_args: Seq2SeqTrainingArguments,
+    checkpoint_path: str = None,
 ):
     if not training_args.predict_with_generate:
         logging.warning(
-            f"You have set predict_with_generate to False. We will only compute the loss"
-            f" on the test set. If you want to generate predictions, set"
-            f" predict_with_generate to True."
+            "You have set predict_with_generate to False. We will only compute the loss"
+            " on the test set. If you want to generate predictions, set"
+            " predict_with_generate to True."
         )
 
         if not training_args.prediction_loss_only:
             logging.warning(
-                f"You have set predict_with_generate to False, so you only "
-                f"want to compute the loss on the test set. But you have set "
-                f"prediction_loss_only to False. This is contradictory, please "
-                f"review you configuration. We will attempt to continue but "
-                f"you might get unexpected results."
+                "You have set predict_with_generate to False, so you only "
+                "want to compute the loss on the test set. But you have set "
+                "prediction_loss_only to False. This is contradictory, please "
+                "review you configuration. We will attempt to continue but "
+                "you might get unexpected results."
             )
 
     if training_args.do_train:
-        logging.warning(
-            "You are doing inference after training a model! We will load the "
-            f"pretrained model saved in {training_args.output_dir}."
-        )
-        if model_args.use_lora:
-            model_path = model_args.model_name_or_path
-            lora_weights_name_or_path = training_args.output_dir
+        if not checkpoint_path:
+            logging.warning(
+                "You are doing inference after training a model! We will load the "
+                f"pretrained model saved in {training_args.output_dir}."
+            )
+            if model_args.use_lora:
+                model_path = model_args.model_name_or_path
+                lora_weights_name_or_path = training_args.output_dir
+            else:
+                model_path = training_args.output_dir
+                lora_weights_name_or_path = None
         else:
-            model_path = training_args.output_dir
-            lora_weights_name_or_path = None
+            logging.warning(
+                "You are doing inference after training a model! We will load the "
+                f"pretrained model saved in {checkpoint_path}."
+            )
+            if model_args.use_lora:
+                model_path = model_args.model_name_or_path
+                lora_weights_name_or_path = checkpoint_path
+            else:
+                model_path = checkpoint_path
+                lora_weights_name_or_path = None
     else:
-        model_path = model_args.model_name_or_path
-        lora_weights_name_or_path = model_args.lora_weights_name_or_path
+        if not checkpoint_path:
+            model_path = model_args.model_name_or_path
+            lora_weights_name_or_path = model_args.lora_weights_name_or_path
+        else:
+            if model_args.use_lora:
+                model_path = model_args.model_name_or_path
+                lora_weights_name_or_path = checkpoint_path
+            else:
+                model_path = checkpoint_path
+                lora_weights_name_or_path = None
 
     if model_args.use_lora and lora_weights_name_or_path is None:
         logging.warning(
@@ -183,56 +205,55 @@ def inference_collie(
         logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
 
+        output_dir = training_args.output_dir if checkpoint_path is None else checkpoint_path
         if training_args.predict_with_generate:
-            output_name = (
-                f"{os.path.join(training_args.output_dir,test_task)}.predictions.jsonl"
-            )
+            output_name = f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
+
+            os.makedirs(os.path.join(output_dir, "predictions"), exist_ok=True)
 
             with open(output_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing predictions to {output_name}")
                 predictions = predictions.predictions
-                predictions = tokenizer.batch_decode(
-                    predictions, skip_special_tokens=True
-                )
+                # Switch all -100 to tokenizer.pad_token_id, so we can decode the predictions
+                predictions[predictions == -100] = tokenizer.pad_token_id
+
+                try:
+                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+                except OverflowError:
+                    raise OverflowError(f"Unable to decode predictions: {predictions}")
+
                 for prediction in predictions:
                     print(
                         json.dumps({"model_prediction": prediction}, ensure_ascii=False),
                         file=f,
                     )
+
         else:
-            metrics_name = (
-                f"{os.path.join(training_args.output_dir,test_task)}.metrics.json"
-            )
+            metrics_name = f"{os.path.join(output_dir,test_task)}.metrics.json"
             with open(metrics_name, "w", encoding="utf8") as f:
                 logging.info(f"Writing metrics to {metrics_name}")
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
     if training_args.predict_with_generate:
-        evaluate(model_args, data_args, training_args)
+        evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
-    )
+    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
     print(sys.argv)
     print(len(sys.argv))
     print(sys.argv[1].endswith(".yaml"))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
-        )
+        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
 
     elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
         # If we pass only one argument to the script and it's the path to a yaml file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(
-            yaml_file=os.path.abspath(sys.argv[1])
-        )
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
@@ -244,8 +265,32 @@ if __name__ == "__main__":
         )
 
     if data_args.test_tasks is not None:
-        inference_collie(
-            model_args,
-            data_args,
-            training_args,
-        )
+        if not data_args.evaluate_all_checkpoints:
+            inference_collie(
+                model_args,
+                data_args,
+                training_args,
+            )
+        else:
+            # Find all checkpoints in the output directory
+            checkpoints = [
+                c
+                for c in glob.glob(
+                    os.path.join(training_args.output_dir, "checkpoint-*"),
+                )
+                if os.path.isdir(c)
+            ]
+
+            logging.info(
+                f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
+                f" {checkpoints} . We will evaluate each of them."
+            )
+
+            # Evaluate each checkpoint
+            for checkpoint in checkpoints:
+                inference_collie(
+                    model_args,
+                    data_args,
+                    training_args,
+                    checkpoint_path=checkpoint,
+                )

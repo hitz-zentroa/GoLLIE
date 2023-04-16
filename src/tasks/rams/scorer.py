@@ -1,4 +1,5 @@
 from typing import List, Type
+
 from src.tasks.rams.prompts import EVENT_DEFINITIONS
 from src.tasks.utils_scorer import EventScorer
 

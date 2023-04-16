@@ -2,9 +2,9 @@ import inspect
 import math
 import random
 from typing import Any, Dict, List, Tuple, Type, Union
-from jinja2 import Template
 
 import numpy as np
+from jinja2 import Template
 
 
 class DatasetLoader:
@@ -129,24 +129,13 @@ class Sampler:
             guidelines = [
                 definition
                 for definition in self.task_definitions
-                if any(
-                    isinstance(ann, definition)
-                    for inst in instances
-                    for ann in inst[self.task_target]
-                )
+                if any(isinstance(ann, definition) for inst in instances for ann in inst[self.task_target])
             ]
             random.shuffle(guidelines)
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
-                _guidelines = guidelines[
-                    i * self.max_guidelines : (i + 1) * self.max_guidelines
-                ]
-                _ann = [
-                    ann
-                    for inst in instances
-                    for ann in inst[self.task_target]
-                    if type(ann) in _guidelines
-                ]
+                _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
+                _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
                 yield {
@@ -155,27 +144,19 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": [ann.__repr__() for ann in _ann],
                     "text": self.template.render(
-                        guidelines=[
-                            inspect.getsource(definition) for definition in _guidelines
-                        ],
+                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
                         text=_text,
                         annotations=_ann,
                     ),
                     "unlabelled_sentence": _text,
                 }
         elif self.split == "train":
-            positive_guidelines = {
-                type(ann) for inst in instances for ann in inst[self.task_target]
-            }
+            positive_guidelines = {type(ann) for inst in instances for ann in inst[self.task_target]}
             # Assign a probability distribution that helps positive classes
             # if ensure_positives_on_train is True
             p = np.asarray(
                 [
-                    (
-                        5.0
-                        if _def in positive_guidelines and self.ensure_positives_on_train
-                        else 0.0
-                    )
+                    (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
                     for _def in self.task_definitions
                 ]
             )
@@ -194,12 +175,7 @@ class Sampler:
                 if random.random() > self.guideline_dropout
                 or (_def in positive_guidelines and self.ensure_positives_on_train)
             ]
-            _ann = [
-                ann
-                for inst in instances
-                for ann in inst[self.task_target]
-                if type(ann) in _guidelines
-            ]
+            _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
             _text = " ".join([inst["text"] for inst in instances]).strip()
             yield {
                 "ids": [inst["id"] for inst in instances],
@@ -207,28 +183,19 @@ class Sampler:
                 "scorer_cls": self.scorer_cls,
                 "labels": [ann.__repr__() for ann in _ann],
                 "text": self.template.render(
-                    guidelines=[
-                        inspect.getsource(definition) for definition in _guidelines
-                    ],
+                    guidelines=[inspect.getsource(definition) for definition in _guidelines],
                     text=_text,
                     annotations=_ann,
                 ),
                 "unlabelled_sentence": _text,
             }
         else:
-            guidelines = [definition for definition in self.task_definitions]
+            guidelines = list(self.task_definitions)
             random.shuffle(guidelines)
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
-                _guidelines = guidelines[
-                    i * self.max_guidelines : (i + 1) * self.max_guidelines
-                ]
-                _ann = [
-                    ann
-                    for inst in instances
-                    for ann in inst[self.task_target]
-                    if type(ann) in _guidelines
-                ]
+                _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
+                _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
                 yield {
@@ -237,9 +204,7 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": [ann.__repr__() for ann in _ann],
                     "text": self.template.render(
-                        guidelines=[
-                            inspect.getsource(definition) for definition in _guidelines
-                        ],
+                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
                         text=_text,
                         annotations=_ann,
                     ),
@@ -253,9 +218,7 @@ class Sampler:
         prev_id = None
         for elem in self.loader:
             # Prevent mixing sentences from different documents. TODO: generalize
-            if (len(instances) == total_inst) or (
-                prev_id is not None and elem["doc_id"] != prev_id
-            ):
+            if (len(instances) == total_inst) or (prev_id is not None and elem["doc_id"] != prev_id):
                 for samp in self._sample(instances):
                     yield samp
                 instances = []

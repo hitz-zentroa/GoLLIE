@@ -1,16 +1,19 @@
-import os
-import unittest
-from transformers import PreTrainedTokenizerBase
-from src.dataset.dataset import CollieDataset
 import json
+import os
 import tempfile
+import unittest
+from typing import Tuple
+
+from src.dataset.dataset import CollieDataset
+from transformers import PreTrainedTokenizerBase
 
 
 def get_dataset(
     tokenizer: PreTrainedTokenizerBase,
     is_encoder_decoder: bool,
     inference: bool,
-) -> (CollieDataset, str, str):
+    ignore_prompt_loss: bool,
+) -> Tuple[CollieDataset, str, str]:
     text = """@dataclass
 class EnergyAndInfrastructureEvent:
     \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
@@ -19,7 +22,7 @@ class EnergyAndInfrastructureEvent:
     meeting_topic: Union[List[str], None] # Topic discussed on the meeting
     project_location: Union[List[str], None] # Location of the project
     project_name: Union[List[str], None] # Name of the project
-    
+
 # This is the sentence to analyze
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
@@ -42,7 +45,7 @@ class EnergyAndInfrastructureEvent:
     meeting_topic: Union[List[str], None] # Topic discussed on the meeting
     project_location: Union[List[str], None] # Location of the project
     project_name: Union[List[str], None] # Name of the project
-    
+
 # This is the sentence to analyze
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
@@ -67,12 +70,62 @@ result = [
             is_encoder_decoder=is_encoder_decoder,
             max_length=2048,
             inference=inference,
+            ignore_prompt_loss=ignore_prompt_loss,
         )
 
     return dataset, prompt, result
 
 
 class TestCollieDataset(unittest.TestCase):
+    def test_add_eos(self):
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(
+            (
+                "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+                if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+                else "EleutherAI/gpt-neo-125m"
+            ),
+            add_eos_token=True,
+            use_fast=True,
+        )
+
+        simple_sentence = "This is a sentence to test if the tokenizer adds eos token."
+        simple_sentence_ids = tokenizer(simple_sentence, add_special_tokens=True)
+        if simple_sentence_ids["input_ids"][-1] != tokenizer.eos_token_id:
+            simple_sentence_ids["input_ids"].append(tokenizer.eos_token_id)
+            simple_sentence_ids["attention_mask"].append(1)
+            print(simple_sentence_ids)
+
+        self.assertEqual(
+            tokenizer.decode(simple_sentence_ids.input_ids, skip_special_tokens=True),
+            simple_sentence,
+        )
+
+        self.assertEqual(simple_sentence_ids.input_ids[-1], tokenizer.eos_token_id)
+
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+
+        dataset, _, _ = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=False,
+        )
+
+        # Check if every instance `input_ids` has `eos_token_id`
+        self.assertTrue(
+            all(inst.input_ids[-1] == tokenizer.eos_token_id for inst in dataset),
+            "There are `input_ids` without `eos_token_ids` at the end.",
+        )
+
+        # Check if every instance labels has `eos_token_id`
+        self.assertTrue(
+            all(inst.labels[-1] == tokenizer.eos_token_id for inst in dataset),
+            "There are `labels` without `eos_token_ids` at the end.",
+        )
+
     def test_encoder(self):
         from transformers import AutoTokenizer
 
@@ -93,16 +146,42 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
+            ignore_prompt_loss=False,
         )
 
         model_input = dataset[0]["input_ids"]
         labels = dataset[0]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
+        )
+
+        # Test Train with ignore_prompt_loss
+        dataset, prompt, result = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=True,
+        )
+
+        model_input = dataset[0]["input_ids"]
+        labels = dataset[0]["labels"]
+        self.assertNotEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt + result,
+        )
+
+        self.assertTrue(-100 in labels)
+
+        labels = [x for x in labels if x != -100]
+
+        # Strip to make sure some spaces do not affect the comparison (probably wrong
+        # idea?)
+        self.assertEqual(
+            tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
+            result.strip(),
         )
 
         # Test Inference
@@ -110,22 +189,21 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=True,
+            ignore_prompt_loss=False,
         )
 
         model_input = dataset[0]["input_ids"]
         self.assertFalse("labels" in dataset[0])
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt,
         )
 
     """
-    We do not support encoder-decoder models yet. T5/mT5/FlanT5 lack the representation for '\n' or multiple whitespaces
-    so they cannot be used with CoLLIE prompt encoding. 
-    
-    
+    We do not support encoder-decoder models yet. T5/mT5/FlanT5 lack the representation
+    for '\n' or multiple whitespaces so they cannot be used with CoLLIE prompt encoding.
+
+
     def test_encoder_decoder(self):
         from transformers import AutoTokenizer
 
@@ -207,8 +285,9 @@ class TestCollieDataset(unittest.TestCase):
     """
 
     def test_dataloader(self):
-        from transformers import DataCollatorForSeq2Seq, AutoTokenizer
         from torch.utils.data import DataLoader
+
+        from transformers import AutoTokenizer, DataCollatorForSeq2Seq
 
         tokenizer = AutoTokenizer.from_pretrained(
             (
@@ -229,6 +308,7 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
+            ignore_prompt_loss=False,
         )
 
         datacollator = DataCollatorForSeq2Seq(
@@ -239,17 +319,13 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=-100,
         )
 
-        dataloder = DataLoader(
-            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
-        )
-        batch = [x for x in dataloder][0]
+        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
         self.assertEqual(
@@ -271,20 +347,58 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=tokenizer.pad_token_id,
         )
 
-        dataloder = DataLoader(
-            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
-        )
-        batch = [x for x in dataloder][0]
+        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
 
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
         self.assertEqual(labels[0], tokenizer.pad_token_id)
+
+        # Test Train with ignore_prompt_loss
+        dataset, prompt, result = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=True,
+        )
+
+        datacollator = DataCollatorForSeq2Seq(
+            tokenizer,
+            pad_to_multiple_of=2048,
+            return_tensors="pt",
+            padding=True,
+            label_pad_token_id=-100,
+        )
+
+        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        batch = list(dataloder)[0]
+
+        model_input = batch["input_ids"][0].tolist()
+        labels = batch["labels"][0].tolist()
+
+        self.assertEqual(model_input[0], tokenizer.pad_token_id)
+        self.assertEqual(labels[0], -100)
+
+        self.assertNotEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt + result,
+        )
+
+        self.assertTrue(-100 in labels)
+
+        labels = [x for x in labels if x != -100]
+
+        # Strip to make sure some spaces do not affect the comparison (probably wrong
+        # idea?)
+        self.assertEqual(
+            tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
+            result.strip(),
+        )

@@ -3,17 +3,20 @@ Adapted from OneIE: http://blender.cs.illinois.edu/software/oneie/
 This script extracts IE annotations from ACE2005 (LDC2006T06).
 """
 
+import glob
+import json
 import os
 import re
-import json
-import glob
-import tqdm
-from typing import List, Dict, Any, Tuple
-from bs4 import BeautifulSoup
-from dataclasses import dataclass
 from argparse import ArgumentParser
+from dataclasses import dataclass
+from typing import Any, Dict, List, Tuple
+
+import tqdm
+from bs4 import BeautifulSoup
 from nltk import (
     sent_tokenize as sent_tokenize_,
+)
+from nltk import (
     wordpunct_tokenize as wordpunct_tokenize_,
 )
 
@@ -21,7 +24,13 @@ from nltk import (
 TAG_PATTERN = re.compile("<[^<>]+>", re.MULTILINE)
 
 DOCS_TO_REVISE_SENT = {
-    "CNN_ENG_20030529_130011.6": [(461, 504), (668, 859), (984, 1074), (1577, 1632)],
+    "CNN_ENG_20030529_130011.6": [
+        (209, 254),
+        (461, 504),
+        (668, 859),
+        (984, 1074),
+        (1577, 1632),
+    ],
     "CNN_ENG_20030626_203133.11": [(1497, 1527)],
     "CNN_ENG_20030526_180540.6": [(67, 99)],
     "CNNHL_ENG_20030523_221118.14": [(136, 174)],
@@ -41,13 +50,6 @@ DOCS_TO_REVISE_SENT = {
     "CNN_CF_20030304.1900.04": [(522, 575), (5193, 5210), (5461, 5542)],
     "CNN_IP_20030403.1600.00-3": [(1487, 1493)],
     "soc.history.war.world-war-ii_20050127.2403": [(414, 441)],
-    "CNN_ENG_20030529_130011.6": [
-        (209, 254),
-        (461, 504),
-        (668, 859),
-        (984, 1074),
-        (1577, 1632),
-    ],
 }
 
 # Inconsistency between data and annotation guideline argument names
@@ -96,9 +98,7 @@ def recover_escape(text: str) -> str:
     return text.replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">")
 
 
-def sent_tokenize(
-    text: Tuple[str, int, int], language: str = "english"
-) -> List[Tuple[str, int, int]]:
+def sent_tokenize(text: Tuple[str, int, int], language: str = "english") -> List[Tuple[str, int, int]]:
     """Performs sentence tokenization. For English, it uses NLTK's sent_tokenize
     function. For Chinese, it uses split_chinese_sentence, a simple sentence
     tokenizer implemented by myself.
@@ -124,9 +124,7 @@ def sent_tokenize(
         if index == -1:
             print(text, sent)
         else:
-            sentences_.append(
-                (sent, last + index + start, last + index + len(sent) + start)
-            )
+            sentences_.append((sent, last + index + start, last + index + len(sent) + start))
         last += index + len(sent)
     return sentences_
 
@@ -171,11 +169,7 @@ def split_chinese_sentence(text: str) -> List[str]:
                 sentence = ""
         elif c == '"':
             quote_mark_count += 1
-            if (
-                quote_mark_count % 2 == 0
-                and len(sentence) > 2
-                and sentence[-2] in {"？", "！", "。", "?", "!"}
-            ):
+            if quote_mark_count % 2 == 0 and len(sentence) > 2 and sentence[-2] in {"？", "！", "。", "?", "!"}:
                 sentences.append(sentence)
                 sentence = ""
     if sentence:
@@ -210,9 +204,7 @@ class Span:
                 end_ = i + 1
         if start_ == -1 or end_ == -1 or start_ > end_:
             raise ValueError(
-                "Failed to update offsets for {}-{}:{} in {}".format(
-                    self.start, self.end, self.text, tokens
-                )
+                "Failed to update offsets for {}-{}:{} in {}".format(self.start, self.end, self.text, tokens)
             )
         self.start, self.end = start_, end_
 
@@ -401,9 +393,7 @@ class Document:
         }
 
 
-def revise_sentences(
-    sentences: List[Tuple[str, int, int]], doc_id: str
-) -> List[Tuple[int, int, str]]:
+def revise_sentences(sentences: List[Tuple[str, int, int]], doc_id: str) -> List[Tuple[int, int, str]]:
     """Automatic sentence tokenization may have errors for a few documents.
 
     Args:
@@ -498,9 +488,7 @@ def read_sgm_file(path: str, language: str = "english") -> List[Tuple[str, int, 
     return sentences
 
 
-def read_apf_file(
-    path: str, time_and_val: bool = False
-) -> Tuple[str, str, List[Entity], List[Relation], List[Event]]:
+def read_apf_file(path: str, time_and_val: bool = False) -> Tuple[str, str, List[Entity], List[Relation], List[Event]]:
     """Reads an APF file.
 
     Args:
@@ -551,7 +539,7 @@ def read_apf_file(
     if time_and_val:
         # entities: value
         for entity in doc.find_all("value"):
-            enitty_id = entity["ID"]
+            entity_id = entity["ID"]
             entity_type = entity["TYPE"]
             entity_subtype = entity.get("SUBTYPE", None)
             for entity_mention in entity.find_all("value_mention"):
@@ -575,7 +563,7 @@ def read_apf_file(
         # entities: timex
         for entity in doc.find_all("timex2"):
             entity_id = entity["ID"]
-            enitty_type = entity_subtype = "TIME"
+            entity_subtype = "TIME"
             value = entity.get("VAL", None)
             for entity_mention in entity.find_all("timex2_mention"):
                 mention_id = entity_mention["ID"]
@@ -598,7 +586,7 @@ def read_apf_file(
 
     # relations
     for relation in doc.find_all("relation"):
-        relation_id = relation["ID"]
+        relation["ID"]
         relation_type = relation["TYPE"]
         if relation_type == "METONYMY":
             continue
@@ -615,19 +603,13 @@ def read_apf_file(
                 elif arg_role == "Arg-2":
                     arg2 = RelationArgument(arg_mention_id, arg_role, arg_text)
             if arg1 and arg2:
-                relation_list.append(
-                    Relation(mention_id, relation_type, relation_subtype, arg1, arg2)
-                )
+                relation_list.append(Relation(mention_id, relation_type, relation_subtype, arg1, arg2))
 
     # events
     for event in doc.find_all("event"):
         event_id = event["ID"]
         event_type = event["TYPE"]
         event_subtype = event["SUBTYPE"]
-        event_modality = event["MODALITY"]
-        event_polarity = event["POLARITY"]
-        event_genericity = event["GENERICITY"]
-        event_tense = event["TENSE"]
         for event_mention in event.find_all("event_mention"):
             mention_id = event_mention["ID"]
             trigger = event_mention.find("anchor").find("charseq")
@@ -659,9 +641,7 @@ def read_apf_file(
     return doc_id, source, entity_list, relation_list, event_list
 
 
-def process_entities(
-    entities: List[Entity], sentences: List[Tuple[str, int, int]]
-) -> List[List[Entity]]:
+def process_entities(entities: List[Entity], sentences: List[Tuple[str, int, int]]) -> List[List[Entity]]:
     """Cleans entities and splits them into lists
 
     Args:
@@ -679,7 +659,6 @@ def process_entities(
         for i, (_, s, e) in enumerate(sentences):
             if start >= s and end <= e:
                 sentence_entities[i].append(entity)
-                assigned = True
                 break
 
     # remove overlapping entities
@@ -759,9 +738,7 @@ def process_events(
                     overlap = True
                     break
             if not overlap:
-                chars[event.trigger.start : event.trigger.end] = [1] * (
-                    event.trigger.end - event.trigger.start
-                )
+                chars[event.trigger.start : event.trigger.end] = [1] * (event.trigger.end - event.trigger.start)
                 sentence_events_cleaned[i].append(event)
         sentence_events_cleaned[i].sort(key=lambda x: x.trigger.start)
 
@@ -828,11 +805,8 @@ def tokenize(
     for event in events:
         splits.add(event.trigger.start - start)
         splits.add(event.trigger.end - start)
-    splits = sorted(list(splits))
-    chunks = [
-        (splits[i], splits[i + 1], text[splits[i] : splits[i + 1]])
-        for i in range(len(splits) - 1)
-    ]
+    splits = sorted(splits)
+    chunks = [(splits[i], splits[i + 1], text[splits[i] : splits[i + 1]]) for i in range(len(splits) - 1)]
 
     # tokenize each chunk
     chunks = [(s, e, t, wordpunct_tokenize(t, language=language)) for s, e, t in chunks]
@@ -859,9 +833,7 @@ def tokenize(
     return tokens
 
 
-def convert(
-    sgm_file: str, apf_file: str, time_and_val: bool = False, language: str = "english"
-) -> Document:
+def convert(sgm_file: str, apf_file: str, time_and_val: bool = False, language: str = "english") -> Document:
     """Converts a document.
 
     Args:
@@ -876,9 +848,7 @@ def convert(
         Document: a Document instance.
     """
     sentences = read_sgm_file(sgm_file, language=language)
-    doc_id, source, entities, relations, events = read_apf_file(
-        apf_file, time_and_val=time_and_val
-    )
+    doc_id, source, entities, relations, events = read_apf_file(apf_file, time_and_val=time_and_val)
 
     # Reivse sentences
     if doc_id in DOCS_TO_REVISE_SENT:
@@ -891,8 +861,7 @@ def convert(
 
     # Tokenization
     sentence_tokens = [
-        tokenize(s, ent, evt, language=language)
-        for s, ent, evt in zip(sentences, sentence_entities, sentence_events)
+        tokenize(s, ent, evt, language=language) for s, ent, evt in zip(sentences, sentence_entities, sentence_events)
     ]
 
     # Convert span character offsets to token indices
@@ -957,9 +926,7 @@ def convert_batch(
         for sgm_file in sgm_files:
             progress.update(1)
             apf_file = sgm_file.replace(".sgm", ".apf.xml")
-            doc = convert(
-                sgm_file, apf_file, time_and_val=time_and_val, language=language
-            )
+            doc = convert(sgm_file, apf_file, time_and_val=time_and_val, language=language)
             w.write(json.dumps(doc.to_dict()) + "\n")
     progress.close()
 
@@ -972,9 +939,7 @@ def convert_to_oneie(input_path: str, output_path: str):
         output_path (str): path to the output file.
     """
     print("Converting the dataset to OneIE format")
-    with open(input_path, "r", encoding="utf-8") as r, open(
-        output_path, "w", encoding="utf-8"
-    ) as w:
+    with open(input_path, "r", encoding="utf-8") as r, open(output_path, "w", encoding="utf-8") as w:
         for line in r:
             doc = json.loads(line)
             for sentence in doc["sentences"]:
@@ -1006,11 +971,7 @@ def convert_to_oneie(input_path: str, output_path: str):
                         {
                             "id": entity["mention_id"],
                             "text": entity["text"],
-                            "entity_type": (
-                                entity["entity_type"]
-                                if entity["mention_type"] != "TIME"
-                                else "TIME"
-                            ),
+                            "entity_type": entity["entity_type"] if entity["mention_type"] != "TIME" else "TIME",
                             "mention_type": entity["mention_type"],
                             "entity_subtype": entity["entity_subtype"],
                             "start": entity["start"],
@@ -1048,9 +1009,7 @@ def convert_to_oneie(input_path: str, output_path: str):
                     events.append(
                         {
                             "id": event["mention_id"],
-                            "event_type": "{}:{}".format(
-                                event["event_type"], event["event_subtype"]
-                            ),
+                            "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
                             "trigger": event["trigger"],
                             "arguments": [
                                 {
@@ -1085,19 +1044,14 @@ def convert_to_event_only(input_path: str, output_path: str):
     """
     print("Converting the dataset to event-only format...")
     skip_num = 0
-    with open(input_path, "r", encoding="utf-8") as r, open(
-        output_path, "w", encoding="utf-8"
-    ) as w:
+    with open(input_path, "r", encoding="utf-8") as r, open(output_path, "w", encoding="utf-8") as w:
         for line in r:
             doc = json.loads(line)
             for sentence in doc["sentences"]:
                 tokens = sentence["tokens"]
 
                 entity_text = {e["mention_id"]: e["text"] for e in sentence["entities"]}
-                entity_span = {
-                    e["mention_id"]: {"start": e["start"], "end": e["end"]}
-                    for e in sentence["entities"]
-                }
+                entity_span = {e["mention_id"]: {"start": e["start"], "end": e["end"]} for e in sentence["entities"]}
 
                 ## update argument text
 
@@ -1114,7 +1068,7 @@ def convert_to_event_only(input_path: str, output_path: str):
                         if event_type in arg_name_mapping:
                             if arg["role"] in arg_name_mapping[event_type]:
                                 new_role = arg_name_mapping[event_type][arg["role"]]
-                                if new_role == None:  # arg type isn't in ontology at all
+                                if new_role is None:  # arg type isn't in ontology at all
                                     continue  # delete it from data
                                 else:  # arg type is in ontology, but misnamed in data
                                     arg["role"] = new_role  # update its name
@@ -1135,9 +1089,7 @@ def convert_to_event_only(input_path: str, output_path: str):
                 for event in sentence["events"]:
                     events.append(
                         {
-                            "event_type": "{}:{}".format(
-                                event["event_type"], event["event_subtype"]
-                            ),
+                            "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
                             "trigger": event["trigger"],
                             "arguments": event["arguments"],
                         }
@@ -1155,7 +1107,10 @@ def convert_to_event_only(input_path: str, output_path: str):
 
 
 def simplify_arg_role_name(role_name: str):
-    """Converts the name of the argument role to the simple form (e.g. "Time-Within" to "Time")."""
+    """
+    Converts the name of the argument role to the simple form (e.g. "Time-Within" to
+    "Time").
+    """
     cols = role_name.split("-")
     if len(cols) > 1 and cols[0] != "Time":
         print(cols)
@@ -1205,9 +1160,7 @@ if __name__ == "__main__":
     parser.add_argument("-o", "--output", help="Path to the output folder")
     parser.add_argument("-s", "--split", default=None, help="Path to the split folder")
     parser.add_argument("-l", "--lang", default="english", help="Document language")
-    parser.add_argument(
-        "--time_and_val", action="store_true", help="Extracts times and values"
-    )
+    parser.add_argument("--time_and_val", action="store_true", help="Extracts times and values")
 
     args = parser.parse_args()
     if args.lang not in ["chinese", "english"]:
@@ -1216,9 +1169,7 @@ if __name__ == "__main__":
 
     # Convert to doc-level JSON format
     json_path = os.path.join(args.output, "{}.json".format(args.lang))
-    convert_batch(
-        input_dir, json_path, time_and_val=args.time_and_val, language=args.lang
-    )
+    convert_batch(input_dir, json_path, time_and_val=args.time_and_val, language=args.lang)
 
     # Convert to event-only format
     sentence_path = os.path.join(args.output, "{}.sentence.json".format(args.lang))

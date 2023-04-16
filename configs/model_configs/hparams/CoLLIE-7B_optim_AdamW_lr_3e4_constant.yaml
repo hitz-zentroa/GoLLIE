@@ -12,9 +12,12 @@ train_tasks:
   - ace05.ner
 validation_tasks:
   - ace05.ner
+test_tasks:
+  - ace05.ner
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
+ignore_prompt_loss: false
 
 # checkpoint settings
 output_dir: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7B_optim_AdamW_lr_3e4_constant
@@ -27,10 +30,12 @@ save_total_limit: 999
 # evaluation
 do_train: true
 do_eval: true
+do_predict: true
 evaluation_strategy: "steps"
 eval_steps: 100
 eval_delay: 0
 predict_with_generate: true
+evaluate_all_checkpoints: true
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
 per_device_train_batch_size: 32

@@ -2,6 +2,7 @@ from typing import List, Union
 
 from ..utils_typing import Event, dataclass
 
+
 """Event definitions
 
 The oficial guidelines are not public. All event definitions are taken from:
@@ -734,13 +735,9 @@ class Transaction(Event):
     participants: List[str]  # Only if subtype is None. The participants.
     giver: List[str]  # The entity giving the artifact
     recipient: List[str]  # The entity receiving the artifact
-    beneficiary: List[
-        str
-    ]  # The entity that benefits from the transaction (other than recipient)
+    beneficiary: List[str]  # The entity that benefits from the transaction (other than recipient)
     artifact: List[str]  # The entity being transferred (artifact, money or territory)
-    preventer: List[
-        str
-    ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
+    preventer: List[str]  # Only in "EmbargoSanction". The entity that prevents the transaction.
     place: List[str]  # Where the event takes place
 
 
@@ -758,13 +755,9 @@ class TransferMoney(Event):
     subtype: Union[str, None]  # Possible event subtype
     giver: List[str]  # The entity giving the money
     recipient: List[str]  # The entity receiving the money
-    beneficiary: List[
-        str
-    ]  # The entity that benefits from the transaction (other than recipient)
+    beneficiary: List[str]  # The entity that benefits from the transaction (other than recipient)
     money: List[str]  # The money amount
-    preventer: List[
-        str
-    ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
+    preventer: List[str]  # Only in "EmbargoSanction". The entity that prevents the transaction.
     place: List[str]  # Where the event takes place
 
 
@@ -782,13 +775,9 @@ class TransferOwnership(Event):
     subtype: Union[str, None]  # Possible event subtype
     giver: List[str]  # The entity giving the artifact
     recipient: List[str]  # The entity receiving the artifact
-    beneficiary: List[
-        str
-    ]  # The entity that benefits from the transaction (other than recipient)
+    beneficiary: List[str]  # The entity that benefits from the transaction (other than recipient)
     artifact: List[str]  # The artifact being transferred
-    preventer: List[
-        str
-    ]  # Only in "EmbargoSanction". The entity that prevents the transaction.
+    preventer: List[str]  # Only in "EmbargoSanction". The entity that prevents the transaction.
     place: List[str]  # Where the event takes place
 
 

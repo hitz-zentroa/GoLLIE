@@ -1,14 +1,16 @@
-import os
-from torch.utils.data import Dataset
-from transformers import PreTrainedTokenizerBase, BatchEncoding
 import json
-from typing import List, Sized, Iterator
-from rich.progress import Progress, TimeElapsedColumn, SpinnerColumn
-import math
-from multiprocessing import Pool
-from functools import partial
 import logging
+import math
+import os
+from functools import partial
 from itertools import chain
+from multiprocessing import Pool
+from typing import Iterator, List, Sized
+
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
+from torch.utils.data import Dataset
+
+from transformers import BatchEncoding, PreTrainedTokenizerBase
 
 
 def batch(iterable: Sized, n=1) -> Iterator:
@@ -37,6 +39,7 @@ def prepare_data(
     is_encoder_decoder: bool = False,
     max_length: int = 2048,
     inference: bool = False,
+    ignore_prompt_loss: bool = False,
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
@@ -53,6 +56,9 @@ def prepare_data(
         inference (`bool`, optional):
             Whether to prepare the data for inference. During inference labels
             are not included in model inputs. Defaults to `False`.
+        ignore_prompt_loss (`bool`, optional):
+            Whether to ignore the prompt tokens when calculating the loss (set to -100).
+            Defaults to `False`
 
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
@@ -108,8 +114,35 @@ def prepare_data(
                 return_tensors=None,
                 add_special_tokens=True,
             )
+            if ignore_prompt_loss:
+                prompt = example.split("result = [\n")[0] + "result = [\n"
+                prompt = tokenizer(
+                    text=prompt,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
 
-            model_inputs["labels"] = model_inputs["input_ids"].copy()
+                # Remove the last token if it is an eos token
+                if prompt[-1] == tokenizer.eos_token_id:
+                    prompt = prompt[:-1]
+
+                model_inputs["labels"] = model_inputs["input_ids"].copy()
+                # Set labels to -100 for prompt tokens
+                for i in range(len(prompt)):
+                    model_inputs["labels"][i] = -100
+
+            else:
+                model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+            # Make sure the `eos_token_id` is added at the end
+            # This bug is reported at https://github.com/huggingface/transformers/issues/22794
+            if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+                model_inputs["input_ids"].append(tokenizer.eos_token_id)
+                model_inputs["labels"].append(tokenizer.eos_token_id)
+                model_inputs["attention_mask"].append(1)
 
     if "token_type_ids" in model_inputs:
         # LLaMa tokenizer adds token type ids, but we don't need them
@@ -124,6 +157,7 @@ def batch_tokenization(
     is_encoder_decoder: bool,
     max_length: int,
     inference: bool,
+    ignore_prompt_loss: bool,
     examples: List[str],
     process_no: int,
 ) -> List[BatchEncoding]:
@@ -144,6 +178,9 @@ def batch_tokenization(
             `is_encoder_decoder=False`, inputs ids will be truncated to don't include the
             results section of the example. Labels will still include the full correct
             example. If model `is_encoder_decoder=True`, this parameter is ignored.
+        ignore_prompt_loss (`bool`, optional):
+            Whether to ignore the prompt tokens when calculating the loss (set to -100).
+            Defaults to `False`
         examples (`List[str]`):
             The examples to tokenize.
         process_no (`int`):
@@ -165,22 +202,24 @@ def batch_tokenization(
             for example in examples:
                 tokenized_examples.append(
                     prepare_data(
-                        example,
-                        tokenizer,
-                        is_encoder_decoder,
-                        max_length,
-                        inference,
+                        example=example,
+                        tokenizer=tokenizer,
+                        is_encoder_decoder=is_encoder_decoder,
+                        max_length=max_length,
+                        inference=inference,
+                        ignore_prompt_loss=ignore_prompt_loss,
                     )
                 )
                 progress.update(task, advance=1)
     else:
         tokenized_examples = [
             prepare_data(
-                example,
-                tokenizer,
-                is_encoder_decoder,
-                max_length,
-                inference,
+                example=example,
+                tokenizer=tokenizer,
+                is_encoder_decoder=is_encoder_decoder,
+                max_length=max_length,
+                inference=inference,
+                ignore_prompt_loss=ignore_prompt_loss,
             )
             for example in examples
         ]
@@ -207,6 +246,9 @@ class CollieDataset(Dataset):
             the results section of the example. Labels will still include the full
             correct example. If model `is_encoder_decoder=True`, this parameter is
             ignored. Defaults to `False`.
+        ignore_prompt_loss (`bool`, optional):
+            Whether to ignore the prompt tokens when calculating the loss (set to -100).
+            Defaults to `False`
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
@@ -219,6 +261,7 @@ class CollieDataset(Dataset):
         is_encoder_decoder: bool = False,
         max_length: int = 2048,
         inference: bool = False,
+        ignore_prompt_loss: bool = False,
         num_workers: int = min(os.cpu_count(), 16),
     ):
         self.dataset_name = os.path.splitext(os.path.basename(dataset_path))[0]
@@ -230,13 +273,14 @@ class CollieDataset(Dataset):
 
         if num_workers <= 1:
             self.tokenized_examples = batch_tokenization(
-                tokenizer,
-                self.dataset_name,
-                is_encoder_decoder,
-                max_length,
-                inference,
-                examples,
-                0,
+                tokenizer=tokenizer,
+                dataset_name=self.dataset_name,
+                is_encoder_decoder=is_encoder_decoder,
+                max_length=max_length,
+                inference=inference,
+                ignore_prompt_loss=ignore_prompt_loss,
+                examples=examples,
+                process_no=0,
             )
         else:
             tokenizer_fn = partial(
@@ -246,19 +290,16 @@ class CollieDataset(Dataset):
                 is_encoder_decoder,
                 max_length,
                 inference,
+                ignore_prompt_loss,
             )
             with Pool(num_workers) as p:
                 self.tokenized_examples = p.starmap(
                     tokenizer_fn,
                     zip(batch(examples, num_workers), range(num_workers)),
                 )
-                self.tokenized_examples = list(
-                    chain.from_iterable(self.tokenized_examples)
-                )
+                self.tokenized_examples = list(chain.from_iterable(self.tokenized_examples))
 
-        logging.info(
-            f"Loaded {len(self.tokenized_examples)} examples from {self.dataset_name}"
-        )
+        logging.info(f"Loaded {len(self.tokenized_examples)} examples from {self.dataset_name}")
 
     def __len__(self) -> int:
         return len(self.tokenized_examples)
