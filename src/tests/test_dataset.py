@@ -2,6 +2,7 @@ import os
 import unittest
 from transformers import PreTrainedTokenizerBase
 from src.dataset.dataset import CollieDataset
+from typing import Tuple
 import json
 import tempfile
 
@@ -11,7 +12,7 @@ def get_dataset(
     is_encoder_decoder: bool,
     inference: bool,
     ignore_prompt_loss: bool,
-) -> (CollieDataset, str, str):
+) -> Tuple[CollieDataset, str, str]:
     text = """@dataclass
 class EnergyAndInfrastructureEvent:
     \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
@@ -75,6 +76,40 @@ result = [
 
 
 class TestCollieDataset(unittest.TestCase):
+    def test_add_eos(self):
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(
+            (
+                "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+                if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+                else "EleutherAI/gpt-neo-125m"
+            ),
+            add_eos_token=True,
+        )
+
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+
+        dataset, _, _ = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=False,
+        )
+
+        # Check if every instance `input_ids` has `eos_token_id`
+        self.assertTrue(
+            all(inst.input_ids[-1] == tokenizer.eos_token_id for inst in dataset),
+            "There are `input_ids` without `eos_token_ids` at the end.",
+        )
+
+        # Check if every instance labels has `eos_token_id`
+        self.assertTrue(
+            all(inst.labels[-1] == tokenizer.eos_token_id for inst in dataset),
+            "There are `labels` without `eos_token_ids` at the end.",
+        )
+
     def test_encoder(self):
         from transformers import AutoTokenizer
 
