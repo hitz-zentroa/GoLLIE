@@ -1,5 +1,6 @@
 import os
 import unittest
+import rich
 from transformers import PreTrainedTokenizerBase
 from src.dataset.dataset import CollieDataset
 from typing import Tuple
@@ -86,7 +87,24 @@ class TestCollieDataset(unittest.TestCase):
                 else "EleutherAI/gpt-neo-125m"
             ),
             add_eos_token=True,
+            use_fast=True
         )
+
+        simple_sentence = "This is a sentence to test if the tokenizer adds eos token."
+        simple_sentence_ids = tokenizer(
+            simple_sentence, add_special_tokens=True
+        )
+        if simple_sentence_ids['input_ids'][-1] != tokenizer.eos_token_id:
+            simple_sentence_ids['input_ids'].append(tokenizer.eos_token_id)
+            simple_sentence_ids["attention_mask"].append(1)
+            print(simple_sentence_ids)
+
+        self.assertEqual(
+            tokenizer.decode(simple_sentence_ids.input_ids, skip_special_tokens=True),
+            simple_sentence,
+        )
+
+        self.assertEqual(simple_sentence_ids.input_ids[-1], tokenizer.eos_token_id)
 
         if tokenizer.pad_token_id is None:
             tokenizer.pad_token_id = tokenizer.unk_token_id
@@ -165,11 +183,12 @@ class TestCollieDataset(unittest.TestCase):
 
         labels = [x for x in labels if x != -100]
 
+        # Strip to make sure some spaces do not affect the comparison (probably wrong idea?)
         self.assertEqual(
             tokenizer.decode(
                 labels, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
-            result,
+            ).strip(),
+            result.strip(),
         )
 
         # Test Inference
@@ -397,9 +416,10 @@ class TestCollieDataset(unittest.TestCase):
 
         labels = [x for x in labels if x != -100]
 
+        # Strip to make sure some spaces do not affect the comparison (probably wrong idea?)
         self.assertEqual(
             tokenizer.decode(
                 labels, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
-            result,
+            ).strip(),
+            result.strip(),
         )

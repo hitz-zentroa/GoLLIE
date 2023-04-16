@@ -135,6 +135,13 @@ def prepare_data(
             else:
                 model_inputs["labels"] = model_inputs["input_ids"].copy()
 
+            # Make sure the `eos_token_id` is added at the end
+            # This bug is reported at https://github.com/huggingface/transformers/issues/22794
+            if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
+                model_inputs["input_ids"].append(tokenizer.eos_token_id)
+                model_inputs["labels"].append(tokenizer.eos_token_id)
+                model_inputs["attention_mask"].append(1)
+
     if "token_type_ids" in model_inputs:
         # LLaMa tokenizer adds token type ids, but we don't need them
         model_inputs.pop("token_type_ids")
