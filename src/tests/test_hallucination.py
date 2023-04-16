@@ -5,10 +5,10 @@ class TestEvaluate(unittest.TestCase):
     def test_entity_hallucination(self):
         from src.evaluate import remove_hallucinations
         from src.tasks.ace.prompts import (
-            Person,
-            Organization,
             GPE,
             Location,
+            Organization,
+            Person,
         )
 
         unlabelled_sentence = "Peter was born in Donosti. He married Carlos on May 18th."
@@ -21,9 +21,7 @@ class TestEvaluate(unittest.TestCase):
             GPE("UE"),
         ]
 
-        filtered_predictions = remove_hallucinations(
-            unlabelled_sentence=unlabelled_sentence, predictions=predictions
-        )
+        filtered_predictions = remove_hallucinations(unlabelled_sentence=unlabelled_sentence, predictions=predictions)
 
         self.assertListEqual(
             filtered_predictions,
@@ -37,9 +35,9 @@ class TestEvaluate(unittest.TestCase):
     def test_relation_hallucination(self):
         from src.evaluate import remove_hallucinations
         from src.tasks.ace.prompts import (
-            Located,
-            Geographical,
             Family,
+            Geographical,
+            Located,
         )
 
         unlabelled_sentence = "Peter was born in Donosti. He married Carlos on May 18th."
@@ -52,9 +50,7 @@ class TestEvaluate(unittest.TestCase):
             geographical,
         ]
 
-        filtered_predictions = remove_hallucinations(
-            unlabelled_sentence=unlabelled_sentence, predictions=predictions
-        )
+        filtered_predictions = remove_hallucinations(unlabelled_sentence=unlabelled_sentence, predictions=predictions)
 
         self.assertListEqual(
             filtered_predictions,

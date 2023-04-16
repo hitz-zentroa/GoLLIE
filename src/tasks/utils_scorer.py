@@ -1,14 +1,14 @@
 from typing import Any, Dict, List, Type, Union
+
 from typing_extensions import override
-from .utils_typing import Event, Relation, Entity, Value
+
+from .utils_typing import Entity, Event, Relation, Value
 
 
 class Scorer:
     """An abstract class for scorers."""
 
-    def __call__(
-        self, reference: List[Any], predictions: List[Any]
-    ) -> Dict[str, Dict[str, float]]:
+    def __call__(self, reference: List[Any], predictions: List[Any]) -> Dict[str, Dict[str, float]]:
         """
         Computes the scores for the given reference and predictions.
 
@@ -38,11 +38,7 @@ class Scorer:
                 List of the filtered annotations to keep only the ones defined by the
                 valid types.
         """
-        return [
-            elem
-            for elem in elems
-            if any(isinstance(elem, _type) for _type in self.valid_types)
-        ]
+        return [elem for elem in elems if any(isinstance(elem, _type) for _type in self.valid_types)]
 
 
 class SpanScorer(Scorer):
@@ -60,15 +56,12 @@ class SpanScorer(Scorer):
     ) -> Dict[str, Dict[str, float]]:
         if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
-        if not len(predictions) or (
-            len(predictions) and not isinstance(predictions[0], list)
-        ):
+        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
             predictions = [predictions]
 
-        assert len(reference) == len(predictions), (
-            f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount"
-            " must be equal."
-        )
+        assert len(reference) == len(
+            predictions
+        ), f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount must be equal."
 
         tp = total_pos = total_pre = 0
         for ref, pre in zip(reference, predictions):
@@ -84,11 +77,7 @@ class SpanScorer(Scorer):
 
         precision = tp / total_pre if total_pre > 0.0 else 0.0
         recall = tp / total_pos if total_pos > 0.0 else 0.0
-        f1_score = (
-            2 * precision * recall / (precision + recall)
-            if (precision + recall) > 0.0
-            else 0.0
-        )
+        f1_score = 2 * precision * recall / (precision + recall) if (precision + recall) > 0.0 else 0.0
 
         return {"spans": {"precision": precision, "recall": recall, "f1-score": f1_score}}
 
@@ -101,9 +90,7 @@ class RelationScorer(SpanScorer):
     valid_types: List[Type] = [Relation]
 
     @override
-    def __call__(
-        self, reference: List[Relation], predictions: List[Relation]
-    ) -> Dict[str, Dict[str, float]]:
+    def __call__(self, reference: List[Relation], predictions: List[Relation]) -> Dict[str, Dict[str, float]]:
         output = super().__call__(reference, predictions)
         return {"relations": output["spans"]}
 
@@ -117,15 +104,12 @@ class EventScorer(Scorer):
     def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
         if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
             reference = [reference]
-        if not len(predictions) or (
-            len(predictions) and not isinstance(predictions[0], list)
-        ):
+        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
             predictions = [predictions]
 
-        assert len(reference) == len(predictions), (
-            f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount"
-            " must be equal."
-        )
+        assert len(reference) == len(
+            predictions
+        ), f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount must be equal."
         e_tp = e_total_pos = e_total_pre = 0
         a_tp = a_total_pos = a_total_pre = 0
         for ref, pre in zip(reference, predictions):
@@ -148,16 +132,8 @@ class EventScorer(Scorer):
         a_precision = a_tp / a_total_pre if a_total_pre > 0.0 else 0.0
         e_recall = e_tp / e_total_pos if e_total_pos > 0.0 else 0.0
         a_recall = a_tp / a_total_pos if a_total_pos > 0.0 else 0.0
-        e_f1_score = (
-            2 * e_precision * e_recall / (e_precision + e_recall)
-            if (e_precision + e_recall) > 0.0
-            else 0.0
-        )
-        a_f1_score = (
-            2 * a_precision * a_recall / (a_precision + a_recall)
-            if (a_precision + a_recall) > 0.0
-            else 0.0
-        )
+        e_f1_score = 2 * e_precision * e_recall / (e_precision + e_recall) if (e_precision + e_recall) > 0.0 else 0.0
+        a_f1_score = 2 * a_precision * a_recall / (a_precision + a_recall) if (a_precision + a_recall) > 0.0 else 0.0
 
         return {
             "events": {

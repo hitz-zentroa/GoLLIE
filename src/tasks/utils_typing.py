@@ -1,7 +1,8 @@
 from __future__ import annotations
-from dataclasses import dataclass as org_dataclass
+
 import inspect
 from copy import deepcopy
+from dataclasses import dataclass as org_dataclass
 
 
 def dataclass(
@@ -86,11 +87,7 @@ class Relation:
     arg2: str
 
     def __eq__(self: Value, other: Value) -> bool:
-        return (
-            type(self) == type(other)
-            and self.arg1 == other.arg1
-            and self.arg2 == other.arg2
-        )
+        return type(self) == type(other) and self.arg1 == other.arg1 and self.arg2 == other.arg2
 
     def exists_in(self, text: str) -> bool:
         """
@@ -121,11 +118,7 @@ class Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (
-                attr.startswith("__")
-                or attr in ["mention", "subtype"]
-                or inspect.ismethod(values)
-            )
+            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         if self == other:
             for attr in attrs.keys():
@@ -148,11 +141,7 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (
-                attr.startswith("__")
-                or attr in ["mention", "subtype"]
-                or inspect.ismethod(values)
-            )
+            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         _len = 0
         for values in attrs.values():

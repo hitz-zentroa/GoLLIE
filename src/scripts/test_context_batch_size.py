@@ -1,21 +1,23 @@
-from model.load_model import load_model_for_training
+import argparse
+import logging
+import random
+import string
+
+import bitsandbytes as bnb
+import torch
 from accelerate import Accelerator
+from fairseq.optim.adafactor import Adafactor
+from model.load_model import load_model_for_training
+from tabulate import tabulate
+from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
+
 from transformers import (
-    PreTrainedTokenizerBase,
+    BatchEncoding,
     DataCollatorForSeq2Seq,
     PreTrainedModel,
-    BatchEncoding,
+    PreTrainedTokenizerBase,
 )
-import random
-from torch.optim import AdamW
-from fairseq.optim.adafactor import Adafactor
-import bitsandbytes as bnb
-from tabulate import tabulate
-import argparse
-import torch
-import string
-import logging
 
 
 def generate_random_sentence(sentence_length: int = 5120) -> str:
@@ -33,9 +35,7 @@ def generate_random_sentence(sentence_length: int = 5120) -> str:
     sentence = ""
     for i in range(sentence_length):
         # generate a random word of length between 1 and 10 characters
-        word = "".join(
-            random.choice(string.ascii_lowercase) for _ in range(random.randint(1, 10))
-        )
+        word = "".join(random.choice(string.ascii_lowercase) for _ in range(random.randint(1, 10)))
         sentence += word + " "
     return sentence
 
@@ -109,9 +109,7 @@ def get_dataloader(
             The dataloader that fits the configuration given.
     """
     dataset = TestDataset(tokenizer=tokenizer, seq_len=seq_len, data_len=batch_size)
-    data_collator = DataCollatorForSeq2Seq(
-        tokenizer, padding=True, pad_to_multiple_of=8, return_tensors="pt"
-    )
+    data_collator = DataCollatorForSeq2Seq(tokenizer, padding=True, pad_to_multiple_of=8, return_tensors="pt")
     return DataLoader(
         dataset,
         batch_size=batch_size,
@@ -166,9 +164,7 @@ def run_training_test(
 
     model.config.max_length = seq_len
 
-    dataloader = get_dataloader(
-        tokenizer=tokenizer, batch_size=batch_size, seq_len=seq_len
-    )
+    dataloader = get_dataloader(tokenizer=tokenizer, batch_size=batch_size, seq_len=seq_len)
 
     if int8_quantization:
         if optimizer_name != "adamW":
@@ -295,9 +291,7 @@ def main():
 
     for i, seq_len in enumerate(seq_lens):
         for j, batch_size in enumerate(batch_sizes):
-            logging.info(
-                f"Running test with seq_len={seq_len} and batch_size={batch_size}..."
-            )
+            logging.info(f"Running test with seq_len={seq_len} and batch_size={batch_size}...")
             try:
                 result_matrix[i][j] = run_training_test(
                     model=model,

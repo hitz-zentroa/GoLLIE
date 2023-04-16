@@ -1,24 +1,22 @@
+import glob
 import json
+import logging
+import os
+import sys
 
-from transformers import (
-    Seq2SeqTrainingArguments,
-    HfArgumentParser,
-    DataCollatorForSeq2Seq,
-)
-
-from src.trainer import CollieTrainer
-
+import torch.utils.data
 from datasets import DatasetDict
 
+from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset
-from src.model.load_model import load_model_for_training, load_model_for_inference
-from src.config import ModelArguments, DataTrainingArguments
-import sys
-import os
-import torch.utils.data
-import logging
 from src.evaluate import evaluate
-import glob
+from src.model.load_model import load_model_for_inference, load_model_for_training
+from src.trainer import CollieTrainer
+from transformers import (
+    DataCollatorForSeq2Seq,
+    HfArgumentParser,
+    Seq2SeqTrainingArguments,
+)
 
 
 def train_collie(
@@ -37,22 +35,18 @@ def train_collie(
 
     logging.info("Loading datasets...")
     training_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl"
-        for task in data_args.train_tasks
+        f"{os.path.join(data_args.dataset_dir, task)}.train.jsonl" for task in data_args.train_tasks
     ]
     development_datasets_path = [
-        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl"
-        for task in data_args.validation_tasks
+        f"{os.path.join(data_args.dataset_dir, task)}.dev.jsonl" for task in data_args.validation_tasks
     ]
 
     logging.info(
-        f"We will train CoLLIE on {len(training_datasets_path)} datasets:"
-        f" {', '.join(training_datasets_path)}"
+        f"We will train CoLLIE on {len(training_datasets_path)} datasets: {', '.join(training_datasets_path)}"
     )
 
     logging.info(
-        f"We will validate CoLLIE on {len(development_datasets_path)} datasets:"
-        f" {', '.join(development_datasets_path)}"
+        f"We will validate CoLLIE on {len(development_datasets_path)} datasets: {', '.join(development_datasets_path)}"
     )
 
     logging.info(
@@ -99,9 +93,7 @@ def train_collie(
             pad_to_multiple_of=8,
             return_tensors="pt",
             padding=True,
-            label_pad_token_id=(
-                -100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id
-            ),
+            label_pad_token_id=(-100 if data_args.ignore_pad_token_for_loss else tokenizer.pad_token_id),
         ),
     )
 
@@ -213,13 +205,9 @@ def inference_collie(
         logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
 
-        output_dir = (
-            training_args.output_dir if checkpoint_path is None else checkpoint_path
-        )
+        output_dir = training_args.output_dir if checkpoint_path is None else checkpoint_path
         if training_args.predict_with_generate:
-            output_name = (
-                f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
-            )
+            output_name = f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
 
             os.makedirs(os.path.join(output_dir, "predictions"), exist_ok=True)
 
@@ -230,9 +218,7 @@ def inference_collie(
                 predictions[predictions == -100] = tokenizer.pad_token_id
 
                 try:
-                    predictions = tokenizer.batch_decode(
-                        predictions, skip_special_tokens=True
-                    )
+                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
                 except OverflowError:
                     raise OverflowError(f"Unable to decode predictions: {predictions}")
 
@@ -255,25 +241,19 @@ def inference_collie(
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
-    )
+    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
     print(sys.argv)
     print(len(sys.argv))
     print(sys.argv[1].endswith(".yaml"))
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
-        )
+        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
 
     elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
         # If we pass only one argument to the script and it's the path to a yaml file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(
-            yaml_file=os.path.abspath(sys.argv[1])
-        )
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
@@ -293,13 +273,13 @@ if __name__ == "__main__":
             )
         else:
             # Find all checkpoints in the output directory
-            checkpoints = list(
+            checkpoints = [
                 c
                 for c in glob.glob(
                     os.path.join(training_args.output_dir, "checkpoint-*"),
                 )
                 if os.path.isdir(c)
-            )
+            ]
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"

@@ -1,14 +1,16 @@
-import os
-from torch.utils.data import Dataset
-from transformers import PreTrainedTokenizerBase, BatchEncoding
 import json
-from typing import List, Sized, Iterator
-from rich.progress import Progress, TimeElapsedColumn, SpinnerColumn
-import math
-from multiprocessing import Pool
-from functools import partial
 import logging
+import math
+import os
+from functools import partial
 from itertools import chain
+from multiprocessing import Pool
+from typing import Iterator, List, Sized
+
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
+from torch.utils.data import Dataset
+
+from transformers import BatchEncoding, PreTrainedTokenizerBase
 
 
 def batch(iterable: Sized, n=1) -> Iterator:
@@ -295,13 +297,9 @@ class CollieDataset(Dataset):
                     tokenizer_fn,
                     zip(batch(examples, num_workers), range(num_workers)),
                 )
-                self.tokenized_examples = list(
-                    chain.from_iterable(self.tokenized_examples)
-                )
+                self.tokenized_examples = list(chain.from_iterable(self.tokenized_examples))
 
-        logging.info(
-            f"Loaded {len(self.tokenized_examples)} examples from {self.dataset_name}"
-        )
+        logging.info(f"Loaded {len(self.tokenized_examples)} examples from {self.dataset_name}")
 
     def __len__(self) -> int:
         return len(self.tokenized_examples)

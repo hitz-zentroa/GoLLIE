@@ -1,8 +1,8 @@
 import os
 import unittest
-from transformers.testing_utils import require_bitsandbytes, require_torch_gpu
 
 from src.model.load_model import load_model_for_training
+from transformers.testing_utils import require_bitsandbytes, require_torch_gpu
 
 
 class TestCollieTrainer(unittest.TestCase):
@@ -13,10 +13,11 @@ class TestCollieTrainer(unittest.TestCase):
     @require_torch_gpu
     @require_bitsandbytes
     def test_save(self):
-        from src.trainer import CollieTrainer
-        from src.config import ModelArguments
-        from transformers import Seq2SeqTrainingArguments
         from tempfile import TemporaryDirectory
+
+        from src.config import ModelArguments
+        from src.trainer import CollieTrainer
+        from transformers import Seq2SeqTrainingArguments
 
         with TemporaryDirectory() as tmpdirname:
             model_args = ModelArguments(
@@ -47,9 +48,7 @@ class TestCollieTrainer(unittest.TestCase):
                 "If PEFT is used, then the adapter must be saved.",
             )
             self.assertFalse(
-                any(
-                    [elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)]
-                ),
+                any([elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)]),
                 "If PEFT is used, then the model should not be saved.",
             )
 
@@ -82,8 +81,6 @@ class TestCollieTrainer(unittest.TestCase):
                 "If PEFT is not used, then no adapter must be saved.",
             )
             self.assertTrue(
-                any(
-                    [elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)]
-                ),
+                any([elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)]),
                 "If PEFT is not used, then the model have to be saved.",
             )

@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, List
+from typing import List, Optional
 
 
 @dataclass
@@ -10,12 +10,7 @@ class ModelArguments:
 
     model_name_or_path: Optional[str] = field(
         default=None,
-        metadata={
-            "help": (
-                "The local path or huggingface hub name of the model and tokenizer to"
-                " use."
-            )
-        },
+        metadata={"help": "The local path or huggingface hub name of the model and tokenizer to use."},
     )
 
     torch_dtype: Optional[str] = field(
@@ -34,8 +29,7 @@ class ModelArguments:
         default=False,
         metadata={
             "help": (
-                "Whether to use LoRA. If True, the model will be trained with "
-                "LoRA: https://arxiv.org/abs/2106.09685"
+                "Whether to use LoRA. If True, the model will be trained with LoRA: https://arxiv.org/abs/2106.09685"
             )
         },
     )
@@ -92,30 +86,22 @@ class DataTrainingArguments:
 
     dataset_dir: str = field(
         default="~/CoLLIE/data/processed",
-        metadata={
-            "help": "The tasks to train on. Can be a list of tasks or a single task."
-        },
+        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
     )
 
     train_tasks: List[str] = field(
         default=None,
-        metadata={
-            "help": "The tasks to train on. Can be a list of tasks or a single task."
-        },
+        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
     )
 
     validation_tasks: List[str] = field(
         default=None,
-        metadata={
-            "help": "The tasks to train on. Can be a list of tasks or a single task."
-        },
+        metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
     )
 
     test_tasks: List[str] = field(
         default=None,
-        metadata={
-            "help": "The tasks to test on. Can be a list of tasks or a single task."
-        },
+        metadata={"help": "The tasks to test on. Can be a list of tasks or a single task."},
     )
 
     max_seq_length: int = field(
@@ -131,18 +117,13 @@ class DataTrainingArguments:
     ignore_pad_token_for_loss: bool = field(
         default=False,
         metadata={
-            "help": (
-                "Whether to ignore the tokens corresponding to padded labels in the"
-                " loss computation or not."
-            )
+            "help": "Whether to ignore the tokens corresponding to padded labels in the loss computation or not."
         },
     )
 
     use_dev_inference: bool = field(
         default=False,
-        metadata={
-            "help": "Use the development set for inference instead of the test set."
-        },
+        metadata={"help": "Use the development set for inference instead of the test set."},
     )
 
     evaluate_all_checkpoints: bool = field(
@@ -152,7 +133,5 @@ class DataTrainingArguments:
 
     ignore_prompt_loss: bool = field(
         default=False,
-        metadata={
-            "help": "Whether to ignore the prompt tokens in the loss computation or not"
-        },
+        metadata={"help": "Whether to ignore the prompt tokens in the loss computation or not"},
     )

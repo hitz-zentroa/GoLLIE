@@ -1,3 +1,5 @@
+import inspect
+import json
 from typing import Tuple, Union
 
 from src.tasks.ace.prompts import (
@@ -31,6 +33,7 @@ from src.tasks.ace.prompts import (
     Family,
     Fine,
     Founder,
+    Geographical,
     Injure,
     InvestorShareholder,
     JobTitle,
@@ -44,8 +47,8 @@ from src.tasks.ace.prompts import (
     Near,
     Nominate,
     Numeric,
-    OrgLocationOrigin,
     Organization,
+    OrgLocationOrigin,
     Ownership,
     Pardon,
     Person,
@@ -67,12 +70,9 @@ from src.tasks.ace.prompts import (
     UserOwnerInventorManufacturer,
     Vehicle,
     Weapon,
-    Geographical,
 )
-from ..utils_data import DatasetLoader, Sampler
 
-import json
-import inspect
+from ..utils_data import DatasetLoader, Sampler
 
 
 class ACEDatasetLoader(DatasetLoader):
@@ -118,9 +118,7 @@ class ACEDatasetLoader(DatasetLoader):
         "ORG-AFF:Ownership": Ownership,
         "ORG-AFF:Sports-Affiliation": SportsAffiliation,
         "ORG-AFF:Student-Alum": StudentAlum,
-        "PART-WHOLE:Artifact": (
-            Geographical
-        ),  # There is no definition for Artifact relation on the guidelines
+        "PART-WHOLE:Artifact": Geographical,  # There is no definition for Artifact relation on the guidelines
         "PART-WHOLE:Geographical": Geographical,
         "PART-WHOLE:Subsidiary": Subsidiary,
         "PER-SOC:Business": Business,
@@ -362,16 +360,12 @@ class ACEDatasetLoader(DatasetLoader):
                     }
 
                 entities = [
-                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](
-                        span=entity["text"]
-                    )
+                    self.ENTITY_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.ENTITY_TO_CLASS_MAPPING
                 ]
                 values = [
-                    self.VALUE_TO_CLASS_MAPPING[entity["entity_type"]](
-                        span=entity["text"]
-                    )
+                    self.VALUE_TO_CLASS_MAPPING[entity["entity_type"]](span=entity["text"])
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.VALUE_TO_CLASS_MAPPING
                 ]
@@ -388,10 +382,7 @@ class ACEDatasetLoader(DatasetLoader):
                     if event["event_type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
                     info = self.EVENT_TO_CLASS_MAPPING[event["event_type"]]
-                    _inst = {
-                        param: []
-                        for param in inspect.signature(info["class"]).parameters.keys()
-                    }
+                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
                     _inst["mention"] = event["trigger"]["text"]
                     for argument in event["arguments"]:
                         if argument["role"] in info:
@@ -403,10 +394,7 @@ class ACEDatasetLoader(DatasetLoader):
                                 continue
                             _inst[name].append(argument["text"])
                         else:
-                            raise ValueError(
-                                f"Argument {event['event_type']}:{argument['role']} not"
-                                " found!"
-                            )
+                            raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
 
                     events.append(info["class"](**_inst))
 

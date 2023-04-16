@@ -1,6 +1,7 @@
 from typing import List
 
-from ..utils_typing import Entity, Event, Value, Relation, dataclass
+from ..utils_typing import Entity, Event, Relation, Value, dataclass
+
 
 """Entity definitions
 

@@ -51,6 +51,7 @@ from src.tasks.rams.prompts import (
     Vote,
     Yield,
 )
+
 from ..utils_data import DatasetLoader, Sampler
 
 
@@ -118,9 +119,7 @@ class RAMSDatasetLoader(DatasetLoader):
         },
         "conflict.demonstrate": {
             "class": Demonstrate,
-            "subtypes": {
-                "marchprotestpoliticalgathering": "MarchProtestPoliticalGathering"
-            },
+            "subtypes": {"marchprotestpoliticalgathering": "MarchProtestPoliticalGathering"},
             "demonstrator": "demonstrator",
         },
         "conflict.yield": {
@@ -525,10 +524,7 @@ class RAMSDatasetLoader(DatasetLoader):
                     _event_full_type = ".".join(event_type[:2])
 
                     info = self.EVENT_TO_CLASS_MAPPING[_event_full_type]
-                    _inst = {
-                        param: []
-                        for param in inspect.signature(info["class"]).parameters.keys()
-                    }
+                    _inst = {param: [] for param in inspect.signature(info["class"]).parameters.keys()}
                     _inst["mention"] = " ".join(tokens[trigger_start : trigger_end + 1])
 
                     # Find the correct event subtype

@@ -1,16 +1,19 @@
-from transformers import (
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    AutoModelForSeq2SeqLM,
-    PreTrainedTokenizerBase,
-    PreTrainedModel,
-    AutoConfig,
-)
-from typing import Optional, List, Tuple
 import logging
-from .model_utils import get_trainable_parameters
 import os
+from typing import List, Optional, Tuple
+
 import torch
+
+from transformers import (
+    AutoConfig,
+    AutoModelForCausalLM,
+    AutoModelForSeq2SeqLM,
+    AutoTokenizer,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+)
+
+from .model_utils import get_trainable_parameters
 
 
 def load_model_for_training(
@@ -86,9 +89,7 @@ def load_model_for_training(
 
     config = AutoConfig.from_pretrained(model_weights_name_or_path)
 
-    torch_dtype = (
-        torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
-    )
+    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
@@ -97,8 +98,7 @@ def load_model_for_training(
 
     if config.is_encoder_decoder:
         logging.warning(
-            f"Model {model_weights_name_or_path} is a encoder-decoder model. We will"
-            " load it as a Seq2SeqLM model."
+            f"Model {model_weights_name_or_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model."
         )
 
         if config.model_type == "t5" or config.model_type == "mt5":
@@ -119,8 +119,7 @@ def load_model_for_training(
 
     else:
         logging.warning(
-            f"Model {model_weights_name_or_path} is an decoder-only model. We will"
-            " load it as a CausalLM model."
+            f"Model {model_weights_name_or_path} is an decoder-only model. We will load it as a CausalLM model."
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
@@ -132,10 +131,7 @@ def load_model_for_training(
         tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
-        logging.warning(
-            "Your model does not have a pad token, we will use the ukn token as pad"
-            " token."
-        )
+        logging.warning("Your model does not have a pad token, we will use the ukn token as pad token.")
         tokenizer.pad_token_id = tokenizer.unk_token_id
 
     if int8_quantization:
@@ -144,17 +140,12 @@ def load_model_for_training(
         model = prepare_model_for_int8_training(model)
 
     if use_lora:
-        from peft import LoraConfig, TaskType, get_peft_model, PeftModel
+        from peft import LoraConfig, PeftModel, TaskType, get_peft_model
 
         if lora_weights_name_or_path is None:
-            logging.info(
-                "No pretrained LORA weights provided, we will initialize the weights"
-                " randomly."
-            )
+            logging.info("No pretrained LORA weights provided, we will initialize the weights randomly.")
 
-            if lora_target_modules is None or (
-                lora_target_modules is not None and len(lora_target_modules) == 0
-            ):
+            if lora_target_modules is None or (lora_target_modules is not None and len(lora_target_modules) == 0):
                 logging.warning(
                     "No target modules provided,  will use the default modules for the"
                     " model in huggingface PEFT library. "
@@ -173,9 +164,7 @@ def load_model_for_training(
             model = get_peft_model(model, config)
 
         else:
-            logging.info(
-                f"Loading pretrained LORA weights from {lora_weights_name_or_path}"
-            )
+            logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
 
             model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
 
@@ -230,9 +219,7 @@ def load_model_for_inference(
 
     config = AutoConfig.from_pretrained(weights_path)
 
-    torch_dtype = (
-        torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
-    )
+    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         weights_path,
@@ -240,10 +227,7 @@ def load_model_for_inference(
     )
 
     if config.is_encoder_decoder:
-        logging.warning(
-            f"Model {weights_path} is a encoder-decoder model. We will"
-            " load it as a Seq2SeqLM model."
-        )
+        logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
             load_in_8bit=int8_quantization,
@@ -252,10 +236,7 @@ def load_model_for_inference(
         )
 
     else:
-        logging.warning(
-            f"Model {weights_path} is an encoder-only model. We will"
-            " load it as a CausalLM model."
-        )
+        logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
             load_in_8bit=int8_quantization,
@@ -267,9 +248,7 @@ def load_model_for_inference(
         tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
-        logging.warning(
-            "Model does not have a pad token, we will use the ukn token as pad token."
-        )
+        logging.warning("Model does not have a pad token, we will use the ukn token as pad token.")
         tokenizer.pad_token_id = tokenizer.unk_token_id
 
     if lora_weights_name_or_path:

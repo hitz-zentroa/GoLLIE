@@ -1,16 +1,14 @@
+import glob
+import importlib
 import json
+import logging
 import os
 import sys
-from typing import Dict, Type, List, Any
-from transformers import HfArgumentParser, Seq2SeqTrainingArguments
-
-import logging
-import importlib
-
-import glob
+from typing import Any, Dict, List, Type
 
 from src.config import DataTrainingArguments, ModelArguments
 from src.tasks import TASK_ID_TO_TASKS
+from transformers import HfArgumentParser, Seq2SeqTrainingArguments
 
 
 def import_prompts(task_module: str) -> None:
@@ -31,7 +29,7 @@ def import_prompts(task_module: str) -> None:
     names = {x: y for x, y in mdl.__dict__.items() if not x.startswith("_")}
 
     # now drag them in
-    globals().update({k: v for k, v in names.items()})
+    globals().update(dict(names.items()))
 
 
 def get_class(class_path: str) -> Type:
@@ -146,18 +144,14 @@ def evaluate(
                     gold_labels = []
 
                 try:
-                    pred_labels = fix_prompt_outputs(
-                        pred_line["model_prediction"].strip().split("result = ")[-1]
-                    )
+                    pred_labels = fix_prompt_outputs(pred_line["model_prediction"].strip().split("result = ")[-1])
                     pred_labels = eval(pred_labels)
                 except Exception:
                     # logging.warning("Found an incorrect formated pred file!")
                     pred_labels = []
                     impossible_to_parse += 1
 
-                filtered_pred_labels = remove_hallucinations(
-                    gold_line["unlabelled_sentence"], pred_labels
-                )
+                filtered_pred_labels = remove_hallucinations(gold_line["unlabelled_sentence"], pred_labels)
 
                 valid_predictions += len(filtered_pred_labels)
                 hallucinated_predictions += len(pred_labels) - len(filtered_pred_labels)
@@ -175,24 +169,16 @@ def evaluate(
         all_scores[task]["prediction_stats"]["hallucinated_predictions"] = {}
         all_scores[task]["prediction_stats"]["total"] = {}
 
-        all_scores[task]["prediction_stats"]["impossible_to_parse"][
-            "total"
-        ] = impossible_to_parse
-        all_scores[task]["prediction_stats"]["impossible_to_parse"]["percentage"] = (
-            impossible_to_parse / len(predictions)
+        all_scores[task]["prediction_stats"]["impossible_to_parse"]["total"] = impossible_to_parse
+        all_scores[task]["prediction_stats"]["impossible_to_parse"]["percentage"] = impossible_to_parse / len(
+            predictions
         )
-        all_scores[task]["prediction_stats"]["hallucinated_predictions"][
-            "total"
-        ] = hallucinated_predictions
+        all_scores[task]["prediction_stats"]["hallucinated_predictions"]["total"] = hallucinated_predictions
         all_scores[task]["prediction_stats"]["hallucinated_predictions"]["percentage"] = (
             hallucinated_predictions / total_predictions
         )
-        all_scores[task]["prediction_stats"]["total"]["predictions"] = sum(
-            [len(x) for x in predictions]
-        )
-        all_scores[task]["prediction_stats"]["total"]["gold"] = sum(
-            [len(x) for x in labels]
-        )
+        all_scores[task]["prediction_stats"]["total"]["predictions"] = sum([len(x) for x in predictions])
+        all_scores[task]["prediction_stats"]["total"]["gold"] = sum([len(x) for x in labels])
 
     scores_file_name = os.path.join(output_dir, "task_scores.json")
     with open(scores_file_name, "wt") as f:
@@ -205,23 +191,17 @@ def evaluate(
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
-    parser = HfArgumentParser(
-        (ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments)
-    )
+    parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
 
     if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
         # If we pass only one argument to the script and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(
-            json_file=os.path.abspath(sys.argv[1])
-        )
+        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
 
     elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
         # If we pass only one argument to the script and it's the path to a yaml file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(
-            yaml_file=os.path.abspath(sys.argv[1])
-        )
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[1]))
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
@@ -233,13 +213,13 @@ if __name__ == "__main__":
                 training_args,
             )
         else:
-            checkpoints = list(
+            checkpoints = [
                 c
                 for c in glob.glob(
                     os.path.join(training_args.output_dir, "checkpoint-*"),
                 )
                 if os.path.isdir(c)
-            )
+            ]
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"

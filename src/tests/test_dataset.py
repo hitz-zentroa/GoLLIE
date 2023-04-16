@@ -1,10 +1,11 @@
-import os
-import unittest
-from transformers import PreTrainedTokenizerBase
-from src.dataset.dataset import CollieDataset
-from typing import Tuple
 import json
+import os
 import tempfile
+import unittest
+from typing import Tuple
+
+from src.dataset.dataset import CollieDataset
+from transformers import PreTrainedTokenizerBase
 
 
 def get_dataset(
@@ -21,7 +22,7 @@ class EnergyAndInfrastructureEvent:
     meeting_topic: Union[List[str], None] # Topic discussed on the meeting
     project_location: Union[List[str], None] # Location of the project
     project_name: Union[List[str], None] # Name of the project
-    
+
 # This is the sentence to analyze
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
@@ -44,7 +45,7 @@ class EnergyAndInfrastructureEvent:
     meeting_topic: Union[List[str], None] # Topic discussed on the meeting
     project_location: Union[List[str], None] # Location of the project
     project_name: Union[List[str], None] # Name of the project
-    
+
 # This is the sentence to analyze
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
@@ -152,9 +153,7 @@ class TestCollieDataset(unittest.TestCase):
         labels = dataset[0]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
 
@@ -170,9 +169,7 @@ class TestCollieDataset(unittest.TestCase):
         labels = dataset[0]["labels"]
         self.assertNotEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
 
@@ -180,11 +177,10 @@ class TestCollieDataset(unittest.TestCase):
 
         labels = [x for x in labels if x != -100]
 
-        # Strip to make sure some spaces do not affect the comparison (probably wrong idea?)
+        # Strip to make sure some spaces do not affect the comparison (probably wrong
+        # idea?)
         self.assertEqual(
-            tokenizer.decode(
-                labels, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ).strip(),
+            tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
             result.strip(),
         )
 
@@ -199,17 +195,15 @@ class TestCollieDataset(unittest.TestCase):
         model_input = dataset[0]["input_ids"]
         self.assertFalse("labels" in dataset[0])
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt,
         )
 
     """
-    We do not support encoder-decoder models yet. T5/mT5/FlanT5 lack the representation for '\n' or multiple whitespaces
-    so they cannot be used with CoLLIE prompt encoding. 
-    
-    
+    We do not support encoder-decoder models yet. T5/mT5/FlanT5 lack the representation
+    for '\n' or multiple whitespaces so they cannot be used with CoLLIE prompt encoding.
+
+
     def test_encoder_decoder(self):
         from transformers import AutoTokenizer
 
@@ -291,8 +285,9 @@ class TestCollieDataset(unittest.TestCase):
     """
 
     def test_dataloader(self):
-        from transformers import DataCollatorForSeq2Seq, AutoTokenizer
         from torch.utils.data import DataLoader
+
+        from transformers import AutoTokenizer, DataCollatorForSeq2Seq
 
         tokenizer = AutoTokenizer.from_pretrained(
             (
@@ -324,17 +319,13 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=-100,
         )
 
-        dataloder = DataLoader(
-            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
-        )
-        batch = [x for x in dataloder][0]
+        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
         self.assertEqual(
@@ -356,18 +347,14 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=tokenizer.pad_token_id,
         )
 
-        dataloder = DataLoader(
-            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
-        )
-        batch = [x for x in dataloder][0]
+        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
         self.assertEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
 
@@ -390,10 +377,8 @@ class TestCollieDataset(unittest.TestCase):
             label_pad_token_id=-100,
         )
 
-        dataloder = DataLoader(
-            dataset, batch_size=1, collate_fn=datacollator, shuffle=False
-        )
-        batch = [x for x in dataloder][0]
+        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+        batch = list(dataloder)[0]
 
         model_input = batch["input_ids"][0].tolist()
         labels = batch["labels"][0].tolist()
@@ -403,9 +388,7 @@ class TestCollieDataset(unittest.TestCase):
 
         self.assertNotEqual(model_input, labels)
         self.assertEqual(
-            tokenizer.decode(
-                model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ),
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt + result,
         )
 
@@ -413,10 +396,9 @@ class TestCollieDataset(unittest.TestCase):
 
         labels = [x for x in labels if x != -100]
 
-        # Strip to make sure some spaces do not affect the comparison (probably wrong idea?)
+        # Strip to make sure some spaces do not affect the comparison (probably wrong
+        # idea?)
         self.assertEqual(
-            tokenizer.decode(
-                labels, skip_special_tokens=True, clean_up_tokenization_spaces=False
-            ).strip(),
+            tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
             result.strip(),
         )

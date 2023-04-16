@@ -1,16 +1,18 @@
-from transformers import Seq2SeqTrainer, PreTrainedModel
-from transformers.modeling_utils import unwrap_model
 import os
+from typing import Callable, Dict, List, Optional, Tuple, Union
+
 import torch
 import torch.nn as nn
-from torch.utils.data import Dataset
-from typing import Callable, Dict, List, Optional, Tuple, Union
-from transformers import TrainingArguments, DataCollator, PreTrainedTokenizerBase
-from transformers.trainer import logger, TRAINING_ARGS_NAME
-from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_available
-from transformers.trainer_callback import TrainerCallback
-from transformers.trainer_utils import has_length, EvalPrediction
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
+from torch.utils.data import Dataset
+
+from transformers import DataCollator, PreTrainedModel, PreTrainedTokenizerBase, Seq2SeqTrainer, TrainingArguments
+from transformers.modeling_utils import unwrap_model
+from transformers.trainer import TRAINING_ARGS_NAME, logger
+from transformers.trainer_callback import TrainerCallback
+from transformers.trainer_utils import EvalPrediction, has_length
+from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_available
+
 
 if is_safetensors_available():
     import safetensors.torch
@@ -37,9 +39,7 @@ class RichProgressCallback(TrainerCallback):
             )
 
             self.training_bar.start()
-            self.training_task = self.training_bar.add_task(
-                "[cyan]Training: ", total=state.max_steps
-            )
+            self.training_task = self.training_bar.add_task("[cyan]Training: ", total=state.max_steps)
         self.current_step = 0
 
     def on_step_end(self, args, state, control, **kwargs):
@@ -61,9 +61,7 @@ class RichProgressCallback(TrainerCallback):
                     auto_refresh=False,
                 )
                 self.prediction_bar.start()
-                self.prediction_task = self.prediction_bar.add_task(
-                    "[cyan]Predicting: ", total=len(eval_dataloader)
-                )
+                self.prediction_task = self.prediction_bar.add_task("[cyan]Predicting: ", total=len(eval_dataloader))
             self.prediction_bar.update(self.prediction_task, advance=1, refresh=True)
 
     def on_evaluate(self, args, state, control, **kwargs):
@@ -177,9 +175,7 @@ class CollieTrainer(Seq2SeqTrainer):
             None,
             None,
         ),
-        preprocess_logits_for_metrics: Optional[
-            Callable[[torch.Tensor, torch.Tensor], torch.Tensor]
-        ] = None,
+        preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
     ):
         super().__init__(
             model=model,
@@ -228,9 +224,7 @@ class CollieTrainer(Seq2SeqTrainer):
         except ImportError:
             PeftModel = None
 
-        if not isinstance(self.model, PreTrainedModel) and not (
-            PeftModel and isinstance(self.model, PeftModel)
-        ):
+        if not isinstance(self.model, PreTrainedModel) and not (PeftModel and isinstance(self.model, PeftModel)):
             if state_dict is None:
                 state_dict = self.model.state_dict()
 
@@ -241,14 +235,9 @@ class CollieTrainer(Seq2SeqTrainer):
                     safe_serialization=self.args.save_safetensors,
                 )
             else:
-                logger.info(
-                    "Trainer.model is not a `PreTrainedModel`, only saving its state"
-                    " dict."
-                )
+                logger.info("Trainer.model is not a `PreTrainedModel`, only saving its state dict.")
                 if self.args.save_safetensors:
-                    safetensors.torch.save_file(
-                        state_dict, os.path.join(output_dir, SAFE_WEIGHTS_NAME)
-                    )
+                    safetensors.torch.save_file(state_dict, os.path.join(output_dir, SAFE_WEIGHTS_NAME))
                 else:
                     torch.save(state_dict, os.path.join(output_dir, WEIGHTS_NAME))
         else:

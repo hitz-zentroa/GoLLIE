@@ -1,5 +1,6 @@
-from transformers import PreTrainedModel
 from typing import Tuple
+
+from transformers import PreTrainedModel
 
 
 def get_trainable_parameters(model: PreTrainedModel) -> Tuple[int, int, float]:
