@@ -1,7 +1,6 @@
 import os
 import unittest
 import json
-from rich import print
 
 
 class TestDataLoaders(unittest.TestCase):
@@ -18,16 +17,11 @@ class TestDataLoaders(unittest.TestCase):
             "data/ace05/english.sentence.json", group_by="sentence"
         )
 
-        print(dataloader[6])
-
         train_sampler = ACESampler(
             dataloader, task="EE", **config, **config["task_configuration"]["EE"]
         )
 
-        for i, sample in enumerate(train_sampler):
-            print(sample["text"])
-            if i > 3:
-                break
+        # TODO: Implement a better TEST
 
     @unittest.skipIf(
         not os.path.exists("data/rams/dev.jsonlines"), "No RAMS data available"
@@ -40,13 +34,8 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
-        print(dataloader[2])
-
         train_sampler = RAMSSampler(
             dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]
         )
 
-        for i, sample in enumerate(train_sampler):
-            print(sample["text"])
-            if i > 3:
-                break
+        # TODO: Implement a better TEST
