@@ -10,16 +10,14 @@ class TestEvaluate(unittest.TestCase):
 
         annotations = AnnotationList.from_output(
             """[
-                Person("Peter"),
-                Organization("Hitz-zentroa"),
-                Person("carlos"),
-                Location("Tokyo"),
-                Location("Donosti"),
-                GPE("UE"),
-            ]
-        """.replace(
-                "            ", "    "
-            ),
+                    Person("Peter"),
+                    Organization("Hitz-zentroa"),
+                    Person("carlos"),
+                    Location("Tokyo"),
+                    Location("Donosti"),
+                    GPE("UE"),
+                ]
+            """,
             task_module="src.tasks.ace.prompts",
             text=text,
             filter_hallucinations=True,

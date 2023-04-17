@@ -1,9 +1,11 @@
+import gc
 import glob
 import json
 import logging
 import os
 import sys
 
+import torch
 import torch.utils.data
 from datasets import DatasetDict
 
@@ -17,8 +19,6 @@ from transformers import (
     HfArgumentParser,
     Seq2SeqTrainingArguments,
 )
-import gc
-import torch
 
 
 def clean_cache():

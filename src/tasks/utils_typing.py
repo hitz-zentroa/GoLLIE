@@ -1,10 +1,11 @@
 from __future__ import annotations
+from collections import defaultdict
 
 import importlib
 import inspect
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
-from typing import Dict, Tuple, TypeVar
+from typing import Dict, Tuple, TypeVar, Union
 
 
 def dataclass(
@@ -39,6 +40,16 @@ class Entity:
         self_span = self.span.lower().strip()
         other_span = other.span.lower().strip()
         return type(self) == type(other) and self_span == other_span
+
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        return self.span.lower()
 
     def exists_in(self, text: str) -> bool:
         """
@@ -87,6 +98,16 @@ class Value:
     def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.span == other.span
 
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        return self.span.lower()
+
     def exists_in(self, text: str) -> bool:
         """
         Checks whether the annotation exists on a given text. This function is used to
@@ -134,6 +155,16 @@ class Relation:
 
     def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.arg1 == other.arg1 and self.arg2 == other.arg2
+
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        return None
 
     def exists_in(self, text: str) -> bool:
         """
@@ -217,6 +248,19 @@ class Event:
 
         return _len
 
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        if self.mention:
+            return self.mention.lower()
+
+        return None
+
     def exists_in(self, text: str) -> Event:
         """
         Checks whether the annotation exists on a given text. This function is used to
@@ -231,7 +275,8 @@ class Event:
                 Whether the annotation exists on the input text or not.
         """
         text = text.lower()
-        if self.mention.lower() not in text:
+        # Only return None if the mention is defined and is not in the text
+        if self.mention and self.mention.lower() not in text:
             return None
 
         attrs = {
@@ -269,6 +314,10 @@ class Event:
             `int`:
                 The position of the span in the text.
         """
+        # Return len(text) if there is no mention defined
+        if not self.mention:
+            return (len(text), len(text))
+
         if not self.exists_in(text):
             raise IndexError("The span is not in text.")
 
@@ -297,6 +346,7 @@ class AnnotationList(list):
 
     def filter_hallucinations(self, text: str) -> AnnotationList:
         _elems = []
+        _counts = defaultdict(int)
         for elem in self:
             if any(isinstance(elem, _type) for _type in self.SIMPLE_TYPES):
                 elem = elem if elem.exists_in(text) else None
@@ -306,10 +356,16 @@ class AnnotationList(list):
                 elem = elem if elem.exists_in(text) else None
 
             if elem:
+                key = elem.key()
+                # Check if key is not None
+                if key:
+                    _counts[key] += 1
+                    text_counts = text.lower().count(key)
+                    # Skip element if the maximum allowed elements already exists
+                    if text_counts < _counts[key]:
+                        continue
+
                 _elems.append(elem)
-                pos = elem.index(text)
-                if isinstance(pos, int):
-                    text = text[pos + len(elem)]
 
         return type(self)(_elems)
 
