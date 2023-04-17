@@ -255,19 +255,21 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
-    print(sys.argv)
-    print(len(sys.argv))
-    print(sys.argv[1].endswith(".yaml"))
-    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-        # If we pass only one argument to the script and it's the path to a json file,
-        # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+    logging.info(f"Sys args {sys.argv}")
 
-    elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
-        # If we pass only one argument to the script and it's the path to a yaml file,
+    if len(sys.argv) > 0 and sys.argv[-1].endswith(".json"):
+        # If we pass only one argument to the script, and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[1]))
+        logging.info(f"Loading json config {sys.argv[-1]}")
+        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[-1]))
+
+    elif len(sys.argv) > 0 and sys.argv[-1].endswith(".yaml"):
+        # If we pass only one argument to the script, and it's the path to a yaml file,
+        # let's parse it to get our arguments.
+        logging.info(f"Loading yaml config {sys.argv[-1]}")
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
     else:
+        logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     if data_args.train_tasks is not None:
