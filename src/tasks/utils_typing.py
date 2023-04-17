@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib
 import inspect
+import logging
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
@@ -353,6 +354,7 @@ class AnnotationList(list):
             elif any(isinstance(elem, _type) for _type in self.COMPLEX_TYPES):
                 elem = elem.exists_in(text)
             else:
+                print(elem)
                 elem = elem if elem.exists_in(text) else None
 
             if elem is not None:
@@ -377,22 +379,57 @@ class AnnotationList(list):
         guidelines = cls._load_guidelines(task_module)
         locals().update(guidelines)
 
+        _text = ann
         # Remove list expression brackets
         ann = ann.strip().lstrip("[").rstrip("]")
-        # Fix if commas are missing
-        ann = ann.replace(")\n ", "),\n ")
+        # Fix if commas are missing and set the SEP token
+        ann = ann.replace(")\n ", "),\n").replace("), ", "),\n").replace("),\n", ")[SEP]")
         # Split elements
         ann = ann.replace("\n", "")
-        elems = [elem.strip() + ")" if not elem.strip().endswith(")") else elem.strip() for elem in ann.split("), ")]
+        elems = [elem.strip() for elem in ann.split("[SEP]") if elem.strip()]
 
         # Remove malformed elements
         _elems = []
         for elem in elems:
             try:
                 elem = eval(elem)
+                # IDK sometimes there are tuples
+                if isinstance(elem, tuple):
+                    elem = elem[0]
+                # If it is an empty prediction skip
+                if isinstance(elem, type):
+                    continue
+                _elems.append(elem)
+            except (SyntaxError, TypeError):
+                logging.warning(f"Found an incorrectly formated prediction: {elem}")
+            except NameError as e:
+                logging.warning(f"An hallucinated predicted guideline found: {elem} | {e}")
+
+        self = cls(_elems)
+
+        if filter_hallucinations:
+            if text is None:
+                raise ValueError("To filter the allucinations the text argument must not be None.")
+            self = self.filter_hallucinations(text)
+
+        return self
+
+    @classmethod
+    def from_gold(
+        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+    ) -> AnnotationList:
+        # Import guidelines
+        guidelines = cls._load_guidelines(task_module)
+        locals().update(guidelines)
+
+        # Remove malformed elements
+        _elems = []
+        for elem in eval(ann):
+            try:
+                elem = eval(elem)
                 _elems.append(elem)
             except SyntaxError:
-                pass
+                logging.warning(f"Found an incorrectly formated gold: {elem}")
 
         self = cls(_elems)
 

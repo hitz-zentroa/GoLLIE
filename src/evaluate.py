@@ -8,6 +8,7 @@ from typing import Any, Dict, List, Type
 
 from src.config import DataTrainingArguments, ModelArguments
 from src.tasks import TASK_ID_TO_TASKS
+from src.tasks.utils_typing import AnnotationList
 from transformers import HfArgumentParser, Seq2SeqTrainingArguments
 
 
@@ -120,7 +121,7 @@ def evaluate(
         total_predictions: int = 0
 
         with open(gold_path, "rt") as gold_f, open(pred_path, "rt") as pred_f:
-            for sentence_no, (gold_line, pred_line) in enumerate(zip(gold_f, pred_f)):
+            for gold_line, pred_line in zip(gold_f, pred_f):
                 gold_line = json.loads(gold_line)
                 pred_line = json.loads(pred_line)
 
@@ -131,34 +132,18 @@ def evaluate(
                 if not scorer:
                     scorer = get_class(gold_line["scorer_cls"])()
 
-                try:
-                    gold_labels = fix_prompt_outputs(str(gold_line["labels"]))
-                    gold_labels = [eval(item) for item in eval(gold_labels)]
-                except Exception as e:
-                    logging.warning(
-                        "Found an incorrect formatted gold file! This should not happen!"
-                        f" Please check the gold file {gold_path} at line"
-                        f" {sentence_no+1}.\nThe gold line is: {gold_line}\n"
-                        f"The error is: {e}"
-                    )
-                    gold_labels = []
+                gold_labels = AnnotationList.from_gold(str(gold_line["labels"]), task_module=task_module)
 
-                try:
-                    pred_labels = fix_prompt_outputs(pred_line["model_prediction"].strip().split("result = ")[-1])
-                    pred_labels = eval(pred_labels)
-                except Exception:
-                    # logging.warning("Found an incorrect formated pred file!")
-                    pred_labels = []
-                    impossible_to_parse += 1
-
-                filtered_pred_labels = remove_hallucinations(gold_line["unlabelled_sentence"], pred_labels)
+                pred_labels = pred_line["model_prediction"].strip().split("result = ")[-1]
+                pred_labels = AnnotationList.from_output(str(pred_labels), task_module=task_module)
+                filtered_pred_labels = pred_labels.filter_hallucinations(gold_line["unlabelled_sentence"])
 
                 valid_predictions += len(filtered_pred_labels)
                 hallucinated_predictions += len(pred_labels) - len(filtered_pred_labels)
                 total_predictions += len(pred_labels)
 
                 labels.append(gold_labels)
-                predictions.append(pred_labels)
+                predictions.append(filtered_pred_labels)
 
         # rich.print(list(zip(labels, predictions)))
 
