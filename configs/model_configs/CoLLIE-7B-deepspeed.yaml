@@ -1,6 +1,6 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
-torch_dtype: "fp16"
+torch_dtype: fp16
 use_lora: false
 int8_quantization: false
 deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_fullmodel.json
