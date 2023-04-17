@@ -17,6 +17,19 @@ from transformers import (
     HfArgumentParser,
     Seq2SeqTrainingArguments,
 )
+import gc
+import torch
+
+
+def clean_cache():
+    """Clean cache to avoid memory leak.
+    This fixes this issue: https://github.com/huggingface/transformers/issues/22801"""
+
+    logging.info(f"Cleaning GPU memory. Current memory usage: {torch.cuda.memory_allocated()}")
+    torch.cuda.empty_cache()
+    gc.collect()
+    torch.cuda.empty_cache()
+    logging.info(f"GPU memory usage after cleaning: {torch.cuda.memory_allocated()}")
 
 
 def train_collie(
@@ -263,6 +276,7 @@ if __name__ == "__main__":
             data_args,
             training_args,
         )
+        clean_cache()
 
     if data_args.test_tasks is not None:
         if not data_args.evaluate_all_checkpoints:
@@ -271,6 +285,7 @@ if __name__ == "__main__":
                 data_args,
                 training_args,
             )
+            clean_cache()
         else:
             # Find all checkpoints in the output directory
             checkpoints = [
@@ -294,3 +309,4 @@ if __name__ == "__main__":
                     training_args,
                     checkpoint_path=checkpoint,
                 )
+                clean_cache()
