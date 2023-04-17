@@ -2,6 +2,40 @@ import unittest
 
 
 class TestEvaluate(unittest.TestCase):
+    def test_annotation_list(self):
+        from src.tasks.ace.prompts import Location, Organization, Person
+        from src.tasks.utils_typing import AnnotationList
+
+        text = "Peter went to Hitz-zentroa where Carlos works, after visiting Donosti, Tokyo."
+
+        annotations = AnnotationList.from_output(
+            """[
+                Person("Peter"),
+                Organization("Hitz-zentroa"),
+                Person("carlos"),
+                Location("Tokyo"),
+                Location("Donosti"),
+                GPE("UE"),
+            ]
+        """.replace(
+                "            ", "    "
+            ),
+            task_module="src.tasks.ace.prompts",
+            text=text,
+            filter_hallucinations=True,
+        )
+
+        self.assertEqual(
+            annotations,
+            [
+                Person("Peter"),
+                Organization("Hitz-zentroa"),
+                Person("carlos"),
+                Location("Tokyo"),
+                Location("Donosti"),
+            ],
+        )
+
     def test_entity_hallucination(self):
         from src.evaluate import remove_hallucinations
         from src.tasks.ace.prompts import (

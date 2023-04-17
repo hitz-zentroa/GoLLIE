@@ -1,7 +1,5 @@
 import unittest
 
-from src.tasks.rams.prompts import TransferOwnership, Yield
-
 
 class TestACEScorers(unittest.TestCase):
     def test_entity_scorer(self):
@@ -92,6 +90,7 @@ class TestACEScorers(unittest.TestCase):
 
 class TestRAMSScorers(unittest.TestCase):
     def test_event_scorer(self):
+        from src.tasks.rams.prompts import TransferOwnership, Yield
         from src.tasks.rams.scorer import RAMSEventScorer
 
         scorer = RAMSEventScorer()

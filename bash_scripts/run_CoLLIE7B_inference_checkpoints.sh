@@ -24,8 +24,8 @@ export PYTHONPATH="$PYTHONPATH:$PWD"
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine.yaml
-torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_ignore_prompt_loss.yaml
-torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant.yaml
-torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant_ignore_prompt_loss.yaml
+# torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_cosine_ignore_prompt_loss.yaml
+# torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant.yaml
+# torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_optim_AdamW_lr_3e4_constant_ignore_prompt_loss.yaml
 
 # python3 trainer.py ../CoLLIE_configs/CoLLIE-7B_eval.yaml
