@@ -23,4 +23,4 @@ export PYTHONPATH="$PYTHONPATH:$PWD"
 # cd ../src || exit
 
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B-deepspeed.yaml
+deepspeed src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B-deepspeed.yaml
