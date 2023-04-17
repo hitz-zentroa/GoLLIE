@@ -1,8 +1,8 @@
 from __future__ import annotations
-from collections import defaultdict
 
 import importlib
 import inspect
+from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
 from typing import Dict, Tuple, TypeVar, Union
@@ -355,7 +355,7 @@ class AnnotationList(list):
             else:
                 elem = elem if elem.exists_in(text) else None
 
-            if elem:
+            if elem is not None:
                 key = elem.key()
                 # Check if key is not None
                 if key:
@@ -382,7 +382,9 @@ class AnnotationList(list):
         # Fix if commas are missing
         ann = ann.replace(")\n ", "),\n ")
         # Split elements
-        elems = [elem.strip() for elem in ann.split(",")]
+        ann = ann.replace("\n", "")
+        elems = [elem.strip() + ")" if not elem.strip().endswith(")") else elem.strip() for elem in ann.split("), ")]
+
         # Remove malformed elements
         _elems = []
         for elem in elems:
