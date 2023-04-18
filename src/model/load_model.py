@@ -83,7 +83,9 @@ def load_model_for_training(
     ddp = world_size != 1
     if ddp:
         device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-    logging.info(f"Device map: {device_map}")
+
+    if int8_quantization:
+        logging.info(f"Device map: {device_map}")
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
@@ -213,7 +215,9 @@ def load_model_for_inference(
     ddp = world_size != 1
     if ddp:
         device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-    logging.info(f"Device map: {device_map}")
+
+    if int8_quantization:
+        logging.info(f"Device map: {device_map}")
 
     logging.info(f"Loading model from {weights_path}")
 
