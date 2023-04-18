@@ -3,7 +3,7 @@ model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
 torch_dtype: float16
 use_lora: false
 int8_quantization: false
-deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero2.json
+deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
