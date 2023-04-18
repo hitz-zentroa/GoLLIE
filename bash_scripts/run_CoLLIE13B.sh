@@ -21,9 +21,7 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # cd ../src || exit
 
-# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
+# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE13B.sh
 
-#Test beam search
-python3 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_evalcheckpoints.yaml
 python3 src/run.py ${CONFIGS_FOLDER}/CoLLIE-13B.yaml
-# python3 trainer.py ../CoLLIE_configs/CoLLIE-7B_eval.yaml
+
