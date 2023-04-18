@@ -23,7 +23,7 @@ ignore_prompt_loss: true
 output_dir: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-13b
 overwrite_output_dir: true
 load_best_model_at_end: false
-save_strategy: "steps"
+save_strategy: "epoch"
 save_steps: 1000
 save_total_limit: 999
 
@@ -47,7 +47,7 @@ generation_num_beams: 4
 optim: adamw_torch
 learning_rate: 0.0003
 weight_decay: 0
-num_train_epochs: 10
+num_train_epochs: 20
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 
