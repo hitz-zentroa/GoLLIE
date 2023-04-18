@@ -300,8 +300,8 @@ if __name__ == "__main__":
 
             # Sort checkpoints by step number
             checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
-            # Evaluate only checkpoints with more than 1000 steps, underfited models are very slow to evaluate
-            checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) > 1000]
+            # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
+            checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
