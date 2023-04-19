@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 import inspect
 import logging
+import re
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
@@ -29,6 +30,11 @@ def dataclass(
         unsafe_hash=unsafe_hash,
         frozen=frozen,
     )
+
+
+class HallucinatedType:
+    def __init__(self, *args, **kwargs) -> None:
+        pass
 
 
 @dataclass
@@ -353,6 +359,8 @@ class AnnotationList(list):
                 elem = elem if elem.exists_in(text) else None
             elif any(isinstance(elem, _type) for _type in self.COMPLEX_TYPES):
                 elem = elem.exists_in(text)
+            elif isinstance(elem, HallucinatedType):
+                continue
             else:
                 print(elem)
                 elem = elem if elem.exists_in(text) else None
@@ -379,31 +387,45 @@ class AnnotationList(list):
         guidelines = cls._load_guidelines(task_module)
         locals().update(guidelines)
 
-        _text = ann
-        # Remove list expression brackets
-        ann = ann.strip().lstrip("[").rstrip("]")
-        # Fix if commas are missing and set the SEP token
-        ann = ann.replace(")\n ", "),\n").replace("), ", "),\n").replace("),\n", ")[SEP]")
-        # Split elements
-        ann = ann.replace("\n", "")
-        elems = [elem.strip() for elem in ann.split("[SEP]") if elem.strip()]
-
-        # Remove malformed elements
-        _elems = []
-        for elem in elems:
+        reading = True
+        while reading:
             try:
-                elem = eval(elem)
-                # IDK sometimes there are tuples
-                if isinstance(elem, tuple):
-                    elem = elem[0]
-                # If it is an empty prediction skip
-                if isinstance(elem, type):
-                    continue
-                _elems.append(elem)
-            except (SyntaxError, TypeError):
-                logging.warning(f"Found an incorrectly formated prediction: {elem}")
+                _elems = eval(ann)
+                reading = False
+            # Handle hallucinations
             except NameError as e:
-                logging.warning(f"An hallucinated predicted guideline found: {elem} | {e}")
+                name = re.search(r"'\w+'", e.args[0]).group(0).strip("'")
+                logging.warning(f"An hallucinated predicted guideline found: {name}")
+                locals().update({name: HallucinatedType})
+            except Exception:
+                _elems = []
+                reading = False
+
+        # _text = ann
+        # # Remove list expression brackets
+        # ann = ann.strip().lstrip("[").rstrip("]")
+        # # Fix if commas are missing and set the SEP token
+        # ann = ann.replace(")\n ", "),\n").replace("), ", "),\n").replace("),\n", ")[SEP]")
+        # # Split elements
+        # ann = ann.replace("\n", "")
+        # elems = [elem.strip() for elem in ann.split("[SEP]") if elem.strip()]
+
+        # # Remove malformed elements
+        # _elems = []
+        # for elem in elems:
+        #     try:
+        #         elem = eval(elem)
+        #         # IDK sometimes there are tuples
+        #         if isinstance(elem, tuple):
+        #             elem = elem[0]
+        #         # If it is an empty prediction skip
+        #         if isinstance(elem, type):
+        #             continue
+        #         _elems.append(elem)
+        #     except (SyntaxError, TypeError):
+        #         logging.warning(f"Found an incorrectly formated prediction: {elem}")
+        #     except NameError as e:
+        #         logging.warning(f"An hallucinated predicted guideline found: {elem} | {e}")
 
         self = cls(_elems)
 
