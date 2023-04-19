@@ -3,6 +3,7 @@ import math
 import random
 from typing import Any, Dict, List, Tuple, Type, Union
 
+import black
 import numpy as np
 from jinja2 import Template
 
@@ -124,6 +125,8 @@ class Sampler:
         self.dataset_name = dataset_name
         self.scorer_cls = scorer
 
+        self._black_mode = black.Mode()
+
     def _sample(self, instances):
         if self.sample_only_gold_guidelines:
             guidelines = [
@@ -142,11 +145,14 @@ class Sampler:
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
                     "scorer_cls": self.scorer_cls,
-                    "labels": [ann.__repr__() for ann in _ann],
-                    "text": self.template.render(
-                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
-                        text=_text,
-                        annotations=_ann,
+                    "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
+                    "text": black.format_str(
+                        self.template.render(
+                            guidelines=[inspect.getsource(definition) for definition in _guidelines],
+                            text=_text,
+                            annotations=_ann,
+                        ),
+                        mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
                 }
@@ -181,11 +187,14 @@ class Sampler:
                 "ids": [inst["id"] for inst in instances],
                 "task_id": f"{self.dataset_name}_{self.task}",
                 "scorer_cls": self.scorer_cls,
-                "labels": [ann.__repr__() for ann in _ann],
-                "text": self.template.render(
-                    guidelines=[inspect.getsource(definition) for definition in _guidelines],
-                    text=_text,
-                    annotations=_ann,
+                "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
+                "text": black.format_str(
+                    self.template.render(
+                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
+                        text=_text,
+                        annotations=_ann,
+                    ),
+                    mode=self._black_mode,
                 ),
                 "unlabelled_sentence": _text,
             }
@@ -202,11 +211,14 @@ class Sampler:
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
                     "scorer_cls": self.scorer_cls,
-                    "labels": [ann.__repr__() for ann in _ann],
-                    "text": self.template.render(
-                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
-                        text=_text,
-                        annotations=_ann,
+                    "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
+                    "text": black.format_str(
+                        self.template.render(
+                            guidelines=[inspect.getsource(definition) for definition in _guidelines],
+                            text=_text,
+                            annotations=_ann,
+                        ),
+                        mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
                 }
