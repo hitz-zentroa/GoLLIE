@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE-StabilityLM-13B
+#SBATCH --job-name=CoLLIE-StabilityLM-7B
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE-StabilityLM-13B.out.txt
-#SBATCH --error=.slurm/CoLLIE-StabilityLM-13B.err.txt
+#SBATCH --output=.slurm/CoLLIE-StabilityLM-7B.out.txt
+#SBATCH --error=.slurm/CoLLIE-StabilityLM-7B.err.txt
 
 source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
@@ -23,5 +23,5 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/StabilityLM-13B.yaml
 
-python3 src/run.py ${CONFIGS_FOLDER}/StabilityLM-13B.yaml
+python3 src/run.py ${CONFIGS_FOLDER}/StabilityLM-7B.yaml
 
