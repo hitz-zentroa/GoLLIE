@@ -65,8 +65,8 @@ def prepare_data(
     """
 
     if is_encoder_decoder:
-        prompt, result = example.split("result = [\n")
-        prompt = prompt + "result = [\n"
+        prompt, result = example.split("result = [")
+        prompt = prompt + "result = ["
         prompt = prompt.strip()
         result = result.strip()
 
@@ -90,7 +90,7 @@ def prepare_data(
 
     else:
         if inference:
-            prompt = example.split("result = [\n")[0] + "result = [\n"
+            prompt = example.split("result = [")[0] + "result = ["
             model_inputs = tokenizer(
                 text=prompt,
                 max_length=max_length,
@@ -115,7 +115,7 @@ def prepare_data(
                 add_special_tokens=True,
             )
             if ignore_prompt_loss:
-                prompt = example.split("result = [\n")[0] + "result = [\n"
+                prompt = example.split("result = [")[0] + "result = ["
                 prompt = tokenizer(
                     text=prompt,
                     max_length=max_length,
