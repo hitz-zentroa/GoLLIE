@@ -56,10 +56,7 @@ lora_r: 16
 lora_alpha: 16
 lora_dropout: 0.05
 lora_target_modules:
-  - q_proj
-  - v_proj
-  - k_proj
-  - o_proj
+  - query_key_value
 
 # reporting
 logging_strategy: steps
