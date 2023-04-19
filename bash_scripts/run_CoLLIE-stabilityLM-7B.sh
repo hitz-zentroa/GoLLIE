@@ -23,5 +23,5 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/StabilityLM-13B.yaml
 
-python3 src/run.py ${CONFIGS_FOLDER}/StabilityLM-7B.yaml
+python3 -m src.run  ${CONFIGS_FOLDER}/StabilityLM-7B.yaml
 

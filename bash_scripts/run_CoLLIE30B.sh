@@ -23,5 +23,5 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE30B.sh
 
-python3 src/run.py ${CONFIGS_FOLDER}/CoLLIE-30B.yaml
+python3 -m src.run  ${CONFIGS_FOLDER}/CoLLIE-30B.yaml
 
