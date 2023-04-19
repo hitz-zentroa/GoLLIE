@@ -5,7 +5,7 @@ from ..utils_typing import Entity, Event, Relation, Value, dataclass
 
 """Entity definitions
 
-The entity definitions are derived from the oficial ACE guidelines:
+The entity definitions are derived from the official ACE guidelines:
 https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-entities-guidelines-v6.6.pdf
 """
 

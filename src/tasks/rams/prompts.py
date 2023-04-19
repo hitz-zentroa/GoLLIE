@@ -5,7 +5,7 @@ from ..utils_typing import Event, dataclass
 
 """Event definitions
 
-The oficial guidelines are not public. All event definitions are taken from:
+The official guidelines are not public. All event definitions are taken from:
 https://github.com/raspberryice/gen-arg/blob/main/aida_ontology_cleaned.csv
 """
 
