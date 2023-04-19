@@ -4,7 +4,7 @@
 {%- endfor %}
 
 # This is the text to analyze
-text = "{{ text }}"
+text = {{ text.__repr__() }}
 
 # The annotation instances that take place in the text above are listed here
 result = [
