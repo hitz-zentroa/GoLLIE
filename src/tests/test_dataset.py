@@ -50,9 +50,9 @@ class EnergyAndInfrastructureEvent:
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
 # The following list contains the events instances that happens in the sentence defined above
-result = [
-"""
-    result = """    EnergyAndInfrastructureEvent(
+result = ["""
+    result = """
+        EnergyAndInfrastructureEvent(
         meeting_attendees=["Chinese", "Rongovian"],
         meeting_location=["Berlin"],
         meeting_topic=["Pangean Reunification Facility"],
