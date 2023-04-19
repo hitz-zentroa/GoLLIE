@@ -28,6 +28,13 @@ def plot_curves(args):
 
             step = int(os.path.basename(chkpt).split("-")[-1])
 
+            trainer_state_file = os.path.join(chkpt, "trainer_state.json")
+            if os.path.exists(trainer_state_file):
+                with open(trainer_state_file) as f:
+                    step_info = json.load(f)["log_history"][-1]
+            else:
+                step_info = {"step": step}
+
             with open(scores_file) as f:
                 scores = json.load(f)
 
@@ -53,12 +60,12 @@ def plot_curves(args):
                         if step not in results_dict[dataset][task][_key]:
                             results_dict[dataset][task][_key][step] = {}
 
-                        results_dict[dataset][task][_key][step][args.hue in key] = values
+                        results_dict[dataset][task][_key][step][args.hue in key] = {**values, **step_info}
                     else:
                         if step not in results_dict[dataset][task][key]:
                             results_dict[dataset][task][key][step] = {}
 
-                        results_dict[dataset][task][key][step] = values
+                        results_dict[dataset][task][key][step] = {**values, **step_info}
 
     result_list = []
     for dataset, values in results_dict.items():
@@ -72,7 +79,7 @@ def plot_curves(args):
                                     "dataset": dataset,
                                     "task": task,
                                     "model": model,
-                                    "chkpt": chkpt,
+                                    "steps": chkpt,
                                     f"{args.hue}": hue,
                                     **values,
                                 }
@@ -83,7 +90,7 @@ def plot_curves(args):
                                 "dataset": dataset,
                                 "task": task,
                                 "model": model,
-                                "chkpt": chkpt,
+                                "steps": chkpt,
                                 f"{args.hue}": False,
                                 **values,
                             }
@@ -95,11 +102,12 @@ def plot_curves(args):
     )
 
     df = pd.DataFrame(result_list)
-    f = plt.figure()
+    logging.info(f"Available columns: {df.columns}")
+    f = plt.figure(figsize=(10, 5))
     sns.lineplot(
         data=df,
-        x="chkpt",
-        y="f1-score",
+        x=args.x,
+        y=args.y,
         hue="model",
         size=args.hue,
         size_order=[True, False] if args.hue else None,
@@ -121,6 +129,8 @@ if __name__ == "__main__":
     parser.add_argument("--models_path", type=str, default="/ikerlariak/igarcia945/CoLLIE/pretrained_models")
     parser.add_argument("--regexp", type=str, default="*")
     parser.add_argument("--hue", type=str, default=None)
+    parser.add_argument("--x", type=str, default="steps")
+    parser.add_argument("--y", type=str, default="f1-score")
 
     args = parser.parse_args()
     plot_curves(args)
