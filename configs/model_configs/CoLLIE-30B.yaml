@@ -47,7 +47,7 @@ generation_num_beams: 4
 optim: adamw_torch_fused
 learning_rate: 0.0003
 weight_decay: 0
-num_train_epochs: 20
+num_train_epochs: 10
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
 
