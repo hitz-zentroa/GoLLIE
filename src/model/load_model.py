@@ -133,8 +133,13 @@ def load_model_for_training(
         tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
-        logging.warning("Your model does not have a pad token, we will use the ukn token as pad token.")
-        tokenizer.pad_token_id = tokenizer.unk_token_id
+        if tokenizer.unk_token_id is not None and tokenizer.unk_token_id != tokenizer.eos_token_id:
+            logging.warning("Model does not have a pad token, we will use the unk token as pad token.")
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+        else:
+            logging.warning("Model does not have a pad token or unk token. We will create a new pad token.")
+            tokenizer.add_special_tokens({"pad_token": "[PAD]"})
+            model.resize_token_embeddings(len(tokenizer))
 
     if int8_quantization:
         from peft import prepare_model_for_int8_training
@@ -252,8 +257,13 @@ def load_model_for_inference(
         tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
-        logging.warning("Model does not have a pad token, we will use the ukn token as pad token.")
-        tokenizer.pad_token_id = tokenizer.unk_token_id
+        if tokenizer.unk_token is not None and tokenizer.unk_token_id != tokenizer.eos_token_id:
+            logging.warning("Model does not have a pad token, we will use the unk token as pad token.")
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+        else:
+            logging.warning("Model does not have a pad token or unk token. We will create a new pad token.")
+            tokenizer.add_special_tokens({"pad_token": "[PAD]"})
+            model.resize_token_embeddings(len(tokenizer))
 
     if lora_weights_name_or_path:
         from peft import PeftModel
