@@ -130,6 +130,13 @@ def prepare_data(
                     prompt = prompt[:-1]
 
                 model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+                if len(prompt) > len(model_inputs["labels"]):
+                    raise ValueError(
+                        f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+                        f" {model_inputs['input_ids']}"
+                    )
+
                 # Set labels to -100 for prompt tokens
                 for i in range(len(prompt)):
                     model_inputs["labels"][i] = -100
