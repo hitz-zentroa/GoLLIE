@@ -28,7 +28,7 @@ def get_conll_hf(
     from datasets import load_dataset
 
     dataset = load_dataset("conll2003")
-    id2label = {k: v for k, v in enumerate(dataset["train"].features["ner_tags"].feature.names)}
+    id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
     dataset_sentences: List[List[str]] = []
     dataset_entities: List[List[Union[Location, Organization, Person, Miscellaneous]]] = []
 
@@ -176,12 +176,6 @@ class CoNLLDatasetLoader(DatasetLoader):
 
     def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
         self.elements = {}
-
-        assert path_or_split in [
-            "train",
-            "validation",
-            "test",
-        ], f"Split {path_or_split} not found, should be one of train, validation or test."
 
         if path_or_split in ["train", "validation", "test"]:
             dataset_words, dataset_entities = get_conll_hf(

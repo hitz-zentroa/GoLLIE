@@ -13,7 +13,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
-        sampler=list(ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"]))
+        _ = list(ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"]))
 
         # TODO: Implement a better TEST
 
@@ -26,19 +26,87 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
-        sampler = list(RAMSSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]))
+        _ = list(RAMSSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]))
 
         # TODO: Implement a better TEST
 
     def test_CoNLL03(self):
-        from src.tasks.conll03.data_loader import CoNLLDatasetLoader, CONLL03Sampler
-        from src.tasks.conll03.prompts import Person,Organization,Location,Miscellaneous
+        from src.tasks.conll03.data_loader import CONLL03Sampler, CoNLLDatasetLoader
+        from src.tasks.conll03.prompts import Miscellaneous, Organization, Person
 
         with open("configs/data_configs/conll03_config.json") as f:
             config = json.load(f)
 
-        dataloader = CoNLLDatasetLoader("validation")
+        config["task_configuration"] = {
+            "NER": {
+                "parallel_instances": 1,
+                "max_guidelines": -1,
+                "guideline_dropout": 0,
+                "scorer": "src.tasks.ace.scorer.CoNLL03EntityScorer",
+            }
+        }
 
-        sampler = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        config["include_misc"] = True
+        dataloader = CoNLLDatasetLoader("validation", **config)
 
-        
+        _ = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+
+        self.assertDictEqual(
+            {
+                "id": 0,
+                "doc_id": 0,
+                "text": "CRICKET - LEICESTERSHIRE TAKE OVER AT TOP AFTER INNINGS VICTORY .",
+                "entities": [Organization(span="LEICESTERSHIRE")],
+            },
+            dataloader[0],
+        )
+
+        self.assertDictEqual(
+            {
+                "id": 2,
+                "doc_id": 2,
+                "text": (
+                    "West Indian all-rounder Phil Simmons took four for 38 on Friday as Leicestershire beat Somerset"
+                    " by an innings and 39 runs in two days to take over at the head of the county championship ."
+                ),
+                "entities": [
+                    Miscellaneous(span="West Indian"),
+                    Person(span="Phil Simmons"),
+                    Organization(span="Leicestershire"),
+                    Organization(span="Somerset"),
+                ],
+            },
+            dataloader[2],
+        )
+
+        config["include_misc"] = False
+        dataloader = CoNLLDatasetLoader("validation", **config)
+
+        _ = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+
+        self.assertDictEqual(
+            {
+                "id": 0,
+                "doc_id": 0,
+                "text": "CRICKET - LEICESTERSHIRE TAKE OVER AT TOP AFTER INNINGS VICTORY .",
+                "entities": [Organization(span="LEICESTERSHIRE")],
+            },
+            dataloader[0],
+        )
+
+        self.assertDictEqual(
+            {
+                "id": 2,
+                "doc_id": 2,
+                "text": (
+                    "West Indian all-rounder Phil Simmons took four for 38 on Friday as Leicestershire beat Somerset"
+                    " by an innings and 39 runs in two days to take over at the head of the county championship ."
+                ),
+                "entities": [
+                    Person(span="Phil Simmons"),
+                    Organization(span="Leicestershire"),
+                    Organization(span="Somerset"),
+                ],
+            },
+            dataloader[2],
+        )
