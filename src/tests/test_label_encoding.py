@@ -10,10 +10,9 @@ class TestToIOB(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 I-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 I-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -22,7 +21,6 @@ class TestToIOB(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -35,7 +33,7 @@ class TestToIOB(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_corrupted_iob(self):
         text_in = (
@@ -43,10 +41,9 @@ class TestToIOB(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 I-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -55,7 +52,6 @@ class TestToIOB(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -68,10 +64,9 @@ class TestToIOB(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 I-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 I-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -80,7 +75,6 @@ class TestToIOB(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -93,7 +87,7 @@ class TestToIOB(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_iob2(self):
         text_in = (
@@ -101,10 +95,9 @@ class TestToIOB(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 B-LOC\n"
@@ -113,7 +106,6 @@ class TestToIOB(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 B-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -126,10 +118,9 @@ class TestToIOB(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 I-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 I-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -138,7 +129,6 @@ class TestToIOB(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -151,7 +141,7 @@ class TestToIOB(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_bilou(self):
         text_in = (
@@ -159,10 +149,8 @@ class TestToIOB(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -171,7 +159,6 @@ class TestToIOB(unittest.TestCase):
             "word12 U-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -184,10 +171,8 @@ class TestToIOB(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
-            "word5 I-LOC\n"
+            "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 I-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -196,7 +181,6 @@ class TestToIOB(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -217,10 +201,9 @@ class TestToIOB2(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 I-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 I-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -229,7 +212,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -242,10 +224,9 @@ class TestToIOB2(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 B-LOC\n"
@@ -254,7 +235,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 B-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -267,7 +247,7 @@ class TestToIOB2(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_iob2(self):
         text_in = (
@@ -275,10 +255,8 @@ class TestToIOB2(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 B-LOC\n"
@@ -287,7 +265,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 B-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -300,7 +277,7 @@ class TestToIOB2(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_bilou(self):
         text_in = (
@@ -308,10 +285,8 @@ class TestToIOB2(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -320,7 +295,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 U-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -333,10 +307,8 @@ class TestToIOB2(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 B-LOC\n"
@@ -345,7 +317,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 B-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -358,7 +329,7 @@ class TestToIOB2(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_corrupted_iob2(self):
         text_in = (
@@ -366,10 +337,8 @@ class TestToIOB2(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 U-PER\n"
             "word9 B-LOC\n"
@@ -378,7 +347,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -391,10 +359,8 @@ class TestToIOB2(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 B-LOC\n"
@@ -403,7 +369,6 @@ class TestToIOB2(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 B-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -416,7 +381,7 @@ class TestToIOB2(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="iob2")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
 
 class TestToBILOU(unittest.TestCase):
@@ -426,10 +391,9 @@ class TestToBILOU(unittest.TestCase):
             "word2 I-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 I-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 I-PER\n"
             "word8 B-PER\n"
             "word9 I-LOC\n"
@@ -438,7 +402,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 I-ORG\n"
             "word13 I-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -451,10 +414,9 @@ class TestToBILOU(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
+            "wordnl  O\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -463,7 +425,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 U-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -476,7 +437,7 @@ class TestToBILOU(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_iob2(self):
         text_in = (
@@ -484,10 +445,8 @@ class TestToBILOU(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 I-LOC\n"
-            "\n"
             "word5 B-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 B-PER\n"
             "word8 B-PER\n"
             "word9 B-LOC\n"
@@ -496,7 +455,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 B-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -511,10 +469,8 @@ class TestToBILOU(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -523,7 +479,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 U-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -538,7 +493,7 @@ class TestToBILOU(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_bilou(self):
         text_in = (
@@ -546,10 +501,8 @@ class TestToBILOU(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -558,7 +511,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 U-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 O\n"
@@ -571,7 +523,7 @@ class TestToBILOU(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
 
     def test_from_corrupted_bilou(self):
         text_in = (
@@ -579,10 +531,8 @@ class TestToBILOU(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 L-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -591,7 +541,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 B-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 B-PER\n"
@@ -610,10 +559,8 @@ class TestToBILOU(unittest.TestCase):
             "word2 B-LOC\n"
             "word3 I-LOC\n"
             "word4 L-LOC\n"
-            "\n"
             "word5 U-LOC\n"
             "word6 O\n"
-            "\n"
             "word7 U-PER\n"
             "word8 U-PER\n"
             "word9 U-LOC\n"
@@ -622,7 +569,6 @@ class TestToBILOU(unittest.TestCase):
             "word12 U-ORG\n"
             "word13 U-LOC\n"
             "word14 O\n"
-            "\n"
             "word15 O\n"
             "word16 O\n"
             "word17 B-PER\n"
@@ -641,4 +587,4 @@ class TestToBILOU(unittest.TestCase):
 
         rewritten_labels = rewrite_labels(labels=in_labels, encoding="bilou")
 
-        self.assertEquals(gold_labels, rewritten_labels)
+        self.assertEqual(gold_labels, rewritten_labels)
