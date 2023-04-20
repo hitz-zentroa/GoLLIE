@@ -1,9 +1,11 @@
+import gc
 import glob
 import json
 import logging
 import os
 import sys
 
+import torch
 import torch.utils.data
 from datasets import DatasetDict
 
@@ -17,6 +19,17 @@ from transformers import (
     HfArgumentParser,
     Seq2SeqTrainingArguments,
 )
+
+
+def clean_cache():
+    """Clean cache to avoid memory leak.
+    This fixes this issue: https://github.com/huggingface/transformers/issues/22801"""
+
+    logging.info(f"Cleaning GPU memory. Current memory usage: {torch.cuda.memory_allocated()}")
+    torch.cuda.empty_cache()
+    gc.collect()
+    torch.cuda.empty_cache()
+    logging.info(f"GPU memory usage after cleaning: {torch.cuda.memory_allocated()}")
 
 
 def train_collie(
@@ -242,19 +255,21 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
-    print(sys.argv)
-    print(len(sys.argv))
-    print(sys.argv[1].endswith(".yaml"))
-    if len(sys.argv) == 2 and sys.argv[1].endswith(".json"):
-        # If we pass only one argument to the script and it's the path to a json file,
-        # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[1]))
+    logging.info(f"Sys args {sys.argv}")
 
-    elif len(sys.argv) == 2 and sys.argv[1].endswith(".yaml"):
-        # If we pass only one argument to the script and it's the path to a yaml file,
+    if len(sys.argv) > 0 and sys.argv[-1].endswith(".json"):
+        # If we pass only one argument to the script, and it's the path to a json file,
         # let's parse it to get our arguments.
-        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[1]))
+        logging.info(f"Loading json config {sys.argv[-1]}")
+        model_args, data_args, training_args = parser.parse_json_file(json_file=os.path.abspath(sys.argv[-1]))
+
+    elif len(sys.argv) > 0 and sys.argv[-1].endswith(".yaml"):
+        # If we pass only one argument to the script, and it's the path to a yaml file,
+        # let's parse it to get our arguments.
+        logging.info(f"Loading yaml config {sys.argv[-1]}")
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
     else:
+        logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     if data_args.train_tasks is not None:
@@ -263,6 +278,7 @@ if __name__ == "__main__":
             data_args,
             training_args,
         )
+        clean_cache()
 
     if data_args.test_tasks is not None:
         if not data_args.evaluate_all_checkpoints:
@@ -271,6 +287,7 @@ if __name__ == "__main__":
                 data_args,
                 training_args,
             )
+            clean_cache()
         else:
             # Find all checkpoints in the output directory
             checkpoints = [
@@ -280,6 +297,11 @@ if __name__ == "__main__":
                 )
                 if os.path.isdir(c)
             ]
+
+            # Sort checkpoints by step number
+            checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
+            # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
+            checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
@@ -294,3 +316,4 @@ if __name__ == "__main__":
                     training_args,
                     checkpoint_path=checkpoint,
                 )
+                clean_cache()

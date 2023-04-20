@@ -48,7 +48,7 @@ class TestCollieTrainer(unittest.TestCase):
                 "If PEFT is used, then the adapter must be saved.",
             )
             self.assertFalse(
-                any([elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)]),
+                any(elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)),
                 "If PEFT is used, then the model should not be saved.",
             )
 
@@ -81,6 +81,6 @@ class TestCollieTrainer(unittest.TestCase):
                 "If PEFT is not used, then no adapter must be saved.",
             )
             self.assertTrue(
-                any([elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)]),
+                any(elem.startswith("pytorch_model") for elem in os.listdir(tmpdirname)),
                 "If PEFT is not used, then the model have to be saved.",
             )

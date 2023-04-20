@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import importlib
 import inspect
+import logging
+import re
+from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
+from typing import Dict, Tuple, TypeVar, Union
 
 
 def dataclass(
@@ -27,6 +32,11 @@ def dataclass(
     )
 
 
+class HallucinatedType:
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
 @dataclass
 class Entity:
     """A general class to represent entities."""
@@ -38,6 +48,16 @@ class Entity:
         other_span = other.span.lower().strip()
         return type(self) == type(other) and self_span == other_span
 
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        return self.span.lower()
+
     def exists_in(self, text: str) -> bool:
         """
         Checks whether the annotation exists on a given text. This function is used to
@@ -51,7 +71,29 @@ class Entity:
             `bool`:
                 Whether the annotation exists on the input text or not.
         """
-        return self.span.lower() in text.lower()
+        return self.span.lower().strip() in text.lower()
+
+    def index(self, text: str) -> int:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `Tuple[int, int]`:
+                The position of the span in the text.
+        """
+        if not self.exists_in(text):
+            raise IndexError("The span is not in text.")
+
+        pos = text.lower().index(self.span.lower().strip())
+        return (pos, pos + len(self.span))
 
 
 @dataclass
@@ -63,6 +105,16 @@ class Value:
     def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.span == other.span
 
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        return self.span.lower()
+
     def exists_in(self, text: str) -> bool:
         """
         Checks whether the annotation exists on a given text. This function is used to
@@ -78,6 +130,28 @@ class Value:
         """
         return self.span.lower() in text.lower()
 
+    def index(self, text: str) -> int:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `Tuple[int, int]`:
+                The position of the span in the text.
+        """
+        if not self.exists_in(text):
+            raise IndexError("The span is not in text.")
+
+        pos = text.lower().index(self.span.lower().strip())
+        return (pos, pos + len(self.span))
+
 
 @dataclass
 class Relation:
@@ -88,6 +162,16 @@ class Relation:
 
     def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.arg1 == other.arg1 and self.arg2 == other.arg2
+
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        return None
 
     def exists_in(self, text: str) -> bool:
         """
@@ -103,6 +187,28 @@ class Relation:
                 Whether the annotation exists on the input text or not.
         """
         return self.arg1.lower() in text.lower() and self.arg2.lower() in text.lower()
+
+    def index(self, text: str) -> Tuple[int, int]:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `Tuple[int, int]`:
+                The position of the span in the text.
+        """
+        if not self.exists_in(text):
+            raise IndexError("The span is not in text.")
+
+        pos = text.lower().index(self.arg1.lower().strip())
+        return (pos, pos + len(self.arg1))
 
 
 @dataclass
@@ -149,7 +255,20 @@ class Event:
 
         return _len
 
-    def exists_in(self, text: str) -> bool:
+    def key(self) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        if self.mention:
+            return self.mention.lower()
+
+        return None
+
+    def exists_in(self, text: str) -> Event:
         """
         Checks whether the annotation exists on a given text. This function is used to
         identify model alucinations.
@@ -162,4 +281,183 @@ class Event:
             `bool`:
                 Whether the annotation exists on the input text or not.
         """
-        return True  # TODO: implement exists_in for Event
+        text = text.lower()
+        # Only return None if the mention is defined and is not in the text
+        if self.mention and self.mention.lower() not in text:
+            return None
+
+        attrs = {
+            attr: []
+            for attr, values in inspect.getmembers(self)
+            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+        }
+        for attr in attrs.keys():
+            self_values = getattr(self, attr)
+            for value in self_values:
+                if value.lower() in text:
+                    attrs[attr].append(value)
+
+        pos_args = []
+        if hasattr(self, "mention"):
+            pos_args.append(self.mention)
+        if hasattr(self, "subtype"):
+            pos_args.append(self.subtype)
+
+        return type(self)(*pos_args, **attrs)
+
+    def index(self, text: str) -> int:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `int`:
+                The position of the span in the text.
+        """
+        # Return len(text) if there is no mention defined
+        if not self.mention:
+            return (len(text), len(text))
+
+        if not self.exists_in(text):
+            raise IndexError("The span is not in text.")
+
+        pos = text.lower().index(self.mention.lower().strip())
+        return (pos, pos + len(self.mention))
+
+
+class AnnotationList(list):
+    """
+    A class that handles the list of system outputs.
+
+    Args:
+        list (List[Any]):
+            List of annotations generated by the system.
+    """
+
+    SIMPLE_TYPES = [Entity, Value, Relation]
+    COMPLEX_TYPES = [Event]
+
+    @staticmethod
+    def _load_guidelines(task_module: str) -> Dict[str, TypeVar]:
+        mdl = importlib.import_module(task_module)
+        names = {x: y for x, y in mdl.__dict__.items() if not x.startswith("_")}
+
+        return names
+
+    def filter_hallucinations(self, text: str) -> AnnotationList:
+        _elems = []
+        _counts = defaultdict(int)
+        for elem in self:
+            if any(isinstance(elem, _type) for _type in self.SIMPLE_TYPES):
+                elem = elem if elem.exists_in(text) else None
+            elif any(isinstance(elem, _type) for _type in self.COMPLEX_TYPES):
+                elem = elem.exists_in(text)
+            elif isinstance(elem, HallucinatedType):
+                continue
+            else:
+                print(elem)
+                elem = elem if elem.exists_in(text) else None
+
+            if elem is not None:
+                key = elem.key()
+                # Check if key is not None
+                if key:
+                    _counts[key] += 1
+                    text_counts = text.lower().count(key)
+                    # Skip element if the maximum allowed elements already exists
+                    if text_counts < _counts[key]:
+                        continue
+
+                _elems.append(elem)
+
+        return type(self)(_elems)
+
+    @classmethod
+    def from_output(
+        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+    ) -> AnnotationList:
+        # Import guidelines
+        guidelines = cls._load_guidelines(task_module)
+        locals().update(guidelines)
+
+        reading = True
+        while reading:
+            try:
+                _elems = eval(ann)
+                reading = False
+            # Handle hallucinations
+            except NameError as e:
+                name = re.search(r"'\w+'", e.args[0]).group(0).strip("'")
+                logging.warning(f"An hallucinated predicted guideline found: {name}")
+                locals().update({name: HallucinatedType})
+            except Exception:
+                _elems = []
+                reading = False
+
+        # _text = ann
+        # # Remove list expression brackets
+        # ann = ann.strip().lstrip("[").rstrip("]")
+        # # Fix if commas are missing and set the SEP token
+        # ann = ann.replace(")\n ", "),\n").replace("), ", "),\n").replace("),\n", ")[SEP]")
+        # # Split elements
+        # ann = ann.replace("\n", "")
+        # elems = [elem.strip() for elem in ann.split("[SEP]") if elem.strip()]
+
+        # # Remove malformed elements
+        # _elems = []
+        # for elem in elems:
+        #     try:
+        #         elem = eval(elem)
+        #         # IDK sometimes there are tuples
+        #         if isinstance(elem, tuple):
+        #             elem = elem[0]
+        #         # If it is an empty prediction skip
+        #         if isinstance(elem, type):
+        #             continue
+        #         _elems.append(elem)
+        #     except (SyntaxError, TypeError):
+        #         logging.warning(f"Found an incorrectly formated prediction: {elem}")
+        #     except NameError as e:
+        #         logging.warning(f"An hallucinated predicted guideline found: {elem} | {e}")
+
+        self = cls(_elems)
+
+        if filter_hallucinations:
+            if text is None:
+                raise ValueError("To filter the allucinations the text argument must not be None.")
+            self = self.filter_hallucinations(text)
+
+        return self
+
+    @classmethod
+    def from_gold(
+        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+    ) -> AnnotationList:
+        # Import guidelines
+        guidelines = cls._load_guidelines(task_module)
+        locals().update(guidelines)
+
+        # Remove malformed elements
+        _elems = []
+        for elem in eval(ann):
+            try:
+                elem = eval(elem)
+                _elems.append(elem)
+            except SyntaxError:
+                logging.warning(f"Found an incorrectly formated gold: {elem}")
+
+        self = cls(_elems)
+
+        if filter_hallucinations:
+            if text is None:
+                raise ValueError("To filter the allucinations the text argument must not be None.")
+            self = self.filter_hallucinations(text)
+
+        return self

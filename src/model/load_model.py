@@ -83,7 +83,9 @@ def load_model_for_training(
     ddp = world_size != 1
     if ddp:
         device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-    logging.info(f"Device map: {device_map}")
+
+    if int8_quantization:
+        logging.info(f"Device map: {device_map}")
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
@@ -131,8 +133,15 @@ def load_model_for_training(
         tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
-        logging.warning("Your model does not have a pad token, we will use the ukn token as pad token.")
-        tokenizer.pad_token_id = tokenizer.unk_token_id
+        if "<|padding|>" in tokenizer.get_vocab():
+            # StabilityLM specific fix
+            tokenizer.add_special_tokens({"pad_token": "<|padding|>"})
+        elif tokenizer.unk_token is not None:
+            logging.warning("Model does not have a pad token, we will use the unk token as pad token.")
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+        else:
+            logging.warning("Model does not have a pad token. We will use the eos token as pad token.")
+            tokenizer.pad_token_id = tokenizer.eos_token_id
 
     if int8_quantization:
         from peft import prepare_model_for_int8_training
@@ -213,7 +222,9 @@ def load_model_for_inference(
     ddp = world_size != 1
     if ddp:
         device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-    logging.info(f"Device map: {device_map}")
+
+    if int8_quantization:
+        logging.info(f"Device map: {device_map}")
 
     logging.info(f"Loading model from {weights_path}")
 
@@ -248,8 +259,15 @@ def load_model_for_inference(
         tokenizer.padding_side = "left"
 
     if tokenizer.pad_token_id is None:
-        logging.warning("Model does not have a pad token, we will use the ukn token as pad token.")
-        tokenizer.pad_token_id = tokenizer.unk_token_id
+        if "<|padding|>" in tokenizer.get_vocab():
+            # StableLM specific fix
+            tokenizer.add_special_tokens({"pad_token": "<|padding|>"})
+        elif tokenizer.unk_token is not None:
+            logging.warning("Model does not have a pad token, we will use the unk token as pad token.")
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+        else:
+            logging.warning("Model does not have a pad token. We will use the eos token as pad token.")
+            tokenizer.pad_token_id = tokenizer.eos_token_id
 
     if lora_weights_name_or_path:
         from peft import PeftModel

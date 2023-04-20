@@ -40,7 +40,7 @@ gradient_accumulation_steps: 1
 generation_num_beams: 1
 
 # optimizer settings
-optim: adamw_torch
+optim: adamw_torch_fused
 learning_rate: 0.0003
 weight_decay: 0
 num_train_epochs: 1

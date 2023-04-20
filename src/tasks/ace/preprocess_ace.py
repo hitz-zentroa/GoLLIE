@@ -765,8 +765,8 @@ def process_relation(
         mention_id1 = relation.arg1.mention_id
         mention_id2 = relation.arg2.mention_id
         for i, entities in enumerate(sentence_entities):
-            arg1_in_sent = any([mention_id1 == e.mention_id for e in entities])
-            arg2_in_sent = any([mention_id2 == e.mention_id for e in entities])
+            arg1_in_sent = any(mention_id1 == e.mention_id for e in entities)
+            arg2_in_sent = any(mention_id2 == e.mention_id for e in entities)
             if arg1_in_sent and arg2_in_sent:
                 sentence_relations[i].append(relation)
                 break

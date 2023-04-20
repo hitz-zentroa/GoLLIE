@@ -4,7 +4,7 @@
 {%- endfor %}
 
 # This is the text to analyze
-text = "{{ text }}"
+text = {{ text.__repr__() }}
 
 # The list called result contains the instances for the following events:
 {%- for ann in annotations %}
