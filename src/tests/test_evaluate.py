@@ -1,5 +1,11 @@
 import unittest
 
+import black
+
+
+def to_str(x):
+    return black.format_str(x.__repr__(), mode=black.Mode())
+
 
 class TestEvaluate(unittest.TestCase):
     def test_annotation_list(self):
@@ -18,7 +24,7 @@ class TestEvaluate(unittest.TestCase):
         ]
 
         annotations = AnnotationList.from_output(
-            str(annotations),
+            to_str(annotations),
             task_module="src.tasks.ace.prompts",
             text=text,
             filter_hallucinations=True,
@@ -57,6 +63,38 @@ class TestEvaluate(unittest.TestCase):
         ]
 
         predictions = AnnotationList.from_output(str(predictions), task_module="src.tasks.ace.prompts")
+        filtered_predictions = predictions.filter_hallucinations(text=unlabelled_sentence)
+
+        self.assertListEqual(
+            filtered_predictions,
+            AnnotationList(
+                [
+                    Person("Peter"),
+                    Person("carlos"),
+                    Location("Donosti"),
+                ]
+            ),
+        )
+
+    def test_type_hallucination(self):
+        from src.tasks.ace.prompts import (
+            Location,
+            Person,
+        )
+        from src.tasks.utils_typing import AnnotationList
+
+        unlabelled_sentence = "Peter was born in Donosti. He married Carlos on May 18th."
+        predictions = (
+            "["
+            + "Person('Peter'), "
+            + "Organization('Hitz-zentroa'), "
+            + "Person('carlos'), "
+            + "Location('Tokyo'), "
+            + "Location('Donosti'), "
+            + "ASDF('UE'), ] "
+        )
+
+        predictions = AnnotationList.from_output(predictions, task_module="src.tasks.ace.prompts")
         filtered_predictions = predictions.filter_hallucinations(text=unlabelled_sentence)
 
         self.assertListEqual(

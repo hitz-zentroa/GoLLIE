@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONFIG_DIR="configs/data_configs"
-OUTPUT_DIR="data/processed"
+OUTPUT_DIR="data/processed_black"
 
 python -m src.generate_data \
     --configs \

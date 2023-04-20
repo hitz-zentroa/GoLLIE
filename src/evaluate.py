@@ -132,7 +132,7 @@ def evaluate(
                 if not scorer:
                     scorer = get_class(gold_line["scorer_cls"])()
 
-                gold_labels = AnnotationList.from_gold(str(gold_line["labels"]), task_module=task_module)
+                gold_labels = AnnotationList.from_output(str(gold_line["labels"]), task_module=task_module)
 
                 pred_labels = pred_line["model_prediction"].strip().split("result = ")[-1]
                 pred_labels = AnnotationList.from_output(str(pred_labels), task_module=task_module)

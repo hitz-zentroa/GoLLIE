@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE13B
+#SBATCH --job-name=CoLLIE30B
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE13B.out.txt
-#SBATCH --error=.slurm/CoLLIE13B.err.txt
+#SBATCH --output=.slurm/CoLLIE30B.out.txt
+#SBATCH --error=.slurm/CoLLIE30B.err.txt
 
 source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
@@ -21,7 +21,7 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # cd ../src || exit
 
-# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE13B.sh
+# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE30B.sh
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-13B.yaml
+python3 -m src.run  ${CONFIGS_FOLDER}/CoLLIE-30B.yaml
 
