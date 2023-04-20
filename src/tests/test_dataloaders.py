@@ -13,7 +13,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
-        ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"])
+        sampler=list(ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"]))
 
         # TODO: Implement a better TEST
 
@@ -26,6 +26,19 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
-        RAMSSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"])
+        sampler = list(RAMSSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]))
 
         # TODO: Implement a better TEST
+
+    def test_CoNLL03(self):
+        from src.tasks.conll03.data_loader import CoNLLDatasetLoader, CONLL03Sampler
+        from src.tasks.conll03.prompts import Person,Organization,Location,Miscellaneous
+
+        with open("configs/data_configs/conll03_config.json") as f:
+            config = json.load(f)
+
+        dataloader = CoNLLDatasetLoader("validation")
+
+        sampler = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+
+        

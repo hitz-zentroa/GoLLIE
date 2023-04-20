@@ -1,6 +1,4 @@
-from typing import Tuple, Union
-
-from datasets import load_dataset
+from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
@@ -14,13 +12,153 @@ from src.tasks.label_encoding import rewrite_labels
 from ..utils_data import DatasetLoader, Sampler
 
 
+def get_conll_hf(
+    split: str,
+    include_misc: bool,
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Location, Organization, Person, Miscellaneous]]],
+) -> (List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]):
+    """
+    Get the conll dataset from the huggingface datasets library
+    Args:
+        split (str): The path_or_split to load. Can be one of `train`, `validation` or `test`.
+        include_misc (bool): Whether to include the MISC entity type. Defaults to `True`.
+    Returns:
+        (List[str],List[Union[Location,Organization,Person,Miscellaneous]]): The text and the entities
+    """
+    from datasets import load_dataset
+
+    dataset = load_dataset("conll2003")
+    id2label = {k: v for k, v in enumerate(dataset["train"].features["ner_tags"].feature.names)}
+    dataset_sentences: List[List[str]] = []
+    dataset_entities: List[List[Union[Location, Organization, Person, Miscellaneous]]] = []
+
+    for example in dataset[split]:
+        words = example["tokens"]
+        # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
+        # we convert them to IOB2, so we don't have to deal with this later.
+        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+
+        # Get labeled word spans
+        spans = []
+        for i, label in enumerate(labels):
+            if label == "O":
+                continue
+            elif label.startswith("B-"):
+                spans.append([label[2:], i, i + 1])
+            elif label.startswith("I-"):
+                spans[-1][2] += 1
+            else:
+                raise ValueError(f"Found an unexpected label: {label}")
+
+        # Get entities
+        entities = []
+        for label, start, end in spans:
+            if include_misc or label != "MISC":
+                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+
+        dataset_sentences.append(words)
+        dataset_entities.append(entities)
+
+    return dataset_sentences, dataset_entities
+
+
+def read_tsv(filepath) -> (List[List[str]], List[List[str]]):
+    """
+    READ tsv file in conll format
+    Args:
+        filepath: Path to the file
+    Returns: List of words, List of labels
+    """
+
+    dataset_words: List[List[str]] = []
+    dataset_labels: List[List[str]] = []
+    with open(filepath, "r", encoding="utf-8") as f:
+        words = []
+        labels = []
+        for line in f:
+            line = line.strip()
+            if line.startswith("-DOCSTART-") or line == "" or line == "\n":
+                if words:
+                    dataset_words.append(words)
+                    dataset_labels.append(labels)
+                    words = []
+                    labels = []
+            else:
+                try:
+                    word, label = line.split()
+                except ValueError:
+                    try:
+                        word, label, _ = line.split()
+                    except ValueError:
+                        raise ValueError(f"Cannot path_or_split line: {line}")
+                if word:
+                    words.append(word)
+                    labels.append(label)
+        if words:
+            dataset_words.append(words)
+            dataset_labels.append(labels)
+
+    print(f"Read {len(dataset_words)} sentences from {filepath}")
+
+    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
+
+    return dataset_words, dataset_labels
+
+
+def load_conll_tsv(
+    path: str,
+    include_misc: bool,
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Location, Organization, Person, Miscellaneous]]],
+) -> (List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]):
+    """
+    Load the conll dataset from a tsv file
+    Args:
+        path (str): The path to the tsv file
+        include_misc (bool): Whether to include the MISC entity type. Defaults to `True`.
+    Returns:
+        (List[str],List[Union[Location,Organization,Person,Miscellaneous]]): The text and the entities
+    """
+    dataset_sentences: List[List[str]] = []
+    dataset_entities: List[List[Union[Location, Organization, Person, Miscellaneous]]] = []
+
+    dataset_words, dataset_labels = read_tsv(path)
+
+    for words, labels in zip(dataset_words, dataset_labels):
+        # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
+        # we convert them to IOB2, so we don't have to deal with this later.
+        labels = rewrite_labels(labels=labels, encoding="iob2")
+        # Get labeled word spans
+        spans = []
+        for i, label in enumerate(labels):
+            if label == "O":
+                continue
+            elif label.startswith("B-"):
+                spans.append([label[2:], i, i + 1])
+            elif label.startswith("I-"):
+                spans[-1][2] += 1
+            else:
+                raise ValueError(f"Found an unexpected label: {label}")
+
+        # Get entities
+        entities = []
+        for label, start, end in spans:
+            if include_misc or label != "MISC":
+                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+
+        dataset_sentences.append(words)
+        dataset_entities.append(entities)
+
+    return dataset_sentences, dataset_entities
+
+
 class CoNLLDatasetLoader(DatasetLoader):
     """
     A `DatasetLoader` for the ConLL03 dataset.
 
     Args:
-        split (`str`):
-            The split to load. Can be one of `train`, `validation` or `test`.
+        path_or_split (`str`):
+            The split to load. Can be one of `train`, `validation` or `test`. Or the path to a
+            tsv file in conll format.
         include_misc (`str`, optional):
             Whether to include the MISC entity type. Defaults to `True`.
 
@@ -36,46 +174,34 @@ class CoNLLDatasetLoader(DatasetLoader):
         "MISC": Miscellaneous,
     }
 
-    def __init__(self, split: str, include_misc: bool = True, **kwargs) -> None:
+    def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
         self.elements = {}
 
-        assert split in [
+        assert path_or_split in [
             "train",
             "validation",
             "test",
-        ], f"Split {split} not found, should be one of train, validation or test."
+        ], f"Split {path_or_split} not found, should be one of train, validation or test."
 
-        dataset = load_dataset("conll2003")
-        id2label = {v: k for k, v in dataset["train"].features["ner_tags"].feature.names.items()}
-        for example in dataset[split]:
-            words = example["tokens"]
-            # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
-            # we convert them to IOB2, so we don't have to deal with this later.
-            labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        if path_or_split in ["train", "validation", "test"]:
+            dataset_words, dataset_entities = get_conll_hf(
+                split=path_or_split,
+                include_misc=include_misc,
+                ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
+            )
+        else:
+            dataset_words, dataset_entities = load_conll_tsv(
+                path=path_or_split,
+                include_misc=include_misc,
+                ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
+            )
 
-            # Get labeled word spans
-            spans = []
-            for i, label in enumerate(labels):
-                if label == "O":
-                    continue
-                elif label.startswith("B-"):
-                    spans.append((label[2:], i, i + 1))
-                elif label.startswith("I-"):
-                    spans[-1][2] += 1
-                else:
-                    raise ValueError(f"Found an unexpected label: {label}")
-
-            # Get entities
-            entities = []
-            for label, start, end in spans:
-                if include_misc or label != "MISC":
-                    entities.append(self.ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
-
-            self.elements[example["id"]] = {
-                "id": example["id"],
-                "doc_id": example["id"],
+        for id, (words, entities) in enumerate(zip(dataset_words, dataset_entities)):
+            self.elements[id] = {
+                "id": id,
+                "doc_id": id,
                 "text": " ".join(words),
-                "labels": entities,
+                "entities": entities,
             }
 
 
@@ -90,8 +216,8 @@ class CONLL03Sampler(Sampler):
             The task to sample. It must be one of the following: NER, VER, RE, EE.
             Defaults to `None`.
         split (`str`, optional):
-            The split to sample. It must be one of the following: "train", "dev" or
-            "test". Depending on the split the sampling strategy differs. Defaults to
+            The path_or_split to sample. It must be one of the following: "train", "dev" or
+            "test". Depending on the path_or_split the sampling strategy differs. Defaults to
             `"train"`.
         parallel_instances (`Union[int, Tuple[int, int]]`, optional):
             The number of sentences sampled in parallel. Options:
