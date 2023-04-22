@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
+
 CONFIG_DIR="configs/data_configs"
 OUTPUT_DIR="data/processed"
 
