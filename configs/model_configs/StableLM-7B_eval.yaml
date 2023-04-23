@@ -27,7 +27,7 @@ save_total_limit: 999
 # evaluation
 do_train: false
 do_eval: false
-do_predict: false
+do_predict: true
 evaluation_strategy: "steps"
 eval_steps: 100
 eval_delay: 0

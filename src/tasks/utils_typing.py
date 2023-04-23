@@ -36,6 +36,21 @@ class HallucinatedType:
     def __init__(self, *args, **kwargs) -> None:
         pass
 
+    def exists_in(self, text: str) -> bool:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
+        return True
+
 
 @dataclass
 class Entity:
