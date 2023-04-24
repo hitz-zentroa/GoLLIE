@@ -84,6 +84,8 @@ def main(args):
                             ids = elem["ids"]
                             progress.update(task, advance=len(ids))
 
+                logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
+
         if "dev_file" in config:
             dataloader = dataloader_cls(config["dev_file"], **config)
             for task in config["tasks"]:
@@ -116,6 +118,8 @@ def main(args):
                         if ids != elem["ids"]:
                             ids = elem["ids"]
                             progress.update(task, advance=len(ids))
+
+                logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
 
         if "test_file" in config:
             dataloader = dataloader_cls(config["test_file"], **config)
@@ -150,7 +154,10 @@ def main(args):
                             ids = elem["ids"]
                             progress.update(task, advance=len(ids))
 
+                logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
+
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.INFO)
     args = parser.parse_args()
     main(args)

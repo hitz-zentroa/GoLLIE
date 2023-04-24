@@ -199,7 +199,7 @@ class CoNLLDatasetLoader(DatasetLoader):
             }
 
 
-class CONLL03Sampler(Sampler):
+class CoNLL03Sampler(Sampler):
     """
     A data `Sampler` for the CONLL03 dataset.
 
