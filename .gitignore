@@ -1,5 +1,6 @@
 .slurm/*
 .vscode/*
+.ignore/
 data/*
 wandb/*
 assets/plots/*
