@@ -189,6 +189,11 @@ class CollieTrainer(Seq2SeqTrainer):
         ),
         preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
     ):
+        if callbacks is None:
+            callbacks = [RotateDatasetCallback()]
+        else:
+            callbacks.append(RotateDatasetCallback())
+
         super().__init__(
             model=model,
             args=args,
@@ -324,3 +329,5 @@ class RotateDatasetCallback(TrainerCallback):
     def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
         if "train_dataloader" in kwargs:
             kwargs["train_dataloader"].dataset.rotate_split()
+        else:
+            logging.warning("No train_dataloader in kwargs. Skipping rotate_split()")

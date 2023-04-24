@@ -540,6 +540,7 @@ class TestCollieDataset(unittest.TestCase):
                 print(json.dumps({"text": text1}, ensure_ascii=False), file=f)
             with open(os.path.join(tmpdirname, "tmp.ee.train.42.jsonl"), "w", encoding="utf8") as f:
                 print(json.dumps({"text": text2}, ensure_ascii=False), file=f)
+                print(json.dumps({"text": text1}, ensure_ascii=False), file=f)
 
             dataset1 = CollieDataset(
                 tokenizer=tokenizer,
@@ -559,6 +560,8 @@ class TestCollieDataset(unittest.TestCase):
 
         train_dataset = ConcatDataset([dataset1, dataset3])
 
+        self.assertEqual(len(train_dataset), 3)
+
         model_input = train_dataset[0]["input_ids"]
         labels = train_dataset[0]["labels"]
         self.assertEqual(model_input, labels)
@@ -580,6 +583,22 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt1 + result1,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt2 + result2,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt3 + result3,
+        )
+
+        model_input = train_dataset[2]["input_ids"]
+        labels = train_dataset[2]["labels"]
+        self.assertEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt3 + result3,
         )
 
@@ -589,6 +608,7 @@ class TestCollieDataset(unittest.TestCase):
         train_dataset.rotate_split()
         train_dataset.rotate_split()
 
+        self.assertEqual(len(train_dataset), 3)
         model_input = train_dataset[0]["input_ids"]
         labels = train_dataset[0]["labels"]
         self.assertEqual(model_input, labels)
@@ -600,12 +620,30 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt1 + result1,
         )
+
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
             prompt3 + result3,
         )
+
         model_input = train_dataset[1]["input_ids"]
         labels = train_dataset[1]["labels"]
+        self.assertEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt1 + result1,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt2 + result2,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt3 + result3,
+        )
+
+        model_input = train_dataset[2]["input_ids"]
+        labels = train_dataset[2]["labels"]
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
