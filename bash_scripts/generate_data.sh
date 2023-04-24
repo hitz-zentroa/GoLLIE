@@ -10,5 +10,6 @@ python -m src.generate_data \
         ${CONFIG_DIR}/ace_config.json \
         ${CONFIG_DIR}/rams_config.json \
         ${CONFIG_DIR}/conll03_config.json \
+        ${CONFIG_DIR}/europarl_config.json \
     --output ${OUTPUT_DIR} \
     --overwrite_output_dir
