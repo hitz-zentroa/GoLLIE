@@ -3,6 +3,7 @@ import json
 import logging
 import math
 import os
+import random
 from functools import partial
 from itertools import chain
 from multiprocessing import Pool
@@ -315,11 +316,22 @@ class CollieDataset(Dataset):
                     self.dataset_keys.append(int(epoch))
 
                 # Truncate datasers to ensure all datasets have the same length
-                min_length = min([len(x) for x in self.dataset_dict.values()])
+                # min_length = min([len(x) for x in self.dataset_dict.values()])
+                # for key in self.dataset_dict.keys():
+                #    if len(self.dataset_dict[key]) > min_length:
+                #        logging.warning(f"Truncating dataset {key} from {len(self.dataset_dict[key])} to {min_length}")
+                #    self.dataset_dict[key] = self.dataset_dict[key][:min_length]
+
+                # Oversample datasets to ensure all datasets have the same length
+                max_length = max([len(x) for x in self.dataset_dict.values()])
                 for key in self.dataset_dict.keys():
-                    if len(self.dataset_dict[key]) > min_length:
-                        logging.warning(f"Truncating dataset {key} from {len(self.dataset_dict[key])} to {min_length}")
-                    self.dataset_dict[key] = self.dataset_dict[key][:min_length]
+                    if len(self.dataset_dict[key]) < max_length:
+                        logging.warning(
+                            f"Oversampling dataset {key} from {len(self.dataset_dict[key])} to {max_length}"
+                        )
+                        num_samples = max_length - len(self.dataset_dict[key])
+                        random_samples = random.choices(self.dataset_dict[key], k=num_samples)
+                        self.dataset_dict[key].extend(random_samples)
 
                 self.current_dataset_key = self.dataset_keys[0]
 
