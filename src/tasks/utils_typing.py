@@ -374,7 +374,7 @@ class AnnotationList(list):
                 elem = elem if elem.exists_in(text) else None
             elif any(isinstance(elem, _type) for _type in self.COMPLEX_TYPES):
                 elem = elem.exists_in(text)
-            elif isinstance(elem, HallucinatedType):
+            elif isinstance(elem, HallucinatedType) or isinstance(elem, type):
                 continue
             else:
                 print(elem)
@@ -415,32 +415,6 @@ class AnnotationList(list):
             except Exception:
                 _elems = []
                 reading = False
-
-        # _text = ann
-        # # Remove list expression brackets
-        # ann = ann.strip().lstrip("[").rstrip("]")
-        # # Fix if commas are missing and set the SEP token
-        # ann = ann.replace(")\n ", "),\n").replace("), ", "),\n").replace("),\n", ")[SEP]")
-        # # Split elements
-        # ann = ann.replace("\n", "")
-        # elems = [elem.strip() for elem in ann.split("[SEP]") if elem.strip()]
-
-        # # Remove malformed elements
-        # _elems = []
-        # for elem in elems:
-        #     try:
-        #         elem = eval(elem)
-        #         # IDK sometimes there are tuples
-        #         if isinstance(elem, tuple):
-        #             elem = elem[0]
-        #         # If it is an empty prediction skip
-        #         if isinstance(elem, type):
-        #             continue
-        #         _elems.append(elem)
-        #     except (SyntaxError, TypeError):
-        #         logging.warning(f"Found an incorrectly formated prediction: {elem}")
-        #     except NameError as e:
-        #         logging.warning(f"An hallucinated predicted guideline found: {elem} | {e}")
 
         self = cls(_elems)
 
