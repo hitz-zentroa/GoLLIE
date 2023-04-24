@@ -10,6 +10,8 @@ class TestDataLoaders(unittest.TestCase):
 
         with open("configs/data_configs/ace_config.json") as f:
             config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
@@ -23,6 +25,8 @@ class TestDataLoaders(unittest.TestCase):
 
         with open("configs/data_configs/rams_config.json") as f:
             config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
@@ -36,6 +40,8 @@ class TestDataLoaders(unittest.TestCase):
 
         with open("configs/data_configs/conll03_config.json") as f:
             config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         config["task_configuration"] = {
             "NER": {
