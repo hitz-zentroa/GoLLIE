@@ -13,7 +13,7 @@ from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset
 from src.evaluate import evaluate
 from src.model.load_model import load_model_for_inference, load_model_for_training
-from src.trainer import CollieTrainer
+from src.trainer import CollieTrainer, ConcatDataset
 from transformers import (
     DataCollatorForSeq2Seq,
     HfArgumentParser,
@@ -81,7 +81,7 @@ def train_collie(
         )
         training_datasets.append(train_dataset)
 
-    train_dataset = torch.utils.data.ConcatDataset(training_datasets)
+    train_dataset = ConcatDataset(training_datasets)
 
     dev_datasets = DatasetDict()
     for dev_task in data_args.validation_tasks:

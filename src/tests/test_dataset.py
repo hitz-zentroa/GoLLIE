@@ -1,5 +1,6 @@
 import json
 import os
+import random
 import tempfile
 import unittest
 from typing import Tuple
@@ -13,6 +14,7 @@ def get_dataset(
     is_encoder_decoder: bool,
     inference: bool,
     ignore_prompt_loss: bool,
+    num_epochs: int = -1,
 ) -> Tuple[CollieDataset, str, str]:
     text = """@dataclass
 class EnergyAndInfrastructureEvent:
@@ -60,18 +62,36 @@ result = ["""
         project_name=["Pangean Reunification Facility"]
     ),
 ]"""
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        with open(os.path.join(tmpdirname, "test.jsonl"), "w", encoding="utf8") as f:
-            print(json.dumps({"text": text}, ensure_ascii=False), file=f)
+    if num_epochs == -1:
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with open(os.path.join(tmpdirname, "tmp.ee.train.jsonl"), "w", encoding="utf8") as f:
+                print(json.dumps({"text": text}, ensure_ascii=False), file=f)
 
-        dataset = CollieDataset(
-            tokenizer=tokenizer,
-            dataset_path=os.path.join(tmpdirname, "test.jsonl"),
-            is_encoder_decoder=is_encoder_decoder,
-            max_length=2048,
-            inference=inference,
-            ignore_prompt_loss=ignore_prompt_loss,
-        )
+            dataset = CollieDataset(
+                tokenizer=tokenizer,
+                dataset_path=os.path.join(tmpdirname, "tmp.ee.train.jsonl"),
+                is_encoder_decoder=is_encoder_decoder,
+                max_length=2048,
+                inference=inference,
+                ignore_prompt_loss=ignore_prompt_loss,
+            )
+
+    else:
+        # List of random integers with len = num_epochs
+        random_seeds = random.sample(range(0, 100000), num_epochs)
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            for epoch in random_seeds:
+                with open(os.path.join(tmpdirname, f"tmp.ee.train.{epoch}.jsonl"), "w", encoding="utf8") as f:
+                    print(json.dumps({"text": text}, ensure_ascii=False), file=f)
+
+            dataset = CollieDataset(
+                tokenizer=tokenizer,
+                dataset_path=os.path.join(tmpdirname, "tmp.ee.train.jsonl"),
+                is_encoder_decoder=is_encoder_decoder,
+                max_length=2048,
+                inference=inference,
+                ignore_prompt_loss=ignore_prompt_loss,
+            )
 
     return dataset, prompt, result
 
@@ -95,7 +115,7 @@ class TestCollieDataset(unittest.TestCase):
         if simple_sentence_ids["input_ids"][-1] != tokenizer.eos_token_id:
             simple_sentence_ids["input_ids"].append(tokenizer.eos_token_id)
             simple_sentence_ids["attention_mask"].append(1)
-            print(simple_sentence_ids)
+            # print(simple_sentence_ids)
 
         self.assertEqual(
             tokenizer.decode(simple_sentence_ids.input_ids, skip_special_tokens=True),
@@ -401,4 +421,193 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(
             tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
             result.strip(),
+        )
+
+    def test_dataset_rotation(self):
+        from src.trainer import ConcatDataset
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(
+            (
+                "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+                if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+                else "EleutherAI/gpt-neo-125m"
+            ),
+            add_eos_token=True,
+        )
+
+        tokenizer.padding_side = "left"
+
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
+
+        text1 = """@dataclass
+        class EnergyAndInfrastructureEvent:
+            \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
+            meeting_attendees: Union[List[str], None] # Persons or organizations that attended the meeting.
+            meeting_location: Union[List[str], None] # Location where the meeting happened.
+            meeting_topic: Union[List[str], None] # Topic discussed on the meeting
+            project_location: Union[List[str], None] # Location of the project
+            project_name: Union[List[str], None] # Name of the project
+
+        # This is the sentence to analyze
+        sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
+
+        # The following list contains the events instances that happens in the sentence defined above
+        result = [
+            EnergyAndInfrastructureEvent(
+                meeting_attendees=["Chinese", "Rongovian"],
+                meeting_location=["Berlin"],
+                meeting_topic=["Pangean Reunification Facility"],
+                project_location=["Rongovia"],
+                project_name=["Pangean Reunification Facility"]
+            ),
+        ]"""
+
+        prompt1 = """@dataclass
+        class EnergyAndInfrastructureEvent:
+            \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
+            meeting_attendees: Union[List[str], None] # Persons or organizations that attended the meeting.
+            meeting_location: Union[List[str], None] # Location where the meeting happened.
+            meeting_topic: Union[List[str], None] # Topic discussed on the meeting
+            project_location: Union[List[str], None] # Location of the project
+            project_name: Union[List[str], None] # Name of the project
+
+        # This is the sentence to analyze
+        sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
+
+        # The following list contains the events instances that happens in the sentence defined above
+        result = ["""
+        result1 = """
+            EnergyAndInfrastructureEvent(
+                meeting_attendees=["Chinese", "Rongovian"],
+                meeting_location=["Berlin"],
+                meeting_topic=["Pangean Reunification Facility"],
+                project_location=["Rongovia"],
+                project_name=["Pangean Reunification Facility"]
+            ),
+        ]"""
+
+        text2 = """@dataclass
+        class EnergyAndInfrastructureEvent:
+            \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
+            meeting_attendees: Union[List[str], None] # Persons or organizations that attended the meeting.
+            meeting_location: Union[List[str], None] # Location where the meeting happened.
+            meeting_topic: Union[List[str], None] # Topic discussed on the meeting
+            project_location: Union[List[str], None] # Location of the project
+            project_name: Union[List[str], None] # Name of the project
+
+        # This is the sentence to analyze
+        sentence = "The Spanish and French delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
+
+        # The following list contains the events instances that happens in the sentence defined above
+        result = [
+            EnergyAndInfrastructureEvent(
+                meeting_attendees=["Spanish", "French"],
+                meeting_location=["Berlin"],
+                meeting_topic=["Pangean Reunification Facility"],
+                project_location=["Rongovia"],
+                project_name=["Pangean Reunification Facility"]
+            ),
+        ]"""
+
+        prompt2 = """@dataclass
+        class EnergyAndInfrastructureEvent:
+            \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
+            meeting_attendees: Union[List[str], None] # Persons or organizations that attended the meeting.
+            meeting_location: Union[List[str], None] # Location where the meeting happened.
+            meeting_topic: Union[List[str], None] # Topic discussed on the meeting
+            project_location: Union[List[str], None] # Location of the project
+            project_name: Union[List[str], None] # Name of the project
+
+        # This is the sentence to analyze
+        sentence = "The Spanish and French delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
+
+        # The following list contains the events instances that happens in the sentence defined above
+        result = ["""
+        result2 = """
+            EnergyAndInfrastructureEvent(
+                meeting_attendees=["Spanish", "French"],
+                meeting_location=["Berlin"],
+                meeting_topic=["Pangean Reunification Facility"],
+                project_location=["Rongovia"],
+                project_name=["Pangean Reunification Facility"]
+            ),
+        ]"""
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            with open(os.path.join(tmpdirname, "tmp.ee.train.8.jsonl"), "w", encoding="utf8") as f:
+                print(json.dumps({"text": text1}, ensure_ascii=False), file=f)
+            with open(os.path.join(tmpdirname, "tmp.ee.train.42.jsonl"), "w", encoding="utf8") as f:
+                print(json.dumps({"text": text2}, ensure_ascii=False), file=f)
+
+            dataset1 = CollieDataset(
+                tokenizer=tokenizer,
+                dataset_path=os.path.join(tmpdirname, "tmp.ee.train.jsonl"),
+                is_encoder_decoder=False,
+                max_length=2048,
+                inference=False,
+                ignore_prompt_loss=False,
+            )
+
+        dataset3, prompt3, result3 = get_dataset(
+            tokenizer=tokenizer,
+            is_encoder_decoder=False,
+            inference=False,
+            ignore_prompt_loss=False,
+        )
+
+        train_dataset = ConcatDataset([dataset1, dataset3])
+
+        model_input = train_dataset[0]["input_ids"]
+        labels = train_dataset[0]["labels"]
+        self.assertEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt1 + result1,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt2 + result2,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt3 + result3,
+        )
+
+        model_input = train_dataset[1]["input_ids"]
+        labels = train_dataset[1]["labels"]
+        self.assertEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt3 + result3,
+        )
+
+        train_dataset.rotate_split()
+        train_dataset.rotate_split()
+        train_dataset.rotate_split()
+        train_dataset.rotate_split()
+        train_dataset.rotate_split()
+
+        model_input = train_dataset[0]["input_ids"]
+        labels = train_dataset[0]["labels"]
+        self.assertEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt2 + result2,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt1 + result1,
+        )
+        self.assertNotEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt3 + result3,
+        )
+        model_input = train_dataset[1]["input_ids"]
+        labels = train_dataset[1]["labels"]
+        self.assertEqual(model_input, labels)
+        self.assertEqual(
+            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+            prompt3 + result3,
         )

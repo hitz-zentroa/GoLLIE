@@ -1,3 +1,5 @@
+import bisect
+import logging
 import os
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
@@ -5,8 +7,18 @@ import torch
 import torch.nn as nn
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from torch.utils.data import Dataset
+from torch.utils.data.dataset import Iterable, IterableDataset, T_co
 
-from transformers import DataCollator, PreTrainedModel, PreTrainedTokenizerBase, Seq2SeqTrainer, TrainingArguments
+from src.dataset.dataset import CollieDataset
+from transformers import (
+    DataCollator,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    Seq2SeqTrainer,
+    TrainerControl,
+    TrainerState,
+    TrainingArguments,
+)
 from transformers.modeling_utils import unwrap_model
 from transformers.trainer import TRAINING_ARGS_NAME, logger
 from transformers.trainer_callback import TrainerCallback
@@ -252,3 +264,63 @@ class CollieTrainer(Seq2SeqTrainer):
 
         # Good practice: save your training arguments together with the trained model
         torch.save(self.args, os.path.join(output_dir, TRAINING_ARGS_NAME))
+
+
+class ConcatDataset(Dataset[T_co]):
+    r"""Dataset as a concatenation of multiple datasets.
+
+    This class is useful to assemble different existing datasets.
+
+    Args:
+        datasets (sequence): List of datasets to be concatenated
+    """
+    datasets: List[CollieDataset]
+    cumulative_sizes: List[int]
+
+    @staticmethod
+    def cumsum(sequence):
+        r, s = [], 0
+        for e in sequence:
+            l = len(e)
+            r.append(l + s)
+            s += l
+        return r
+
+    def __init__(self, datasets: Iterable[CollieDataset]) -> None:
+        super().__init__()
+        self.datasets = list(datasets)
+        assert len(self.datasets) > 0, "datasets should not be an empty iterable"  # type: ignore[arg-type]
+        for d in self.datasets:
+            assert not isinstance(d, IterableDataset), "ConcatDataset does not support IterableDataset"
+        self.cumulative_sizes = self.cumsum(self.datasets)
+
+    def __len__(self):
+        return self.cumulative_sizes[-1]
+
+    def __getitem__(self, idx):
+        if idx < 0:
+            if -idx > len(self):
+                raise ValueError("absolute value of index should not exceed dataset length")
+            idx = len(self) + idx
+        dataset_idx = bisect.bisect_right(self.cumulative_sizes, idx)
+        if dataset_idx == 0:
+            sample_idx = idx
+        else:
+            sample_idx = idx - self.cumulative_sizes[dataset_idx - 1]
+        return self.datasets[dataset_idx][sample_idx]
+
+    @property
+    def cummulative_sizes(self):
+        logging.warning("cummulative_sizes attribute is renamed to cumulative_sizes", DeprecationWarning, stacklevel=2)
+        return self.cumulative_sizes
+
+    def rotate_split(self):
+        for x in self.datasets:
+            x.rotate_split()
+        self.cumulative_sizes = self.cumsum(self.datasets)
+
+
+class RotateDatasetCallback(TrainerCallback):
+    def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if "train_dataloader" in kwargs:
+            kwargs["train_dataloader"].dataset.rotate_split()

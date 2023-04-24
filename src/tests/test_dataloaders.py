@@ -31,7 +31,7 @@ class TestDataLoaders(unittest.TestCase):
         # TODO: Implement a better TEST
 
     def test_CoNLL03(self):
-        from src.tasks.conll03.data_loader import CONLL03Sampler, CoNLLDatasetLoader
+        from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader
         from src.tasks.conll03.prompts import Miscellaneous, Organization, Person
 
         with open("configs/data_configs/conll03_config.json") as f:
@@ -49,7 +49,7 @@ class TestDataLoaders(unittest.TestCase):
         config["include_misc"] = True
         dataloader = CoNLLDatasetLoader("validation", **config)
 
-        _ = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        _ = list(CoNLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
 
         self.assertDictEqual(
             {
@@ -82,7 +82,7 @@ class TestDataLoaders(unittest.TestCase):
         config["include_misc"] = False
         dataloader = CoNLLDatasetLoader("validation", **config)
 
-        _ = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        _ = list(CoNLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
 
         self.assertDictEqual(
             {

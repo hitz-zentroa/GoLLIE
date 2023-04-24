@@ -1,3 +1,4 @@
+import glob
 import json
 import logging
 import math
@@ -5,7 +6,7 @@ import os
 from functools import partial
 from itertools import chain
 from multiprocessing import Pool
-from typing import Iterator, List, Sized
+from typing import Dict, Iterator, List, Sized
 
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from torch.utils.data import Dataset
@@ -271,7 +272,90 @@ class CollieDataset(Dataset):
         ignore_prompt_loss: bool = False,
         num_workers: int = min(os.cpu_count(), 16),
     ):
-        self.dataset_name = os.path.splitext(os.path.basename(dataset_path))[0]
+        self.is_encoder_decoder = is_encoder_decoder
+        self.max_length = max_length
+        self.inference = inference
+        self.ignore_prompt_loss = ignore_prompt_loss
+
+        try:
+            self.dataset_name, self.task_name, self.split, extension = os.path.basename(dataset_path).split(".")
+        except ValueError:
+            raise ValueError(
+                f"Something is wrong with the dataset path {dataset_path}. Please check it and ensure "
+                "it follows the format `dataset_name.task_name.split.jsonl`"
+            )
+
+        # Find pre-computed epoch datasets for training
+        self.dataset_dict: Dict[int, List[BatchEncoding]] = {}
+        self.dataset_keys: List[int] = []
+        self.current_dataset_key: int = 0
+
+        if self.split == "train":
+            epoch_datasets = glob.glob(
+                os.path.join(
+                    os.path.dirname(dataset_path), f"{self.dataset_name}.{self.task_name}.{self.split}.*.jsonl"
+                )
+            )
+            if epoch_datasets:
+                epoch_datasets.sort(key=lambda x: int(x.split(".")[-2]))
+                logging.info(f"Found {len(epoch_datasets)} pre-computed epoch datasets.")
+                for dataset in epoch_datasets:
+                    try:
+                        _, _, _, epoch, _ = os.path.basename(dataset).split(".")
+                    except ValueError:
+                        logging.warning(f"Error loading pre-computed epoch {dataset} . Skipping...")
+                        continue
+
+                    self.dataset_dict[int(epoch)] = self.compute_tokenized_examples(
+                        dataset_path=dataset,
+                        num_workers=num_workers,
+                        tokenizer=tokenizer,
+                    )
+
+                    self.dataset_keys.append(int(epoch))
+
+                # Truncate datasers to ensure all datasets have the same length
+                min_length = min([len(x) for x in self.dataset_dict.values()])
+                for key in self.dataset_dict.keys():
+                    if len(self.dataset_dict[key]) > min_length:
+                        logging.warning(f"Truncating dataset {key} from {len(self.dataset_dict[key])} to {min_length}")
+                    self.dataset_dict[key] = self.dataset_dict[key][:min_length]
+
+                self.current_dataset_key = self.dataset_keys[0]
+
+        if len(self.dataset_dict) == 0:
+            self.dataset_dict[0] = self.compute_tokenized_examples(
+                dataset_path=dataset_path,
+                num_workers=num_workers,
+                tokenizer=tokenizer,
+            )
+            self.dataset_keys.append(0)
+            self.current_dataset_key = self.dataset_keys[0]
+
+        logging.info(f"Loaded {[len(x) for x in self.dataset_dict.values()]} examples from {dataset_path}")
+
+    def compute_tokenized_examples(
+        self,
+        dataset_path,
+        num_workers,
+        tokenizer,
+    ) -> List[BatchEncoding]:
+        """
+        Compute the tokenized examples.
+
+        Args:
+            dataset_path (`str`):
+                The path to the jsonl file containing the dataset.
+            num_workers (`int`):
+                The number of workers to use for tokenization.
+            tokenizer (`PreTrainedTokenizerBase`):
+                The tokenizer to use.
+
+        Returns:
+            `List[BatchEncoding]`:
+                List of BatchEncoding with the prepared data.
+
+        """
 
         with open(dataset_path, "r", encoding="utf8") as f:
             examples = f.readlines()
@@ -279,13 +363,13 @@ class CollieDataset(Dataset):
         examples = [json.loads(example.strip())["text"] for example in examples]
 
         if num_workers <= 1:
-            self.tokenized_examples = batch_tokenization(
+            return batch_tokenization(
                 tokenizer=tokenizer,
-                dataset_name=self.dataset_name,
-                is_encoder_decoder=is_encoder_decoder,
-                max_length=max_length,
-                inference=inference,
-                ignore_prompt_loss=ignore_prompt_loss,
+                dataset_name=".".join([self.dataset_name, self.task_name, self.split]),
+                is_encoder_decoder=self.is_encoder_decoder,
+                max_length=self.max_length,
+                inference=self.inference,
+                ignore_prompt_loss=self.ignore_prompt_loss,
                 examples=examples,
                 process_no=0,
             )
@@ -293,23 +377,36 @@ class CollieDataset(Dataset):
             tokenizer_fn = partial(
                 batch_tokenization,
                 tokenizer,
-                self.dataset_name,
-                is_encoder_decoder,
-                max_length,
-                inference,
-                ignore_prompt_loss,
+                ".".join([self.dataset_name, self.task_name, self.split]),
+                self.is_encoder_decoder,
+                self.max_length,
+                self.inference,
+                self.ignore_prompt_loss,
             )
             with Pool(num_workers) as p:
-                self.tokenized_examples = p.starmap(
+                tokenized_examples = p.starmap(
                     tokenizer_fn,
                     zip(batch(examples, num_workers), range(num_workers)),
                 )
-                self.tokenized_examples = list(chain.from_iterable(self.tokenized_examples))
 
-        logging.info(f"Loaded {len(self.tokenized_examples)} examples from {self.dataset_name}")
+            return list(chain.from_iterable(tokenized_examples))
 
     def __len__(self) -> int:
-        return len(self.tokenized_examples)
+        return len(self.dataset_dict[self.current_dataset_key])
 
     def __getitem__(self, idx) -> List[BatchEncoding]:
-        return self.tokenized_examples[idx].copy()
+        return self.dataset_dict[self.current_dataset_key][idx].copy()
+
+    def rotate_split(self):
+        """
+        Rotate the current dataset to the next one.
+        """
+        self.current_dataset_key = self.dataset_keys[
+            (self.dataset_keys.index(self.current_dataset_key) + 1) % len(self.dataset_keys)
+        ]
+
+        if len(self.dataset_dict) > 1:
+            logging.info(
+                f' Dataset {".".join([self.dataset_name, self.task_name, self.split])} rotated to split'
+                f" {self.current_dataset_key}"
+            )
