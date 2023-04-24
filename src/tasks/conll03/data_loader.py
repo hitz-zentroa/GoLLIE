@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
+    ENTITY_DEFINITIONS_woMISC,
     Location,
     Miscellaneous,
     Organization,
@@ -167,14 +168,24 @@ class CoNLLDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-    ENTITY_TO_CLASS_MAPPING = {
-        "LOC": Location,
-        "ORG": Organization,
-        "PER": Person,
-        "MISC": Miscellaneous,
-    }
+    ENTITY_TO_CLASS_MAPPING = None
 
     def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
+        self.ENTITY_TO_CLASS_MAPPING = (
+            {
+                "LOC": Location,
+                "ORG": Organization,
+                "PER": Person,
+                "MISC": Miscellaneous,
+            }
+            if include_misc
+            else {
+                "LOC": Location,
+                "ORG": Organization,
+                "PER": Person,
+            }
+        )
+
         self.elements = {}
 
         if path_or_split in ["train", "validation", "test"]:
@@ -262,7 +273,7 @@ class CoNLL03Sampler(Sampler):
         ], f"CoNLL03 only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
-            "NER": (ENTITY_DEFINITIONS, "entities"),
+            "NER": (ENTITY_DEFINITIONS if kwargs["include_misc"] else ENTITY_DEFINITIONS_woMISC, "entities"),
         }[task]
 
         super().__init__(
