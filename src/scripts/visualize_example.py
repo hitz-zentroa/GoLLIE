@@ -27,6 +27,7 @@ def main(args):
     os.system(f"black {output_path}")
     os.system(f"ruff check {output_path} --fix")
 
+
 if __name__ == "__main__":
     parser = ArgumentParser("Visualize examples")
 
