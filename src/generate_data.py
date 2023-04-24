@@ -7,31 +7,6 @@ from typing import Type
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 
 
-parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
-
-parser.add_argument(
-    "-c",
-    "--configs",
-    nargs="+",
-    dest="configs",
-    type=str,
-    help="The list of configuration files.",
-)
-parser.add_argument(
-    "-o",
-    "--output",
-    type=str,
-    dest="output_dir",
-    default="data/processed",
-    help="Output directory where files will be saved.",
-)
-parser.add_argument(
-    "--overwrite_output_dir",
-    action="store_true",
-    help="Whether to overwrite the output dir.",
-)
-
-
 def get_class(class_path: str) -> Type:
     components = class_path.split(".")
     mod = __import__(components[0])
@@ -166,5 +141,29 @@ def main(args):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
+    parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
+
+    parser.add_argument(
+        "-c",
+        "--configs",
+        nargs="+",
+        dest="configs",
+        type=str,
+        help="The list of configuration files.",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=str,
+        dest="output_dir",
+        default="data/processed",
+        help="Output directory where files will be saved.",
+    )
+    parser.add_argument(
+        "--overwrite_output_dir",
+        action="store_true",
+        help="Whether to overwrite the output dir.",
+    )
+
     args = parser.parse_args()
     main(args)

@@ -1,6 +1,7 @@
 import inspect
 import math
 import random
+import re
 from typing import Any, Dict, List, Tuple, Type, Union
 
 import black
@@ -92,6 +93,7 @@ class Sampler:
         scorer: str = None,
         task_definitions: List[Type] = None,
         task_target: str = "labels",
+        remove_guidelines: bool = False,
         **kwargs,
     ) -> None:
         self.loader = dataset_loader
@@ -126,6 +128,9 @@ class Sampler:
         self.scorer_cls = scorer
 
         self._black_mode = black.Mode()
+        self.remove_guidelines = remove_guidelines
+        self._remove_guidelines_re = re.compile(r'"""(.+\n?)*"""')
+        self._remove_comments_re = re.compile(r"#.+?\n")
 
     def _sample(self, instances):
         if self.sample_only_gold_guidelines:
@@ -141,6 +146,11 @@ class Sampler:
                 _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
+                _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                if self.remove_guidelines:
+                    _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                    _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
                 yield {
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
@@ -148,7 +158,7 @@ class Sampler:
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
                         self.template.render(
-                            guidelines=[inspect.getsource(definition) for definition in _guidelines],
+                            guidelines=_guidelines,
                             text=_text,
                             annotations=_ann,
                         ),
@@ -183,6 +193,12 @@ class Sampler:
             ]
             _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
             _text = " ".join([inst["text"] for inst in instances]).strip()
+
+            _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+            if self.remove_guidelines:
+                _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
             yield {
                 "ids": [inst["id"] for inst in instances],
                 "task_id": f"{self.dataset_name}_{self.task}",
@@ -190,7 +206,7 @@ class Sampler:
                 "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                 "text": black.format_str(
                     self.template.render(
-                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
+                        guidelines=_guidelines,
                         text=_text,
                         annotations=_ann,
                     ),
@@ -207,6 +223,11 @@ class Sampler:
                 _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
+                _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                if self.remove_guidelines:
+                    _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                    _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
                 yield {
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
@@ -214,7 +235,7 @@ class Sampler:
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
                         self.template.render(
-                            guidelines=[inspect.getsource(definition) for definition in _guidelines],
+                            guidelines=_guidelines,
                             text=_text,
                             annotations=_ann,
                         ),
