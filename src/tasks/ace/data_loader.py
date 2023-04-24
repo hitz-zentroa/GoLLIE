@@ -438,7 +438,7 @@ class ACESampler(Sampler):
             The path to the prompt template. Defaults to `"templates/prompt.txt"`.
         ensure_positives_on_train (bool, optional):
             Whether to ensure that the guidelines of annotated examples are not removed.
-            Defaults to `True`.
+            Defaults to `False`.
         dataset_name (str, optional):
             The name of the dataset. Defaults to `None`.
         scorer (`str`, optional):
@@ -457,7 +457,7 @@ class ACESampler(Sampler):
         guideline_dropout: float = 0.0,
         seed: float = 0,
         prompt_template: str = "templates/prompt.txt",
-        ensure_positives_on_train: bool = True,
+        ensure_positives_on_train: bool = False,
         dataset_name: str = None,
         scorer: str = None,
         sample_only_gold_guidelines: bool = False,

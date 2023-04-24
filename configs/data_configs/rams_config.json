@@ -9,7 +9,7 @@
     "dev_file": "data/rams/dev.jsonlines",
     "test_file": "data/rams/test.jsonlines",
     "prompt_template": "templates/prompt_eae.txt",
-    "seed": 0,
+    "seed": [0, 24, 42],
     "task_configuration": {
         "EAE": {
             "parallel_instances": 1,

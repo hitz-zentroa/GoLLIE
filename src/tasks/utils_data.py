@@ -86,7 +86,7 @@ class Sampler:
         guideline_dropout: float = 0.0,
         seed: float = 0,
         prompt_template: str = "templates/prompt.txt",
-        ensure_positives_on_train: bool = True,
+        ensure_positives_on_train: bool = False,
         sample_only_gold_guidelines: bool = False,
         dataset_name: str = None,
         scorer: str = None,
@@ -225,6 +225,7 @@ class Sampler:
 
     def __iter__(self):
         random.seed(self.seed)
+        np.random.seed(self.seed)
         instances = []
         total_inst = random.randint(*self.parallel_instances)
         prev_id = None

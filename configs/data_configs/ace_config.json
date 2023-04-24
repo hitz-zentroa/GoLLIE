@@ -12,7 +12,7 @@
     "dev_file": "data/ace05/dev.sentence.json",
     "test_file": "data/ace05/test.sentence.json",
     "prompt_template": "templates/prompt.txt",
-    "seed": 0,
+    "seed": [0, 24, 42],
     "task_configuration": {
         "NER": {
             "group_by": "sentence",

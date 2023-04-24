@@ -7,7 +7,7 @@
     "dev_file": "validation",
     "test_file": "test",
     "prompt_template": "templates/prompt.txt",
-    "seed": 0,
+    "seed": [0, 24, 42],
     "include_misc": true,
     "task_configuration": {
         "NER": {
