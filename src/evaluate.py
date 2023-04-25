@@ -120,7 +120,7 @@ def evaluate(
         hallucinated_predictions: int = 0
         total_predictions: int = 0
 
-        with open(gold_path, "rt") as gold_f, open(pred_path, "rt") as pred_f:
+        with open(gold_path, "rt", encoding="utf8") as gold_f, open(pred_path, "rt", encoding="utf8") as pred_f:
             for gold_line, pred_line in zip(gold_f, pred_f):
                 gold_line = json.loads(gold_line)
                 pred_line = json.loads(pred_line)
@@ -166,7 +166,7 @@ def evaluate(
         all_scores[task]["prediction_stats"]["total"]["gold"] = sum([len(x) for x in labels])
 
     scores_file_name = os.path.join(output_dir, "task_scores.json")
-    with open(scores_file_name, "wt") as f:
+    with open(scores_file_name, "wt", encoding="utf8") as f:
         json.dump(all_scores, f, indent=4, ensure_ascii=False)
     logging.info(f"Scores saved in: {scores_file_name}")
 
