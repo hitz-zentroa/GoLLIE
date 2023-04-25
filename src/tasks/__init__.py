@@ -8,6 +8,7 @@ TASK_ID_TO_TASKS = {
     "ACE05_EE": "src.tasks.ace",
     "RAMS_EAE": "src.tasks.rams",
     "CoNLL03_NER": "src.tasks.conll03",
+    "Europarl_NER": "src.tasks.conll03",
 }
 
 __all__ = ["ace", "rams", "conll03", "TASK_ID_TO_TASKS"]
