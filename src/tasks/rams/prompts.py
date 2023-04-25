@@ -763,8 +763,8 @@ class TransferMoney(Event):
 
 @dataclass
 class TransferOwnership(Event):
-    """A TransferMoney (transaction) Event occurs when a Giver gives some Artifact to a
-    Recipient for the benefit of Beneficiary in some Place. There can be a
+    """A TransferOwnership (transaction) Event occurs when a Giver gives some Artifact to
+    a Recipient for the benefit of Beneficiary in some Place. There can be a
     preventer that prevents the transaction to occur.
 
     The possible Event subtypes are: "BorrowLend", "EmbargoSanction",
