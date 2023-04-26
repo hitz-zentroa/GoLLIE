@@ -115,7 +115,7 @@ class TACREDDatasetLoader(DatasetLoader):
         "per:title": PersonTitle,
     }
 
-    def __init__(self, path: str) -> None:
+    def __init__(self, path: str, **kwargs) -> None:
         self.elements = {}
         with open(path, "rt", encoding="utf-8") as in_f:
             data = json.load(in_f)

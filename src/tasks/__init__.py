@@ -1,4 +1,4 @@
-from . import ace, conll03, rams
+from . import ace, conll03, rams, tacred
 
 
 TASK_ID_TO_TASKS = {
@@ -9,6 +9,7 @@ TASK_ID_TO_TASKS = {
     "RAMS_EAE": "src.tasks.rams",
     "CoNLL03_NER": "src.tasks.conll03",
     "Europarl_NER": "src.tasks.conll03",
+    "TACRED": "src.tasks.tacred",
 }
 
-__all__ = ["ace", "rams", "conll03", "TASK_ID_TO_TASKS"]
+__all__ = ["ace", "rams", "conll03", "tacred", "TASK_ID_TO_TASKS"]

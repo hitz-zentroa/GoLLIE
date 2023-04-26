@@ -1,10 +1,10 @@
 {
-    "dataset_name": "ACE05",
+    "dataset_name": "TACRED",
     "tasks": [
         "RE"
     ],
-    "dataloader_cls": "src.tasks.tacred.data_loader.ACEDatasetLoader",
-    "sampler_cls": "src.tasks.tacred.data_loader.ACESampler",
+    "dataloader_cls": "src.tasks.tacred.data_loader.TACREDDatasetLoader",
+    "sampler_cls": "src.tasks.tacred.data_loader.TACREDSampler",
     "train_file": "data/tacred/train.json",
     "dev_file": "data/tacred/dev.json",
     "test_file": "data/tacred/test.json",
