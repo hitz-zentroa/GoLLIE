@@ -378,7 +378,10 @@ class AnnotationList(list):
                 continue
             else:
                 print(elem)
-                elem = elem if elem.exists_in(text) else None
+                if hasattr(elem, 'exist_in'):
+                    elem = elem if elem.exists_in(text) else None
+                else:
+                    continue
 
             if elem is not None:
                 key = elem.key()
