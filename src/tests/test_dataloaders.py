@@ -100,7 +100,7 @@ class TestDataLoaders(unittest.TestCase):
                     Person(span="Phil Simmons"),
                     Organization(span="Leicestershire"),
                     Organization(span="Somerset"),
-                ]
+                ],
             },
             dataloader[2],
         )
