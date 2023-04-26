@@ -1,0 +1,22 @@
+{
+    "dataset_name": "ACE05",
+    "tasks": [
+        "RE"
+    ],
+    "dataloader_cls": "src.tasks.tacred.data_loader.ACEDatasetLoader",
+    "sampler_cls": "src.tasks.tacred.data_loader.ACESampler",
+    "train_file": "data/tacred/train.json",
+    "dev_file": "data/tacred/dev.json",
+    "test_file": "data/tacred/test.json",
+    "prompt_template": "templates/prompt_tacred.txt",
+    "seed": [0, 24, 42],
+    "task_configuration": {
+        "RE": {
+            "parallel_instances": 1,
+            "max_guidelines": 5,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.TACREDRelationScorer",
+            "ensure_positives_on_train": true
+        }
+    }
+}

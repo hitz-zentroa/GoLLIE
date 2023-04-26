@@ -141,6 +141,7 @@ class Sampler:
         self._remove_comments_re = re.compile(r"#.+?\n")
 
     def _sample(self, instances):
+        _gold = [gold for inst in instances for gold in inst["gold"]]
         if self.sample_only_gold_guidelines:
             guidelines = [
                 definition
@@ -165,11 +166,7 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=_guidelines,
-                            text=_text,
-                            annotations=_ann,
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
@@ -216,11 +213,7 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=_guidelines,
-                            text=_text,
-                            annotations=_ann,
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
@@ -245,11 +238,7 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=_guidelines,
-                            text=_text,
-                            annotations=_ann,
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
