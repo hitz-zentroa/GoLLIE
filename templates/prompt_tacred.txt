@@ -6,9 +6,9 @@
 # This is the text to analyze
 text = {{ text.__repr__() }}
 
-# The list called result contains the relations for the following query entities:
-{%- for ann in annotations %}
-#    - "{{ann.arg1}}"
+# The list called result contains the relations (if exist) for the following entity pairs:
+{%- for ann in gold %}
+#    - (arg1: {{ann.subj_type}} = "{{ann.arg1}}", arg2: {{ann.subj_type}} = "{{ann.arg2}}")
 {%- endfor %}
 # 
 result = [

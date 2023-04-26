@@ -158,12 +158,7 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=_guidelines,
-                            text=_text,
-                            annotations=_ann,
-                            gold=_gold
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
@@ -207,12 +202,7 @@ class Sampler:
                 "scorer_cls": self.scorer_cls,
                 "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                 "text": black.format_str(
-                    self.template.render(
-                        guidelines=_guidelines,
-                        text=_text,
-                        annotations=_ann,
-                        gold=_gold
-                    ),
+                    self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                     mode=self._black_mode,
                 ),
                 "unlabelled_sentence": _text,
@@ -237,12 +227,7 @@ class Sampler:
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=_guidelines,
-                            text=_text,
-                            annotations=_ann,
-                            gold=_gold
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,

@@ -207,7 +207,7 @@ class CoNLLDatasetLoader(DatasetLoader):
                 "doc_id": id,
                 "text": " ".join(words),
                 "entities": entities,
-                "gold": entities
+                "gold": entities,
             }
 
 

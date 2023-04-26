@@ -36,9 +36,17 @@ class TestDataLoaders(unittest.TestCase):
 
     @unittest.skipIf(not os.path.exists("data/tacred/dev.json"), "No TACRED data available")
     def test_TACRED(self):
-        from src.tasks.tacred.data_loader import TACREDDatasetLoader
+        from src.tasks.tacred.data_loader import TACREDDatasetLoader, TACREDSampler
+
+        with open("configs/data_configs/tacred_config.json") as f:
+            config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         dataloader = TACREDDatasetLoader("data/tacred/train.json")
+
+        _ = list(TACREDSampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
+
 
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader

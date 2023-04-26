@@ -403,7 +403,7 @@ class ACEDatasetLoader(DatasetLoader):
                 self.elements[key]["values"] += values
                 self.elements[key]["relations"] += relations
                 self.elements[key]["events"] += events
-                self.elements[key]["gold"] += entities # Is not used anyway
+                self.elements[key]["gold"] += entities  # Is not used anyway
 
 
 class ACESampler(Sampler):
