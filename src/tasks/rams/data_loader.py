@@ -562,6 +562,7 @@ class RAMSDatasetLoader(DatasetLoader):
                     "doc_id": key,
                     "text": text,
                     "labels": events,
+                    "gold": events
                 }
 
 

@@ -375,7 +375,7 @@ class OrganizationNumberOfEmployeesMembers(Relation):
 class OrganizationMember(Relation):
     """The OrganizationMember relation encodes the organizations or geopolitical (GPE)
     entities that are members of the assigned organization (the inverse of
-    OrganizationMemberOf). While similar to OrganizationSubsidiaries, OrganizationMember
+    OrganizationMemberOf). While similar to OrganizationSubsidiary, OrganizationMember
     is different because correct `arg2` fillers are distinct entities that are generally
     capable of autonomously ending their membership with the assigned organization.
 
@@ -404,7 +404,7 @@ class OrganizationMemberOf(Relation):
 @dataclass
 class OrganizationSubsidiary(Relation):
     """The OrganizationSubsidiary relation encodes the organizations that are
-    subsidiaries of the assigned organization (the inverse of OrganizationParents).
+    subsidiaries of the assigned organization (the inverse of OrganizationParent).
     Subsidiaries are subsumed under the assigned organization, rather than being distinct
     entities.
 

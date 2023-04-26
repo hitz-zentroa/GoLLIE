@@ -133,6 +133,7 @@ class Sampler:
         self._remove_comments_re = re.compile(r"#.+?\n")
 
     def _sample(self, instances):
+        _gold = [gold for inst in instances for gold in inst["gold"]]
         if self.sample_only_gold_guidelines:
             guidelines = [
                 definition
@@ -161,6 +162,7 @@ class Sampler:
                             guidelines=_guidelines,
                             text=_text,
                             annotations=_ann,
+                            gold=_gold
                         ),
                         mode=self._black_mode,
                     ),
@@ -209,6 +211,7 @@ class Sampler:
                         guidelines=_guidelines,
                         text=_text,
                         annotations=_ann,
+                        gold=_gold
                     ),
                     mode=self._black_mode,
                 ),
@@ -238,6 +241,7 @@ class Sampler:
                             guidelines=_guidelines,
                             text=_text,
                             annotations=_ann,
+                            gold=_gold
                         ),
                         mode=self._black_mode,
                     ),

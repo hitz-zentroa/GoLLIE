@@ -34,6 +34,12 @@ class TestDataLoaders(unittest.TestCase):
 
         # TODO: Implement a better TEST
 
+    @unittest.skipIf(not os.path.exists("data/tacred/dev.json"), "No TACRED data available")
+    def test_TACRED(self):
+        from src.tasks.tacred.data_loader import TACREDDatasetLoader
+
+        dataloader = TACREDDatasetLoader("data/tacred/train.json")
+
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader
         from src.tasks.conll03.prompts import Miscellaneous, Organization, Person

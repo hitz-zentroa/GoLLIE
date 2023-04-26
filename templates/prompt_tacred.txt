@@ -1,0 +1,18 @@
+# The following lines describe the task definition
+{%- for definition in guidelines %}
+{{ definition }}
+{%- endfor %}
+
+# This is the text to analyze
+text = {{ text.__repr__() }}
+
+# The list called result contains the relations for the following query entities:
+{%- for ann in annotations %}
+#    - "{{ann.arg1}}"
+{%- endfor %}
+# 
+result = [
+{%- for ann in annotations %}
+    {{ ann }},
+{%- endfor %}
+]
