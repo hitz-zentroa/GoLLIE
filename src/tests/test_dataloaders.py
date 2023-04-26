@@ -76,6 +76,7 @@ class TestDataLoaders(unittest.TestCase):
                 "doc_id": 0,
                 "text": "CRICKET - LEICESTERSHIRE TAKE OVER AT TOP AFTER INNINGS VICTORY .",
                 "entities": [Organization(span="LEICESTERSHIRE")],
+                "gold": [Organization(span="LEICESTERSHIRE")],
             },
             dataloader[0],
         )
@@ -94,6 +95,12 @@ class TestDataLoaders(unittest.TestCase):
                     Organization(span="Leicestershire"),
                     Organization(span="Somerset"),
                 ],
+                "gold": [
+                    Miscellaneous(span="West Indian"),
+                    Person(span="Phil Simmons"),
+                    Organization(span="Leicestershire"),
+                    Organization(span="Somerset"),
+                ]
             },
             dataloader[2],
         )
@@ -109,6 +116,7 @@ class TestDataLoaders(unittest.TestCase):
                 "doc_id": 0,
                 "text": "CRICKET - LEICESTERSHIRE TAKE OVER AT TOP AFTER INNINGS VICTORY .",
                 "entities": [Organization(span="LEICESTERSHIRE")],
+                "gold": [Organization(span="LEICESTERSHIRE")],
             },
             dataloader[0],
         )
@@ -122,6 +130,11 @@ class TestDataLoaders(unittest.TestCase):
                     " by an innings and 39 runs in two days to take over at the head of the county championship ."
                 ),
                 "entities": [
+                    Person(span="Phil Simmons"),
+                    Organization(span="Leicestershire"),
+                    Organization(span="Somerset"),
+                ],
+                "gold": [
                     Person(span="Phil Simmons"),
                     Organization(span="Leicestershire"),
                     Organization(span="Somerset"),
