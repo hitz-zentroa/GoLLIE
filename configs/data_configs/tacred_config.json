@@ -15,7 +15,7 @@
             "parallel_instances": 1,
             "max_guidelines": 5,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.ace.scorer.ACERelationScorer",
+            "scorer": "src.tasks.ace.scorer.TACREDRelationScorer",
             "ensure_positives_on_train": true
         }
     }
