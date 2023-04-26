@@ -357,6 +357,7 @@ class ACEDatasetLoader(DatasetLoader):
                         "values": [],
                         "relations": [],
                         "events": [],
+                        "gold": [],
                     }
 
                 entities = [

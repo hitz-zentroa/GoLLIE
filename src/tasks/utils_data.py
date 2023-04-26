@@ -189,6 +189,7 @@ class Sampler:
                 replace=False,
                 p=p,
             ).tolist()
+            random.shuffle(guidelines)
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
                 _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
