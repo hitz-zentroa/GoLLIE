@@ -47,7 +47,6 @@ class TestDataLoaders(unittest.TestCase):
 
         _ = list(TACREDSampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
 
-
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader
         from src.tasks.conll03.prompts import Miscellaneous, Organization, Person
