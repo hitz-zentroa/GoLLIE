@@ -388,8 +388,101 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-events-guideline
 
 
 @dataclass
-class BeBorn(Event):
-    """A BeBorn Event occurs whenever a Person Entity is given birth to"""
+class LifeEvent(Event):
+    """A LifeEvent occurs whenever a Person Entity borns, dies, gets married, divorced
+    or gets injured.
+    """
+
+    mention: str
+
+
+@dataclass
+class MovementEvent(Event):
+    """A TransportEvent occurs whenever an Artifact (Weapon or Vehicle) or a
+    Person is moved from one Place (GPE, Facility, Location) to another. This
+    event requires the explicit mention of the Artifact or Person.
+    """
+
+    mention: str
+
+
+@dataclass
+class TransactionEvent(Event):
+    """A TransactionEvent refers to buying, selling, loaning, borrowing, giving, or
+    receving of Artifacts or Organizations; or giving, receiving, borrowing, or
+    lending Money.
+    """
+
+    mention: str
+
+
+@dataclass
+class BusinessEvent(Event):
+    """A BusinessEvent refers to actions related to Organizations such as: creating,
+    merging, declaring bankruptcy or ending organizations (including government
+    agencies).
+    """
+
+    mention: str
+
+
+@dataclass
+class ConflictEvent(Event):
+    """A ConflictEvent refers to either violent physical acts causing harm or damage,
+    but are not covered by Life events (conflicts, clashes, fighting, gunfire, ...) or
+    demonstrations (protests, sit-ins, strikes, riots, ...).
+    """
+
+    mention: str
+
+
+@dataclass
+class ContactEvent(Event):
+    """A ContactEvent occurs whenever two or more entities (persons or organization's
+    representatives) come together at a single location and interact with one another
+    face-to-face or directly enages in discussion via written or telephone communication.
+    """
+
+    mention: str
+
+
+@dataclass
+class PersonellEvent(Event):
+    """A PersonellEvent occurs when a Person entity changes its job position (JobTitle
+    entity) with respect an Organization entity. It includes when a person starts
+    working, ends working, changes offices within, gets nominated or is elected for a
+    position in a Organization.
+    """
+
+    mention: str
+
+
+@dataclass
+class JusticeEvent(Event):
+    """A JusticeEvent refers to any judicial action such as: arresting, jailing,
+    releasing, granting parole, trial starting, hearing, charging, indicting, suing,
+    convicting, sentencing, fine, executing, extraditing, adquiting, appealing or
+    pardoning a Person entity.
+    """
+
+    mention: str
+
+
+COARSE_EVENT_DEFINITIONS = List[Event] = [
+    LifeEvent,
+    MovementEvent,
+    TransactionEvent,
+    BusinessEvent,
+    ConflictEvent,
+    ContactEvent,
+    PersonellEvent,
+    JusticeEvent,
+]
+
+
+@dataclass
+class BeBorn(LifeEvent):
+    """A BeBorn Event occurs whenever a Person Entity is given birth to."""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person who is born
@@ -398,7 +491,7 @@ class BeBorn(Event):
 
 
 @dataclass
-class Marry(Event):
+class Marry(LifeEvent):
     """Marry Events are official Events, where two people are married under the
     legal definition.
     """
@@ -410,8 +503,8 @@ class Marry(Event):
 
 
 @dataclass
-class Divorce(Event):
-    """A DIVORCE Event occurs whenever two people are officially divorced under the
+class Divorce(LifeEvent):
+    """A Divorce Event occurs whenever two people are officially divorced under the
     legal definition of divorce. We do not include separations or church annulments.
     """
 
@@ -422,7 +515,7 @@ class Divorce(Event):
 
 
 @dataclass
-class Injure(Event):
+class Injure(LifeEvent):
     """An Injure Event occurs whenever a Person Entity experiences physical harm.
     Injure Events can be accidental, intentional or self-inflicted.
     """
@@ -436,7 +529,7 @@ class Injure(Event):
 
 
 @dataclass
-class Die(Event):
+class Die(LifeEvent):
     """A Die Event occurs whenever the life of a Person Entity ends. Die Events
     can be accidental, intentional or self-inflicted
     """
@@ -450,7 +543,7 @@ class Die(Event):
 
 
 @dataclass
-class Transport(Event):
+class Transport(MovementEvent):
     """A Transport Event occurs whenever an Artifact (Weapon or Vehicle) or a
     Person is moved from one Place (GPE, Facility, Location) to another.
     """
@@ -466,7 +559,7 @@ class Transport(Event):
 
 
 @dataclass
-class TransferOwnership(Event):
+class TransferOwnership(TransactionEvent):
     """TransferOwnership Events refer to the buying, selling, loaning,
     borrowing, giving, or receiving of artifacts or organizations.
     """
@@ -482,7 +575,7 @@ class TransferOwnership(Event):
 
 
 @dataclass
-class TransferMoney(Event):
+class TransferMoney(TransactionEvent):
     """TransferMoney Events refer to the giving, receiving, borrowing, or
     lending money when it is not in the context of purchasing something. The
     canonical examples are: (1) people giving money to organizations (and getting
@@ -500,7 +593,7 @@ class TransferMoney(Event):
 
 
 @dataclass
-class StartOrg(Event):
+class StartOrg(BusinessEvent):
     """A StartOrg Event occurs whenever a new Organization is created."""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -511,11 +604,11 @@ class StartOrg(Event):
 
 
 @dataclass
-class MergeOrg(Event):
+class MergeOrg(BusinessEvent):
     """A MergeOrg Event occurs whenever two or more Organization Entities
     come together to form a new Organization Entity. This Event applies to any
     kind of Organization, including government agencies. It also includes joint
-    venture
+    venture.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -525,7 +618,7 @@ class MergeOrg(Event):
 
 
 @dataclass
-class DeclareBankruptcy(Event):
+class DeclareBankruptcy(BusinessEvent):
     """A DeclareBankruptcy Event will occur whenever an Entity officially
     requests legal protection from debt collection due to an extremely negative
     balance sheet.
@@ -538,7 +631,7 @@ class DeclareBankruptcy(Event):
 
 
 @dataclass
-class EndOrg(Event):
+class EndOrg(BusinessEvent):
     """An EndOrg Event occurs whenever an Organization ceases to exist (in
     other words 'goes out of business').
     """
@@ -550,7 +643,7 @@ class EndOrg(Event):
 
 
 @dataclass
-class Attack(Event):
+class Attack(ConflictEvent):
     """An Attack Event is defined as a violent physical act causing harm or damage.
     Attack Events include any such Event not covered by the Injure or Die
     subtypes, including Events where there is no stated agent.
@@ -565,7 +658,7 @@ class Attack(Event):
 
 
 @dataclass
-class Demonstrate(Event):
+class Demonstrate(ConflictEvent):
     """A Demonstrate Event occurs whenever a large number of people come
     together in a public area to protest or demand some sort of official action.
     Demonstrate Events include, but are not limited to, protests, sit-ins, strikes,
@@ -579,7 +672,7 @@ class Demonstrate(Event):
 
 
 @dataclass
-class Meet(Event):
+class Meet(ContactEvent):
     """A Meet Event occurs whenever two or more Entities come together at a single
     location and interact with one another face-to-face. Meet Events include talks,
     summits, conferences, meetings, visits, and any other Event where two or more
@@ -593,7 +686,7 @@ class Meet(Event):
 
 
 @dataclass
-class PhoneWrite(Event):
+class PhoneWrite(ContactEvent):
     """A PhoneWrite Event occurs when two or more people directly engage in
     discussion which does not take place 'face-to-face'. To make this Event less
     open-ended, we limit it to written or telephone communication where at least two
@@ -606,7 +699,7 @@ class PhoneWrite(Event):
 
 
 @dataclass
-class StartPosition(Event):
+class StartPosition(PersonellEvent):
     """A StartPosition Event occurs whenever a Person Entity begins working
     for (or changes offices within) an Organization or GPE. This includes
     government officials starting their terms, whether elected or appointed.
@@ -621,7 +714,7 @@ class StartPosition(Event):
 
 
 @dataclass
-class EndPosition(Event):
+class EndPosition(PersonellEvent):
     """An EndPosition Event occurs whenever a Person Entity stops working for
     (or changes offices within) an Organization or GPE.
     """
@@ -635,7 +728,7 @@ class EndPosition(Event):
 
 
 @dataclass
-class Nominate(Event):
+class Nominate(PersonellEvent):
     """A Nominate Event occurs whenever a Person is proposed for a StartPosition
     Event by the appropriate Person, through official channels.
     """
@@ -649,7 +742,7 @@ class Nominate(Event):
 
 
 @dataclass
-class Elect(Event):
+class Elect(PersonellEvent):
     """An Elect Event occurs whenever a candidate wins an election designed to
     determine the Person argument of a StartPosition Event.
     """
@@ -663,7 +756,7 @@ class Elect(Event):
 
 
 @dataclass
-class ArrestJail(Event):
+class ArrestJail(JusticeEvent):
     """A Jail Event occurs whenever the movement of a Person is constrained by a
     state actor (a GPE, its Organization subparts, or its Person representatives).
     """
@@ -677,7 +770,7 @@ class ArrestJail(Event):
 
 
 @dataclass
-class ReleaseParole(Event):
+class ReleaseParole(JusticeEvent):
     """A Release Event occurs whenever a state actor (GPE, Organization
     subpart, or Person representative) ends its custody of a Person Entity.
     """
@@ -691,7 +784,7 @@ class ReleaseParole(Event):
 
 
 @dataclass
-class TrialHearing(Event):
+class TrialHearing(JusticeEvent):
     """A Trial Event occurs whenever a court proceeding has been initiated for the
     purposes of determining the guilt or innocence of a Person, Organization
     or GPE accused of committing a crime.
@@ -707,7 +800,7 @@ class TrialHearing(Event):
 
 
 @dataclass
-class ChargeIndict(Event):
+class ChargeIndict(JusticeEvent):
     """A Charge Event occurs whenever a Person, Organization or GPE is
     accused of a crime by a state actor (GPE, an Organization subpart of a GPE
     or a Person representing a GPE).
@@ -723,7 +816,7 @@ class ChargeIndict(Event):
 
 
 @dataclass
-class Sue(Event):
+class Sue(JusticeEvent):
     """A Sue Event occurs whenever a court proceeding has been initiated for the
     purposes of determining the liability of a Person, Organization or GPE
     accused of committing a crime or neglecting a commitment.
@@ -739,7 +832,7 @@ class Sue(Event):
 
 
 @dataclass
-class Convict(Event):
+class Convict(JusticeEvent):
     """A Convict Event occurs whenever a Try Event ends with a successful
     prosecution of the Defendant. In other words, a Person,
     Organization or GPE Entity is convicted whenever that Entity has been found
@@ -755,7 +848,7 @@ class Convict(Event):
 
 
 @dataclass
-class SentenceAct(Event):
+class SentenceAct(JusticeEvent):
     """A SentenceAct Event takes place whenever the punishment (particularly
     incarceration) for the Defendant of a Try Event is issued by a state
     actor (a GPE, an Organization subpart or a Person representing them)
@@ -771,7 +864,7 @@ class SentenceAct(Event):
 
 
 @dataclass
-class Fine(Event):
+class Fine(JusticeEvent):
     """A Fine Event takes place whenever a state actor issues a financial punishment
     to a GPE, Person or Organization Entity, typically as a result of court
     proceedings.
@@ -787,7 +880,7 @@ class Fine(Event):
 
 
 @dataclass
-class Execute(Event):
+class Execute(JusticeEvent):
     """An Execute Event occurs whenever the life of a Person is taken by a state
     actor (a GPE, its Organization subparts, or Person representatives).
     """
@@ -801,7 +894,7 @@ class Execute(Event):
 
 
 @dataclass
-class Extradite(Event):
+class Extradite(JusticeEvent):
     """An Extradite Event occurs whenever a Person is sent by a state actor from
     one Place (normally the GPE associated with the state actor, but sometimes a
     Facility under its control) to another place (Location, GPE or Facility) for
@@ -818,7 +911,7 @@ class Extradite(Event):
 
 
 @dataclass
-class Acquit(Event):
+class Acquit(JusticeEvent):
     """An Acquit Event occurs whenever a trial ends but fails to produce a conviction.
     This will include cases where the charges are dropped by the Prosecutor.
     """
@@ -832,7 +925,7 @@ class Acquit(Event):
 
 
 @dataclass
-class Pardon(Event):
+class Pardon(JusticeEvent):
     """A Pardon Event occurs whenever a head-of-state or their appointed
     representative lifts a sentence imposed by the judiciary.
     """
@@ -846,7 +939,7 @@ class Pardon(Event):
 
 
 @dataclass
-class Appeal(Event):
+class Appeal(JusticeEvent):
     """An Appeal Event occurs whenever the decision of a court is taken to a higher
     court for review.
     """
@@ -896,4 +989,4 @@ EVENT_DEFINITIONS: List[Event] = [
     Appeal,
 ]
 
-__all__ = list(map(str, [*ENTITY_DEFINITIONS, *RELATION_DEFINITIONS, *EVENT_DEFINITIONS]))
+# __all__ = list(map(str, [*ENTITY_DEFINITIONS, *RELATION_DEFINITIONS, *EVENT_DEFINITIONS]))

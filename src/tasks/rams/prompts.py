@@ -676,7 +676,7 @@ class TransportPerson(Event):
 
 @dataclass
 class Elect(Event):
-    """An Elect (personnel) Event occurs when a Voter elects a Candidate in some
+    """An Elect (personell) Event occurs when a Voter elects a Candidate in some
     Place.
 
     The possible Event subtypes are: "WinElection" or None.
@@ -691,7 +691,7 @@ class Elect(Event):
 
 @dataclass
 class EndPossition(Event):
-    """An EndPossition (personnel) Event occurs when an Employee stops working on
+    """An EndPossition (personell) Event occurs when an Employee stops working on
     a Organization in some Place.
 
     The possible Event subtypes are: "FiringLayOff", "QuitRetire" or None.
@@ -706,7 +706,7 @@ class EndPossition(Event):
 
 @dataclass
 class StartPossition(Event):
-    """An StartPossition (personnel) Event occurs when an Employee starts working on
+    """An StartPossition (personell) Event occurs when an Employee starts working on
     a Organization in some Place.
 
     The possible Event subtypes are: "Hiring" or None.
@@ -830,4 +830,4 @@ EVENT_DEFINITIONS: List[Event] = [
     TransferOwnership,
 ]
 
-__all__ = list(map(str, [*EVENT_DEFINITIONS]))
+# __all__ = list(map(str, [*EVENT_DEFINITIONS]))
