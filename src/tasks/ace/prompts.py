@@ -174,7 +174,86 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-relations-guidel
 
 
 @dataclass
-class Located(Relation):
+class PhysicalRelation(Relation):
+    """The Physical Relation captures the physical location relation of entities such as:
+    a Person entity located in a Facility, Location or GPE; or two entities that are near,
+    but neither entity is a part of the other or located in/at the other.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class PartWholeRelation(Relation):
+    """The PartWhole Relation refers to the semantic relation between two entities that
+    are parts of a larger whole or vice versa. For example, the relation between a
+    country and its states, or between a company and its subsidiaries, are instances of
+    PartWhole relations.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class PersonalSocialRelation(Relation):
+    """The Personal-Social Relation describe the relationship between people. Both arguments
+    must be entities of type Person. Please note: The arguments of these Relations are
+    not ordered. The Relations are symmetric.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class OrganizationAffiliationRelation(Relation):
+    """The OrganizationAffiliation Relation describes the relations between a Person (or
+    other Organizations) and a related Organization. This relation includes: employment,
+    ownership, founder, student or alumn, sport affiliation, inverstor or shareholder
+    and membership relations.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class AgentArtifactRelationRelation(Relation):
+    """The AgentArtifact Relation applies when an agent owns an artifact, has possession
+    of an artifact, uses an artifact, or caused an artifact to come into being. Note:
+    if the `arg2` is an Organization, use OrganizationAffiliation when `arg1` is a Person
+    or PartWhole when `arg1` is an Organization or GPE.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class GenAffiliationRelation(Relation):
+    """The GenAffiliation Relation describes the citizen, resident, religion or ethnicity
+    relation when the `arg1` is a Person. When the `arg1` is an Organization, the relation
+    describes where it is located, based or does business.
+    """
+
+    arg1: str
+    arg2: str
+
+
+COARSE_RELATION_DEFINITIONS: List[Relation] = [
+    PhysicalRelation,
+    PartWholeRelation,
+    PersonalSocialRelation,
+    OrganizationAffiliationRelation,
+    AgentArtifactRelationRelation,
+    GenAffiliationRelation,
+]
+
+
+@dataclass
+class Located(PhysicalRelation):
     """The Located relation captures the physical location of an entity. This
     relation is restricted to people. In other words, `arg1` in Located
     relations can only be occupied by mentions of Entities of type Person.
@@ -185,7 +264,7 @@ class Located(Relation):
 
 
 @dataclass
-class Near(Relation):
+class Near(PhysicalRelation):
     """Near indicates that an entity is explicitly near another entity, but
     neither entity is a part of the other or located in/at the other.
     """
@@ -195,7 +274,7 @@ class Near(Relation):
 
 
 @dataclass
-class Geographical(Relation):
+class Geographical(PartWholeRelation):
     """The Geographical relation captures the location of a Facility, Location,
     or GPE in or at or as a part of another Facility, Location, or GPE.
     """
@@ -205,7 +284,7 @@ class Geographical(Relation):
 
 
 @dataclass
-class Subsidiary(Relation):
+class Subsidiary(PartWholeRelation):
     """Subsidiary captures the ownership, administrative, and other hierarchical
     relationships between organizations and between organizations and GPEs.
     """
@@ -215,7 +294,7 @@ class Subsidiary(Relation):
 
 
 @dataclass
-class Business(Relation):
+class Business(PersonalSocialRelation):
     """The Business Relation captures the connection between two entities in any
     professional relationship. Both arguments must be entities of type Person.
     """
@@ -225,7 +304,7 @@ class Business(Relation):
 
 
 @dataclass
-class Family(Relation):
+class Family(PersonalSocialRelation):
     """The Family Relation captures the connection between one entity and another
     with which it is in any familial relationship. Both arguments must be entities
     of type Person.
@@ -236,7 +315,7 @@ class Family(Relation):
 
 
 @dataclass
-class LastingPersonal(Relation):
+class LastingPersonal(PersonalSocialRelation):
     """Lasting-Personal captures relationships that meet the following conditions:
     (1) The relationship must involve personal contact (or a reasonable assumption
     thereof).
@@ -250,7 +329,7 @@ class LastingPersonal(Relation):
 
 
 @dataclass
-class Employment(Relation):
+class Employment(OrganizationAffiliationRelation):
     """Employment captures the relationship between Persons and their employers.
     This Relation is only taggable when it can be reasonably assumed that the
     Person is paid by the ORG or GPE.
@@ -261,7 +340,7 @@ class Employment(Relation):
 
 
 @dataclass
-class Ownership(Relation):
+class Ownership(OrganizationAffiliationRelation):
     """Ownership captures the relationship between a Person and an Organization
     owned by that Person. If the `arg2` is not an Organization, use the
     Agent-Artifact relation.
@@ -272,7 +351,7 @@ class Ownership(Relation):
 
 
 @dataclass
-class Founder(Relation):
+class Founder(OrganizationAffiliationRelation):
     """Founder captures the relationship between an agent (Person, Organization,
     or GPE) and an Organization or GPE established or set up by that agent.
     """
@@ -282,7 +361,7 @@ class Founder(Relation):
 
 
 @dataclass
-class StudentAlum(Relation):
+class StudentAlum(OrganizationAffiliationRelation):
     """StudentAlum captures the relationship between a Person and an educational
     institution the Person attends or attended.
     """
@@ -292,7 +371,7 @@ class StudentAlum(Relation):
 
 
 @dataclass
-class SportsAffiliation(Relation):
+class SportsAffiliation(OrganizationAffiliationRelation):
     """Sports-Affiliation captures the relationship between a player, coach, manager,
     or assistant and his or her affiliation with a sports organization (including
     sports leagues or divisions as well as individual sports teams).
@@ -303,7 +382,7 @@ class SportsAffiliation(Relation):
 
 
 @dataclass
-class InvestorShareholder(Relation):
+class InvestorShareholder(OrganizationAffiliationRelation):
     """InvestorShareholder captures the relationship between an agent (Person,
     Organization, or GPE) and an Organization in which the agent has invested or in
     which the agent owns shares/stock. Please note that agents may invest in
@@ -315,7 +394,7 @@ class InvestorShareholder(Relation):
 
 
 @dataclass
-class Membership(Relation):
+class Membership(OrganizationAffiliationRelation):
     """Membership captures the relationship between an agent and an organization of
     which the agent is a member. Organizations and GPEs can be members of other
     Organizations (such as NATO or the UN).
@@ -326,7 +405,7 @@ class Membership(Relation):
 
 
 @dataclass
-class UserOwnerInventorManufacturer(Relation):
+class UserOwnerInventorManufacturer(AgentArtifactRelationRelation):
     """This Relation applies when an agent owns an artifact, has possession of an
     artifact, uses an artifact, or caused an artifact to come into being. Note:
     if `arg2` is an Organization, use Ownership relation (arg1=PER) or Subsidiary
@@ -338,7 +417,7 @@ class UserOwnerInventorManufacturer(Relation):
 
 
 @dataclass
-class CitizenResidentReligionEthnicity(Relation):
+class CitizenResidentReligionEthnicity(GenAffiliationRelation):
     """CitizenResidentReligionEthnicity describes the relation between a Person
     entity and (1) the GPE in which they have citizenship, (2) the GPE or Location
     in which they live, the religious Organization or Person entity with which they
@@ -350,7 +429,7 @@ class CitizenResidentReligionEthnicity(Relation):
 
 
 @dataclass
-class OrgLocationOrigin(Relation):
+class OrgLocationOrigin(GenAffiliationRelation):
     """OrgLocationOrigin captures the relationship between an organization and the
     Location or GPE where it is located, based, or does business. Note: Subsidiary
     trumps this relation for government organizations.
