@@ -355,8 +355,9 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(labels[0], tokenizer.pad_token_id)
 
     def test_weight_loss_mask(self):
-        from torch.utils.data import DataLoader
         import numpy as np
+        from torch.utils.data import DataLoader
+
         from src.dataset.dataset import DataCollatorForCoLLIE
         from transformers import AutoTokenizer
 

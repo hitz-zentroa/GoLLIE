@@ -12,6 +12,10 @@ from transformers import (
     PreTrainedModel,
     PreTrainedTokenizerBase,
 )
+from transformers.models.auto.modeling_auto import (
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES,
+    MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES,
+)
 
 from .model_utils import get_trainable_parameters
 
@@ -92,13 +96,13 @@ def load_model_for_training(
     config = AutoConfig.from_pretrained(model_weights_name_or_path)
 
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
-
+    logging.info(f"Loading model with dtype: {torch_dtype}")
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
     )
 
-    if config.is_encoder_decoder:
+    if config.model_type in MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(
             f"Model {model_weights_name_or_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model."
         )
@@ -119,7 +123,7 @@ def load_model_for_training(
             torch_dtype=torch_dtype,
         )
 
-    else:
+    elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(
             f"Model {model_weights_name_or_path} is an decoder-only model. We will load it as a CausalLM model."
         )
@@ -131,6 +135,14 @@ def load_model_for_training(
 
         # Ensure that the padding token is added to the left of the input sequence.
         tokenizer.padding_side = "left"
+
+    else:
+        raise ValueError(
+            f"Model {model_weights_name_or_path} of type {config.model_type} is not supported by CoLLIE."
+            "Supported models are:\n"
+            f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
+            f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
+        )
 
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
@@ -237,7 +249,7 @@ def load_model_for_inference(
         add_eos_token=True,
     )
 
-    if config.is_encoder_decoder:
+    if config.model_type in MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
@@ -246,7 +258,7 @@ def load_model_for_inference(
             torch_dtype=torch_dtype,
         )
 
-    else:
+    elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
@@ -257,6 +269,13 @@ def load_model_for_inference(
 
         # Ensure that the padding token is added to the left of the input sequence.
         tokenizer.padding_side = "left"
+    else:
+        raise ValueError(
+            f"Model {weights_path} of type {config.model_type} is not supported by CoLLIE."
+            "Supported models are:\n"
+            f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
+            f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
+        )
 
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
