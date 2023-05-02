@@ -29,10 +29,10 @@ test_tasks:
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
-prompt_loss_weight: 0.0
+prompt_loss_weight: 0.05
 
 # checkpoint settings
-output_dir: /ikerlariak/igarcia945/CoLLIE/pretrained_models/CoLLIE-7b-prompt5%
+output_dir: /ikerlariak/osainz006/models/collie/CoLLIE-7b-prompt5%
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"

@@ -91,7 +91,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
-            prompt_loss_weight=data_args.prompt_loss_weight,
+            prompt_loss_weight=0.0,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -212,6 +212,7 @@ def inference_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
+            prompt_loss_weight=0.0,
         )
 
         logging.info(f"Running inference on {test_task}...")

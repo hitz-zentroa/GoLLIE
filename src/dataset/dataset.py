@@ -292,7 +292,7 @@ class CollieDataset(Dataset):
         is_encoder_decoder: bool = False,
         max_length: int = 2048,
         inference: bool = False,
-        prompt_loss_weight: float = 0.05,
+        prompt_loss_weight: float = 0.0,
         num_workers: int = min(os.cpu_count(), 16),
     ):
         self.is_encoder_decoder = is_encoder_decoder
