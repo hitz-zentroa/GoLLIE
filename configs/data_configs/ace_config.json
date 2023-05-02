@@ -42,7 +42,8 @@
             "parallel_instances": 1,
             "max_guidelines": -1,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.ace.scorer.ACERelationScorer"
+            "scorer": "src.tasks.ace.scorer.ACERelationScorer",
+            "ensure_positives_on_train": true
         },
         "EE": {
             "group_by": "sentence",
@@ -54,9 +55,10 @@
         "EAE": {
             "group_by": "sentence",
             "parallel_instances": 1,
-            "max_guidelines": -1,
+            "max_guidelines": 5,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.ace.scorer.ACEEventScorer"
+            "scorer": "src.tasks.ace.scorer.ACEEventScorer",
+            "ensure_positives_on_train": true
         }
     }
 }
