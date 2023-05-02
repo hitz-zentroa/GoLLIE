@@ -11,21 +11,30 @@ dataset_dir:
 train_tasks:
   - ace05.ner
   - ace05.re
+  - ace05.rc
   - ace05.ee
+  - ace05.eae
   - conll03.ner
+  - rams.eae
 validation_tasks:
   - ace05.ner
   - ace05.ver
   - ace05.re
+  - ace05.rc
   - ace05.ee
+  - ace05.eae
   - conll03.ner
+  - rams.eae
 test_tasks:
   - ace05.ner
   - ace05.ver
   - ace05.re
+  - ace05.rc
   - ace05.ee
+  - ace05.eae
   - conll03.ner
   - europarl.ner
+  - rams.eae
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
