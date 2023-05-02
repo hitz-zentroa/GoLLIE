@@ -7,7 +7,7 @@ import re
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
-from typing import Dict, Tuple, TypeVar, Union
+from typing import Any, Dict, Tuple, Type, TypeVar, Union
 
 
 def dataclass(
@@ -30,6 +30,14 @@ def dataclass(
         unsafe_hash=unsafe_hash,
         frozen=frozen,
     )
+
+
+def cast_to(obj: Any, dtype: Type) -> Any:
+    if not isinstance(obj, dtype):
+        raise TypeError(f"Type {dtype} must be a parent class of object {obj}.")
+
+    _inst = {param: getattr(obj, param) for param in inspect.signature(dtype).parameters.keys() if hasattr(obj, param)}
+    return dtype(**_inst)
 
 
 class HallucinatedType:

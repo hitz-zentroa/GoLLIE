@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List, Type
 
 from ..utils_typing import Entity, Event, Relation, Value, dataclass
 
@@ -459,6 +459,13 @@ RELATION_DEFINITIONS: List[Relation] = [
     OrgLocationOrigin,
 ]
 
+FINE_TO_COARSE_RELATIONS: Dict[Type, Type] = {_def: _def.__base__ for _def in RELATION_DEFINITIONS}
+COARSE_TO_FINE_RELATIONS: Dict[Type, List[Type]] = {}
+for fine, coarse in FINE_TO_COARSE_RELATIONS.items():
+    if coarse not in COARSE_TO_FINE_RELATIONS:
+        COARSE_TO_FINE_RELATIONS[coarse] = []
+    COARSE_TO_FINE_RELATIONS[coarse].append(fine)
+
 """Event definitions
 
 The events definitions are derived from the oficial ACE guidelines:
@@ -547,7 +554,7 @@ class JusticeEvent(Event):
     mention: str
 
 
-COARSE_EVENT_DEFINITIONS = List[Event] = [
+COARSE_EVENT_DEFINITIONS: List[Event] = [
     LifeEvent,
     MovementEvent,
     TransactionEvent,
@@ -1067,5 +1074,12 @@ EVENT_DEFINITIONS: List[Event] = [
     Pardon,
     Appeal,
 ]
+
+FINE_TO_COARSE_EVENTS: Dict[Type, Type] = {_def: _def.__base__ for _def in EVENT_DEFINITIONS}
+COARSE_TO_FINE_EVENTS: Dict[Type, List[Type]] = {}
+for fine, coarse in FINE_TO_COARSE_EVENTS.items():
+    if coarse not in COARSE_TO_FINE_EVENTS:
+        COARSE_TO_FINE_EVENTS[coarse] = []
+    COARSE_TO_FINE_EVENTS[coarse].append(fine)
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS, *RELATION_DEFINITIONS, *EVENT_DEFINITIONS]))

@@ -6,6 +6,7 @@ import unittest
 class TestDataLoaders(unittest.TestCase):
     @unittest.skipIf(not os.path.exists("data/ace05/english.sentence.json"), "No ACE data available")
     def test_ACE(self):
+
         from src.tasks.ace.data_loader import ACEDatasetLoader, ACESampler
 
         with open("configs/data_configs/ace_config.json") as f:
@@ -15,7 +16,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
-        _ = list(ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"]))
+        _ = list(ACESampler(dataloader, task="RC", **config, **config["task_configuration"]["RC"]))
 
         # TODO: Implement a better TEST
 

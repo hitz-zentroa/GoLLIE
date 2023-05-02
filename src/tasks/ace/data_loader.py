@@ -1,21 +1,37 @@
 import inspect
 import json
+import math
+import random
 from typing import Tuple, Union
 
+import black
+import numpy as np
+from typing_extensions import override
+
 from src.tasks.ace.prompts import (
+    COARSE_EVENT_DEFINITIONS,
+    COARSE_RELATION_DEFINITIONS,
+    COARSE_TO_FINE_EVENTS,
+    COARSE_TO_FINE_RELATIONS,
     ENTITY_DEFINITIONS,
     EVENT_DEFINITIONS,
+    FINE_TO_COARSE_EVENTS,
+    FINE_TO_COARSE_RELATIONS,
     GPE,
     RELATION_DEFINITIONS,
     VALUE_DEFINITIONS,
     Acquit,
+    AgentArtifactRelationRelation,
     Appeal,
     ArrestJail,
     Attack,
     BeBorn,
     Business,
+    BusinessEvent,
     ChargeIndict,
     CitizenResidentReligionEthnicity,
+    ConflictEvent,
+    ContactEvent,
     ContactInfo,
     Convict,
     Crime,
@@ -33,26 +49,35 @@ from src.tasks.ace.prompts import (
     Family,
     Fine,
     Founder,
+    GenAffiliationRelation,
     Geographical,
     Injure,
     InvestorShareholder,
     JobTitle,
+    JusticeEvent,
     LastingPersonal,
+    LifeEvent,
     Located,
     Location,
     Marry,
     Meet,
     Membership,
     MergeOrg,
+    MovementEvent,
     Near,
     Nominate,
     Numeric,
     Organization,
+    OrganizationAffiliationRelation,
     OrgLocationOrigin,
     Ownership,
     Pardon,
+    PartWholeRelation,
     Person,
+    PersonalSocialRelation,
+    PersonellEvent,
     PhoneWrite,
+    PhysicalRelation,
     ReleaseParole,
     Sentence,
     SentenceAct,
@@ -63,6 +88,7 @@ from src.tasks.ace.prompts import (
     Subsidiary,
     Sue,
     Time,
+    TransactionEvent,
     TransferMoney,
     TransferOwnership,
     Transport,
@@ -71,6 +97,7 @@ from src.tasks.ace.prompts import (
     Vehicle,
     Weapon,
 )
+from src.tasks.utils_typing import cast_to
 
 from ..utils_data import DatasetLoader, Sampler
 
@@ -108,24 +135,27 @@ class ACEDatasetLoader(DatasetLoader):
         "TIME": Time,
     }
     RELATION_TO_CLASS_MAPPING = {
-        "ART:User-Owner-Inventor-Manufacturer": UserOwnerInventorManufacturer,
-        "GEN-AFF:Citizen-Resident-Religion-Ethnicity": CitizenResidentReligionEthnicity,
-        "GEN-AFF:Org-Location": OrgLocationOrigin,
-        "ORG-AFF:Employment": Employment,
-        "ORG-AFF:Founder": Founder,
-        "ORG-AFF:Investor-Shareholder": InvestorShareholder,
-        "ORG-AFF:Membership": Membership,
-        "ORG-AFF:Ownership": Ownership,
-        "ORG-AFF:Sports-Affiliation": SportsAffiliation,
-        "ORG-AFF:Student-Alum": StudentAlum,
-        "PART-WHOLE:Artifact": Geographical,  # There is no definition for Artifact relation on the guidelines
-        "PART-WHOLE:Geographical": Geographical,
-        "PART-WHOLE:Subsidiary": Subsidiary,
-        "PER-SOC:Business": Business,
-        "PER-SOC:Family": Family,
-        "PER-SOC:Lasting-Personal": LastingPersonal,
-        "PHYS:Located": Located,
-        "PHYS:Near": Near,
+        "ART:User-Owner-Inventor-Manufacturer": (AgentArtifactRelationRelation, UserOwnerInventorManufacturer),
+        "GEN-AFF:Citizen-Resident-Religion-Ethnicity": (GenAffiliationRelation, CitizenResidentReligionEthnicity),
+        "GEN-AFF:Org-Location": (GenAffiliationRelation, OrgLocationOrigin),
+        "ORG-AFF:Employment": (OrganizationAffiliationRelation, Employment),
+        "ORG-AFF:Founder": (OrganizationAffiliationRelation, Founder),
+        "ORG-AFF:Investor-Shareholder": (OrganizationAffiliationRelation, InvestorShareholder),
+        "ORG-AFF:Membership": (OrganizationAffiliationRelation, Membership),
+        "ORG-AFF:Ownership": (OrganizationAffiliationRelation, Ownership),
+        "ORG-AFF:Sports-Affiliation": (OrganizationAffiliationRelation, SportsAffiliation),
+        "ORG-AFF:Student-Alum": (OrganizationAffiliationRelation, StudentAlum),
+        "PART-WHOLE:Artifact": (
+            PartWholeRelation,
+            Geographical,
+        ),  # There is no definition for Artifact relation on the guidelines
+        "PART-WHOLE:Geographical": (PartWholeRelation, Geographical),
+        "PART-WHOLE:Subsidiary": (PartWholeRelation, Subsidiary),
+        "PER-SOC:Business": (PersonalSocialRelation, Business),
+        "PER-SOC:Family": (PersonalSocialRelation, Family),
+        "PER-SOC:Lasting-Personal": (PersonalSocialRelation, LastingPersonal),
+        "PHYS:Located": (PhysicalRelation, Located),
+        "PHYS:Near": (PhysicalRelation, Near),
     }
     _EVENT_CONSTANTS_MAPPING = {
         "trigger": "mention",
@@ -142,19 +172,23 @@ class ACEDatasetLoader(DatasetLoader):
     }
     EVENT_TO_CLASS_MAPPING = {
         "Business:Declare-Bankruptcy": {
+            "coarse": BusinessEvent,
             "class": DeclareBankruptcy,
             "Org": "org",
         },
         "Business:End-Org": {
+            "coarse": BusinessEvent,
             "class": EndOrg,
             "Org": "org",
         },
         "Business:Merge-Org": {
+            "coarse": BusinessEvent,
             "class": MergeOrg,
             "Org": "org",
         },
-        "Business:Start-Org": {"class": StartOrg, "Agent": "agent", "Org": "org"},
+        "Business:Start-Org": {"coarse": BusinessEvent, "class": StartOrg, "Agent": "agent", "Org": "org"},
         "Conflict:Attack": {
+            "coarse": ConflictEvent,
             "class": Attack,
             "Agent": "attacker",
             "Attacker": "attacker",
@@ -163,36 +197,43 @@ class ACEDatasetLoader(DatasetLoader):
             "Victim": "target",
         },
         "Conflict:Demonstrate": {
+            "coarse": ConflictEvent,
             "class": Demonstrate,
             "Entity": "entity",
         },
         "Contact:Meet": {
+            "coarse": ContactEvent,
             "class": Meet,
             "Entity": "entity",
         },
         "Contact:Phone-Write": {
+            "coarse": ContactEvent,
             "class": PhoneWrite,
             "Entity": "entity",
         },
         "Justice:Acquit": {
+            "coarse": JusticeEvent,
             "class": Acquit,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
             "Defendant": "defendant",
         },
         "Justice:Appeal": {
+            "coarse": JusticeEvent,
             "class": Appeal,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
             "Plaintiff": "prosecutor",
         },
         "Justice:Arrest-Jail": {
+            "coarse": JusticeEvent,
             "class": ArrestJail,
             "Agent": "agent",
             "Crime": "crime",
             "Person": "person",
         },
         "Justice:Charge-Indict": {
+            "coarse": JusticeEvent,
             "class": ChargeIndict,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
@@ -200,18 +241,21 @@ class ACEDatasetLoader(DatasetLoader):
             "Prosecutor": "prosecutor",
         },
         "Justice:Convict": {
+            "coarse": JusticeEvent,
             "class": Convict,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
             "Defendant": "defendant",
         },
         "Justice:Execute": {
+            "coarse": JusticeEvent,
             "class": Execute,
             "Agent": "agent",
             "Crime": "crime",
             "Person": "person",
         },
         "Justice:Extradite": {
+            "coarse": JusticeEvent,
             "class": Extradite,
             "Agent": "agent",
             "Destination": "destination",
@@ -219,6 +263,7 @@ class ACEDatasetLoader(DatasetLoader):
             "Person": "person",
         },
         "Justice:Fine": {
+            "coarse": JusticeEvent,
             "class": Fine,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
@@ -226,18 +271,21 @@ class ACEDatasetLoader(DatasetLoader):
             "Money": "money",
         },
         "Justice:Pardon": {
+            "coarse": JusticeEvent,
             "class": Pardon,
             "Adjudicator": "adjudicator",
             "Defendant": "defendant",
             "Crime": "crime",
         },
         "Justice:Release-Parole": {
+            "coarse": JusticeEvent,
             "class": ReleaseParole,
             "Crime": "crime",
             "Entity": "entity",
             "Person": "person",
         },
         "Justice:Sentence": {
+            "coarse": JusticeEvent,
             "class": SentenceAct,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
@@ -245,6 +293,7 @@ class ACEDatasetLoader(DatasetLoader):
             "Sentence": "sentence",
         },
         "Justice:Sue": {
+            "coarse": JusticeEvent,
             "class": Sue,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
@@ -252,6 +301,7 @@ class ACEDatasetLoader(DatasetLoader):
             "Plaintiff": "plaintiff",
         },
         "Justice:Trial-Hearing": {
+            "coarse": JusticeEvent,
             "class": TrialHearing,
             "Adjudicator": "adjudicator",
             "Crime": "crime",
@@ -259,10 +309,12 @@ class ACEDatasetLoader(DatasetLoader):
             "Prosecutor": "prosecutor",
         },
         "Life:Be-Born": {
+            "coarse": LifeEvent,
             "class": BeBorn,
             "Person": "person",
         },
         "Life:Die": {
+            "coarse": LifeEvent,
             "class": Die,
             "Agent": "agent",
             "Instrument": "instrument",
@@ -270,20 +322,24 @@ class ACEDatasetLoader(DatasetLoader):
             "Victim": "victim",
         },
         "Life:Divorce": {
+            "coarse": LifeEvent,
             "class": Divorce,
             "Person": "person",
         },
         "Life:Injure": {
+            "coarse": LifeEvent,
             "class": Injure,
             "Agent": "agent",
             "Instrument": "instrument",
             "Victim": "victim",
         },
         "Life:Marry": {
+            "coarse": LifeEvent,
             "class": Marry,
             "Person": "person",
         },
         "Movement:Transport": {
+            "coarse": MovementEvent,
             "class": Transport,
             "Agent": "agent",
             "Artifact": "artifact",
@@ -295,30 +351,35 @@ class ACEDatasetLoader(DatasetLoader):
             "Price": "price",
         },
         "Personnel:Elect": {
+            "coarse": PersonellEvent,
             "class": Elect,
             "Entity": "entity",
             "Person": "person",
             "Position": "position",
         },
         "Personnel:End-Position": {
+            "coarse": PersonellEvent,
             "class": EndPosition,
             "Entity": "entity",
             "Person": "person",
             "Position": "position",
         },
         "Personnel:Nominate": {
+            "coarse": PersonellEvent,
             "class": Nominate,
             "Agent": "agent",
             "Person": "person",
             "Position": "position",
         },
         "Personnel:Start-Position": {
+            "coarse": PersonellEvent,
             "class": StartPosition,
             "Entity": "entity",
             "Person": "person",
             "Position": "position",
         },
         "Transaction:Transfer-Money": {
+            "coarse": TransactionEvent,
             "class": TransferMoney,
             "Beneficiary": "beneficiary",
             "Giver": "giver",
@@ -326,6 +387,7 @@ class ACEDatasetLoader(DatasetLoader):
             "Recipient": "recipient",
         },
         "Transaction:Transfer-Ownership": {
+            "coarse": TransactionEvent,
             "class": TransferOwnership,
             "Artifact": "artifact",
             "Beneficiary": "beneficiary",
@@ -355,8 +417,10 @@ class ACEDatasetLoader(DatasetLoader):
                         "text": "",
                         "entities": [],
                         "values": [],
+                        "coarse_relations": [],
                         "relations": [],
                         "events": [],
+                        "arguments": [],
                         "gold": [],
                     }
 
@@ -370,15 +434,23 @@ class ACEDatasetLoader(DatasetLoader):
                     for entity in line["entity_mentions"]
                     if entity["entity_type"] in self.VALUE_TO_CLASS_MAPPING
                 ]
-                relations = [
-                    self.RELATION_TO_CLASS_MAPPING[rel["relation_subtype"]](
-                        arg1=rel["arguments"][0]["text"],
-                        arg2=rel["arguments"][1]["text"],
+                coarse_relations, relations = [], []
+                for rel in line["relation_mentions"]:
+                    if rel["relation_subtype"] not in self.RELATION_TO_CLASS_MAPPING:
+                        continue
+                    coarse_relations.append(
+                        self.RELATION_TO_CLASS_MAPPING[rel["relation_subtype"]][0](
+                            arg1=rel["arguments"][0]["text"],
+                            arg2=rel["arguments"][1]["text"],
+                        )
                     )
-                    for rel in line["relation_mentions"]
-                    if rel["relation_subtype"] in self.RELATION_TO_CLASS_MAPPING
-                ]
-                events = []
+                    relations.append(
+                        self.RELATION_TO_CLASS_MAPPING[rel["relation_subtype"]][-1](
+                            arg1=rel["arguments"][0]["text"],
+                            arg2=rel["arguments"][1]["text"],
+                        )
+                    )
+                events, arguments = [], []
                 for event in line["event_mentions"]:
                     if event["event_type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
@@ -397,13 +469,16 @@ class ACEDatasetLoader(DatasetLoader):
                         else:
                             raise ValueError(f"Argument {event['event_type']}:{argument['role']} not found!")
 
-                    events.append(info["class"](**_inst))
+                    events.append(info["coarse"](mention=_inst["mention"]))
+                    arguments.append(info["class"](**_inst))
 
                 self.elements[key]["text"] += " " + line["sentence"].strip()
                 self.elements[key]["entities"] += entities
                 self.elements[key]["values"] += values
+                self.elements[key]["coarse_relations"] += coarse_relations
                 self.elements[key]["relations"] += relations
                 self.elements[key]["events"] += events
+                self.elements[key]["arguments"] += arguments
                 self.elements[key]["gold"] += entities  # Is not used anyway
 
 
@@ -458,7 +533,6 @@ class ACESampler(Sampler):
         max_guidelines: int = -1,
         guideline_dropout: float = 0.0,
         seed: float = 0,
-        prompt_template: str = "templates/prompt.txt",
         ensure_positives_on_train: bool = False,
         dataset_name: str = None,
         scorer: str = None,
@@ -469,15 +543,21 @@ class ACESampler(Sampler):
             "NER",
             "VER",
             "RE",
+            "RC",
             "EE",
-        ], f"{task} must be either 'NER', 'VER', 'RE', 'EE'."
+            "EAE",
+        ], f"{task} must be either 'NER', 'VER', 'RE', 'RC', 'EE', 'EAE'."
 
-        task_definitions, task_target = {
-            "NER": (ENTITY_DEFINITIONS, "entities"),
-            "VER": (VALUE_DEFINITIONS, "values"),
-            "RE": (RELATION_DEFINITIONS, "relations"),
-            "EE": (EVENT_DEFINITIONS, "events"),
+        task_definitions, task_target, task_template = {
+            "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt.txt"),
+            "VER": (VALUE_DEFINITIONS, "values", "templates/prompt.txt"),
+            "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt.txt"),
+            "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_re.txt"),
+            "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
+            "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
         }[task]
+
+        kwargs.pop("prompt_template")
 
         super().__init__(
             dataset_loader=dataset_loader,
@@ -487,7 +567,7 @@ class ACESampler(Sampler):
             max_guidelines=max_guidelines,
             guideline_dropout=guideline_dropout,
             seed=seed,
-            prompt_template=prompt_template,
+            prompt_template=task_template,
             ensure_positives_on_train=ensure_positives_on_train,
             sample_only_gold_guidelines=sample_only_gold_guidelines,
             dataset_name=dataset_name,
@@ -496,3 +576,77 @@ class ACESampler(Sampler):
             task_target=task_target,
             **kwargs,
         )
+
+    @override
+    def _sample(self, instances):
+        if self.task not in ["RC", "EAE"]:
+            for inst in super()._sample(instances):
+                yield inst
+        else:
+            COARSE_TO_FINE = COARSE_TO_FINE_EVENTS if self.task == "EAE" else COARSE_TO_FINE_RELATIONS
+            FINE_TO_COARSE = FINE_TO_COARSE_EVENTS if self.task == "EAE" else FINE_TO_COARSE_RELATIONS
+            positive_guidelines = {type(ann) for inst in instances for ann in inst[self.task_target]}
+            for coarse_type in {FINE_TO_COARSE[_def] for _def in positive_guidelines}:
+                # guidelines = {_type for _def in positive_guidelines for _type in COARSE_TO_FINE[FINE_TO_COARSE[_def]]}
+                guidelines = COARSE_TO_FINE[coarse_type]
+                if self.sample_only_gold_guidelines:
+                    guidelines = [
+                        definition
+                        for definition in guidelines
+                        if any(isinstance(ann, definition) for inst in instances for ann in inst[self.task_target])
+                    ]
+
+                if (
+                    self.split == "train"
+                    and self.sample_total_guidelines < len(guidelines)
+                    and not self.sample_only_gold_guidelines
+                ):
+                    p = np.asarray(
+                        [
+                            (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+                            for _def in guidelines
+                        ]
+                    )
+                    p += 1.0 / p.shape[0]
+                    p /= p.sum()
+                    guidelines = np.random.choice(
+                        np.asarray(guidelines),
+                        size=(self.sample_total_guidelines,),
+                        replace=False,
+                        p=p,
+                    ).tolist()
+
+                # guidelines = list(self.task_definitions)
+                random.shuffle(guidelines)
+                splits = math.ceil(len(guidelines) / self.max_guidelines)
+                for i in range(splits):
+                    _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
+                    # Apply guideline dropout
+                    if self.split == "train":
+                        _guidelines = [
+                            _def
+                            for _def in _guidelines
+                            if random.random() > self.guideline_dropout
+                            or (_def in positive_guidelines and self.ensure_positives_on_train)
+                        ]
+
+                    _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
+                    _gold = [cast_to(ann, coarse_type) for ann in _ann]
+                    _text = " ".join([inst["text"] for inst in instances]).strip()
+
+                    _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                    if self.remove_guidelines:
+                        _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                        _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
+                    yield {
+                        "ids": [inst["id"] for inst in instances],
+                        "task_id": f"{self.dataset_name}_{self.task}",
+                        "scorer_cls": self.scorer_cls,
+                        "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
+                        "text": black.format_str(
+                            self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
+                            mode=self._black_mode,
+                        ),
+                        "unlabelled_sentence": _text,
+                    }
