@@ -63,7 +63,7 @@ def train_collie(
 
     logging.info(
         "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
-        f" {data_args.ignore_pad_token_for_loss} and 'prompt loss weight':"
+        f" {data_args.ignore_pad_token_for_loss} and 'prompt_loss_weight':"
         f" {data_args.prompt_loss_weight}"
     )
 
