@@ -175,20 +175,23 @@ class Sampler:
             positive_guidelines = {type(ann) for inst in instances for ann in inst[self.task_target]}
             # Assign a probability distribution that helps positive classes
             # if ensure_positives_on_train is True
-            p = np.asarray(
-                [
-                    (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
-                    for _def in self.task_definitions
-                ]
-            )
-            p += 1.0 / p.shape[0]
-            p /= p.sum()
-            guidelines = np.random.choice(
-                np.asarray(self.task_definitions),
-                size=(self.sample_total_guidelines,),
-                replace=False,
-                p=p,
-            ).tolist()
+            if self.sample_total_guidelines < len(self.task_definitions):
+                p = np.asarray(
+                    [
+                        (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+                        for _def in self.task_definitions
+                    ]
+                )
+                p += 1.0 / p.shape[0]
+                p /= p.sum()
+                guidelines = np.random.choice(
+                    np.asarray(self.task_definitions),
+                    size=(self.sample_total_guidelines,),
+                    replace=False,
+                    p=p,
+                ).tolist()
+            else:
+                guidelines = list(self.task_definitions)
             random.shuffle(guidelines)
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
