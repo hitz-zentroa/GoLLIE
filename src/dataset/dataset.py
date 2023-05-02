@@ -62,7 +62,8 @@ def prepare_data(
             Whether to prepare the data for inference. During inference labels
             are not included in model inputs. Defaults to `False`.
         prompt_loss_weight (`float`, optional):
-            The weight of the prompt tokens in the loss function. Defaults to `0.05`.
+            The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
+            of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
 
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
@@ -153,8 +154,24 @@ def prepare_data(
             # Create the weight mask
             loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
 
+            # The sum of the loss of the prompt tokens should be equal to 'prompt_loss_weight' percent of the total loss
+            len_prompt = len(prompt)
+            len_result = len(model_inputs["labels"]) - len_prompt
+            prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
+            try:
+                prompt_token_weight = prompt_token_weight * (
+                    len_result / (len_result * (1 - prompt_loss_weight))
+                )  # Scale so result tokens can have 1.0 weight
+                prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
+            except ZeroDivisionError:
+                logging.warning(
+                    "Found division by zero in prompt token weight calculation. You might have an empty prompt, empty"
+                    f" result, or both. Example with error: {example}. Setting prompt token weight to 0.0."
+                )
+                prompt_token_weight = 0.0
+
             for i in range(len(prompt)):
-                loss_weight_mask[i] = prompt_loss_weight
+                loss_weight_mask[i] = prompt_token_weight
 
             model_inputs["loss_weight_mask"] = loss_weight_mask
 
@@ -193,7 +210,8 @@ def batch_tokenization(
             results section of the example. Labels will still include the full correct
             example. If model `is_encoder_decoder=True`, this parameter is ignored.
         prompt_loss_weight (`float`):
-            The weight of the prompt tokens in the loss function.
+            The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
+            of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
         examples (`List[str]`):
             The examples to tokenize.
         process_no (`int`):
@@ -260,7 +278,8 @@ class CollieDataset(Dataset):
             correct example. If model `is_encoder_decoder=True`, this parameter is
             ignored. Defaults to `False`.
         prompt_loss_weight (`float`, optional):
-            The weight of the prompt tokens in the loss function. Defaults to `0.05`.
+            The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
+            of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
@@ -279,6 +298,11 @@ class CollieDataset(Dataset):
         self.is_encoder_decoder = is_encoder_decoder
         self.max_length = max_length
         self.inference = inference
+
+        assert (
+            prompt_loss_weight >= 0.0 and prompt_loss_weight < 1.0
+        ), f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}."
+
         self.prompt_loss_weight = prompt_loss_weight
 
         try:

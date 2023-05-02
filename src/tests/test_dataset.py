@@ -376,7 +376,7 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer.pad_token_id = tokenizer.unk_token_id
 
         # Padding = Max Length , Ignore pad token for loss = True
-        for prompt_loss_weight in [0.0, 0.05, 1.0]:
+        for prompt_loss_weight in [0.0, 0.05, 0.2, 0.5]:
             # Test Train
             dataset, prompt, result = get_dataset(
                 tokenizer=tokenizer,
@@ -446,20 +446,38 @@ class TestCollieDataset(unittest.TestCase):
                 [0.0] * num_pad_tokens,
             )
 
-            # Test that all prompt tokens are prompt_loss_weight in loss_weights_mask
-            np.testing.assert_almost_equal(
-                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)],
-                [prompt_loss_weight] * len(prompt_tokens),
-            )
-
             # Test that all result tokens are 1.0 in loss_weights_mask
             np.testing.assert_almost_equal(
                 loss_weights_mask[num_pad_tokens + len(prompt_tokens) :],
                 [1.0] * len(result_tokens),
             )
 
+            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
+            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            total_loss = prompt_tokens_loss + result_tokens_loss
+
+            # print(f"Prompt loss weight: {prompt_loss_weight}")
+            # print(f"Prompt loss: {prompt_tokens_loss}")
+            # print(f"Result loss: {result_tokens_loss}")
+            # print(f"Total loss: {total_loss}")
+            # print()
+
+            # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
+            self.assertAlmostEqual(
+                prompt_tokens_loss / total_loss,
+                prompt_loss_weight,
+                places=5,
+            )
+
+            # Test that the loss of the result tokens is (1 - prompt_loss_weight) of the total loss
+            self.assertAlmostEqual(
+                result_tokens_loss / total_loss,
+                1 - prompt_loss_weight,
+                places=5,
+            )
+
         # Padding = True , Ignore pad token for loss = True
-        for prompt_loss_weight in [0.0, 0.05, 1.0]:
+        for prompt_loss_weight in [0.0, 0.05, 0.2, 0.5]:
             # Test Train
             dataset, prompt, result = get_dataset(
                 tokenizer=tokenizer,
@@ -529,20 +547,32 @@ class TestCollieDataset(unittest.TestCase):
                 [0.0] * num_pad_tokens,
             )
 
-            # Test that all prompt tokens are prompt_loss_weight in loss_weights_mask
-            np.testing.assert_almost_equal(
-                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)],
-                [prompt_loss_weight] * len(prompt_tokens),
-            )
-
             # Test that all result tokens are 1.0 in loss_weights_mask
             np.testing.assert_almost_equal(
                 loss_weights_mask[num_pad_tokens + len(prompt_tokens) :],
                 [1.0] * len(result_tokens),
             )
 
+            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
+            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            total_loss = prompt_tokens_loss + result_tokens_loss
+
+            # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
+            self.assertAlmostEqual(
+                prompt_tokens_loss / total_loss,
+                prompt_loss_weight,
+                places=5,
+            )
+
+            # Test that the loss of the result tokens is (1 - prompt_loss_weight) of the total loss
+            self.assertAlmostEqual(
+                result_tokens_loss / total_loss,
+                1 - prompt_loss_weight,
+                places=5,
+            )
+
         # Padding = "Max len" , Ignore pad token for loss = False
-        for prompt_loss_weight in [0.0, 0.05, 1.0]:
+        for prompt_loss_weight in [0.0, 0.05, 0.2, 0.5]:
             # Test Train
             dataset, prompt, result = get_dataset(
                 tokenizer=tokenizer,
@@ -612,16 +642,28 @@ class TestCollieDataset(unittest.TestCase):
                 [1.0] * num_pad_tokens,
             )
 
-            # Test that all prompt tokens are prompt_loss_weight in loss_weights_mask
-            np.testing.assert_almost_equal(
-                loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)],
-                [prompt_loss_weight] * len(prompt_tokens),
-            )
-
             # Test that all result tokens are 1.0 in loss_weights_mask
             np.testing.assert_almost_equal(
                 loss_weights_mask[num_pad_tokens + len(prompt_tokens) :],
                 [1.0] * len(result_tokens),
+            )
+
+            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
+            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            total_loss = prompt_tokens_loss + result_tokens_loss
+
+            # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
+            self.assertAlmostEqual(
+                prompt_tokens_loss / total_loss,
+                prompt_loss_weight,
+                places=5,
+            )
+
+            # Test that the loss of the result tokens is (1 - prompt_loss_weight) of the total loss
+            self.assertAlmostEqual(
+                result_tokens_loss / total_loss,
+                1 - prompt_loss_weight,
+                places=5,
             )
 
     def test_dataset_rotation(self):

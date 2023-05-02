@@ -133,5 +133,11 @@ class DataTrainingArguments:
 
     prompt_loss_weight: float = field(
         default=0.05,
-        metadata={"help": "The weight of the prompt tokens in the loss function."},
+        metadata={
+            "help": (
+                "The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total"
+                " weight of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to"
+                " `0.05`."
+            )
+        },
     )
