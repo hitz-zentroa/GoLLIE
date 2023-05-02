@@ -597,8 +597,7 @@ class ACESampler(Sampler):
                     ]
 
                 if (
-                    self.split == "train"
-                    and self.sample_total_guidelines < len(guidelines)
+                    self.sample_total_guidelines < len(guidelines)
                     and not self.sample_only_gold_guidelines
                 ):
                     p = np.asarray(
