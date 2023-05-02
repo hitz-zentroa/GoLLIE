@@ -20,6 +20,7 @@ from transformers import (
     TrainingArguments,
 )
 from transformers.modeling_utils import unwrap_model
+from transformers.models.auto.modeling_auto import MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
 from transformers.trainer import TRAINING_ARGS_NAME, logger
 from transformers.trainer_callback import TrainerCallback
 from transformers.trainer_utils import EvalPrediction, has_length
@@ -211,6 +212,40 @@ class CollieTrainer(Seq2SeqTrainer):
         # _prev_progress_callback = self.pop_callback(ProgressCallback)
         # if _prev_progress_callback:
         #    self.add_callback(RichProgressCallback)
+
+    def compute_loss(self, model, inputs, return_outputs=False):
+        """
+        How the loss is computed by Trainer. By default, all models return the loss in the first element.
+        Subclass and override for custom behavior.
+        """
+
+        if "labels" in inputs:
+            labels = inputs.pop("labels")
+        else:
+            raise ValueError("You should supply a labels key to compute the loss")
+
+        if "loss_weight_mask" in inputs:
+            loss_weight_mask = inputs.pop("loss_weight_mask")
+        else:
+            raise ValueError("You should supply a loss_weight_mask key to compute the loss")
+
+        outputs = model(**inputs)
+
+        logits = outputs["logits"] if isinstance(outputs, dict) else outputs[0]
+        if unwrap_model(model)._get_name() in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values():
+            logits = logits[..., :-1, :].contiguous()
+            labels = labels[..., 1:].contiguous()
+            loss_weight_mask = loss_weight_mask[..., 1:].contiguous()
+
+        logits = logits.view(-1, logits.size(-1))
+        labels = labels.view(-1)
+        loss_weight_mask = loss_weight_mask.view(-1)
+        loss_fct = nn.CrossEntropyLoss(reduction="none", ignore_index=-100)
+
+        loss = loss_fct(logits, labels)
+        loss = torch.sum(loss * loss_weight_mask) / torch.sum(loss_weight_mask)
+
+        return (loss, outputs) if return_outputs else loss
 
     # Modify the Seq2SeqTrainer from transformers to only save the LoRA weights if we are using a LoRA model
     # Original trainer saves the full state dict. It doesn't make sense for us to create a full copy

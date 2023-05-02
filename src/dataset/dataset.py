@@ -4,15 +4,18 @@ import logging
 import math
 import os
 import random
+from dataclasses import dataclass
 from functools import partial
 from itertools import chain
 from multiprocessing import Pool
-from typing import Dict, Iterator, List, Sized
+from typing import Any, Dict, Iterator, List, Optional, Sized, Union
 
+import numpy as np
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from torch.utils.data import Dataset
 
 from transformers import BatchEncoding, PreTrainedTokenizerBase
+from transformers.utils import PaddingStrategy
 
 
 def batch(iterable: Sized, n=1) -> Iterator:
@@ -41,7 +44,7 @@ def prepare_data(
     is_encoder_decoder: bool = False,
     max_length: int = 2048,
     inference: bool = False,
-    ignore_prompt_loss: bool = False,
+    prompt_loss_weight: float = 0.05,
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
@@ -58,9 +61,9 @@ def prepare_data(
         inference (`bool`, optional):
             Whether to prepare the data for inference. During inference labels
             are not included in model inputs. Defaults to `False`.
-        ignore_prompt_loss (`bool`, optional):
-            Whether to ignore the prompt tokens when calculating the loss (set to -100).
-            Defaults to `False`
+        prompt_loss_weight (`float`, optional):
+            The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
+            of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
 
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
@@ -90,6 +93,8 @@ def prepare_data(
                 add_special_tokens=True,
             )["input_ids"]
 
+            model_inputs["loss_weight_mask"] = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+
     else:
         if inference:
             prompt = example.split("result = [")[0] + "result = ["
@@ -116,42 +121,59 @@ def prepare_data(
                 return_tensors=None,
                 add_special_tokens=True,
             )
-            if ignore_prompt_loss:
-                prompt = example.split("result = [")[0] + "result = ["
-                prompt = tokenizer(
-                    text=prompt,
-                    max_length=max_length,
-                    truncation=True,
-                    padding=False,
-                    return_tensors=None,
-                    add_special_tokens=True,
-                )["input_ids"]
-
-                # Remove the last token if it is an eos token
-                if prompt[-1] == tokenizer.eos_token_id:
-                    prompt = prompt[:-1]
-
-                model_inputs["labels"] = model_inputs["input_ids"].copy()
-
-                if len(prompt) > len(model_inputs["labels"]):
-                    raise ValueError(
-                        f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-                        f" {model_inputs['input_ids']}"
-                    )
-
-                # Set labels to -100 for prompt tokens
-                for i in range(len(prompt)):
-                    model_inputs["labels"][i] = -100
-
-            else:
-                model_inputs["labels"] = model_inputs["input_ids"].copy()
 
             # Make sure the `eos_token_id` is added at the end
             # This bug is reported at https://github.com/huggingface/transformers/issues/22794
             if model_inputs["input_ids"][-1] != tokenizer.eos_token_id:
                 model_inputs["input_ids"].append(tokenizer.eos_token_id)
-                model_inputs["labels"].append(tokenizer.eos_token_id)
                 model_inputs["attention_mask"].append(1)
+
+            model_inputs["labels"] = model_inputs["input_ids"].copy()
+
+            # Find the prompt length
+            prompt = example.split("result = [")[0] + "result = ["
+            prompt = tokenizer(
+                text=prompt,
+                max_length=max_length,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            # Remove the last token if it is an eos token
+            if prompt[-1] == tokenizer.eos_token_id:
+                prompt = prompt[:-1]
+
+            if len(prompt) > len(model_inputs["labels"]):
+                raise ValueError(
+                    f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
+                    f" {model_inputs['input_ids']}"
+                )
+
+            # Create the weight mask
+            loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+
+            # The sum of the loss of the prompt tokens should be equal to 'prompt_loss_weight' percent of the total loss
+            len_prompt = len(prompt)
+            len_result = len(model_inputs["labels"]) - len_prompt
+            prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
+            try:
+                prompt_token_weight = prompt_token_weight * (
+                    len_result / (len_result * (1 - prompt_loss_weight))
+                )  # Scale so result tokens can have 1.0 weight
+                prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
+            except ZeroDivisionError:
+                logging.warning(
+                    "Found division by zero in prompt token weight calculation. You might have an empty prompt, empty"
+                    f" result, or both. Example with error: {example}. Setting prompt token weight to 0.0."
+                )
+                prompt_token_weight = 0.0
+
+            for i in range(len(prompt)):
+                loss_weight_mask[i] = prompt_token_weight
+
+            model_inputs["loss_weight_mask"] = loss_weight_mask
 
     if "token_type_ids" in model_inputs:
         # LLaMa tokenizer adds token type ids, but we don't need them
@@ -166,7 +188,7 @@ def batch_tokenization(
     is_encoder_decoder: bool,
     max_length: int,
     inference: bool,
-    ignore_prompt_loss: bool,
+    prompt_loss_weight: float,
     examples: List[str],
     process_no: int,
 ) -> List[BatchEncoding]:
@@ -187,9 +209,9 @@ def batch_tokenization(
             `is_encoder_decoder=False`, inputs ids will be truncated to don't include the
             results section of the example. Labels will still include the full correct
             example. If model `is_encoder_decoder=True`, this parameter is ignored.
-        ignore_prompt_loss (`bool`, optional):
-            Whether to ignore the prompt tokens when calculating the loss (set to -100).
-            Defaults to `False`
+        prompt_loss_weight (`float`):
+            The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
+            of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
         examples (`List[str]`):
             The examples to tokenize.
         process_no (`int`):
@@ -216,7 +238,7 @@ def batch_tokenization(
                         is_encoder_decoder=is_encoder_decoder,
                         max_length=max_length,
                         inference=inference,
-                        ignore_prompt_loss=ignore_prompt_loss,
+                        prompt_loss_weight=prompt_loss_weight,
                     )
                 )
                 progress.update(task, advance=1)
@@ -228,7 +250,7 @@ def batch_tokenization(
                 is_encoder_decoder=is_encoder_decoder,
                 max_length=max_length,
                 inference=inference,
-                ignore_prompt_loss=ignore_prompt_loss,
+                prompt_loss_weight=prompt_loss_weight,
             )
             for example in examples
         ]
@@ -255,9 +277,9 @@ class CollieDataset(Dataset):
             the results section of the example. Labels will still include the full
             correct example. If model `is_encoder_decoder=True`, this parameter is
             ignored. Defaults to `False`.
-        ignore_prompt_loss (`bool`, optional):
-            Whether to ignore the prompt tokens when calculating the loss (set to -100).
-            Defaults to `False`
+        prompt_loss_weight (`float`, optional):
+            The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
+            of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
@@ -270,13 +292,18 @@ class CollieDataset(Dataset):
         is_encoder_decoder: bool = False,
         max_length: int = 2048,
         inference: bool = False,
-        ignore_prompt_loss: bool = False,
+        prompt_loss_weight: float = 0.0,
         num_workers: int = min(os.cpu_count(), 16),
     ):
         self.is_encoder_decoder = is_encoder_decoder
         self.max_length = max_length
         self.inference = inference
-        self.ignore_prompt_loss = ignore_prompt_loss
+
+        assert (
+            prompt_loss_weight >= 0.0 and prompt_loss_weight < 1.0
+        ), f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}."
+
+        self.prompt_loss_weight = prompt_loss_weight
 
         try:
             self.dataset_name, self.task_name, self.split, extension = os.path.basename(dataset_path).split(".")
@@ -381,7 +408,7 @@ class CollieDataset(Dataset):
                 is_encoder_decoder=self.is_encoder_decoder,
                 max_length=self.max_length,
                 inference=self.inference,
-                ignore_prompt_loss=self.ignore_prompt_loss,
+                prompt_loss_weight=self.prompt_loss_weight,
                 examples=examples,
                 process_no=0,
             )
@@ -393,7 +420,7 @@ class CollieDataset(Dataset):
                 self.is_encoder_decoder,
                 self.max_length,
                 self.inference,
-                self.ignore_prompt_loss,
+                self.prompt_loss_weight,
             )
             with Pool(num_workers) as p:
                 tokenized_examples = p.starmap(
@@ -422,3 +449,127 @@ class CollieDataset(Dataset):
                 f' Dataset {".".join([self.dataset_name, self.task_name, self.split])} rotated to split'
                 f" {self.current_dataset_key}"
             )
+
+
+@dataclass
+class DataCollatorForCoLLIE:
+    """
+    Adapted from transformers.DataCollatorForSeq2Seq to handle CoLLIE data.
+
+    Data collator that will dynamically pad the inputs received, as well as the labels.
+
+    Args:
+        tokenizer ([`PreTrainedTokenizer`] or [`PreTrainedTokenizerFast`]):
+            The tokenizer used for encoding the data.
+        model ([`PreTrainedModel`]):
+            The model that is being trained. If set and has the *prepare_decoder_input_ids_from_labels*, use it to
+            prepare the *decoder_input_ids*
+
+            This is useful when using *label_smoothing* to avoid calculating loss twice.
+        padding (`bool`, `str` or [`~utils.PaddingStrategy`], *optional*, defaults to `True`):
+            Select a strategy to pad the returned sequences (according to the model's padding side and padding index)
+            among:
+
+            - `True` or `'longest'` (default): Pad to the longest sequence in the batch (or no padding if only a single
+              sequence is provided).
+            - `'max_length'`: Pad to a maximum length specified with the argument `max_length` or to the maximum
+              acceptable input length for the model if that argument is not provided.
+            - `False` or `'do_not_pad'`: No padding (i.e., can output a batch with sequences of different lengths).
+        max_length (`int`, *optional*):
+            Maximum length of the returned list and optionally padding length (see above).
+        pad_to_multiple_of (`int`, *optional*):
+            If set will pad the sequence to a multiple of the provided value.
+
+            This is especially useful to enable the use of Tensor Cores on NVIDIA hardware with compute capability >=
+            7.5 (Volta).
+        label_pad_token_id (`int`, *optional*, defaults to -100):
+            The id to use when padding the labels (-100 will be automatically ignored by PyTorch loss functions).
+        return_tensors (`str`):
+            The type of Tensor to return. Allowable values are "np", "pt" and "tf".
+    """
+
+    tokenizer: PreTrainedTokenizerBase
+    model: Optional[Any] = None
+    padding: Union[bool, str, PaddingStrategy] = True
+    max_length: Optional[int] = None
+    pad_to_multiple_of: Optional[int] = None
+    label_pad_token_id: int = -100
+    return_tensors: str = "pt"
+
+    def __call__(self, features, return_tensors=None):
+        if return_tensors is None:
+            return_tensors = self.return_tensors
+        labels = [feature["labels"] for feature in features] if "labels" in features[0].keys() else None
+        loss_weight_mask = (
+            [feature["loss_weight_mask"] for feature in features] if "loss_weight_mask" in features[0].keys() else None
+        )
+        # We have to pad the labels before calling `tokenizer.pad` as this method won't pad them and needs them of the
+        # same length to return tensors.
+        if labels is not None:
+            max_label_length = max(len(l) for l in labels)
+            if self.pad_to_multiple_of is not None:
+                max_label_length = (
+                    (max_label_length + self.pad_to_multiple_of - 1)
+                    // self.pad_to_multiple_of
+                    * self.pad_to_multiple_of
+                )
+
+            padding_side = self.tokenizer.padding_side
+            for feature in features:
+                remainder = [self.label_pad_token_id] * (max_label_length - len(feature["labels"]))
+                if isinstance(feature["labels"], list):
+                    feature["labels"] = (
+                        feature["labels"] + remainder if padding_side == "right" else remainder + feature["labels"]
+                    )
+                elif padding_side == "right":
+                    feature["labels"] = np.concatenate([feature["labels"], remainder]).astype(np.int64)
+                else:
+                    feature["labels"] = np.concatenate([remainder, feature["labels"]]).astype(np.int64)
+
+        if loss_weight_mask is not None:
+            max_loss_weight_mask_length = max(len(l) for l in loss_weight_mask)
+            if self.pad_to_multiple_of is not None:
+                max_loss_weight_mask_length = (
+                    (max_loss_weight_mask_length + self.pad_to_multiple_of - 1)
+                    // self.pad_to_multiple_of
+                    * self.pad_to_multiple_of
+                )
+
+            padding_side = self.tokenizer.padding_side
+            for feature in features:
+                remainder = [0.0 if self.label_pad_token_id == -100 else 1.0] * (
+                    max_loss_weight_mask_length - len(feature["loss_weight_mask"])
+                )
+                if isinstance(feature["loss_weight_mask"], list):
+                    feature["loss_weight_mask"] = (
+                        feature["loss_weight_mask"] + remainder
+                        if padding_side == "right"
+                        else remainder + feature["loss_weight_mask"]
+                    )
+                elif padding_side == "right":
+                    feature["loss_weight_mask"] = np.concatenate([feature["loss_weight_mask"], remainder]).astype(
+                        np.float32
+                    )
+                else:
+                    feature["loss_weight_mask"] = np.concatenate([remainder, feature["loss_weight_mask"]]).astype(
+                        np.float32
+                    )
+
+        features = self.tokenizer.pad(
+            features,
+            padding=self.padding,
+            max_length=self.max_length,
+            pad_to_multiple_of=self.pad_to_multiple_of,
+            return_tensors=return_tensors,
+        )
+
+        # prepare decoder_input_ids
+        if (
+            labels is not None
+            and self.model is not None
+            and hasattr(self.model, "prepare_decoder_input_ids_from_labels")
+        ):
+            decoder_input_ids = self.model.prepare_decoder_input_ids_from_labels(labels=features["labels"])
+            features["decoder_input_ids"] = decoder_input_ids
+
+        return features

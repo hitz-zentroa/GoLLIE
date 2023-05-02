@@ -131,7 +131,13 @@ class DataTrainingArguments:
         metadata={"help": "Evaluate all checkpoints in the model directory."},
     )
 
-    ignore_prompt_loss: bool = field(
-        default=False,
-        metadata={"help": "Whether to ignore the prompt tokens in the loss computation or not"},
+    prompt_loss_weight: float = field(
+        default=0.05,
+        metadata={
+            "help": (
+                "The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total"
+                " weight of 5% in the loss while the result tokens will have a total weight of 95%. Only used for"
+                " computing the loss in the training data. Defaults to `0.05`."
+            )
+        },
     )

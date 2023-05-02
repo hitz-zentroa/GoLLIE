@@ -3,7 +3,6 @@ import os
 import random
 import tempfile
 import unittest
-from typing import Tuple
 
 from src.dataset.dataset import CollieDataset
 from transformers import PreTrainedTokenizerBase
@@ -13,9 +12,9 @@ def get_dataset(
     tokenizer: PreTrainedTokenizerBase,
     is_encoder_decoder: bool,
     inference: bool,
-    ignore_prompt_loss: bool,
+    prompt_loss_weight: float,
     num_epochs: int = -1,
-) -> Tuple[CollieDataset, str, str]:
+) -> (CollieDataset, str, str):
     text = """@dataclass
 class EnergyAndInfrastructureEvent:
     \"\"\"This class is used to instantiate events that involve Chinese energy and infrastructure projects.\"\"\"
@@ -73,7 +72,7 @@ result = ["""
                 is_encoder_decoder=is_encoder_decoder,
                 max_length=2048,
                 inference=inference,
-                ignore_prompt_loss=ignore_prompt_loss,
+                prompt_loss_weight=prompt_loss_weight,
             )
 
     else:
@@ -90,7 +89,7 @@ result = ["""
                 is_encoder_decoder=is_encoder_decoder,
                 max_length=2048,
                 inference=inference,
-                ignore_prompt_loss=ignore_prompt_loss,
+                prompt_loss_weight=prompt_loss_weight,
             )
 
     return dataset, prompt, result
@@ -131,7 +130,7 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
-            ignore_prompt_loss=False,
+            prompt_loss_weight=0.05,
         )
 
         # Check if every instance `input_ids` has `eos_token_id`
@@ -166,7 +165,7 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
-            ignore_prompt_loss=False,
+            prompt_loss_weight=0.05,
         )
 
         model_input = dataset[0]["input_ids"]
@@ -177,39 +176,12 @@ class TestCollieDataset(unittest.TestCase):
             prompt + result,
         )
 
-        # Test Train with ignore_prompt_loss
-        dataset, prompt, result = get_dataset(
-            tokenizer=tokenizer,
-            is_encoder_decoder=False,
-            inference=False,
-            ignore_prompt_loss=True,
-        )
-
-        model_input = dataset[0]["input_ids"]
-        labels = dataset[0]["labels"]
-        self.assertNotEqual(model_input, labels)
-        self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt + result,
-        )
-
-        self.assertTrue(-100 in labels)
-
-        labels = [x for x in labels if x != -100]
-
-        # Strip to make sure some spaces do not affect the comparison (probably wrong
-        # idea?)
-        self.assertEqual(
-            tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
-            result.strip(),
-        )
-
         # Test Inference
         dataset, prompt, result = get_dataset(
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=True,
-            ignore_prompt_loss=False,
+            prompt_loss_weight=0.05,
         )
 
         model_input = dataset[0]["input_ids"]
@@ -307,7 +279,8 @@ class TestCollieDataset(unittest.TestCase):
     def test_dataloader(self):
         from torch.utils.data import DataLoader
 
-        from transformers import AutoTokenizer, DataCollatorForSeq2Seq
+        from src.dataset.dataset import DataCollatorForCoLLIE
+        from transformers import AutoTokenizer
 
         tokenizer = AutoTokenizer.from_pretrained(
             (
@@ -328,10 +301,10 @@ class TestCollieDataset(unittest.TestCase):
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
-            ignore_prompt_loss=False,
+            prompt_loss_weight=0.05,
         )
 
-        datacollator = DataCollatorForSeq2Seq(
+        datacollator = DataCollatorForCoLLIE(
             tokenizer,
             pad_to_multiple_of=2048,
             return_tensors="pt",
@@ -359,7 +332,7 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
         self.assertEqual(labels[0], -100)
 
-        datacollator = DataCollatorForSeq2Seq(
+        datacollator = DataCollatorForCoLLIE(
             tokenizer,
             pad_to_multiple_of=2048,
             return_tensors="pt",
@@ -381,47 +354,317 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
         self.assertEqual(labels[0], tokenizer.pad_token_id)
 
-        # Test Train with ignore_prompt_loss
-        dataset, prompt, result = get_dataset(
-            tokenizer=tokenizer,
-            is_encoder_decoder=False,
-            inference=False,
-            ignore_prompt_loss=True,
+    def test_weight_loss_mask(self):
+        import numpy as np
+        from torch.utils.data import DataLoader
+
+        from src.dataset.dataset import DataCollatorForCoLLIE
+        from transformers import AutoTokenizer
+
+        tokenizer = AutoTokenizer.from_pretrained(
+            (
+                "/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/"
+                if os.path.exists("/gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/")
+                else "EleutherAI/gpt-neo-125m"
+            ),
+            add_eos_token=True,
         )
 
-        datacollator = DataCollatorForSeq2Seq(
-            tokenizer,
-            pad_to_multiple_of=2048,
-            return_tensors="pt",
-            padding=True,
-            label_pad_token_id=-100,
-        )
+        tokenizer.padding_side = "left"
 
-        dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
-        batch = list(dataloder)[0]
+        if tokenizer.pad_token_id is None:
+            tokenizer.pad_token_id = tokenizer.unk_token_id
 
-        model_input = batch["input_ids"][0].tolist()
-        labels = batch["labels"][0].tolist()
+        # Padding = Max Length , Ignore pad token for loss = True
+        for prompt_loss_weight in [0.0, 0.05, 0.2, 0.5]:
+            # Test Train
+            dataset, prompt, result = get_dataset(
+                tokenizer=tokenizer,
+                is_encoder_decoder=False,
+                inference=False,
+                prompt_loss_weight=prompt_loss_weight,
+            )
 
-        self.assertEqual(model_input[0], tokenizer.pad_token_id)
-        self.assertEqual(labels[0], -100)
+            datacollator = DataCollatorForCoLLIE(
+                tokenizer,
+                pad_to_multiple_of=2048,
+                return_tensors="pt",
+                padding="max_length",
+                label_pad_token_id=-100,
+            )
 
-        self.assertNotEqual(model_input, labels)
-        self.assertEqual(
-            tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt + result,
-        )
+            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            batch = list(dataloder)[0]
 
-        self.assertTrue(-100 in labels)
+            model_input = batch["input_ids"][0].tolist()
+            labels = batch["labels"][0].tolist()
+            loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 
-        labels = [x for x in labels if x != -100]
+            self.assertEqual(
+                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                prompt + result,
+            )
+            self.assertEqual(
+                tokenizer.decode(
+                    [x for x in labels if x != -100],
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
+                prompt + result,
+            )
 
-        # Strip to make sure some spaces do not affect the comparison (probably wrong
-        # idea?)
-        self.assertEqual(
-            tokenizer.decode(labels, skip_special_tokens=True, clean_up_tokenization_spaces=False).strip(),
-            result.strip(),
-        )
+            prompt_tokens = tokenizer(
+                text=prompt,
+                max_length=2048,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            # Remove the last token if it is an eos token
+            if prompt_tokens[-1] == tokenizer.eos_token_id:
+                prompt_tokens = prompt_tokens[:-1]
+
+            result_tokens = tokenizer(
+                text=result,
+                max_length=2048,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            if result_tokens[-1] != tokenizer.eos_token_id:
+                result_tokens = result_tokens + [tokenizer.eos_token_id]
+
+            num_pad_tokens = len(labels) - len(prompt_tokens) - len(result_tokens)
+
+            # Test that all pad tokens are 0 in loss_weights_mask
+            np.testing.assert_almost_equal(
+                loss_weights_mask[:num_pad_tokens],
+                [0.0] * num_pad_tokens,
+            )
+
+            # Test that all result tokens are 1.0 in loss_weights_mask
+            np.testing.assert_almost_equal(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :],
+                [1.0] * len(result_tokens),
+            )
+
+            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
+            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            total_loss = prompt_tokens_loss + result_tokens_loss
+
+            # print(f"Prompt loss weight: {prompt_loss_weight}")
+            # print(f"Prompt loss: {prompt_tokens_loss}")
+            # print(f"Result loss: {result_tokens_loss}")
+            # print(f"Total loss: {total_loss}")
+            # print()
+
+            # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
+            self.assertAlmostEqual(
+                prompt_tokens_loss / total_loss,
+                prompt_loss_weight,
+                places=5,
+            )
+
+            # Test that the loss of the result tokens is (1 - prompt_loss_weight) of the total loss
+            self.assertAlmostEqual(
+                result_tokens_loss / total_loss,
+                1 - prompt_loss_weight,
+                places=5,
+            )
+
+        # Padding = True , Ignore pad token for loss = True
+        for prompt_loss_weight in [0.0, 0.05, 0.2, 0.5]:
+            # Test Train
+            dataset, prompt, result = get_dataset(
+                tokenizer=tokenizer,
+                is_encoder_decoder=False,
+                inference=False,
+                prompt_loss_weight=prompt_loss_weight,
+            )
+
+            datacollator = DataCollatorForCoLLIE(
+                tokenizer,
+                pad_to_multiple_of=2048,
+                return_tensors="pt",
+                padding=True,
+                label_pad_token_id=-100,
+            )
+
+            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            batch = list(dataloder)[0]
+
+            model_input = batch["input_ids"][0].tolist()
+            labels = batch["labels"][0].tolist()
+            loss_weights_mask = batch["loss_weight_mask"][0].tolist()
+
+            self.assertEqual(
+                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                prompt + result,
+            )
+            self.assertEqual(
+                tokenizer.decode(
+                    [x for x in labels if x != -100],
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
+                prompt + result,
+            )
+
+            prompt_tokens = tokenizer(
+                text=prompt,
+                max_length=2048,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            # Remove the last token if it is an eos token
+            if prompt_tokens[-1] == tokenizer.eos_token_id:
+                prompt_tokens = prompt_tokens[:-1]
+
+            result_tokens = tokenizer(
+                text=result,
+                max_length=2048,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            if result_tokens[-1] != tokenizer.eos_token_id:
+                result_tokens = result_tokens + [tokenizer.eos_token_id]
+
+            num_pad_tokens = len(labels) - len(prompt_tokens) - len(result_tokens)
+
+            # Test that all pad tokens are 0 in loss_weights_mask
+            np.testing.assert_almost_equal(
+                loss_weights_mask[:num_pad_tokens],
+                [0.0] * num_pad_tokens,
+            )
+
+            # Test that all result tokens are 1.0 in loss_weights_mask
+            np.testing.assert_almost_equal(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :],
+                [1.0] * len(result_tokens),
+            )
+
+            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
+            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            total_loss = prompt_tokens_loss + result_tokens_loss
+
+            # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
+            self.assertAlmostEqual(
+                prompt_tokens_loss / total_loss,
+                prompt_loss_weight,
+                places=5,
+            )
+
+            # Test that the loss of the result tokens is (1 - prompt_loss_weight) of the total loss
+            self.assertAlmostEqual(
+                result_tokens_loss / total_loss,
+                1 - prompt_loss_weight,
+                places=5,
+            )
+
+        # Padding = "Max len" , Ignore pad token for loss = False
+        for prompt_loss_weight in [0.0, 0.05, 0.2, 0.5]:
+            # Test Train
+            dataset, prompt, result = get_dataset(
+                tokenizer=tokenizer,
+                is_encoder_decoder=False,
+                inference=False,
+                prompt_loss_weight=prompt_loss_weight,
+            )
+
+            datacollator = DataCollatorForCoLLIE(
+                tokenizer,
+                pad_to_multiple_of=2048,
+                return_tensors="pt",
+                padding="max_length",
+                label_pad_token_id=tokenizer.pad_token_id,
+            )
+
+            dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
+            batch = list(dataloder)[0]
+
+            model_input = batch["input_ids"][0].tolist()
+            labels = batch["labels"][0].tolist()
+            loss_weights_mask = batch["loss_weight_mask"][0].tolist()
+
+            self.assertEqual(
+                tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
+                prompt + result,
+            )
+            self.assertEqual(
+                tokenizer.decode(
+                    [x for x in labels if x != -100],
+                    skip_special_tokens=True,
+                    clean_up_tokenization_spaces=False,
+                ),
+                prompt + result,
+            )
+
+            prompt_tokens = tokenizer(
+                text=prompt,
+                max_length=2048,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            # Remove the last token if it is an eos token
+            if prompt_tokens[-1] == tokenizer.eos_token_id:
+                prompt_tokens = prompt_tokens[:-1]
+
+            result_tokens = tokenizer(
+                text=result,
+                max_length=2048,
+                truncation=True,
+                padding=False,
+                return_tensors=None,
+                add_special_tokens=True,
+            )["input_ids"]
+
+            if result_tokens[-1] != tokenizer.eos_token_id:
+                result_tokens = result_tokens + [tokenizer.eos_token_id]
+
+            num_pad_tokens = len(labels) - len(prompt_tokens) - len(result_tokens)
+
+            # Test that all pad tokens are 1.0 in loss_weights_mask
+            np.testing.assert_almost_equal(
+                loss_weights_mask[:num_pad_tokens],
+                [1.0] * num_pad_tokens,
+            )
+
+            # Test that all result tokens are 1.0 in loss_weights_mask
+            np.testing.assert_almost_equal(
+                loss_weights_mask[num_pad_tokens + len(prompt_tokens) :],
+                [1.0] * len(result_tokens),
+            )
+
+            prompt_tokens_loss = sum(loss_weights_mask[num_pad_tokens : num_pad_tokens + len(prompt_tokens)])
+            result_tokens_loss = sum(loss_weights_mask[num_pad_tokens + len(prompt_tokens) :])
+            total_loss = prompt_tokens_loss + result_tokens_loss
+
+            # Test that the loss of the prompt tokens is prompt_loss_weight of the total loss
+            self.assertAlmostEqual(
+                prompt_tokens_loss / total_loss,
+                prompt_loss_weight,
+                places=5,
+            )
+
+            # Test that the loss of the result tokens is (1 - prompt_loss_weight) of the total loss
+            self.assertAlmostEqual(
+                result_tokens_loss / total_loss,
+                1 - prompt_loss_weight,
+                places=5,
+            )
 
     def test_dataset_rotation(self):
         from src.trainer import ConcatDataset
@@ -548,14 +791,14 @@ class TestCollieDataset(unittest.TestCase):
                 is_encoder_decoder=False,
                 max_length=2048,
                 inference=False,
-                ignore_prompt_loss=False,
+                prompt_loss_weight=0.05,
             )
 
         dataset3, prompt3, result3 = get_dataset(
             tokenizer=tokenizer,
             is_encoder_decoder=False,
             inference=False,
-            ignore_prompt_loss=False,
+            prompt_loss_weight=0.05,
         )
 
         train_dataset = ConcatDataset([dataset1, dataset3])
