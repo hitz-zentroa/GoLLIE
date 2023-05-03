@@ -232,7 +232,9 @@ class CollieTrainer(Seq2SeqTrainer):
         outputs = model(**inputs)
 
         logits = outputs["logits"] if isinstance(outputs, dict) else outputs[0]
-        if unwrap_model(model)._get_name() in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values():
+
+        model_name = unwrap_model(model)._get_name()
+        if model_name in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values() or model_name == "PeftModelForCausalLM":
             logits = logits[..., :-1, :].contiguous()
             labels = labels[..., 1:].contiguous()
             loss_weight_mask = loss_weight_mask[..., 1:].contiguous()

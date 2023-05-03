@@ -14,6 +14,7 @@ def get_dataset(
     inference: bool,
     prompt_loss_weight: float,
     num_epochs: int = -1,
+    max_length: int = 2048,
 ) -> (CollieDataset, str, str):
     text = """@dataclass
 class EnergyAndInfrastructureEvent:
@@ -70,7 +71,7 @@ result = ["""
                 tokenizer=tokenizer,
                 dataset_path=os.path.join(tmpdirname, "tmp.ee.train.jsonl"),
                 is_encoder_decoder=is_encoder_decoder,
-                max_length=2048,
+                max_length=max_length,
                 inference=inference,
                 prompt_loss_weight=prompt_loss_weight,
                 num_workers=1,
@@ -88,7 +89,7 @@ result = ["""
                 tokenizer=tokenizer,
                 dataset_path=os.path.join(tmpdirname, "tmp.ee.train.jsonl"),
                 is_encoder_decoder=is_encoder_decoder,
-                max_length=2048,
+                max_length=max_length,
                 inference=inference,
                 prompt_loss_weight=prompt_loss_weight,
                 num_workers=1,
