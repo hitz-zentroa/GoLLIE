@@ -132,11 +132,16 @@ class TestCollieTrainer(unittest.TestCase):
             dataloader = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
             inputs = list(dataloader)[0]
             inputs = {key: value.to("cpu") for key, value in inputs.items()}
+            not_result_mask = (inputs["loss_weight_mask"] < 1.)
 
             collie_loss = collie_trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
 
             inputs = list(dataloader)[0]
             inputs = {key: value.to("cpu") for key, value in inputs.items() if key not in ["loss_weight_mask"]}
+            inputs["labels"][not_result_mask] = -100
+
+            model_loss = model(**inputs).loss
             original_loss = trainer.compute_loss(model=model, inputs=inputs, return_outputs=False)
 
-            self.assertAlmostEqual(collie_loss.item(), original_loss.item())
+            self.assertAlmostEqual(model_loss.item(), original_loss.item(), delta=1e-5)
+            self.assertAlmostEqual(collie_loss.item(), original_loss.item(), delta=1e-5)
