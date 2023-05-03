@@ -596,10 +596,7 @@ class ACESampler(Sampler):
                         if any(isinstance(ann, definition) for inst in instances for ann in inst[self.task_target])
                     ]
 
-                if (
-                    self.sample_total_guidelines < len(guidelines)
-                    and not self.sample_only_gold_guidelines
-                ):
+                if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
                     p = np.asarray(
                         [
                             (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)

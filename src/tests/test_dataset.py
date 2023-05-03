@@ -73,6 +73,7 @@ result = ["""
                 max_length=2048,
                 inference=inference,
                 prompt_loss_weight=prompt_loss_weight,
+                num_workers=1,
             )
 
     else:
@@ -90,6 +91,7 @@ result = ["""
                 max_length=2048,
                 inference=inference,
                 prompt_loss_weight=prompt_loss_weight,
+                num_workers=1,
             )
 
     return dataset, prompt, result
