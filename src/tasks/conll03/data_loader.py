@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
+    ENTITY_DEFINITIONS_woMISC,
     Location,
     Miscellaneous,
     Organization,
@@ -16,7 +17,7 @@ def get_conll_hf(
     split: str,
     include_misc: bool,
     ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Location, Organization, Person, Miscellaneous]]],
-) -> (List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]):
+) -> Tuple[List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]]:
     """
     Get the conll dataset from the huggingface datasets library
     Args:
@@ -62,7 +63,7 @@ def get_conll_hf(
     return dataset_sentences, dataset_entities
 
 
-def read_tsv(filepath) -> (List[List[str]], List[List[str]]):
+def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
     """
     READ tsv file in conll format
     Args:
@@ -109,7 +110,7 @@ def load_conll_tsv(
     path: str,
     include_misc: bool,
     ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Location, Organization, Person, Miscellaneous]]],
-) -> (List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]):
+) -> Tuple[List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]]:
     """
     Load the conll dataset from a tsv file
     Args:
@@ -167,14 +168,24 @@ class CoNLLDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-    ENTITY_TO_CLASS_MAPPING = {
-        "LOC": Location,
-        "ORG": Organization,
-        "PER": Person,
-        "MISC": Miscellaneous,
-    }
+    ENTITY_TO_CLASS_MAPPING = None
 
     def __init__(self, path_or_split: str, include_misc: bool = True, **kwargs) -> None:
+        self.ENTITY_TO_CLASS_MAPPING = (
+            {
+                "LOC": Location,
+                "ORG": Organization,
+                "PER": Person,
+                "MISC": Miscellaneous,
+            }
+            if include_misc
+            else {
+                "LOC": Location,
+                "ORG": Organization,
+                "PER": Person,
+            }
+        )
+
         self.elements = {}
 
         if path_or_split in ["train", "validation", "test"]:
@@ -196,10 +207,11 @@ class CoNLLDatasetLoader(DatasetLoader):
                 "doc_id": id,
                 "text": " ".join(words),
                 "entities": entities,
+                "gold": entities,
             }
 
 
-class CONLL03Sampler(Sampler):
+class CoNLL03Sampler(Sampler):
     """
     A data `Sampler` for the CONLL03 dataset.
 
@@ -232,7 +244,7 @@ class CONLL03Sampler(Sampler):
             The path to the prompt template. Defaults to `"templates/prompt.txt"`.
         ensure_positives_on_train (bool, optional):
             Whether to ensure that the guidelines of annotated examples are not removed.
-            Defaults to `True`.
+            Defaults to `False`.
         dataset_name (str, optional):
             The name of the dataset. Defaults to `None`.
         scorer (`str`, optional):
@@ -251,7 +263,7 @@ class CONLL03Sampler(Sampler):
         guideline_dropout: float = 0.0,
         seed: float = 0,
         prompt_template: str = "templates/prompt.txt",
-        ensure_positives_on_train: bool = True,
+        ensure_positives_on_train: bool = False,
         dataset_name: str = None,
         scorer: str = None,
         sample_only_gold_guidelines: bool = False,
@@ -262,7 +274,7 @@ class CONLL03Sampler(Sampler):
         ], f"CoNLL03 only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
-            "NER": (ENTITY_DEFINITIONS, "entities"),
+            "NER": (ENTITY_DEFINITIONS if kwargs["include_misc"] else ENTITY_DEFINITIONS_woMISC, "entities"),
         }[task]
 
         super().__init__(

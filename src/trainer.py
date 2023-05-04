@@ -1,3 +1,5 @@
+import bisect
+import logging
 import os
 from typing import Callable, Dict, List, Optional, Tuple, Union
 
@@ -5,9 +7,20 @@ import torch
 import torch.nn as nn
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from torch.utils.data import Dataset
+from torch.utils.data.dataset import Iterable, IterableDataset, T_co
 
-from transformers import DataCollator, PreTrainedModel, PreTrainedTokenizerBase, Seq2SeqTrainer, TrainingArguments
+from src.dataset.dataset import CollieDataset
+from transformers import (
+    DataCollator,
+    PreTrainedModel,
+    PreTrainedTokenizerBase,
+    Seq2SeqTrainer,
+    TrainerControl,
+    TrainerState,
+    TrainingArguments,
+)
 from transformers.modeling_utils import unwrap_model
+from transformers.models.auto.modeling_auto import MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
 from transformers.trainer import TRAINING_ARGS_NAME, logger
 from transformers.trainer_callback import TrainerCallback
 from transformers.trainer_utils import EvalPrediction, has_length
@@ -177,6 +190,11 @@ class CollieTrainer(Seq2SeqTrainer):
         ),
         preprocess_logits_for_metrics: Optional[Callable[[torch.Tensor, torch.Tensor], torch.Tensor]] = None,
     ):
+        if callbacks is None:
+            callbacks = [RotateDatasetCallback()]
+        else:
+            callbacks.append(RotateDatasetCallback())
+
         super().__init__(
             model=model,
             args=args,
@@ -194,6 +212,42 @@ class CollieTrainer(Seq2SeqTrainer):
         # _prev_progress_callback = self.pop_callback(ProgressCallback)
         # if _prev_progress_callback:
         #    self.add_callback(RichProgressCallback)
+
+    def compute_loss(self, model, inputs, return_outputs=False):
+        """
+        How the loss is computed by Trainer. By default, all models return the loss in the first element.
+        Subclass and override for custom behavior.
+        """
+
+        if "labels" in inputs:
+            labels = inputs.pop("labels")
+        else:
+            raise ValueError("You should supply a labels key to compute the loss")
+
+        if "loss_weight_mask" in inputs:
+            loss_weight_mask = inputs.pop("loss_weight_mask")
+        else:
+            raise ValueError("You should supply a loss_weight_mask key to compute the loss")
+
+        outputs = model(**inputs)
+
+        logits = outputs["logits"] if isinstance(outputs, dict) else outputs[0]
+
+        model_name = unwrap_model(model)._get_name()
+        if model_name in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.values() or model_name == "PeftModelForCausalLM":
+            logits = logits[..., :-1, :].contiguous()
+            labels = labels[..., 1:].contiguous()
+            loss_weight_mask = loss_weight_mask[..., 1:].contiguous()
+
+        logits = logits.view(-1, logits.size(-1))
+        labels = labels.view(-1)
+        loss_weight_mask = loss_weight_mask.view(-1)
+        loss_fct = nn.CrossEntropyLoss(reduction="none", ignore_index=-100)
+
+        loss = loss_fct(logits, labels)
+        loss = torch.sum(loss * loss_weight_mask) / torch.sum(loss_weight_mask)
+
+        return (loss, outputs) if return_outputs else loss
 
     # Modify the Seq2SeqTrainer from transformers to only save the LoRA weights if we are using a LoRA model
     # Original trainer saves the full state dict. It doesn't make sense for us to create a full copy
@@ -252,3 +306,65 @@ class CollieTrainer(Seq2SeqTrainer):
 
         # Good practice: save your training arguments together with the trained model
         torch.save(self.args, os.path.join(output_dir, TRAINING_ARGS_NAME))
+
+
+class ConcatDataset(Dataset[T_co]):
+    r"""Dataset as a concatenation of multiple datasets.
+
+    This class is useful to assemble different existing datasets.
+
+    Args:
+        datasets (sequence): List of datasets to be concatenated
+    """
+    datasets: List[CollieDataset]
+    cumulative_sizes: List[int]
+
+    @staticmethod
+    def cumsum(sequence):
+        r, s = [], 0
+        for e in sequence:
+            l = len(e)
+            r.append(l + s)
+            s += l
+        return r
+
+    def __init__(self, datasets: Iterable[CollieDataset]) -> None:
+        super().__init__()
+        self.datasets = list(datasets)
+        assert len(self.datasets) > 0, "datasets should not be an empty iterable"  # type: ignore[arg-type]
+        for d in self.datasets:
+            assert not isinstance(d, IterableDataset), "ConcatDataset does not support IterableDataset"
+        self.cumulative_sizes = self.cumsum(self.datasets)
+
+    def __len__(self):
+        return self.cumulative_sizes[-1]
+
+    def __getitem__(self, idx):
+        if idx < 0:
+            if -idx > len(self):
+                raise ValueError("absolute value of index should not exceed dataset length")
+            idx = len(self) + idx
+        dataset_idx = bisect.bisect_right(self.cumulative_sizes, idx)
+        if dataset_idx == 0:
+            sample_idx = idx
+        else:
+            sample_idx = idx - self.cumulative_sizes[dataset_idx - 1]
+        return self.datasets[dataset_idx][sample_idx]
+
+    @property
+    def cummulative_sizes(self):
+        logging.warning("cummulative_sizes attribute is renamed to cumulative_sizes", DeprecationWarning, stacklevel=2)
+        return self.cumulative_sizes
+
+    def rotate_split(self):
+        for x in self.datasets:
+            x.rotate_split()
+        self.cumulative_sizes = self.cumsum(self.datasets)
+
+
+class RotateDatasetCallback(TrainerCallback):
+    def on_epoch_end(self, args: TrainingArguments, state: TrainerState, control: TrainerControl, **kwargs):
+        if "train_dataloader" in kwargs:
+            kwargs["train_dataloader"].dataset.rotate_split()
+        else:
+            logging.warning("No train_dataloader in kwargs. Skipping rotate_split()")

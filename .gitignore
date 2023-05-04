@@ -1,5 +1,6 @@
 .slurm/*
 .vscode/*
+.ignore/
 data/*
 wandb/*
 assets/plots/*
@@ -137,3 +138,4 @@ dmypy.json
 .idea/
 
 pretrained_models/
+configs/model_configs/debug.yaml

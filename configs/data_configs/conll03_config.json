@@ -1,20 +1,20 @@
 {
     "dataset_name": "CoNLL03",
     "tasks": ["NER"],
-    "dataloader_cls": "src.tasks.ace.data_loader.CoNLLDatasetLoader",
-    "sampler_cls": "src.tasks.ace.data_loader.CONLL03Sampler",
+    "dataloader_cls": "src.tasks.conll03.data_loader.CoNLLDatasetLoader",
+    "sampler_cls": "src.tasks.conll03.data_loader.CoNLL03Sampler",
     "train_file": "train",
     "dev_file": "validation",
     "test_file": "test",
     "prompt_template": "templates/prompt.txt",
-    "seed": 0,
+    "seed": [0, 24, 42],
     "include_misc": true,
     "task_configuration": {
         "NER": {
             "parallel_instances": 1,
             "max_guidelines": -1,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.ace.scorer.CoNLL03EntityScorer"
+            "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorer"
         }
     }
 }

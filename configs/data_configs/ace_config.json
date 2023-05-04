@@ -4,7 +4,9 @@
         "NER",
         "VER",
         "RE",
-        "EE"
+        "RC",
+        "EE",
+        "EAE"
     ],
     "dataloader_cls": "src.tasks.ace.data_loader.ACEDatasetLoader",
     "sampler_cls": "src.tasks.ace.data_loader.ACESampler",
@@ -12,7 +14,7 @@
     "dev_file": "data/ace05/dev.sentence.json",
     "test_file": "data/ace05/test.sentence.json",
     "prompt_template": "templates/prompt.txt",
-    "seed": 0,
+    "seed": [0, 24, 42],
     "task_configuration": {
         "NER": {
             "group_by": "sentence",
@@ -30,21 +32,29 @@
         },
         "RE": {
             "group_by": "sentence",
-            "parallel_instances": [
-                1,
-                3
-            ],
-            "max_guidelines": 5,
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.ACERelationScorer"
+        },
+        "RC": {
+            "group_by": "sentence",
+            "parallel_instances": 1,
+            "max_guidelines": -1,
             "guideline_dropout": 0.15,
             "scorer": "src.tasks.ace.scorer.ACERelationScorer",
             "ensure_positives_on_train": true
         },
         "EE": {
             "group_by": "sentence",
-            "parallel_instances": [
-                1,
-                3
-            ],
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.ace.scorer.ACEEventScorer"
+        },
+        "EAE": {
+            "group_by": "sentence",
+            "parallel_instances": 1,
             "max_guidelines": 5,
             "guideline_dropout": 0.15,
             "scorer": "src.tasks.ace.scorer.ACEEventScorer",

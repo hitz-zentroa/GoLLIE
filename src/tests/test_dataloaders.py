@@ -10,10 +10,12 @@ class TestDataLoaders(unittest.TestCase):
 
         with open("configs/data_configs/ace_config.json") as f:
             config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
-        _ = list(ACESampler(dataloader, task="EE", **config, **config["task_configuration"]["EE"]))
+        _ = list(ACESampler(dataloader, task="RC", **config, **config["task_configuration"]["RC"]))
 
         # TODO: Implement a better TEST
 
@@ -23,6 +25,8 @@ class TestDataLoaders(unittest.TestCase):
 
         with open("configs/data_configs/rams_config.json") as f:
             config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
@@ -30,12 +34,27 @@ class TestDataLoaders(unittest.TestCase):
 
         # TODO: Implement a better TEST
 
+    @unittest.skipIf(not os.path.exists("data/tacred/dev.json"), "No TACRED data available")
+    def test_TACRED(self):
+        from src.tasks.tacred.data_loader import TACREDDatasetLoader, TACREDSampler
+
+        with open("configs/data_configs/tacred_config.json") as f:
+            config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
+
+        dataloader = TACREDDatasetLoader("data/tacred/train.json")
+
+        _ = list(TACREDSampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
+
     def test_CoNLL03(self):
-        from src.tasks.conll03.data_loader import CONLL03Sampler, CoNLLDatasetLoader
+        from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader
         from src.tasks.conll03.prompts import Miscellaneous, Organization, Person
 
         with open("configs/data_configs/conll03_config.json") as f:
             config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
 
         config["task_configuration"] = {
             "NER": {
@@ -49,7 +68,7 @@ class TestDataLoaders(unittest.TestCase):
         config["include_misc"] = True
         dataloader = CoNLLDatasetLoader("validation", **config)
 
-        _ = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        _ = list(CoNLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
 
         self.assertDictEqual(
             {
@@ -57,6 +76,7 @@ class TestDataLoaders(unittest.TestCase):
                 "doc_id": 0,
                 "text": "CRICKET - LEICESTERSHIRE TAKE OVER AT TOP AFTER INNINGS VICTORY .",
                 "entities": [Organization(span="LEICESTERSHIRE")],
+                "gold": [Organization(span="LEICESTERSHIRE")],
             },
             dataloader[0],
         )
@@ -75,6 +95,12 @@ class TestDataLoaders(unittest.TestCase):
                     Organization(span="Leicestershire"),
                     Organization(span="Somerset"),
                 ],
+                "gold": [
+                    Miscellaneous(span="West Indian"),
+                    Person(span="Phil Simmons"),
+                    Organization(span="Leicestershire"),
+                    Organization(span="Somerset"),
+                ],
             },
             dataloader[2],
         )
@@ -82,7 +108,7 @@ class TestDataLoaders(unittest.TestCase):
         config["include_misc"] = False
         dataloader = CoNLLDatasetLoader("validation", **config)
 
-        _ = list(CONLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
+        _ = list(CoNLL03Sampler(dataloader, task="NER", **config, **config["task_configuration"]["NER"]))
 
         self.assertDictEqual(
             {
@@ -90,6 +116,7 @@ class TestDataLoaders(unittest.TestCase):
                 "doc_id": 0,
                 "text": "CRICKET - LEICESTERSHIRE TAKE OVER AT TOP AFTER INNINGS VICTORY .",
                 "entities": [Organization(span="LEICESTERSHIRE")],
+                "gold": [Organization(span="LEICESTERSHIRE")],
             },
             dataloader[0],
         )
@@ -103,6 +130,11 @@ class TestDataLoaders(unittest.TestCase):
                     " by an innings and 39 runs in two days to take over at the head of the county championship ."
                 ),
                 "entities": [
+                    Person(span="Phil Simmons"),
+                    Organization(span="Leicestershire"),
+                    Organization(span="Somerset"),
+                ],
+                "gold": [
                     Person(span="Phil Simmons"),
                     Organization(span="Leicestershire"),
                     Organization(span="Somerset"),

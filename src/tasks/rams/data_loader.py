@@ -557,12 +557,7 @@ class RAMSDatasetLoader(DatasetLoader):
 
                     events.append(info["class"](**_inst))
 
-                self.elements[key] = {
-                    "id": key,
-                    "doc_id": key,
-                    "text": text,
-                    "labels": events,
-                }
+                self.elements[key] = {"id": key, "doc_id": key, "text": text, "labels": events, "gold": events}
 
 
 class RAMSSampler(Sampler):

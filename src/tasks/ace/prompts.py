@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List, Type
 
 from ..utils_typing import Entity, Event, Relation, Value, dataclass
 
@@ -174,7 +174,86 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-relations-guidel
 
 
 @dataclass
-class Located(Relation):
+class PhysicalRelation(Relation):
+    """The Physical Relation captures the physical location relation of entities such as:
+    a Person entity located in a Facility, Location or GPE; or two entities that are near,
+    but neither entity is a part of the other or located in/at the other.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class PartWholeRelation(Relation):
+    """The PartWhole Relation refers to the semantic relation between two entities that
+    are parts of a larger whole or vice versa. For example, the relation between a
+    country and its states, or between a company and its subsidiaries, are instances of
+    PartWhole relations.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class PersonalSocialRelation(Relation):
+    """The Personal-Social Relation describe the relationship between people. Both arguments
+    must be entities of type Person. Please note: The arguments of these Relations are
+    not ordered. The Relations are symmetric.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class OrganizationAffiliationRelation(Relation):
+    """The OrganizationAffiliation Relation describes the relations between a Person (or
+    other Organizations) and a related Organization. This relation includes: employment,
+    ownership, founder, student or alumn, sport affiliation, inverstor or shareholder
+    and membership relations.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class AgentArtifactRelationRelation(Relation):
+    """The AgentArtifact Relation applies when an agent owns an artifact, has possession
+    of an artifact, uses an artifact, or caused an artifact to come into being. Note:
+    if the `arg2` is an Organization, use OrganizationAffiliation when `arg1` is a Person
+    or PartWhole when `arg1` is an Organization or GPE.
+    """
+
+    arg1: str
+    arg2: str
+
+
+@dataclass
+class GenAffiliationRelation(Relation):
+    """The GenAffiliation Relation describes the citizen, resident, religion or ethnicity
+    relation when the `arg1` is a Person. When the `arg1` is an Organization, the relation
+    describes where it is located, based or does business.
+    """
+
+    arg1: str
+    arg2: str
+
+
+COARSE_RELATION_DEFINITIONS: List[Relation] = [
+    PhysicalRelation,
+    PartWholeRelation,
+    PersonalSocialRelation,
+    OrganizationAffiliationRelation,
+    AgentArtifactRelationRelation,
+    GenAffiliationRelation,
+]
+
+
+@dataclass
+class Located(PhysicalRelation):
     """The Located relation captures the physical location of an entity. This
     relation is restricted to people. In other words, `arg1` in Located
     relations can only be occupied by mentions of Entities of type Person.
@@ -185,7 +264,7 @@ class Located(Relation):
 
 
 @dataclass
-class Near(Relation):
+class Near(PhysicalRelation):
     """Near indicates that an entity is explicitly near another entity, but
     neither entity is a part of the other or located in/at the other.
     """
@@ -195,7 +274,7 @@ class Near(Relation):
 
 
 @dataclass
-class Geographical(Relation):
+class Geographical(PartWholeRelation):
     """The Geographical relation captures the location of a Facility, Location,
     or GPE in or at or as a part of another Facility, Location, or GPE.
     """
@@ -205,7 +284,7 @@ class Geographical(Relation):
 
 
 @dataclass
-class Subsidiary(Relation):
+class Subsidiary(PartWholeRelation):
     """Subsidiary captures the ownership, administrative, and other hierarchical
     relationships between organizations and between organizations and GPEs.
     """
@@ -215,7 +294,7 @@ class Subsidiary(Relation):
 
 
 @dataclass
-class Business(Relation):
+class Business(PersonalSocialRelation):
     """The Business Relation captures the connection between two entities in any
     professional relationship. Both arguments must be entities of type Person.
     """
@@ -225,7 +304,7 @@ class Business(Relation):
 
 
 @dataclass
-class Family(Relation):
+class Family(PersonalSocialRelation):
     """The Family Relation captures the connection between one entity and another
     with which it is in any familial relationship. Both arguments must be entities
     of type Person.
@@ -236,7 +315,7 @@ class Family(Relation):
 
 
 @dataclass
-class LastingPersonal(Relation):
+class LastingPersonal(PersonalSocialRelation):
     """Lasting-Personal captures relationships that meet the following conditions:
     (1) The relationship must involve personal contact (or a reasonable assumption
     thereof).
@@ -250,7 +329,7 @@ class LastingPersonal(Relation):
 
 
 @dataclass
-class Employment(Relation):
+class Employment(OrganizationAffiliationRelation):
     """Employment captures the relationship between Persons and their employers.
     This Relation is only taggable when it can be reasonably assumed that the
     Person is paid by the ORG or GPE.
@@ -261,7 +340,7 @@ class Employment(Relation):
 
 
 @dataclass
-class Ownership(Relation):
+class Ownership(OrganizationAffiliationRelation):
     """Ownership captures the relationship between a Person and an Organization
     owned by that Person. If the `arg2` is not an Organization, use the
     Agent-Artifact relation.
@@ -272,7 +351,7 @@ class Ownership(Relation):
 
 
 @dataclass
-class Founder(Relation):
+class Founder(OrganizationAffiliationRelation):
     """Founder captures the relationship between an agent (Person, Organization,
     or GPE) and an Organization or GPE established or set up by that agent.
     """
@@ -282,7 +361,7 @@ class Founder(Relation):
 
 
 @dataclass
-class StudentAlum(Relation):
+class StudentAlum(OrganizationAffiliationRelation):
     """StudentAlum captures the relationship between a Person and an educational
     institution the Person attends or attended.
     """
@@ -292,7 +371,7 @@ class StudentAlum(Relation):
 
 
 @dataclass
-class SportsAffiliation(Relation):
+class SportsAffiliation(OrganizationAffiliationRelation):
     """Sports-Affiliation captures the relationship between a player, coach, manager,
     or assistant and his or her affiliation with a sports organization (including
     sports leagues or divisions as well as individual sports teams).
@@ -303,7 +382,7 @@ class SportsAffiliation(Relation):
 
 
 @dataclass
-class InvestorShareholder(Relation):
+class InvestorShareholder(OrganizationAffiliationRelation):
     """InvestorShareholder captures the relationship between an agent (Person,
     Organization, or GPE) and an Organization in which the agent has invested or in
     which the agent owns shares/stock. Please note that agents may invest in
@@ -315,7 +394,7 @@ class InvestorShareholder(Relation):
 
 
 @dataclass
-class Membership(Relation):
+class Membership(OrganizationAffiliationRelation):
     """Membership captures the relationship between an agent and an organization of
     which the agent is a member. Organizations and GPEs can be members of other
     Organizations (such as NATO or the UN).
@@ -326,7 +405,7 @@ class Membership(Relation):
 
 
 @dataclass
-class UserOwnerInventorManufacturer(Relation):
+class UserOwnerInventorManufacturer(AgentArtifactRelationRelation):
     """This Relation applies when an agent owns an artifact, has possession of an
     artifact, uses an artifact, or caused an artifact to come into being. Note:
     if `arg2` is an Organization, use Ownership relation (arg1=PER) or Subsidiary
@@ -338,7 +417,7 @@ class UserOwnerInventorManufacturer(Relation):
 
 
 @dataclass
-class CitizenResidentReligionEthnicity(Relation):
+class CitizenResidentReligionEthnicity(GenAffiliationRelation):
     """CitizenResidentReligionEthnicity describes the relation between a Person
     entity and (1) the GPE in which they have citizenship, (2) the GPE or Location
     in which they live, the religious Organization or Person entity with which they
@@ -350,7 +429,7 @@ class CitizenResidentReligionEthnicity(Relation):
 
 
 @dataclass
-class OrgLocationOrigin(Relation):
+class OrgLocationOrigin(GenAffiliationRelation):
     """OrgLocationOrigin captures the relationship between an organization and the
     Location or GPE where it is located, based, or does business. Note: Subsidiary
     trumps this relation for government organizations.
@@ -380,6 +459,13 @@ RELATION_DEFINITIONS: List[Relation] = [
     OrgLocationOrigin,
 ]
 
+FINE_TO_COARSE_RELATIONS: Dict[Type, Type] = {_def: _def.__base__ for _def in RELATION_DEFINITIONS}
+COARSE_TO_FINE_RELATIONS: Dict[Type, List[Type]] = {}
+for fine, coarse in FINE_TO_COARSE_RELATIONS.items():
+    if coarse not in COARSE_TO_FINE_RELATIONS:
+        COARSE_TO_FINE_RELATIONS[coarse] = []
+    COARSE_TO_FINE_RELATIONS[coarse].append(fine)
+
 """Event definitions
 
 The events definitions are derived from the oficial ACE guidelines:
@@ -388,8 +474,101 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-events-guideline
 
 
 @dataclass
-class BeBorn(Event):
-    """A BeBorn Event occurs whenever a Person Entity is given birth to"""
+class LifeEvent(Event):
+    """A LifeEvent occurs whenever a Person Entity borns, dies, gets married, divorced
+    or gets injured.
+    """
+
+    mention: str
+
+
+@dataclass
+class MovementEvent(Event):
+    """A TransportEvent occurs whenever an Artifact (Weapon or Vehicle) or a
+    Person is moved from one Place (GPE, Facility, Location) to another. This
+    event requires the explicit mention of the Artifact or Person.
+    """
+
+    mention: str
+
+
+@dataclass
+class TransactionEvent(Event):
+    """A TransactionEvent refers to buying, selling, loaning, borrowing, giving, or
+    receving of Artifacts or Organizations; or giving, receiving, borrowing, or
+    lending Money.
+    """
+
+    mention: str
+
+
+@dataclass
+class BusinessEvent(Event):
+    """A BusinessEvent refers to actions related to Organizations such as: creating,
+    merging, declaring bankruptcy or ending organizations (including government
+    agencies).
+    """
+
+    mention: str
+
+
+@dataclass
+class ConflictEvent(Event):
+    """A ConflictEvent refers to either violent physical acts causing harm or damage,
+    but are not covered by Life events (conflicts, clashes, fighting, gunfire, ...) or
+    demonstrations (protests, sit-ins, strikes, riots, ...).
+    """
+
+    mention: str
+
+
+@dataclass
+class ContactEvent(Event):
+    """A ContactEvent occurs whenever two or more entities (persons or organization's
+    representatives) come together at a single location and interact with one another
+    face-to-face or directly enages in discussion via written or telephone communication.
+    """
+
+    mention: str
+
+
+@dataclass
+class PersonellEvent(Event):
+    """A PersonellEvent occurs when a Person entity changes its job position (JobTitle
+    entity) with respect an Organization entity. It includes when a person starts
+    working, ends working, changes offices within, gets nominated or is elected for a
+    position in a Organization.
+    """
+
+    mention: str
+
+
+@dataclass
+class JusticeEvent(Event):
+    """A JusticeEvent refers to any judicial action such as: arresting, jailing,
+    releasing, granting parole, trial starting, hearing, charging, indicting, suing,
+    convicting, sentencing, fine, executing, extraditing, adquiting, appealing or
+    pardoning a Person entity.
+    """
+
+    mention: str
+
+
+COARSE_EVENT_DEFINITIONS: List[Event] = [
+    LifeEvent,
+    MovementEvent,
+    TransactionEvent,
+    BusinessEvent,
+    ConflictEvent,
+    ContactEvent,
+    PersonellEvent,
+    JusticeEvent,
+]
+
+
+@dataclass
+class BeBorn(LifeEvent):
+    """A BeBorn Event occurs whenever a Person Entity is given birth to."""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person who is born
@@ -398,7 +577,7 @@ class BeBorn(Event):
 
 
 @dataclass
-class Marry(Event):
+class Marry(LifeEvent):
     """Marry Events are official Events, where two people are married under the
     legal definition.
     """
@@ -410,8 +589,8 @@ class Marry(Event):
 
 
 @dataclass
-class Divorce(Event):
-    """A DIVORCE Event occurs whenever two people are officially divorced under the
+class Divorce(LifeEvent):
+    """A Divorce Event occurs whenever two people are officially divorced under the
     legal definition of divorce. We do not include separations or church annulments.
     """
 
@@ -422,7 +601,7 @@ class Divorce(Event):
 
 
 @dataclass
-class Injure(Event):
+class Injure(LifeEvent):
     """An Injure Event occurs whenever a Person Entity experiences physical harm.
     Injure Events can be accidental, intentional or self-inflicted.
     """
@@ -436,7 +615,7 @@ class Injure(Event):
 
 
 @dataclass
-class Die(Event):
+class Die(LifeEvent):
     """A Die Event occurs whenever the life of a Person Entity ends. Die Events
     can be accidental, intentional or self-inflicted
     """
@@ -450,7 +629,7 @@ class Die(Event):
 
 
 @dataclass
-class Transport(Event):
+class Transport(MovementEvent):
     """A Transport Event occurs whenever an Artifact (Weapon or Vehicle) or a
     Person is moved from one Place (GPE, Facility, Location) to another.
     """
@@ -466,7 +645,7 @@ class Transport(Event):
 
 
 @dataclass
-class TransferOwnership(Event):
+class TransferOwnership(TransactionEvent):
     """TransferOwnership Events refer to the buying, selling, loaning,
     borrowing, giving, or receiving of artifacts or organizations.
     """
@@ -482,7 +661,7 @@ class TransferOwnership(Event):
 
 
 @dataclass
-class TransferMoney(Event):
+class TransferMoney(TransactionEvent):
     """TransferMoney Events refer to the giving, receiving, borrowing, or
     lending money when it is not in the context of purchasing something. The
     canonical examples are: (1) people giving money to organizations (and getting
@@ -500,7 +679,7 @@ class TransferMoney(Event):
 
 
 @dataclass
-class StartOrg(Event):
+class StartOrg(BusinessEvent):
     """A StartOrg Event occurs whenever a new Organization is created."""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -511,11 +690,11 @@ class StartOrg(Event):
 
 
 @dataclass
-class MergeOrg(Event):
+class MergeOrg(BusinessEvent):
     """A MergeOrg Event occurs whenever two or more Organization Entities
     come together to form a new Organization Entity. This Event applies to any
     kind of Organization, including government agencies. It also includes joint
-    venture
+    venture.
     """
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -525,7 +704,7 @@ class MergeOrg(Event):
 
 
 @dataclass
-class DeclareBankruptcy(Event):
+class DeclareBankruptcy(BusinessEvent):
     """A DeclareBankruptcy Event will occur whenever an Entity officially
     requests legal protection from debt collection due to an extremely negative
     balance sheet.
@@ -538,7 +717,7 @@ class DeclareBankruptcy(Event):
 
 
 @dataclass
-class EndOrg(Event):
+class EndOrg(BusinessEvent):
     """An EndOrg Event occurs whenever an Organization ceases to exist (in
     other words 'goes out of business').
     """
@@ -550,7 +729,7 @@ class EndOrg(Event):
 
 
 @dataclass
-class Attack(Event):
+class Attack(ConflictEvent):
     """An Attack Event is defined as a violent physical act causing harm or damage.
     Attack Events include any such Event not covered by the Injure or Die
     subtypes, including Events where there is no stated agent.
@@ -565,7 +744,7 @@ class Attack(Event):
 
 
 @dataclass
-class Demonstrate(Event):
+class Demonstrate(ConflictEvent):
     """A Demonstrate Event occurs whenever a large number of people come
     together in a public area to protest or demand some sort of official action.
     Demonstrate Events include, but are not limited to, protests, sit-ins, strikes,
@@ -579,7 +758,7 @@ class Demonstrate(Event):
 
 
 @dataclass
-class Meet(Event):
+class Meet(ContactEvent):
     """A Meet Event occurs whenever two or more Entities come together at a single
     location and interact with one another face-to-face. Meet Events include talks,
     summits, conferences, meetings, visits, and any other Event where two or more
@@ -593,7 +772,7 @@ class Meet(Event):
 
 
 @dataclass
-class PhoneWrite(Event):
+class PhoneWrite(ContactEvent):
     """A PhoneWrite Event occurs when two or more people directly engage in
     discussion which does not take place 'face-to-face'. To make this Event less
     open-ended, we limit it to written or telephone communication where at least two
@@ -606,7 +785,7 @@ class PhoneWrite(Event):
 
 
 @dataclass
-class StartPosition(Event):
+class StartPosition(PersonellEvent):
     """A StartPosition Event occurs whenever a Person Entity begins working
     for (or changes offices within) an Organization or GPE. This includes
     government officials starting their terms, whether elected or appointed.
@@ -621,7 +800,7 @@ class StartPosition(Event):
 
 
 @dataclass
-class EndPosition(Event):
+class EndPosition(PersonellEvent):
     """An EndPosition Event occurs whenever a Person Entity stops working for
     (or changes offices within) an Organization or GPE.
     """
@@ -635,7 +814,7 @@ class EndPosition(Event):
 
 
 @dataclass
-class Nominate(Event):
+class Nominate(PersonellEvent):
     """A Nominate Event occurs whenever a Person is proposed for a StartPosition
     Event by the appropriate Person, through official channels.
     """
@@ -649,7 +828,7 @@ class Nominate(Event):
 
 
 @dataclass
-class Elect(Event):
+class Elect(PersonellEvent):
     """An Elect Event occurs whenever a candidate wins an election designed to
     determine the Person argument of a StartPosition Event.
     """
@@ -663,7 +842,7 @@ class Elect(Event):
 
 
 @dataclass
-class ArrestJail(Event):
+class ArrestJail(JusticeEvent):
     """A Jail Event occurs whenever the movement of a Person is constrained by a
     state actor (a GPE, its Organization subparts, or its Person representatives).
     """
@@ -677,7 +856,7 @@ class ArrestJail(Event):
 
 
 @dataclass
-class ReleaseParole(Event):
+class ReleaseParole(JusticeEvent):
     """A Release Event occurs whenever a state actor (GPE, Organization
     subpart, or Person representative) ends its custody of a Person Entity.
     """
@@ -691,7 +870,7 @@ class ReleaseParole(Event):
 
 
 @dataclass
-class TrialHearing(Event):
+class TrialHearing(JusticeEvent):
     """A Trial Event occurs whenever a court proceeding has been initiated for the
     purposes of determining the guilt or innocence of a Person, Organization
     or GPE accused of committing a crime.
@@ -707,7 +886,7 @@ class TrialHearing(Event):
 
 
 @dataclass
-class ChargeIndict(Event):
+class ChargeIndict(JusticeEvent):
     """A Charge Event occurs whenever a Person, Organization or GPE is
     accused of a crime by a state actor (GPE, an Organization subpart of a GPE
     or a Person representing a GPE).
@@ -723,7 +902,7 @@ class ChargeIndict(Event):
 
 
 @dataclass
-class Sue(Event):
+class Sue(JusticeEvent):
     """A Sue Event occurs whenever a court proceeding has been initiated for the
     purposes of determining the liability of a Person, Organization or GPE
     accused of committing a crime or neglecting a commitment.
@@ -739,7 +918,7 @@ class Sue(Event):
 
 
 @dataclass
-class Convict(Event):
+class Convict(JusticeEvent):
     """A Convict Event occurs whenever a Try Event ends with a successful
     prosecution of the Defendant. In other words, a Person,
     Organization or GPE Entity is convicted whenever that Entity has been found
@@ -755,7 +934,7 @@ class Convict(Event):
 
 
 @dataclass
-class SentenceAct(Event):
+class SentenceAct(JusticeEvent):
     """A SentenceAct Event takes place whenever the punishment (particularly
     incarceration) for the Defendant of a Try Event is issued by a state
     actor (a GPE, an Organization subpart or a Person representing them)
@@ -771,7 +950,7 @@ class SentenceAct(Event):
 
 
 @dataclass
-class Fine(Event):
+class Fine(JusticeEvent):
     """A Fine Event takes place whenever a state actor issues a financial punishment
     to a GPE, Person or Organization Entity, typically as a result of court
     proceedings.
@@ -787,7 +966,7 @@ class Fine(Event):
 
 
 @dataclass
-class Execute(Event):
+class Execute(JusticeEvent):
     """An Execute Event occurs whenever the life of a Person is taken by a state
     actor (a GPE, its Organization subparts, or Person representatives).
     """
@@ -801,7 +980,7 @@ class Execute(Event):
 
 
 @dataclass
-class Extradite(Event):
+class Extradite(JusticeEvent):
     """An Extradite Event occurs whenever a Person is sent by a state actor from
     one Place (normally the GPE associated with the state actor, but sometimes a
     Facility under its control) to another place (Location, GPE or Facility) for
@@ -818,7 +997,7 @@ class Extradite(Event):
 
 
 @dataclass
-class Acquit(Event):
+class Acquit(JusticeEvent):
     """An Acquit Event occurs whenever a trial ends but fails to produce a conviction.
     This will include cases where the charges are dropped by the Prosecutor.
     """
@@ -832,7 +1011,7 @@ class Acquit(Event):
 
 
 @dataclass
-class Pardon(Event):
+class Pardon(JusticeEvent):
     """A Pardon Event occurs whenever a head-of-state or their appointed
     representative lifts a sentence imposed by the judiciary.
     """
@@ -846,7 +1025,7 @@ class Pardon(Event):
 
 
 @dataclass
-class Appeal(Event):
+class Appeal(JusticeEvent):
     """An Appeal Event occurs whenever the decision of a court is taken to a higher
     court for review.
     """
@@ -896,4 +1075,11 @@ EVENT_DEFINITIONS: List[Event] = [
     Appeal,
 ]
 
-__all__ = list(map(str, [*ENTITY_DEFINITIONS, *RELATION_DEFINITIONS, *EVENT_DEFINITIONS]))
+FINE_TO_COARSE_EVENTS: Dict[Type, Type] = {_def: _def.__base__ for _def in EVENT_DEFINITIONS}
+COARSE_TO_FINE_EVENTS: Dict[Type, List[Type]] = {}
+for fine, coarse in FINE_TO_COARSE_EVENTS.items():
+    if coarse not in COARSE_TO_FINE_EVENTS:
+        COARSE_TO_FINE_EVENTS[coarse] = []
+    COARSE_TO_FINE_EVENTS[coarse].append(fine)
+
+# __all__ = list(map(str, [*ENTITY_DEFINITIONS, *RELATION_DEFINITIONS, *EVENT_DEFINITIONS]))

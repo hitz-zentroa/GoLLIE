@@ -7,7 +7,7 @@ import re
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
-from typing import Dict, Tuple, TypeVar, Union
+from typing import Any, Dict, Tuple, Type, TypeVar, Union
 
 
 def dataclass(
@@ -32,9 +32,32 @@ def dataclass(
     )
 
 
+def cast_to(obj: Any, dtype: Type) -> Any:
+    if not isinstance(obj, dtype):
+        raise TypeError(f"Type {dtype} must be a parent class of object {obj}.")
+
+    _inst = {param: getattr(obj, param) for param in inspect.signature(dtype).parameters.keys() if hasattr(obj, param)}
+    return dtype(**_inst)
+
+
 class HallucinatedType:
     def __init__(self, *args, **kwargs) -> None:
         pass
+
+    def exists_in(self, text: str) -> bool:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
+        return True
 
 
 @dataclass
@@ -359,11 +382,14 @@ class AnnotationList(list):
                 elem = elem if elem.exists_in(text) else None
             elif any(isinstance(elem, _type) for _type in self.COMPLEX_TYPES):
                 elem = elem.exists_in(text)
-            elif isinstance(elem, HallucinatedType):
+            elif isinstance(elem, HallucinatedType) or isinstance(elem, type):
                 continue
             else:
                 print(elem)
-                elem = elem if elem.exists_in(text) else None
+                if hasattr(elem, "exist_in"):
+                    elem = elem if elem.exists_in(text) else None
+                else:
+                    continue
 
             if elem is not None:
                 key = elem.key()
@@ -400,32 +426,6 @@ class AnnotationList(list):
             except Exception:
                 _elems = []
                 reading = False
-
-        # _text = ann
-        # # Remove list expression brackets
-        # ann = ann.strip().lstrip("[").rstrip("]")
-        # # Fix if commas are missing and set the SEP token
-        # ann = ann.replace(")\n ", "),\n").replace("), ", "),\n").replace("),\n", ")[SEP]")
-        # # Split elements
-        # ann = ann.replace("\n", "")
-        # elems = [elem.strip() for elem in ann.split("[SEP]") if elem.strip()]
-
-        # # Remove malformed elements
-        # _elems = []
-        # for elem in elems:
-        #     try:
-        #         elem = eval(elem)
-        #         # IDK sometimes there are tuples
-        #         if isinstance(elem, tuple):
-        #             elem = elem[0]
-        #         # If it is an empty prediction skip
-        #         if isinstance(elem, type):
-        #             continue
-        #         _elems.append(elem)
-        #     except (SyntaxError, TypeError):
-        #         logging.warning(f"Found an incorrectly formated prediction: {elem}")
-        #     except NameError as e:
-        #         logging.warning(f"An hallucinated predicted guideline found: {elem} | {e}")
 
         self = cls(_elems)
 

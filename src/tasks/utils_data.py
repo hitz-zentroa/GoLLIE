@@ -1,6 +1,7 @@
 import inspect
 import math
 import random
+import re
 from typing import Any, Dict, List, Tuple, Type, Union
 
 import black
@@ -48,6 +49,9 @@ class Sampler:
         max_guidelines (`int`, optional):
             The number of guidelines to append to the example at the same time. If `-1`
             is given then all the guidelines are appended. Defaults to `-1`.
+        sample_total_guidelines (`int`, optional):
+            The total number of guidelines to sample. If `-1` is given then all the
+            guidelines are sampled. Defaults to `-1`.
         guideline_dropout (`float`, optional):
             The probability to dropout a guideline definition for the given example. This
             is only applied on training. Defaults to `0.0`.
@@ -83,15 +87,17 @@ class Sampler:
         split: str = "train",
         parallel_instances: Union[int, Tuple[int, int]] = 1,
         max_guidelines: int = -1,
+        sample_total_guidelines: int = -1,
         guideline_dropout: float = 0.0,
         seed: float = 0,
         prompt_template: str = "templates/prompt.txt",
-        ensure_positives_on_train: bool = True,
+        ensure_positives_on_train: bool = False,
         sample_only_gold_guidelines: bool = False,
         dataset_name: str = None,
         scorer: str = None,
         task_definitions: List[Type] = None,
         task_target: str = "labels",
+        remove_guidelines: bool = False,
         **kwargs,
     ) -> None:
         self.loader = dataset_loader
@@ -116,6 +122,10 @@ class Sampler:
             self.max_guidelines = len(self.task_definitions)
         else:
             self.max_guidelines = max_guidelines
+        if sample_total_guidelines < 0 or sample_total_guidelines > len(self.task_definitions):
+            self.sample_total_guidelines = len(self.task_definitions)
+        else:
+            self.sample_total_guidelines = sample_total_guidelines
         self.ensure_positives_on_train = ensure_positives_on_train
         self.sample_only_gold_guidelines = sample_only_gold_guidelines
 
@@ -126,8 +136,12 @@ class Sampler:
         self.scorer_cls = scorer
 
         self._black_mode = black.Mode()
+        self.remove_guidelines = remove_guidelines
+        self._remove_guidelines_re = re.compile(r'"""(.+\n?)*"""')
+        self._remove_comments_re = re.compile(r"#.+?\n")
 
     def _sample(self, instances):
+        _gold = [gold for inst in instances for gold in inst["gold"]]
         if self.sample_only_gold_guidelines:
             guidelines = [
                 definition
@@ -141,17 +155,18 @@ class Sampler:
                 _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
+                _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                if self.remove_guidelines:
+                    _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                    _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
                 yield {
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=[inspect.getsource(definition) for definition in _guidelines],
-                            text=_text,
-                            annotations=_ann,
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
@@ -160,44 +175,53 @@ class Sampler:
             positive_guidelines = {type(ann) for inst in instances for ann in inst[self.task_target]}
             # Assign a probability distribution that helps positive classes
             # if ensure_positives_on_train is True
-            p = np.asarray(
-                [
-                    (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
-                    for _def in self.task_definitions
+            if self.sample_total_guidelines < len(self.task_definitions):
+                p = np.asarray(
+                    [
+                        (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+                        for _def in self.task_definitions
+                    ]
+                )
+                p += 1.0 / p.shape[0]
+                p /= p.sum()
+                guidelines = np.random.choice(
+                    np.asarray(self.task_definitions),
+                    size=(self.sample_total_guidelines,),
+                    replace=False,
+                    p=p,
+                ).tolist()
+            else:
+                guidelines = list(self.task_definitions)
+            random.shuffle(guidelines)
+            splits = math.ceil(len(guidelines) / self.max_guidelines)
+            for i in range(splits):
+                _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
+                # Apply guideline dropout
+                _guidelines = [
+                    _def
+                    for _def in _guidelines
+                    if random.random() > self.guideline_dropout
+                    or (_def in positive_guidelines and self.ensure_positives_on_train)
                 ]
-            )
-            p += 1.0 / p.shape[0]
-            p /= p.sum()
-            _guidelines = np.random.choice(
-                np.asarray(self.task_definitions),
-                size=(self.max_guidelines,),
-                replace=False,
-                p=p,
-            ).tolist()
-            # Apply guideline dropout
-            _guidelines = [
-                _def
-                for _def in _guidelines
-                if random.random() > self.guideline_dropout
-                or (_def in positive_guidelines and self.ensure_positives_on_train)
-            ]
-            _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
-            _text = " ".join([inst["text"] for inst in instances]).strip()
-            yield {
-                "ids": [inst["id"] for inst in instances],
-                "task_id": f"{self.dataset_name}_{self.task}",
-                "scorer_cls": self.scorer_cls,
-                "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
-                "text": black.format_str(
-                    self.template.render(
-                        guidelines=[inspect.getsource(definition) for definition in _guidelines],
-                        text=_text,
-                        annotations=_ann,
+                _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
+                _text = " ".join([inst["text"] for inst in instances]).strip()
+
+                _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                if self.remove_guidelines:
+                    _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                    _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
+                yield {
+                    "ids": [inst["id"] for inst in instances],
+                    "task_id": f"{self.dataset_name}_{self.task}",
+                    "scorer_cls": self.scorer_cls,
+                    "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
+                    "text": black.format_str(
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
+                        mode=self._black_mode,
                     ),
-                    mode=self._black_mode,
-                ),
-                "unlabelled_sentence": _text,
-            }
+                    "unlabelled_sentence": _text,
+                }
         else:
             guidelines = list(self.task_definitions)
             random.shuffle(guidelines)
@@ -207,17 +231,18 @@ class Sampler:
                 _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
 
+                _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+                if self.remove_guidelines:
+                    _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+                    _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
                 yield {
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
                     "text": black.format_str(
-                        self.template.render(
-                            guidelines=[inspect.getsource(definition) for definition in _guidelines],
-                            text=_text,
-                            annotations=_ann,
-                        ),
+                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
                         mode=self._black_mode,
                     ),
                     "unlabelled_sentence": _text,
@@ -225,6 +250,7 @@ class Sampler:
 
     def __iter__(self):
         random.seed(self.seed)
+        np.random.seed(self.seed)
         instances = []
         total_inst = random.randint(*self.parallel_instances)
         prev_id = None

@@ -1,6 +1,6 @@
 from typing import Dict, List, Type
 
-from src.tasks.ace.prompts import ENTITY_DEFINITIONS, EVENT_DEFINITIONS, VALUE_DEFINITIONS
+from src.tasks.ace.prompts import ENTITY_DEFINITIONS, EVENT_DEFINITIONS, RELATION_DEFINITIONS, VALUE_DEFINITIONS
 from src.tasks.utils_scorer import EventScorer, RelationScorer, SpanScorer
 from src.tasks.utils_typing import Entity, Value
 
@@ -28,7 +28,7 @@ class ACEValueScorer(SpanScorer):
 class ACERelationScorer(RelationScorer):
     """ACE Relation identification and classification scorer."""
 
-    valid_types: List[Type] = EVENT_DEFINITIONS
+    valid_types: List[Type] = RELATION_DEFINITIONS
 
 
 class ACEEventScorer(EventScorer):

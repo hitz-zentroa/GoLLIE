@@ -1,0 +1,18 @@
+# The following lines describe the task definition
+{%- for definition in guidelines %}
+{{ definition }}
+{%- endfor %}
+
+# This is the text to analyze
+text = {{ text.__repr__() }}
+
+# The list called result contains the fine-grained relations for the following coarse-grained relations:
+{%- for ann in gold %}
+#    - {{ ann.__repr__() }}
+{%- endfor %}
+# 
+result = [
+{%- for ann in annotations %}
+    {{ ann }},
+{%- endfor %}
+]

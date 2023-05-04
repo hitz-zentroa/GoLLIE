@@ -107,5 +107,11 @@ ENTITY_DEFINITIONS: List[Entity] = [
     Miscellaneous,
 ]
 
+ENTITY_DEFINITIONS_woMISC: List[Entity] = [
+    Person,
+    Organization,
+    Location,
+]
 
-__all__ = list(map(str, [*ENTITY_DEFINITIONS]))
+
+# __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

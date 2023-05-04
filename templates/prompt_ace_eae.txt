@@ -1,0 +1,18 @@
+# The following lines describe the task definition
+{%- for definition in guidelines %}
+{{ definition }}
+{%- endfor %}
+
+# This is the text to analyze
+text = {{ text.__repr__() }}
+
+# The list called result contains the instances for the following events according to the guidelines above:
+{%- for ann in gold %}
+#    - "{{ann.mention}}" triggers a {{ann.__class__.__name__}} event.
+{%- endfor %}
+# 
+result = [
+{%- for ann in annotations %}
+    {{ ann }},
+{%- endfor %}
+]

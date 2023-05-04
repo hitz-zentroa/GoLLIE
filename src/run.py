@@ -10,12 +10,11 @@ import torch.utils.data
 from datasets import DatasetDict
 
 from src.config import DataTrainingArguments, ModelArguments
-from src.dataset.dataset import CollieDataset
+from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
 from src.evaluate import evaluate
 from src.model.load_model import load_model_for_inference, load_model_for_training
-from src.trainer import CollieTrainer
+from src.trainer import CollieTrainer, ConcatDataset
 from transformers import (
-    DataCollatorForSeq2Seq,
     HfArgumentParser,
     Seq2SeqTrainingArguments,
 )
@@ -64,8 +63,8 @@ def train_collie(
 
     logging.info(
         "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
-        f" {data_args.ignore_pad_token_for_loss} and 'ignore_prompt_loss':"
-        f" {data_args.ignore_prompt_loss}"
+        f" {data_args.ignore_pad_token_for_loss} and 'prompt_loss_weight':"
+        f" {data_args.prompt_loss_weight}"
     )
 
     training_datasets = []
@@ -77,11 +76,11 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
-            ignore_prompt_loss=data_args.ignore_prompt_loss,
+            prompt_loss_weight=data_args.prompt_loss_weight,
         )
         training_datasets.append(train_dataset)
 
-    train_dataset = torch.utils.data.ConcatDataset(training_datasets)
+    train_dataset = ConcatDataset(training_datasets)
 
     dev_datasets = DatasetDict()
     for dev_task in data_args.validation_tasks:
@@ -92,7 +91,7 @@ def train_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
-            ignore_prompt_loss=data_args.ignore_prompt_loss,
+            prompt_loss_weight=0.0,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -101,7 +100,7 @@ def train_collie(
         train_dataset=train_dataset,
         eval_dataset=dev_datasets,
         args=training_args,
-        data_collator=DataCollatorForSeq2Seq(
+        data_collator=DataCollatorForCoLLIE(
             tokenizer,
             pad_to_multiple_of=8,
             return_tensors="pt",
@@ -193,7 +192,7 @@ def inference_collie(
     trainer = CollieTrainer(
         model=model,
         args=training_args,
-        data_collator=DataCollatorForSeq2Seq(
+        data_collator=DataCollatorForCoLLIE(
             tokenizer,
             pad_to_multiple_of=8,
             return_tensors="pt",
@@ -213,6 +212,7 @@ def inference_collie(
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
+            prompt_loss_weight=0.0,
         )
 
         logging.info(f"Running inference on {test_task}...")
