@@ -7,7 +7,7 @@ import re
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
-from typing import Any, Dict, Tuple, Type, TypeVar, Union
+from typing import Any, Dict, Tuple, Type, TypeVar, Union, List
 
 
 def dataclass(
@@ -367,6 +367,19 @@ class AnnotationList(list):
     SIMPLE_TYPES = [Entity, Value, Relation]
     COMPLEX_TYPES = [Event]
 
+    def __init__(self, elems: List[Any], hallucinated_no: int = 0, parse_error: bool = False):
+        self._hallucinated_no = hallucinated_no
+        self._parse_error = parse_error
+        super().__init__(elems)
+
+    @property
+    def hallucinated_no(self) -> int:
+        return self._hallucinated_no
+
+    @property
+    def parse_error(self) -> bool:
+        return self._parse_error
+
     @staticmethod
     def _load_guidelines(task_module: str) -> Dict[str, TypeVar]:
         mdl = importlib.import_module(task_module)
@@ -403,7 +416,7 @@ class AnnotationList(list):
 
                 _elems.append(elem)
 
-        return type(self)(_elems)
+        return type(self)(_elems, hallucinated_no=len(self) - len(_elems), parse_error=self.parse_error)
 
     @classmethod
     def from_output(
@@ -414,6 +427,7 @@ class AnnotationList(list):
         locals().update(guidelines)
 
         reading = True
+        parse_error = False
         while reading:
             try:
                 _elems = eval(ann)
@@ -426,12 +440,13 @@ class AnnotationList(list):
             except Exception:
                 _elems = []
                 reading = False
+                parse_error = True
 
-        self = cls(_elems)
+        self = cls(_elems, parse_error=parse_error)
 
         if filter_hallucinations:
             if text is None:
-                raise ValueError("To filter the allucinations the text argument must not be None.")
+                raise ValueError("To filter the hallucinations the text argument must not be None.")
             self = self.filter_hallucinations(text)
 
         return self
@@ -446,18 +461,23 @@ class AnnotationList(list):
 
         # Remove malformed elements
         _elems = []
+        pase_error = False
         for elem in eval(ann):
             try:
                 elem = eval(elem)
                 _elems.append(elem)
             except SyntaxError:
-                logging.warning(f"Found an incorrectly formated gold: {elem}")
+                logging.warning(f"Found an incorrectly formatted gold: {elem}")
+                pase_error = True
 
-        self = cls(_elems)
+        self = cls(_elems, parse_error=pase_error)
 
         if filter_hallucinations:
             if text is None:
-                raise ValueError("To filter the allucinations the text argument must not be None.")
+                raise ValueError("To filter the hallucinations the text argument must not be None.")
             self = self.filter_hallucinations(text)
 
         return self
+
+    def to_string(self) -> str:
+        return str(self)
