@@ -83,7 +83,7 @@ class ResultLogger:
 
     def print_predictions(self, output_path: str):
         """
-        Print the predictions to a file in jsonl format. Each line contains a json object with the following format:
+        Print the predictions to a file in json format. In the following format:
         {
             "sentence": {
                 "golds": "gold labels",
@@ -99,7 +99,8 @@ class ResultLogger:
         with open(output_path, "w", encoding="utf8") as f:
             for sentence, prediction, gold in zip(self.sentences, self.predictions, self.golds):
                 example = {sentence: {"golds": gold.to_string(), "predictions": prediction.to_string()}}
-                json.dump(example, f, ensure_ascii=False)
+                json.dump(example, ensure_ascii=False, indent=4, fp=f)
+                f.write("\n")
 
 
 def import_prompts(task_module: str) -> None:
