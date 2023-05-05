@@ -64,22 +64,22 @@ class ResultLogger:
         if len(self.sentences) == 0:
             raise ValueError(f"No sentences were added to the {self.task_name} logger, we cannot compute metrics.")
 
-        scores = scorer(reference=self.golds, predictions=self.predictions)
+        scores: Dict[str, Dict[str, Dict[str, float]]] = scorer(reference=self.golds, predictions=self.predictions)
         results: Dict[str, Dict[str, Dict[str, float]]] = {
-            "scores": scores,
-            "prediction_stats": {
+            "predictions_stats": {
                 "impossible_to_parse": {
                     "total": self.impossible_to_parse,
-                    "percentage": round((self.impossible_to_parse / len(self.sentences)) * 100, 4),
+                    "percentage%": round((self.impossible_to_parse / len(self.sentences)) * 100, 4),
                 },
                 "hallucinated_predictions": {
                     "total": self.hallucinated_predictions,
-                    "percentage": round((self.hallucinated_predictions / self.total_predictions) * 100, 4),
+                    "percentage%": round((self.hallucinated_predictions / self.total_predictions) * 100, 4),
                 },
                 "total": {"predictions": self.valid_predictions, "gold": self.gold_predictions},
             },
         }
-        return results
+        scores.update(results)
+        return scores
 
     def print_predictions(self, output_path: str):
         """
