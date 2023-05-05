@@ -231,7 +231,7 @@ def evaluate(
         task_metrics = task_logger.compute_metrics(scorer)
         all_scores[task] = task_metrics
         # rich.print(list(zip(labels, predictions)))
-        task_logger.print_predictions(output_path=os.path.join(predictions_dir, f"{task}.eval_file.jsonl"))
+        task_logger.print_predictions(output_path=os.path.join(predictions_dir, f"{task}.eval_file.json"))
 
     scores_file_name = os.path.join(output_dir, "task_scores.json")
     with open(scores_file_name, "wt", encoding="utf8") as f:
