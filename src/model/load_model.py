@@ -131,6 +131,7 @@ def load_model_for_training(
             pretrained_model_name_or_path=model_weights_name_or_path,
             load_in_8bit=int8_quantization and use_lora,
             device_map=device_map if int8_quantization else None,
+            trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
         )
 
         # Ensure that the padding token is added to the left of the input sequence.
@@ -265,6 +266,7 @@ def load_model_for_inference(
             load_in_8bit=int8_quantization,
             device_map=device_map if int8_quantization else None,
             torch_dtype=torch_dtype,
+            trust_remote_code=True if "mpt" in weights_path else False,
         )
 
         # Ensure that the padding token is added to the left of the input sequence.
