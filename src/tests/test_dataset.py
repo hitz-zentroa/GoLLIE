@@ -52,8 +52,8 @@ class EnergyAndInfrastructureEvent:
 sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
 # The following list contains the events instances that happens in the sentence defined above
-result = ["""
-    result = """
+result ="""
+    result = """[
     EnergyAndInfrastructureEvent(
         meeting_attendees=["Chinese", "Rongovian"],
         meeting_location=["Berlin"],
@@ -176,7 +176,7 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt + result,
+            prompt + " " + result,
         )
 
         # Test Inference
@@ -322,7 +322,7 @@ class TestCollieDataset(unittest.TestCase):
         labels = batch["labels"][0].tolist()
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt + result,
+            prompt + " " + result,
         )
         self.assertEqual(
             tokenizer.decode(
@@ -330,7 +330,7 @@ class TestCollieDataset(unittest.TestCase):
                 skip_special_tokens=True,
                 clean_up_tokenization_spaces=False,
             ),
-            prompt + result,
+            prompt + " " + result,
         )
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
         self.assertEqual(labels[0], -100)
@@ -351,7 +351,7 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt + result,
+            prompt + " " + result,
         )
 
         self.assertEqual(model_input[0], tokenizer.pad_token_id)
@@ -405,7 +405,7 @@ class TestCollieDataset(unittest.TestCase):
 
             self.assertEqual(
                 tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-                prompt + result,
+                prompt + " " + result,
             )
             self.assertEqual(
                 tokenizer.decode(
@@ -413,7 +413,7 @@ class TestCollieDataset(unittest.TestCase):
                     skip_special_tokens=True,
                     clean_up_tokenization_spaces=False,
                 ),
-                prompt + result,
+                prompt + " " + result,
             )
 
             prompt_tokens = tokenizer(
@@ -506,7 +506,7 @@ class TestCollieDataset(unittest.TestCase):
 
             self.assertEqual(
                 tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-                prompt + result,
+                prompt + " " + result,
             )
             self.assertEqual(
                 tokenizer.decode(
@@ -514,7 +514,7 @@ class TestCollieDataset(unittest.TestCase):
                     skip_special_tokens=True,
                     clean_up_tokenization_spaces=False,
                 ),
-                prompt + result,
+                prompt + " " + result,
             )
 
             prompt_tokens = tokenizer(
@@ -601,7 +601,7 @@ class TestCollieDataset(unittest.TestCase):
 
             self.assertEqual(
                 tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-                prompt + result,
+                prompt + " " + result,
             )
             self.assertEqual(
                 tokenizer.decode(
@@ -609,7 +609,7 @@ class TestCollieDataset(unittest.TestCase):
                     skip_special_tokens=True,
                     clean_up_tokenization_spaces=False,
                 ),
-                prompt + result,
+                prompt + " " + result,
             )
 
             prompt_tokens = tokenizer(
@@ -723,8 +723,8 @@ class TestCollieDataset(unittest.TestCase):
         sentence = "The Chinese and Rongovian delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
         # The following list contains the events instances that happens in the sentence defined above
-        result = ["""
-        result1 = """
+        result ="""
+        result1 = """[
             EnergyAndInfrastructureEvent(
                 meeting_attendees=["Chinese", "Rongovian"],
                 meeting_location=["Berlin"],
@@ -770,8 +770,8 @@ class TestCollieDataset(unittest.TestCase):
         sentence = "The Spanish and French delegations met at the sidelines of the Berlin Development Futures conference to discuss Rongovia's proposed Pangean Reunification Facility.
 
         # The following list contains the events instances that happens in the sentence defined above
-        result = ["""
-        result2 = """
+        result ="""
+        result2 = """[
             EnergyAndInfrastructureEvent(
                 meeting_attendees=["Spanish", "French"],
                 meeting_location=["Berlin"],
@@ -813,15 +813,15 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt1 + result1,
+            prompt1 + " " + result1,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt2 + result2,
+            prompt2 + " " + result2,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt3 + result3,
+            prompt3 + " " + result3,
         )
 
         model_input = train_dataset[1]["input_ids"]
@@ -829,15 +829,15 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt1 + result1,
+            prompt1 + " " + result1,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt2 + result2,
+            prompt2 + " " + result2,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt3 + result3,
+            prompt3 + " " + result3,
         )
 
         model_input = train_dataset[2]["input_ids"]
@@ -845,7 +845,7 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt3 + result3,
+            prompt3 + " " + result3,
         )
 
         train_dataset.rotate_split()
@@ -860,16 +860,16 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt2 + result2,
+            prompt2 + " " + result2,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt1 + result1,
+            prompt1 + " " + result1,
         )
 
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt3 + result3,
+            prompt3 + " " + result3,
         )
 
         model_input = train_dataset[1]["input_ids"]
@@ -877,15 +877,15 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt1 + result1,
+            prompt1 + " " + result1,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt2 + result2,
+            prompt2 + " " + result2,
         )
         self.assertNotEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt3 + result3,
+            prompt3 + " " + result3,
         )
 
         model_input = train_dataset[2]["input_ids"]
@@ -893,5 +893,5 @@ class TestCollieDataset(unittest.TestCase):
         self.assertEqual(model_input, labels)
         self.assertEqual(
             tokenizer.decode(model_input, skip_special_tokens=True, clean_up_tokenization_spaces=False),
-            prompt3 + result3,
+            prompt3 + " " + result3,
         )
