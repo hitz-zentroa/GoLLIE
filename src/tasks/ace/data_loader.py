@@ -599,7 +599,7 @@ class ACESampler(Sampler):
                 if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
                     p = np.asarray(
                         [
-                            (5.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+                            (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
                             for _def in guidelines
                         ]
                     )
@@ -629,6 +629,10 @@ class ACESampler(Sampler):
                     _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                     _gold = [cast_to(ann, coarse_type) for ann in _ann]
                     _text = " ".join([inst["text"] for inst in instances]).strip()
+
+                    # Remove the chances for hallucination because the task is classification
+                    if not len(_ann):
+                        continue
 
                     _guidelines = [inspect.getsource(definition) for definition in _guidelines]
                     if self.remove_guidelines:
