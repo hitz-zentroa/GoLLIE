@@ -93,13 +93,19 @@ def load_model_for_training(
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
-    config = AutoConfig.from_pretrained(model_weights_name_or_path)
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update({"mpt": "MPTForCausalLM"})  # MPT not in transformers yet
+
+    config = AutoConfig.from_pretrained(
+        model_weights_name_or_path,
+        trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+    )
 
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
     logging.info(f"Loading model with dtype: {torch_dtype}")
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
+        trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
     )
 
     if config.model_type in MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES:
@@ -241,13 +247,19 @@ def load_model_for_inference(
 
     logging.info(f"Loading model from {weights_path}")
 
-    config = AutoConfig.from_pretrained(weights_path)
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update({"mpt": "MPTForCausalLM"})  # MPT not in transformers yet
+
+    config = AutoConfig.from_pretrained(
+        weights_path,
+        trust_remote_code=True if "mpt" in weights_path else False,
+    )
 
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         weights_path,
         add_eos_token=True,
+        trust_remote_code=True if "mpt" in weights_path else False,
     )
 
     if config.model_type in MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES:
