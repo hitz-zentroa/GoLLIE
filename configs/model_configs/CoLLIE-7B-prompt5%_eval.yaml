@@ -1,6 +1,6 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
-lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b-prompt5%/checkpoint-5596/
+lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b-prompt5%
 torch_dtype: "auto"
 use_lora: true
 int8_quantization: true
@@ -25,7 +25,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.05
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/collie/CoLLIE-7b-prompt5%/checkpoint-5596/
+output_dir: /ikerlariak/osainz006/models/collie/CoLLIE-7b-prompt5%
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"

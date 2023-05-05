@@ -16,7 +16,6 @@ export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=CoLLIE
 
-python3 -m src.run configs/model_configs/conll/CoLLIE-7B_eval.yaml
-python3 -m src.run configs/model_configs/ace_all/CoLLIE-7B_eval.yaml
-python3 -m src.run configs/model_configs/CoLLIE-7B_eval.yaml
 
+python3 -m src.run configs/model_configs/CoLLIE-7B_eval.yaml
+python3 -m src.run configs/model_configs/CoLLIE-7B-prompt5%_eval.yaml
