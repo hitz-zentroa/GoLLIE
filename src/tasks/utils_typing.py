@@ -7,7 +7,7 @@ import re
 from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
-from typing import Any, Dict, Tuple, Type, TypeVar, Union, List
+from typing import Any, Dict, List, Tuple, Type, TypeVar, Union
 
 
 def dataclass(

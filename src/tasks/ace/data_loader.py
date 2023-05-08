@@ -551,8 +551,8 @@ class ACESampler(Sampler):
         task_definitions, task_target, task_template = {
             "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt.txt"),
             "VER": (VALUE_DEFINITIONS, "values", "templates/prompt.txt"),
-            "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt.txt"),
-            "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_re.txt"),
+            "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re.txt"),
+            "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc.txt"),
             "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
             "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
         }[task]
