@@ -1,7 +1,7 @@
 <h1 align="center">CoLLIE</h1>
 <p align="center">
     <br>
-    <img src="assets/CoLLIE_project_icon_rounded.png" style="height: 150px;">
+    <img src="assets/CoLLIE_blue.png" style="height: 250px;">
     <br>
     <h2 align="center"><b>C</b>ode based <b>L</b>arge <b>L</b>anguage-model for <b>I</b>nformation-<b>E</b>xtraction</h2>
     <br>
