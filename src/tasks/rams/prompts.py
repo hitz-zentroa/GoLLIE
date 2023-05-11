@@ -12,11 +12,7 @@ https://github.com/raspberryice/gen-arg/blob/main/aida_ontology_cleaned.csv
 
 @dataclass
 class ArtifactFailure(Event):
-    """An ArtifactFailure (artifact) Event occurs whenever a (mechanical) Artifact
-    failed due to some Instrument at some Place.
-
-    The possible Event subtypes are: "MechanicalFailure" or None.
-    """
+    """{rams_artifactfailure}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype.
@@ -27,11 +23,7 @@ class ArtifactFailure(Event):
 
 @dataclass
 class DamageDestroy(Event):
-    """A DamageDestroy (artifact) Event occurs when an Artifact is damaged or destroyed
-    by some Agent (damager or destroyer) using an Instrument at some Place.
-
-    The possible Event subtypes are: "Damage", "Destroy" or None.
-    """
+    """{rams_damagedestroy}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype.
@@ -43,11 +35,7 @@ class DamageDestroy(Event):
 
 @dataclass
 class Shortage(Event):
-    """A Shortage (artifact) Event occurs when a Experiencer experienced a shortage of
-    Supply in some Place.
-
-    The only possible event subtype is: "Shortage".
-    """
+    """{rams_shortage}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype.
@@ -58,14 +46,7 @@ class Shortage(Event):
 
 @dataclass
 class Attack(Event):
-    """An Attack (conflict) Event occurs when an Attacker attacks a Target with some
-    Instrument at some Place.
-
-    The possible Event subtypes are: "AirStrikeMissileStrike",
-    "BiologicalChemicalPoisonAttack", "Bombing", "FireArmAttack", "Hanging",
-    "Invade", "SelfDirectedBattle", "SetFire", "Stabbing", "StealRobHijack",
-    "Strangling" or None.
-    """
+    """{rams_attack}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -78,11 +59,7 @@ class Attack(Event):
 
 @dataclass
 class Coup(Event):
-    """A Coup (conflict) Event occurs when a DeposedEntity was desposed by a
-    DeposingEntity at some Place.
-
-    The only possible event subtype is: "Coup".
-    """
+    """{rams_coup}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -93,11 +70,7 @@ class Coup(Event):
 
 @dataclass
 class Demonstrate(Event):
-    """A Demonstrate (conflict) Event occurs when a Demonstrator(s) protest at some
-    Place.
-
-    The possible Event subtypes are: "MarchProtestPoliticalGathering" or None.
-    """
+    """{rams_demonstrate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -107,12 +80,7 @@ class Demonstrate(Event):
 
 @dataclass
 class Yield(Event):
-    """A Yield (conflict) Event occurs when an Agent (yielder or surrender)
-    yields or surrenders to a Recipient at some Place. But also, when an Agent
-    (retreater) retreats from Origin to some Destination.
-
-    The possible Event subtypes are: "Surrender", "Retreat" or None
-    """
+    """{rams_yield}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype

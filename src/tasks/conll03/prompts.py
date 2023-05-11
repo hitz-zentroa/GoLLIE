@@ -30,58 +30,14 @@ class Organization(Entity):
 
 @dataclass
 class Location(Entity):
-    """Locations: roads (streets, motorways)
-    trajectories
-    regions (villages, towns, cities, provinces, countries, continents,
-             dioceses, parishes)
-    structures (bridges, ports, dams)
-    natural locations (mountains, mountain ranges, woods,
-                       rivers, wells, fields, valleys, gardens,
-                       nature reserves, allotments, beaches,
-                       national parks)
-    public places (squares, opera houses, museums, schools,
-                   markets, airports, stations, swimming pools,
-                   hospitals, sports facilities, youth centers,
-                   parks, town halls, theaters, cinemas, galleries,
-                   camping grounds, NASA launch pads, club
-                   houses, universities, libraries, churches,
-                   medical centers, parking lots, playgrounds,
-                   cemeteries)
-    commercial places (chemists, pubs, restaurants, depots,
-                       hostels, hotels, industrial parks,
-                       nightclubs, music venues)
-    assorted buildings (houses, monasteries, creches, mills,
-                        army barracks, castles, retirement
-                        homes, towers, halls, rooms, vicarages,
-                        courtyards)
-    abstract ``places'' (e.g. {\\it the free world})
-    """
+    """{ner_location}"""
 
     span: str
 
 
 @dataclass
 class Miscellaneous(Entity):
-    """Miscellaneous: words of which one part is a location, organisation,
-              miscellaneous, or person
-    adjectives and other words derived from a word
-              which is location, organisation, miscellaneous, or
-              person
-    religions
-    political ideologies
-    nationalities
-    languages
-    programs
-    events (conferences, festivals, sports competitions,
-              forums, parties, concerts)
-    wars
-    sports related names (league tables, leagues, cups
-    titles (books, songs, films, stories, albums, musicals,
-              TV programs)
-    slogans
-    eras in time
-    types (not brands) of objects (car types, planes,
-              motorbikes)"""
+    """{ner_miscellaneous}"""
 
     span: str
 
