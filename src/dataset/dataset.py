@@ -70,8 +70,8 @@ def prepare_data(
     """
 
     if is_encoder_decoder:
-        prompt, result = example.split("result = [")
-        prompt = prompt + "result = ["
+        prompt, result = example.split("result =")
+        prompt = prompt + "result ="
         prompt = prompt.strip()
         result = result.strip()
 
@@ -97,7 +97,7 @@ def prepare_data(
 
     else:
         if inference:
-            prompt = example.split("result = [")[0] + "result = ["
+            prompt = example.split("result =")[0] + "result ="
             model_inputs = tokenizer(
                 text=prompt,
                 max_length=max_length,
@@ -131,7 +131,7 @@ def prepare_data(
             model_inputs["labels"] = model_inputs["input_ids"].copy()
 
             # Find the prompt length
-            prompt = example.split("result = [")[0] + "result = ["
+            prompt = example.split("result =")[0] + "result ="
             prompt = tokenizer(
                 text=prompt,
                 max_length=max_length,

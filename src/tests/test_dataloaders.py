@@ -15,7 +15,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
-        _ = list(ACESampler(dataloader, task="RC", **config, **config["task_configuration"]["RC"]))
+        _ = list(ACESampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
 
         # TODO: Implement a better TEST
 

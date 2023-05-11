@@ -15,7 +15,7 @@
             "parallel_instances": 1,
             "max_guidelines": 3,
             "guideline_dropout": 0,
-            "scorer": "src.tasks.ace.scorer.ACEEventScorer",
+            "scorer": "src.tasks.rams.scorer.RAMSEventScorer",
             "sample_only_gold_guidelines": true
         }
     }
