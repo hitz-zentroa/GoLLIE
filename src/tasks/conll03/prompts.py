@@ -16,28 +16,14 @@ Based on: Nancy Chinchor, Erica Brown, Lisa Ferro, Patty Robinson,
 class Person(Entity):
     """Persons: first, middle and last names of people, animals and fictional
             characters
-    aliases"""
+    aliases."""
 
     span: str
 
 
 @dataclass
 class Organization(Entity):
-    """Organizations: companies (press agencies, studios, banks, stock
-               markets, manufacturers, cooperatives)
-    subdivisions of companies (newsrooms)
-    brands
-    political movements (political parties, terrorist
-              organisations)
-    government bodies (ministries, councils, courts, political unions
-               of countries (e.g. the {\\it U.N.}))
-    publications (magazines, newspapers, journals)
-    musical companies (bands, choirs, opera companies, orchestras
-    public organisations (schools, universities, charities
-    other collections of people (sports clubs, sports
-              teams, associations, theaters companies,
-              religious orders, youth organisations
-    """
+    """{ner_organization}"""
 
     span: str
 

@@ -14,7 +14,9 @@
             "parallel_instances": 1,
             "max_guidelines": -1,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorer"
+            "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorer",
+            "paraphrase_train": true,
+            "label_noise": 0.5
         }
     }
 }
