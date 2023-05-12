@@ -1,7 +1,7 @@
 from src.tasks import task_id_to_guidelines
 from torch.utils.data import Dataset
 from transformers import PreTrainedTokenizerBase, BatchEncoding
-from conversation import get_conv_template
+from src.paraphrase.conversation import get_conv_template
 from typing import List
 from tqdm import tqdm
 import logging
