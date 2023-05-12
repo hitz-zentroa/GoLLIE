@@ -8,6 +8,7 @@ from src.tasks.conll03.prompts import (
     Organization,
     Person,
 )
+from src.tasks.conll03.guidelines import GUIDELINES
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
@@ -292,5 +293,6 @@ class CoNLL03Sampler(Sampler):
             scorer=scorer,
             task_definitions=task_definitions,
             task_target=task_target,
+            definitions=GUIDELINES,
             **kwargs,
         )

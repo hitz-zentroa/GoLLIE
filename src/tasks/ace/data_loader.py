@@ -93,6 +93,7 @@ from src.tasks.ace.prompts import (
 )
 
 from ..utils_data import DatasetLoader, Sampler
+from src.tasks.ace.guidelines import GUIDELINES
 
 
 class ACEDatasetLoader(DatasetLoader):
@@ -749,5 +750,6 @@ class ACESampler(Sampler):
             is_coarse_to_fine=is_coarse_to_fine,
             coarse_to_fine=COARSE_TO_FINE,
             fine_to_coarse=FINE_TO_COARSE,
+            definitions=GUIDELINES,
             **kwargs,
         )

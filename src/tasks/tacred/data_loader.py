@@ -49,6 +49,7 @@ from src.tasks.tacred.prompts import (
 
 from ..utils_data import DatasetLoader, Sampler
 from ..utils_typing import Relation, dataclass
+from src.tasks.tacred.guidelines import GUIDELINES
 
 
 @dataclass
@@ -239,5 +240,6 @@ class TACREDSampler(Sampler):
             scorer=scorer,
             task_definitions=RELATION_DEFINITIONS,
             task_target="labels",
+            definitions=GUIDELINES,
             **kwargs,
         )

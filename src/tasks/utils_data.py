@@ -495,7 +495,7 @@ class Sampler:
                 _guidelines = [inspect.getsource(definition) for definition in _guidelines]
                 # Apply definition paraphrases if train
                 _definitions = {
-                    key: random.choice(value[self.lang]) if self.split == "train" else value[0]
+                    key: random.choice(value[self.lang]) if self.split == "train" else value[self.lang][0]
                     for key, value in self.definitions.items()
                 }
                 _guidelines = [definition.format(**_definitions) for definition in _guidelines]

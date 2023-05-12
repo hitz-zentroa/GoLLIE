@@ -53,6 +53,7 @@ from src.tasks.rams.prompts import (
 )
 
 from ..utils_data import DatasetLoader, Sampler
+from src.tasks.rams.guidelines import GUIDELINES
 
 
 class RAMSDatasetLoader(DatasetLoader):
@@ -636,5 +637,6 @@ class RAMSSampler(Sampler):
             scorer=scorer,
             task_definitions=EVENT_DEFINITIONS,
             task_target="labels",
+            definitions=GUIDELINES,
             **kwargs,
         )
