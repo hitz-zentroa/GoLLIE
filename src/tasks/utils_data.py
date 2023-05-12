@@ -349,7 +349,7 @@ class Sampler:
         fine_to_coarse: Dict[Type, Type] = None,
         lang: str = "en",
         definitions: Dict[str, Any] = None,
-        label_noise_prob: float = 0.0
+        label_noise_prob: float = 0.0,
         **kwargs,
     ) -> None:
         self.loader = dataset_loader
