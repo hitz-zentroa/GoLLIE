@@ -18,7 +18,7 @@ datasets:
   - conll03
   #- rams
   #- tacred
-lang: en
+language: en
 
 
 
