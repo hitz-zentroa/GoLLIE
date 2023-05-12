@@ -4,8 +4,6 @@ from typing import Dict, Iterator, List, Sized
 
 import black
 
-from src.tasks import task_id_to_guidelines
-
 
 def batch(iterable: Sized, n=1) -> Iterator:
     """
@@ -27,24 +25,23 @@ def batch(iterable: Sized, n=1) -> Iterator:
         yield iterable[ndx : min(ndx + p, l)]
 
 
-def update_guidelines(paraphrases: List[str], task_name: str, language: str, num_paraphrases_per_guideline: int):
+def update_guidelines(paraphrases: List[str], guidelines: Dict[str, Dict[str, List[str]]], language: str):
     """
     Update the guidelines for a given task.
 
     Args:
         paraphrases (List[str]): The paraphrases.
-        task_name (str): The task name.
+        guidelines (Dict[str, Dict[str, List[str]]]): The guidelines.
         language (str): The language for which the paraphrases were generated.
-        num_paraphrases_per_guideline (int): The number of paraphrases generated per guideline.
 
     Returns:
         The updated guidelines.
     """
 
-    guidelines = task_id_to_guidelines(task_name)
-    paraphrases = batch(paraphrases, n=num_paraphrases_per_guideline)
+    i = 0
     for guideline in guidelines.values():
-        guideline[language].extend(next(paraphrases))
+        guideline[language].append(paraphrases[i])
+        i += 1
     return guidelines
 
 
@@ -66,6 +63,6 @@ def get_num_return_sentences(config_path: str):
 
 def format_guidelines_as_py(guidelines: Dict[str, Dict[str, List[str]]]):
     guidelines_py = json.dumps(guidelines, indent=4)
-    guidelines_py = f"GUIDELINES = {{{guidelines_py}}}"
+    guidelines_py = f"GUIDELINES = {guidelines_py}"
     guidelines_py = black.format_str(guidelines_py, mode=black.Mode())
     return guidelines_py

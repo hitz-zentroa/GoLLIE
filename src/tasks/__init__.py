@@ -29,19 +29,19 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
     Returns:
         The guidelines for the task.
     """
-    if task_id.lower == "ace05":
+    if task_id.lower() == "ace05":
         from src.tasks.ace.guidelines import GUIDELINES
 
         return GUIDELINES
-    elif task_id.lower == "rams":
+    elif task_id.lower() == "rams":
         from src.tasks.rams.guidelines import GUIDELINES
 
         return GUIDELINES
-    elif task_id.lower == "conll03":
+    elif task_id.lower() == "conll03":
         from src.tasks.conll03.guidelines import GUIDELINES
 
         return GUIDELINES
-    elif task_id.lower == "tacred":
+    elif task_id.lower() == "tacred":
         from src.tasks.tacred.guidelines import GUIDELINES
 
         return GUIDELINES

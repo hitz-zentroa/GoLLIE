@@ -27,3 +27,8 @@ class DataInferenceArguments:
         default="en",
         metadata={"help": "The language to do phrase paraphrasing."},
     )
+
+    generation_args_json: str = field(
+        default=None,
+        metadata={"help": "The generation args json file."},
+    )

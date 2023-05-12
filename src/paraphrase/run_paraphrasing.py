@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 import sys
@@ -5,9 +6,11 @@ import sys
 from src.config import ModelArguments
 from src.model.load_model import load_model_for_inference
 from src.paraphrase.config import DataInferenceArguments
+from src.paraphrase.conversation import get_conv_template
 from src.paraphrase.dataset import ParaphraseDataset
-from src.paraphrase.utils import format_guidelines_as_py, get_num_return_sentences, update_guidelines
-from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainingArguments, Trainer
+from src.paraphrase.utils import format_guidelines_as_py, update_guidelines
+from src.tasks import task_id_to_guidelines
+from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
 
 
 def run_paraphrasing(
@@ -24,7 +27,7 @@ def run_paraphrasing(
         lora_weights_name_or_path=model_args.lora_weights_name_or_path,
     )
 
-    trainer = Trainer(
+    trainer = Seq2SeqTrainer(
         model=model,
         args=training_args,
         data_collator=DataCollatorForSeq2Seq(
@@ -36,15 +39,21 @@ def run_paraphrasing(
         ),
     )
 
+    with open(data_args.generation_args_json, "r", encoding="utf8") as f:
+        gen_kwargs = json.load(f)
+        logging.info(f"Generation kwargs: {json.dumps(gen_kwargs, indent=2,ensure_ascii=False)}")
+
     for dataset_name in data_args.datasets:
         logging.info(f"Running inference on {dataset_name}...")
+
+        guidelines = task_id_to_guidelines(dataset_name)
 
         test_dataset = ParaphraseDataset(
             tokenizer=tokenizer,
             dataset_name=dataset_name,
             language=data_args.language,
             is_encoder_decoder=model.config.is_encoder_decoder,
-            max_length=training_args.max_length,
+            max_length=1024,
             conv_template=data_args.config_template,
         )
 
@@ -52,23 +61,30 @@ def run_paraphrasing(
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-        predictions = trainer.predict(test_dataset).predictions
-        predictions[predictions == -100] = tokenizer.pad_token_id
+        # Trainer.predict does not support multiple return sequences, so we have to do it manually
+        for i in range(1 if "num_return_sequences" not in gen_kwargs else gen_kwargs["num_return_sequences"]):
+            predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
+            predictions[predictions == -100] = tokenizer.pad_token_id
 
-        try:
-            predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-        except OverflowError:
-            raise OverflowError(f"Unable to decode predictions: {predictions}")
+            try:
+                predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+            except OverflowError:
+                raise OverflowError(f"Unable to decode predictions: {predictions}")
+            conv = get_conv_template(data_args.config_template)
+            # print(predictions)
+            predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
+            predictions = [
+                prediction[1:].strip() if prediction.startswith(":") else prediction for prediction in predictions
+            ]
 
-        augmented_guidelines = update_guidelines(
-            paraphrases=predictions,
-            task_name=dataset_name,
-            language=data_args.language,
-            num_paraphrases_per_guideline=get_num_return_sentences(training_args.generation_config),
-        )
+            guidelines = update_guidelines(
+                paraphrases=predictions,
+                guidelines=guidelines,
+                language=data_args.language,
+            )
 
         with open(output_path, "w", encoding="utf8") as f:
-            print(format_guidelines_as_py(augmented_guidelines), file=f)
+            print(format_guidelines_as_py(guidelines), file=f)
             logging.info(f"Saved guidelines to {output_path}")
 
 
