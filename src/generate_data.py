@@ -3,6 +3,7 @@ import logging
 import os
 from argparse import ArgumentParser
 from typing import Type
+from itertools import cycle
 
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 
@@ -28,12 +29,16 @@ def main(args):
         seeds = config.get("seed", 0)
         if isinstance(seeds, int):
             seeds = [seeds]
+        label_noise = config.get("label_noise_prob", 0.0)
+        if isinstance(label_noise, int):
+            label_noise = cycle([label_noise])
 
         if "train_file" in config:
             dataloader = dataloader_cls(config["train_file"], **config)
             for ie_task in config["tasks"]:
-                for seed in seeds:
+                for seed, noise_prob in zip(seeds, label_noise):
                     config["seed"] = seed
+                    config["label_noise_prob"] = noise_prob
                     sampler = sampler_cls(
                         dataloader,
                         task=ie_task,

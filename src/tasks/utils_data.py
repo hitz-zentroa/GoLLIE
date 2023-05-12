@@ -402,6 +402,9 @@ class Sampler:
         if not self.definitions:
             raise ValueError("You must provide definitions for your guidelines!")
 
+        self.label_noise_prob = label_noise_prob
+        self._class_label_re = re.compile(r"class (\w+)")
+
     def _sample(self, instances):
         # _gold refers to specifc gold information that is used in the template (depends on the task)
         _gold: List[Any] = [gold for inst in instances for gold in inst["gold"]]
@@ -478,25 +481,35 @@ class Sampler:
                 }
                 _guidelines = [definition.format(**_definitions) for definition in _guidelines]
 
-                if self.split == "train" and self.label_noise_prob > 0.0:
-                    # TODO: Apply label noise
-                    pass
-
                 # Remove definitions for baseline
                 if self.remove_guidelines:
-                    # TODO: Inplement paraprhases stuff
                     _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
                     _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
+                text = self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold)
+                # Apply label noise
+                if self.split == "train" and self.label_noise_prob > 0.0:
+                    pretext_idx = text.index("\ntext =")
+                    results_idx = text.index("\nresult =")
+                    _pretext = text[:pretext_idx]
+                    _intext = text[pretext_idx:results_idx]
+                    _postext = text[results_idx:]
+                    class_names = self._class_label_re.findall(_pretext)
+                    random.shuffle(class_names)
+                    i = 1
+                    for name in class_names:
+                        if random.random() <= self.label_noise_prob:
+                            _pretext = _pretext.replace(f"{name}", f"LABEL_{i}")
+                            _postext = _postext.replace(f"{name}(", f"LABEL_{i}(")
+                            i += 1
+                    text = _pretext + _intext + _postext
 
                 yield {
                     "ids": [inst["id"] for inst in instances],
                     "task_id": f"{self.dataset_name}_{self.task}",
                     "scorer_cls": self.scorer_cls,
                     "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
-                    "text": black.format_str(
-                        self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
-                        mode=self._black_mode,
-                    ),
+                    "text": black.format_str(text, mode=self._black_mode),
                     "unlabelled_sentence": _text,
                 }
 
