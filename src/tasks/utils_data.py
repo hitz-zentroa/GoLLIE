@@ -320,6 +320,25 @@ class Sampler:
             The key of the target task annotations in the dict outputed by the
             `DatasetLoader`. This is useful when the `DataLoader` returns annotations for
             different tasks. Defaults to "labels".
+        remove_guidelines (`bool`, optional):
+            Whether or not to remove guideline information. This is usefull for building the
+            baseline. Defaults to `False`.
+        is_coarse_to_fine (`bool`, optional):
+            Whether or not the task is coarse_to_fine classification. Defaults to `False`.
+        coarse_to_fine (`Dict[Type, List[Type]]`, optional):
+            If `is_coarse_to_fine` this argument contains the information to map from coarse
+            labels to fine labels. Defaults to `None`.
+        fine_to_coarse (`Dict[Type, Type]`, optional):
+            If `is_coarse_to_fine` this argument contains the information to map from fine
+            labels to coarse labels. Defaults to `None`.
+        lang (`str`, optional):
+            Language of the guidelines to sample. Defaults to `"en"`.
+        definitions: Dict[str, Any] = None,
+        definitions (`Dict[str, Any]`, optional):
+            Dictionary from where to sample the guideline definitions. Defaults to None.
+        label_noise_prob: float = 0.0,
+        label_noise_prob (`float`, optional):
+            The probability to hide the label names. Defaults to `0.0`.
 
     Raises:
         ValueError:
