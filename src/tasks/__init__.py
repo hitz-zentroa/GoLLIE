@@ -1,5 +1,7 @@
-from . import ace, conll03, rams, tacred
 from typing import Dict, List
+
+from . import ace, conll03, rams, tacred
+
 
 TASK_ID_TO_TASKS = {
     "ACE05_NER": "src.tasks.ace",

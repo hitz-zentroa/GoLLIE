@@ -2,6 +2,7 @@ import inspect
 import json
 from typing import Tuple, Union
 
+from src.tasks.rams.guidelines import GUIDELINES
 from src.tasks.rams.prompts import (
     EVENT_DEFINITIONS,
     AccidentCrash,
@@ -53,7 +54,6 @@ from src.tasks.rams.prompts import (
 )
 
 from ..utils_data import DatasetLoader, Sampler
-from src.tasks.rams.guidelines import GUIDELINES
 
 
 class RAMSDatasetLoader(DatasetLoader):

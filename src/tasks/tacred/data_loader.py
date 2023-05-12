@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 from typing import Tuple, Union
 
+from src.tasks.tacred.guidelines import GUIDELINES
 from src.tasks.tacred.prompts import (
     RELATION_DEFINITIONS,
     OrganizationAlternateName,
@@ -49,7 +50,6 @@ from src.tasks.tacred.prompts import (
 
 from ..utils_data import DatasetLoader, Sampler
 from ..utils_typing import Relation, dataclass
-from src.tasks.tacred.guidelines import GUIDELINES
 
 
 @dataclass

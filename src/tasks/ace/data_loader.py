@@ -2,6 +2,7 @@ import inspect
 import json
 from typing import Tuple, Union
 
+from src.tasks.ace.guidelines import GUIDELINES
 from src.tasks.ace.prompts import (
     COARSE_EVENT_DEFINITIONS,
     COARSE_RELATION_DEFINITIONS,
@@ -93,7 +94,6 @@ from src.tasks.ace.prompts import (
 )
 
 from ..utils_data import DatasetLoader, Sampler
-from src.tasks.ace.guidelines import GUIDELINES
 
 
 class ACEDatasetLoader(DatasetLoader):

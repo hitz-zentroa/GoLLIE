@@ -1,14 +1,13 @@
-from src.model.load_model import load_model_for_inference
-from transformers import Trainer, Seq2SeqTrainingArguments, HfArgumentParser, DataCollatorForSeq2Seq
-from src.paraphrase.config import DataInferenceArguments
-from src.config import ModelArguments
-from src.paraphrase.dataset import ParaphraseDataset
-import torch
-import argparse
 import logging
 import os
-from src.paraphrase.utils import update_guidelines, get_num_return_sentences, format_guidelines_as_py
 import sys
+
+from src.config import ModelArguments
+from src.model.load_model import load_model_for_inference
+from src.paraphrase.config import DataInferenceArguments
+from src.paraphrase.dataset import ParaphraseDataset
+from src.paraphrase.utils import format_guidelines_as_py, get_num_return_sentences, update_guidelines
+from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainingArguments, Trainer
 
 
 def run_paraphrasing(

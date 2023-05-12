@@ -1,5 +1,6 @@
 from typing import Dict, List, Tuple, Type, Union
 
+from src.tasks.conll03.guidelines import GUIDELINES
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
     ENTITY_DEFINITIONS_woMISC,
@@ -8,7 +9,6 @@ from src.tasks.conll03.prompts import (
     Organization,
     Person,
 )
-from src.tasks.conll03.guidelines import GUIDELINES
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler

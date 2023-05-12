@@ -1,8 +1,10 @@
-from typing import Sized, Iterator, List, Dict
-import math
-from src.tasks import task_id_to_guidelines
 import json
+import math
+from typing import Dict, Iterator, List, Sized
+
 import black
+
+from src.tasks import task_id_to_guidelines
 
 
 def batch(iterable: Sized, n=1) -> Iterator:

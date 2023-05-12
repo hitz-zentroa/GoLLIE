@@ -1,10 +1,12 @@
-from src.tasks import task_id_to_guidelines
-from torch.utils.data import Dataset
-from transformers import PreTrainedTokenizerBase, BatchEncoding
-from src.paraphrase.conversation import get_conv_template
-from typing import List
-from tqdm import tqdm
 import logging
+from typing import List
+
+from torch.utils.data import Dataset
+from tqdm import tqdm
+
+from src.paraphrase.conversation import get_conv_template
+from src.tasks import task_id_to_guidelines
+from transformers import BatchEncoding, PreTrainedTokenizerBase
 
 
 def prepare_data(

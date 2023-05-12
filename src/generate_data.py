@@ -2,8 +2,8 @@ import json
 import logging
 import os
 from argparse import ArgumentParser
-from typing import Type
 from itertools import cycle
+from typing import Type
 
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 

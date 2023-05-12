@@ -1,7 +1,8 @@
-from dataclasses import field
+from dataclasses import dataclass, field
 from typing import List
 
 
+@dataclass
 class DataInferenceArguments:
     """
     Arguments pertaining to what data we are going to input our model for paraphrasing.
