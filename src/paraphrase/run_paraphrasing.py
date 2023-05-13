@@ -85,11 +85,12 @@ def run_paraphrasing(
                 predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
             except OverflowError:
                 raise OverflowError(f"Unable to decode predictions: {predictions}")
-            conv = get_conv_template(data_args.config_template)
 
-            rich.print(predictions)
+            if data_args.config_template is not None:
+                conv = get_conv_template(data_args.config_template)
+                predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
+            # rich.print(predictions)
 
-            predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
             predictions = [prediction.split("\n\n")[-1].strip() for prediction in predictions]
             predictions = [
                 prediction[1:].strip() if prediction.startswith(":") else prediction for prediction in predictions

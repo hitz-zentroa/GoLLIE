@@ -14,10 +14,10 @@ output_dir: /ikerlariak/igarcia945/CoLLIE/paraphrase/vicuna-13b
 
 # dataset arguments
 datasets:
-  #- ace05
+  - ace05
   - conll03
-  #- rams
-  #- tacred
+  - rams
+  - tacred
 language: en
 
 
