@@ -6,7 +6,7 @@ use_lora: false
 int8_quantization: true
 predict_with_generate: true
 do_predict: true
-per_device_eval_batch_size: 4
+per_device_eval_batch_size: 1
 
 generation_args_json: /ikerlariak/igarcia945/CoLLIE/configs/pharapharse_config/generation_config.json
 output_dir: /ikerlariak/igarcia945/CoLLIE/paraphrase/vicuna-13b

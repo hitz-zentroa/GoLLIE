@@ -21,6 +21,12 @@ def run_paraphrasing(
     if not training_args.predict_with_generate:
         raise ValueError("Set `predict_with_generate` to `True` in the config file to run this script.")
 
+    logging.info(
+        f"Loading model from {model_args.model_name_or_path}.\n"
+        f"   - int8_quantization: {model_args.int8_quantization}\n"
+        f"   - lora_weights_name_or_path: {model_args.lora_weights_name_or_path}\n"
+    )
+
     model, tokenizer = load_model_for_inference(
         weights_path=model_args.model_name_or_path,
         int8_quantization=model_args.int8_quantization,
