@@ -2027,9 +2027,9 @@ GUIDELINES = {
                 ' cause fatality. \nExamples include, but are not limited to: "bomb," "M-16s," "missile," etc.'
             ),
             (
-                '"A Weapon entity encompasses instruments that can inflict physical harm, cause destruction, or'
+                "A Weapon entity encompasses instruments that can inflict physical harm, cause destruction, or"
                 " result in \nfatalities. Examples of such weapons include 'bomb', 'M-16s', 'missiles', and the"
-                ' like."'
+                " like."
             ),
             (
                 '"A Weapon entity is defined as an object that can inflict physical harm, cause destruction, or result'

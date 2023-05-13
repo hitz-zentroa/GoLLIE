@@ -90,6 +90,12 @@ def format_guidelines_as_py(guidelines: Dict[str, Dict[str, List[str]]]):
         for language in guideline.keys():
             for i in range(len(guideline[language])):
                 text = guideline[language][i]
+
+                # Remove \" and \' at the beginning and end of the string
+                text = text.strip()
+                text = text.strip('"').strip()
+                text = text.strip("'").strip()
+
                 words = text.split()
                 c: int = 0
                 for j in range(len(words)):
