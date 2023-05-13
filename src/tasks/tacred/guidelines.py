@@ -142,11 +142,11 @@ GUIDELINES = {
             ),
             (
                 "The OrganizationDateFounded relation symbolizes the establishment date of the assigned organization,"
-                ' \nexpressed as follows: "{arg1} was established in {arg2}."'
+                ' \nexpressed as follows: "{arg1} was established in {arg2}.'
             ),
             (
                 "The OrganizationDateFounded relation pertains to the establishment date of the assigned organization,"
-                ' \nrepresented by the following phrase: "{arg1} was founded in {arg2}."'
+                ' \nrepresented by the following phrase: "{arg1} was founded in {arg2}.'
             ),
             (
                 "The OrganizationDateFounded relation refers to the date on which a particular organization was"
@@ -170,9 +170,9 @@ GUIDELINES = {
                 " \nestablished the specified organization."
             ),
             (
-                '"The OrganizationFoundedBy relation links the individual, organization, or geopolitical entity (GPE)'
+                "The OrganizationFoundedBy relation links the individual, organization, or geopolitical entity (GPE)"
                 " that \nestablished the assigned organization. A statement of this connection is expressed as: {arg1}"
-                ' was established by {arg2}."'
+                " was established by {arg2}."
             ),
             (
                 "The OrganizationFoundedBy relation pertains to the individual, entity, or geopolitical organization"
@@ -191,17 +191,17 @@ GUIDELINES = {
                 " assigned organization. Verbalization: {arg2} is member of {arg1}."
             ),
             (
-                '"The OrganizationMember relation represents the relationship between an organization and the entities'
+                "The OrganizationMember relation represents the relationship between an organization and the entities"
                 " that are \nmembers of that organization. This is distinct from OrganizationSubsidiary, as"
                 " OrganizationMember involves separate, \nautonomous entities that can leave their membership in the"
-                ' assigned organization."'
+                " assigned organization."
             ),
             (
                 "The OrganizationMember relationship represents the affiliation of organizations or geopolitical"
                 " entities \n(GPEs) with the assigned organization. Unlike OrganizationSubsidiary, OrganizationMember"
                 " is distinct in that the \nsecond argument, or filler, are separate entities that have the ability to"
                 " independently discontinue their membership \nwith the organization. The description of this"
-                ' relationship can be phrased as: "The {arg2} is a member of the {arg1}."'
+                ' relationship can be phrased as: "The {arg2} is a member of the {arg1}.'
             ),
             (
                 "The OrganizationMember relation represents the membership of organizations or geopolitical entities"
@@ -251,10 +251,10 @@ GUIDELINES = {
                 " relationship independently."
             ),
             (
-                '"The OrganizationMemberOf relation represents the affiliation of an organization with other entities'
+                "The OrganizationMemberOf relation represents the affiliation of an organization with other entities"
                 " such as \nother organizations or geopolitical units (GPEs). In this relation, the assigned"
                 " organization is a separate entity from \nits parent organization and has the autonomy to end its"
-                ' membership in the group."'
+                " membership in the group."
             ),
         ]
     },
@@ -280,9 +280,9 @@ GUIDELINES = {
                 " {arg2} people."
             ),
             (
-                '"The OrganizationNumberOfEmployeesMembers relation expresses the total number of individuals who are'
+                "The OrganizationNumberOfEmployeesMembers relation expresses the total number of individuals who are"
                 " employed \nby or hold membership in the organization. Specifically, {arg1} has approximately {arg2}"
-                ' employees."'
+                " employees."
             ),
         ]
     },
@@ -315,10 +315,10 @@ GUIDELINES = {
                 " organization, making it a subsumed entity rather than a distinct one."
             ),
             (
-                '"The OrganizationParent relation represents the parent organizations or geopolitical (GPE) entities'
-                " of which \nthe assigned organization is a part. This is different from OrganizationMemberOf, as the"
+                "The OrganizationParent relation represents the parent organizations or geopolitical (GPE) entities of"
+                " which the \nassigned organization is a part. This is different from OrganizationMemberOf, as the"
                 " assigned organization is a \nsubordinate entity within the parent organization rather than a"
-                ' separate entity in its own right."'
+                " separate entity in its own right."
             ),
         ]
     },
@@ -362,9 +362,9 @@ GUIDELINES = {
                 " also considered valid responses \nfor this relation."
             ),
             (
-                '"The OrganizationShareholders relation represents any organization, person, or geopolitical entity'
+                "The OrganizationShareholders relation represents any organization, person, or geopolitical entity"
                 " that \npossesses shares (whether in the majority or not) of the company. Former shareholders are"
-                ' also acceptable as responses."'
+                " also acceptable as responses."
             ),
             (
                 "The OrganizationShareholders relation represents any organization, person, or geopolitical entity"
@@ -372,10 +372,10 @@ GUIDELINES = {
                 " also valid responses. \nVerbalization: {arg2} holds shares in {arg1}."
             ),
             (
-                '"The OrganizationShareholders relation represents any organization, person, or geopolitical entity'
+                "The OrganizationShareholders relation represents any organization, person, or geopolitical entity"
                 " that \npossesses shares (whether in the majority or not) of the organization. Former shareholders"
                 " are also considered valid \nresponses. The verbalization of this relation can be expressed as"
-                ' follows: {arg2} owns shares in {arg1}."'
+                " follows: {arg2} owns shares in {arg1}."
             ),
         ]
     },
@@ -429,9 +429,9 @@ GUIDELINES = {
                 " a branch or a subsidiary of {arg1}."
             ),
             (
-                '"The OrganizationSubsidiary relation represents the subsidiary organizations that are under the'
+                "The OrganizationSubsidiary relation represents the subsidiary organizations that are under the"
                 " purview of the \nprimary organization (the inverse of OrganizationParent). These subsidiaries are"
-                ' considered a part of the primary \norganization, rather than separate entities."'
+                " considered a part of the primary \norganization, rather than separate entities."
             ),
             (
                 "The OrganizationSubsidiary relation represents the organizations that are under the control of the"
@@ -449,11 +449,11 @@ GUIDELINES = {
                 " assigned organization. Verbalization: {arg1} \nis a high level member of {arg2}."
             ),
             (
-                '"The OrganizationTopMembersEmployees relation defines the individuals holding top-level positions'
+                "The OrganizationTopMembersEmployees relation defines the individuals holding top-level positions"
                 " within the \nspecified organization. These positions generally involve significant decision-making"
                 " authority over the entire \norganization. Specifically, the definition of a top member or employee"
                 " is expansive, yet all such positions are expected to carry a \nnotable degree of influence within"
-                ' the organization."'
+                " the organization."
             ),
             (
                 "The OrganizationTopMembersEmployees relation defines the individuals holding top-level positions"
@@ -493,12 +493,12 @@ GUIDELINES = {
                 " particular organization."
             ),
             (
-                '"The OrganizationWebsite relation represents the official website of a particular organization,'
-                ' denoted by \n{arg1}, through its top-level URL, {arg2}."'
+                "The OrganizationWebsite relation represents the official website of a particular organization,"
+                " denoted by \n{arg1}, through its top-level URL, {arg2}."
             ),
             (
-                '"The OrganizationWebsite relation represents the official website of a particular organization,'
-                ' denoted by \n{arg1}, through its top-level URL, {arg2}."'
+                "The OrganizationWebsite relation represents the official website of a particular organization,"
+                " denoted by \n{arg1}, through its top-level URL, {arg2}."
             ),
         ]
     },
@@ -593,7 +593,7 @@ GUIDELINES = {
                 "The PersonCharges relation refers to the criminal charges or offenses that have been leveled against"
                 " a particular \nindividual. This can include both alleged and convicted crimes. To express this idea,"
                 ' one could say "The PersonCharges relation \npertains to the criminal charges or convictions that'
-                ' have been brought against a specific person, encompassing both alleged \nand proven offenses."'
+                " have been brought against a specific person, encompassing both alleged \nand proven offenses."
             ),
             (
                 "The PersonCharges relation pertains to the criminal charges or offenses that have been leveled"
@@ -601,16 +601,16 @@ GUIDELINES = {
                 " that have been brought against this \nperson, whether they have been convicted or not."
             ),
             (
-                '"The PersonCharges relation pertains to the criminal charges or offenses that have been leveled'
+                "The PersonCharges relation pertains to the criminal charges or offenses that have been leveled"
                 " against the \nindividual in question. Specifically, it involves the verification of whether the"
                 " person has been found guilty or not for a \nparticular crime or offense, as expressed in the"
-                ' statement: {arg1} was convicted for {arg2}."'
+                " statement: {arg1} was convicted for {arg2}."
             ),
             (
                 "The PersonCharges relation pertains to the criminal charges or offenses that have been leveled"
                 " against a \nparticular individual. This relation captures the charges that have been filed against"
                 " the person, whether they have been \nproven guilty or not. The verbalization of this relation would"
-                ' be something like: "Individual X was found guilty \nof/charged with Y crime."'
+                ' be something like: "Individual X was found guilty \nof/charged with Y crime.'
             ),
         ]
     },
@@ -621,20 +621,20 @@ GUIDELINES = {
                 " step-children. \nVerbalization: {arg2} is the child of {arg1}."
             ),
             (
-                '"The PersonChildren relation designates the offspring of the individual identified, including'
-                ' biological, \nadopted, and step-children."'
+                "The PersonChildren relation designates the offspring of the individual identified, including"
+                " biological, \nadopted, and step-children."
             ),
             (
-                '"The PersonChildren relation represents the offspring of the specified person, including biological,'
-                ' adopted, \nand step-children."'
+                "The PersonChildren relation represents the offspring of the specified person, including biological,"
+                " adopted, \nand step-children."
             ),
             (
-                '"The PersonChildren relation represents the offspring of the specified individual, including'
-                ' biological, \nadopted, and step-children. The assertion is that {arg2} is a child of {arg1}."'
+                "The PersonChildren relation represents the offspring of the specified individual, including"
+                " biological, \nadopted, and step-children. The assertion is that {arg2} is a child of {arg1}."
             ),
             (
-                '"The PersonChildren relation designates the offspring of the individual identified, including those'
-                ' who have \nbeen adopted or are step-children."'
+                "The PersonChildren relation designates the offspring of the individual identified, including those"
+                " who have been \nadopted or are step-children."
             ),
         ]
     },
@@ -648,20 +648,19 @@ GUIDELINES = {
             (
                 "The PersonCityOfBirth connection represents the geopolitical entity at the municipal level (city,"
                 " town, or \nvillage) where the assigned individual was born. The 'arg2' slot must be filled with the"
-                ' name of a city, town, or village. A \nverbalization of this connection would be: "X was born in'
-                ' Y."'
+                ' name of a city, town, or village. A \nverbalization of this connection would be: "X was born in Y.'
             ),
             (
                 "The PersonCityOfBirth relation refers to the geopolitical entity at the municipal level, such as a"
                 " city, town, or \nvillage, where the assigned person was born. The 'arg2' slot must be filled in with"
                 ' the name of a city, town, or village. This can \nbe expressed as "The person was born in the'
-                ' city/town/village of {arg2}."'
+                " city/town/village of {arg2}."
             ),
             (
                 "The PersonCityOfBirth connection represents the geopolitical entity at the municipal level, such as a"
                 " city, town, \nor village, where the assigned individual was born. The 'arg2' position must be filled"
                 " with the name of a city, town, or \nvillage. The explanation for this connection can be stated as"
-                ' follows: "The person was born in the specified city, town, or \nvillage."'
+                ' follows: "The person was born in the specified city, town, or \nvillage.'
             ),
             (
                 "The PersonCityOfBirth connection represents the geopolitical entity at the municipal level (e.g.,"
@@ -687,7 +686,7 @@ GUIDELINES = {
                 "The PersonCityOfDeath relation represents the geopolitical entity at the city, town, or village"
                 " level, where the \nassigned person passed away. The `arg2` slot must contain the name of a city,"
                 ' town, or village. The following is an example of \nhow this relation can be verbalized: "The person'
-                ' died in the city/town/village of [name]."'
+                " died in the city/town/village of [name]."
             ),
             (
                 "The PersonCityOfDeath relation refers to the geopolitical entity located at a city, town, or village"
@@ -699,7 +698,7 @@ GUIDELINES = {
                 "The PersonCityOfDeath relation pertains to the geopolitical entity at a city, town, or village level,"
                 " which \nrepresents the location where the assigned person passed away. The 'arg2' slot must be"
                 ' occupied by a city, town, or village name. \nTo be more specific, the statement "X died in Y" can be'
-                ' expressed as "The person X died in the location Y."'
+                ' expressed as "The person X died in the location Y.'
             ),
         ]
     },
@@ -713,7 +712,7 @@ GUIDELINES = {
             (
                 'The "PersonCityOfResidence" relation pertains to the geopolitical entities such as cities, towns, or'
                 ' villages at \nwhich a person has resided. The "arg2" slot must contain the name of the place where'
-                ' the person has lived. This can be \nexpressed as "The person has/has lived in [arg2]."'
+                ' the person has lived. This can be \nexpressed as "The person has/has lived in [arg2].'
             ),
             (
                 "The PersonCityOfResidence relation defines the geopolitical entities at a local level, such as a"
@@ -743,12 +742,12 @@ GUIDELINES = {
             "The PersonCountryOfBirth connection represents the country where the assigned individual was born.",
             "The PersonCountryOfBirth connection signifies the nation in which the designated individual was born.",
             (
-                '"The PersonCountryOfBirth relation specifies the country where the assigned individual was born.'
-                ' Expressible \nas: {arg1} was born in {arg2}."'
+                "The PersonCountryOfBirth relation specifies the country where the assigned individual was born."
+                " Expressible as: \n{arg1} was born in {arg2}."
             ),
             (
                 'The PersonCountryOfBirth relation links the individual with their place of birth. Expressed as "The'
-                ' person was \nborn in [country name]."'
+                " person was \nborn in [country name]."
             ),
         ]
     },
@@ -769,12 +768,12 @@ GUIDELINES = {
                 ' statement "The PersonCountryOfDeath relation \nencodes the country in which the assigned person'
                 ' died. The `arg2` slot must be filled with the name of a country" can be \nrephrased as "The'
                 " `PersonCountryOfDeath` relation is used to denote the country where a particular person breathed"
-                ' their \nlast. It is mandatory to populate the `arg2` position with the name of a country."'
+                " their \nlast. It is mandatory to populate the `arg2` position with the name of a country."
             ),
             (
                 'The "PersonCountryOfDeath" relation pertains to the country where an individual passed away. The'
                 ' "arg2" position \nmust be occupied with the name of a country. To be more specific, the statement'
-                ' can be paraphrased as: "The death of a person \nis associated with the country of {arg2}."'
+                ' can be paraphrased as: "The death of a person \nis associated with the country of {arg2}.'
             ),
             (
                 'The "PersonCountryOfDeath" relation pertains to the country where a particular person passed away.'
@@ -792,17 +791,17 @@ GUIDELINES = {
             (
                 'The "PersonCountryOfResidence" relation pertains to the country in which a particular individual has'
                 ' resided or \nis currently residing. This can be expressed as "The individual {arg1} has lived or'
-                ' currently lives in {arg2}."'
+                " currently lives in {arg2}."
             ),
             (
                 'The "PersonCountryOfResidence" relation pertains to the country in which the individual designated'
                 ' has resided. \nA possible verbalization of this relation is: "The person {arg1} has lived in or'
-                ' currently resides in {arg2}."'
+                " currently resides in {arg2}."
             ),
             (
                 'The "PersonCountryOfResidence" relation pertains to the country in which a person has resided or'
                 ' currently \nresides. The verbalization of this relation is: "The person {arg1} has lived or resides'
-                ' in {arg2}."'
+                " in {arg2}."
             ),
             (
                 'The "PersonCountryOfResidence" connection represents the country in which the assigned individual has'
@@ -818,11 +817,11 @@ GUIDELINES = {
             ),
             (
                 "The PersonDateOfBirth relation pertains to the birth date of the assigned individual, with the"
-                ' verbalization \nbeing expressed as "{arg1} was born on {arg2}."'
+                ' verbalization \nbeing expressed as "{arg1} was born on {arg2}.'
             ),
             (
-                '"The PersonDateOfBirth relation stores the date on which the designated individual was born.'
-                ' Explanation: {arg1} \nwas born on {arg2}."'
+                "The PersonDateOfBirth relation stores the date on which the designated individual was born."
+                " Explanation: {arg1} \nwas born on {arg2}."
             ),
             (
                 "The PersonDateOfBirth relation pertains to the birth date of the assigned individual, which is"
@@ -845,9 +844,9 @@ GUIDELINES = {
             (
                 "The PersonDateOfDeath relation pertains to the demise of the designated individual, represented by"
                 " the phrase \n\"The PersonDateOfDeath relation encodes the date of the assigned person's death."
-                ' Verbalization: {arg1} died in \n{arg2}."'
+                " Verbalization: {arg1} died in \n{arg2}."
             ),
-            '"The PersonDateOfDeath relation represents the date on which the assigned individual passed away."',
+            "The PersonDateOfDeath relation represents the date on which the assigned individual passed away.",
         ]
     },
     "tacred_personemployeeormemberof": {
@@ -868,7 +867,7 @@ GUIDELINES = {
             (
                 'The "PersonEmployeeOrMemberOf" relation connects the assigned person with the organization or'
                 " geopolitical \nentities (governments) of which they have been an employee or member. This is"
-                ' expressed as " {arg1} is a member of {arg2}."'
+                ' expressed as " {arg1} is a member of {arg2}.'
             ),
             (
                 'The "PersonEmployeeOrMemberOf" relation represents the affiliation of a person with an organization'
@@ -898,7 +897,7 @@ GUIDELINES = {
             (
                 "The PersonOrigin relation specifies the nationality and/or ethnicity of the individual designated by"
                 ' {arg1}. A \nparaphrase of this statement could be: "The PersonOrigin connection identifies the'
-                ' country of origin and/or ethnic \nbackground of the designated person."'
+                " country of origin and/or ethnic \nbackground of the designated person."
             ),
         ]
     },
@@ -916,13 +915,13 @@ GUIDELINES = {
                 " family. This relationship can include \nindividuals such as brothers-in-law, sisters-in-law,"
                 " grandparents, grandchildren, cousins, aunts, uncles, and others. To \nexpress this relationship, the"
                 ' sentence "PersonOtherFamily" can be stated as "The connection between {arg1} and {arg2} is \nthat of'
-                ' family."'
+                " family."
             ),
             (
                 'The "PersonOtherFamily" relation pertains to the family ties of an individual, except for siblings,'
                 " children, and \nspouse (or former spouse). This relation encompasses various relatives such as"
                 " brothers-in-law, sisters-in-law, \ngrandparents, grandchildren, cousins, aunts, uncles, and the"
-                ' like. To express this relation, one can say "({arg1}) and ({arg2}) \nare family."'
+                ' like. To express this relation, one can say "({arg1}) and ({arg2}) \nare family.'
             ),
             (
                 'The "PersonOtherFamily" relation represents the family that is not composed of siblings, children, or'
@@ -959,12 +958,12 @@ GUIDELINES = {
             (
                 "The PersonParents relation represents the parents of a particular person, including biological"
                 ' parents, \nstep-parents, and adoptive parents. This relation can be expressed as "{(arg2) is the'
-                ' parent of (arg1)}."'
+                " parent of (arg1)}."
             ),
             (
                 "The PersonParents relation represents the parents of a particular person, including biological"
                 ' parents, \nstep-parents, and adoptive parents. This relationship is denoted by the phrase "is the'
-                ' parent of."'
+                " parent of."
             ),
         ]
     },
@@ -977,12 +976,12 @@ GUIDELINES = {
             (
                 "The PersonReligion relation pertains to the religious affiliation of the assigned individual. It can"
                 " also include \ninformation about previous religious affiliations. The phrasing for this relation can"
-                ' be stated as: "{arg2}" is the religion of \n"{arg1}."'
+                ' be stated as: "{arg2}" is the religion of \n"{arg1}.'
             ),
             (
                 "The PersonReligion relation represents the religious affiliation of the individual in question. It"
                 " can also \ninclude information about previous religious affiliations. The verbalization of this"
-                ' relation can be stated as "Person \n{arg1} belongs to religion {arg2}."'
+                ' relation can be stated as "Person \n{arg1} belongs to religion {arg2}.'
             ),
             (
                 "The PersonReligion relation specifies the religion that the assigned individual has adhered to."
@@ -993,7 +992,7 @@ GUIDELINES = {
                 "The PersonReligion relation pertains to the religious affiliation of the individual in question. It"
                 " can encompass \nnot only their current religious beliefs but also any previous religious"
                 " affiliations they may have had. This \ninformation is captured through the relation, which is"
-                ' represented by the phrase "The {religion} of {person}."'
+                ' represented by the phrase "The {religion} of {person}.'
             ),
         ]
     },
@@ -1015,12 +1014,12 @@ GUIDELINES = {
             (
                 'The "PersonSchoolAttended" relationship indicates the academic institutions that a particular'
                 ' individual has \nattended. The verbalization of this relationship is expressed as " {arg1} pursued'
-                ' studies in {arg2}."'
+                " studies in {arg2}."
             ),
             (
                 "The PersonSchoolAttended relation indicates the educational institution that a particular individual"
                 ' has \nattended. The verbalization of this relation can be expressed as "The person {arg1} studied in'
-                ' {arg2}."'
+                " {arg2}."
             ),
         ]
     },
@@ -1094,7 +1093,7 @@ GUIDELINES = {
                 'The "PersonStateOrProvinceOfBirth" connection represents the geopolitical entity at the state or'
                 ' province \nlevel where the assigned individual was born. The "arg2" parameter must be populated with'
                 ' the name of a state or province. \nThe verbalization of this connection is: "The person was born in'
-                ' {arg2}."'
+                " {arg2}."
             ),
             (
                 'The "PersonStateOrProvinceOfBirth" connection represents the geopolitical entity at the state or'
@@ -1105,7 +1104,7 @@ GUIDELINES = {
                 'The "PersonStateOrProvinceOfBirth" connection represents the geopolitical entity at the state or'
                 ' province \nlevel where the assigned individual was born. The value in the "arg2" slot must be a'
                 " specific state or province name. The \nfollowing is an example of how this connection can be"
-                ' expressed: "John was born in New York."'
+                ' expressed: "John was born in New York.'
             ),
         ]
     },
@@ -1122,7 +1121,7 @@ GUIDELINES = {
                 ' state or province name. To be more \nspecific, this statement can be rephrased as "The'
                 " PersonStateOrProvinceOfDeath relationship designates the geopolitical \nentity at the state or"
                 " province level where the assigned person expired. The 'arg2' position must be occupied by a state"
-                ' or \nprovince name."'
+                " or \nprovince name."
             ),
             (
                 'The "PersonStateOrProvinceOfDeath" connection represents the geopolitical entity at the state or'
@@ -1133,7 +1132,7 @@ GUIDELINES = {
             (
                 'The "PersonStateOrProvinceOfDeath" relation refers to the geopolitical entity at the state or'
                 ' province level \nwhere a person was deceased. The "arg2" slot must contain the name of a state or'
-                ' province. The verbalization of this \nrelation is: "The person died in [state/province name]."'
+                ' province. The verbalization of this \nrelation is: "The person died in [state/province name].'
             ),
             (
                 'The "PersonStateOrProvinceOfDeath" relation pertains to the geopolitical entity at the state or'
@@ -1155,7 +1154,7 @@ GUIDELINES = {
                 "The PersonStateOrProvinceOfResidence relation represents the geographical entities at the state or"
                 " province \nlevel where the assigned person has lived or currently resides. The 'arg2' parameter must"
                 " be supplied with the specific \nstate or province names. The verbalization of this relation can be"
-                ' expressed as "The individual {arg1} has lived or \ncurrently resides in {arg2}."'
+                ' expressed as "The individual {arg1} has lived or \ncurrently resides in {arg2}.'
             ),
             (
                 "The PersonStateOrProvinceOfResidence connection represents the geopolitical entities at the state or"
@@ -1183,7 +1182,7 @@ GUIDELINES = {
             (
                 "The PersonTitle relation refers to the official or unofficial job title(s) held by an individual. The"
                 " 'arg2' \nparameter must be filled with the name of the position or title. The verbalization for this"
-                ' relation would be "The person is a \n{arg2}."'
+                ' relation would be "The person is a \n{arg2}.'
             ),
             (
                 'The "PersonTitle" connection represents the official or unofficial title(s) held by the designated'
@@ -1199,7 +1198,7 @@ GUIDELINES = {
                 "The PersonTitle relation refers to the official or unofficial names of the positions that a person"
                 " has held in terms \nof employment or membership. The 'arg2' slot must be filled in with the name of"
                 ' the position or title. The verbalization \nof this relation can be expressed as "The {arg1} is a'
-                ' {arg2}."'
+                " {arg2}."
             ),
         ]
     },

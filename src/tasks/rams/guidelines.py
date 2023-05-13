@@ -12,15 +12,15 @@ GUIDELINES = {
             (
                 "A vehicular accident occurs when a driver or passenger in a vehicle collides with a stationary"
                 " object, resulting in a \ncatastrophic event. The only possible type of event associated with this"
-                ' accident is an "AccidentCrash."'
+                ' accident is an "AccidentCrash.'
             ),
             (
                 "A crash event takes place when a driver or passenger in a vehicle collides with a crash object at a"
-                ' specific location. \nThis type of event is exclusively classified as an "AccidentCrash."'
+                ' specific location. \nThis type of event is exclusively classified as an "AccidentCrash.'
             ),
             (
-                "A crash event happens when a vehicle's driver or passenger collides with a crash object at a"
-                ' specific location. This \ntype of event is exclusively classified as an "AccidentCrash."'
+                "A crash event happens when a vehicle's driver or passenger collides with a crash object at a specific"
+                ' location. This \ntype of event is exclusively classified as an "AccidentCrash.'
             ),
         ]
     },
@@ -34,12 +34,12 @@ GUIDELINES = {
             (
                 "A government agreement event takes place when a party signs, rejects, nullifies, or violates a"
                 " contract at a \nspecified location. There are several possible subtypes of this event, including"
-                ' "Accept," "RejectNullify," "Violate," or \n"None."'
+                ' "Accept," "RejectNullify," "Violate," or \n"None.'
             ),
             (
                 "A government agreement event takes place when a party signs, rejects, nullifies, or violates a"
                 " contract at a \nspecific location. There are several possible subtypes of this event, including"
-                ' "Accept," "RejectNullify," "Violate," or \n"None."'
+                ' "Accept," "RejectNullify," "Violate," or \n"None.'
             ),
             (
                 "A government agreement event happens when a party agrees, disagrees, cancels, or disregards a"
@@ -49,7 +49,7 @@ GUIDELINES = {
             (
                 "A government agreement is characterized by an event that takes place when a participant either signs,"
                 " rejects, \nnullifies, or violates an agreement at a specific location. There are several possible"
-                ' subtypes of events that can occur, \nincluding "Accept," "RejectNullify," "Violate," or "None."'
+                ' subtypes of events that can occur, \nincluding "Accept," "RejectNullify," "Violate," or "None.'
             ),
         ]
     },
@@ -66,7 +66,7 @@ GUIDELINES = {
             ),
             (
                 "A Justice Event takes place when a Law Enforcement Officer apprehends an Individual for an Infraction"
-                ' at a specific \nLocation. The only possible subtype of this event is: "ArrestJailDetain."'
+                ' at a specific \nLocation. The only possible subtype of this event is: "ArrestJailDetain.'
             ),
             (
                 "A Justice event takes place when a person in charge of the jail, also known as a jailer, detains"
@@ -119,7 +119,7 @@ GUIDELINES = {
                 "A conflict event happens when an attacker uses an instrument to attack a target at a specific"
                 ' location. The possible \nsubtypes of this event are: "AirStrikeMissileStrike",'
                 ' "BiologicalChemicalPoisonAttack", "Bombing", \n"FireArmAttack", "Hanging", "Invade",'
-                ' "SelfDirectedBattle", "SetFire", "Stabbing", "StealRobHijack", "Strangling" or \n"None."'
+                ' "SelfDirectedBattle", "SetFire", "Stabbing", "StealRobHijack", "Strangling" or "None.'
             ),
             (
                 "An attack event takes place when an attacker targets a victim with a certain weapon at a specific"
@@ -155,17 +155,17 @@ GUIDELINES = {
             ),
             (
                 "A Collaborate event takes place when participants communicate, either remotely or in person, at a"
-                ' specific \nlocation. This event can have one of three subtypes: "Correspondence," "Meet," or "None."'
+                ' specific \nlocation. This event can have one of three subtypes: "Correspondence," "Meet," or "None.'
             ),
             (
                 "A Collaborate event takes place when some participants communicate with each other, either remotely"
                 " or in person, \nat a specific location. There are three possible subtypes of this event:"
-                ' "Correspondence," "Meet," or "None."'
+                ' "Correspondence," "Meet," or "None.'
             ),
             (
                 "A Collaborate event takes place when multiple individuals communicate, either remotely or in person,"
                 ' at a specific \nlocation. This event can have one of three subtypes, including "Correspondence,"'
-                ' "Meet," or "None."'
+                ' "Meet," or "None.'
             ),
         ]
     },
@@ -184,17 +184,17 @@ GUIDELINES = {
             (
                 "A CommandOrder (contact) Event happens when a Communicator gets in touch with a Recipient regarding a"
                 " certain \nsubject at a specific location. There are four possible subtypes of this event:"
-                ' "Broadcast," "Correspondence," "Meet," or \n"None."'
+                ' "Broadcast," "Correspondence," "Meet," or \n"None.'
             ),
             (
-                '"A CommandOrder (contact) Event takes place when a Communicator communicates with a Recipient about'
-                " a particular \nsubject at a specific location. This event can have one of several subtypes,"
-                " including 'Broadcast,' 'Correspondence,' or \n'Meet,' or it may not have any subtype at all.\""
+                "A CommandOrder (contact) Event takes place when a Communicator communicates with a Recipient about a"
+                " particular \nsubject at a specific location. This event can have one of several subtypes, including"
+                " 'Broadcast,' 'Correspondence,' or \n'Meet,' or it may not have any subtype at all."
             ),
             (
                 "A CommandOrder (contact) Event takes place when a Communicator communicates with a Recipient about a"
                 " certain \nsubject at a specific location. There are four possible subtypes of this event:"
-                ' "Broadcast," "Correspondence," "Meet," or \n"None."'
+                ' "Broadcast," "Correspondence," "Meet," or \n"None.'
             ),
         ]
     },
@@ -206,21 +206,21 @@ GUIDELINES = {
                 ' "Broadcast", "Correspondence", \n"Meet"or None.'
             ),
             (
-                '"When a Communicator makes a commitment or expresses an intent to meet with a Recipient about a'
+                "When a Communicator makes a commitment or expresses an intent to meet with a Recipient about a"
                 " particular topic at a \nspecific location, an event known as a CommitmentPromiseExpressIntent"
                 " (contact) occurs. This event can be classified as \neither a Broadcast, Correspondence, or Meet, or"
-                ' it may be None."'
+                " it may be None."
             ),
             (
                 "A CommitmentPromiseExpressIntent (contact) Event takes place when a Communicator commits, promises,"
                 " and \nexpresses an intent to the Recipient regarding a certain subject at a specific location. This"
-                ' event can have one of four \nsubtypes: "Broadcast," "Correspondence," "Meet," or "None."'
+                ' event can have one of four \nsubtypes: "Broadcast," "Correspondence," "Meet," or "None.'
             ),
             (
-                '"An event known as a CommitmentPromiseExpressIntent (contact) occurs when a Communicator makes a'
+                "An event known as a CommitmentPromiseExpressIntent (contact) occurs when a Communicator makes a"
                 " commitment, \nexpresses an intent, or promises to Recipient regarding a specific subject at a"
                 " particular location. This event can have one of \nseveral subtypes, including 'Broadcast',"
-                " 'Correspondence', or 'Meet', or it may not have any subtype at all.\""
+                " 'Correspondence', or 'Meet', or it may not have any subtype at all."
             ),
             (
                 "An event known as a CommitmentPromiseExpressIntent (contact) occurs when a Communicator makes a"
@@ -245,12 +245,12 @@ GUIDELINES = {
                 " only possible type \nof event that can occur during a Convene is a Convene event itself."
             ),
             (
-                '"A Convene event takes place when a Convener gather together a ConvenedEntity at a specific'
-                " location. The only \npossible type of event that can occur during a Convene event is 'Convene'.\""
+                "A Convene event takes place when a Convener gather together a ConvenedEntity at a specific location."
+                " The only \npossible type of event that can occur during a Convene event is 'Convene'."
             ),
             (
                 "A Convene event takes place when a Convener summons a ConvenedEntity to a specific location. The only"
-                ' possible \nsubtype of this event is "Convene."'
+                ' possible \nsubtype of this event is "Convene.'
             ),
         ]
     },
@@ -266,15 +266,15 @@ GUIDELINES = {
             ),
             (
                 "A coup event takes place when a deposed entity is removed by a deposing entity at a specific"
-                ' location. The only \npossible subtype of this event is "coup."'
+                ' location. The only \npossible subtype of this event is "coup.'
             ),
             (
-                '"A coup event takes place when a previously enthroned entity is overthrown by a usurping entity at a'
-                ' specific \nlocation. The only possible subtype of this event is a coup."'
+                "A coup event takes place when a previously enthroned entity is overthrown by a usurping entity at a"
+                " specific \nlocation. The only possible subtype of this event is a coup."
             ),
             (
                 "A coup event takes place when a deposed entity is removed by a deposing entity at a specific"
-                ' location. The only \npossible subtype of this event is "coup."'
+                ' location. The only \npossible subtype of this event is "coup.'
             ),
         ]
     },
@@ -287,7 +287,7 @@ GUIDELINES = {
             ),
             (
                 "An Artifact Damage/Destroy Event takes place when an object is harmed or demolished by a Tool User at"
-                ' a specific \nLocation. The potential subtypes of this event include: "Damage," "Destroy," or "None."'
+                ' a specific \nLocation. The potential subtypes of this event include: "Damage," "Destroy," or "None.'
             ),
             (
                 "A DamageDestroy (artifact) Event takes place when an Artifact is either damaged or destroyed by an"
@@ -313,9 +313,9 @@ GUIDELINES = {
                 ' Event subtypes \nare: "MarchProtestPoliticalGathering"or None.'
             ),
             (
-                '"An instance of a Demonstrate (conflict) Event takes place when a group of Demonstrators gather at a'
+                "An instance of a Demonstrate (conflict) Event takes place when a group of Demonstrators gather at a"
                 " specific \nlocation to express their dissent. There are two possible subtypes of this event: a"
-                ' MarchProtestPoliticalGathering or \nNone."'
+                " MarchProtestPoliticalGathering or \nNone."
             ),
             (
                 "A Demonstrate event takes place when a group of people gather to protest at a specific location."
@@ -327,9 +327,9 @@ GUIDELINES = {
                 " MarchProtestPoliticalGathering or None."
             ),
             (
-                '"An event of demonstration takes place when demonstrators gather at a specific location to express'
+                "An event of demonstration takes place when demonstrators gather at a specific location to express"
                 " their dissent. \nThere are two possible subtypes of this event: a march or political gathering, or"
-                ' none."'
+                " none."
             ),
         ]
     },
@@ -343,23 +343,23 @@ GUIDELINES = {
             (
                 "A Die (life) Event takes place when a person passes away in a specific location. The cause of death"
                 " can be due to the \nactions of a Killer or a Medical Issue, either with or without an Instrument."
-                ' The possible subtypes of this event are \n"Violent" or "Non-Violent" or "None."'
+                ' The possible subtypes of this event are \n"Violent" or "Non-Violent" or "None.'
             ),
             (
                 "A Die (life) Event refers to a situation in which a person has passed away in a particular location."
                 " The cause of death \nmay have been due to murder by a perpetrator, or it could have been the result"
                 " of a medical issue, possibly with or without \nthe use of an instrument. There are two possible"
-                ' subtypes of this event, which are either "Violent" or "NonViolent" or \n"None"'
+                ' subtypes of this event, which are either "Violent" or "NonViolent" or \n"None'
             ),
             (
-                '"A Die (life) Event takes place when a person passes away in a specific location. The cause of death'
+                "A Die (life) Event takes place when a person passes away in a specific location. The cause of death"
                 " may be due to the \nactions of a Killer or a Medical Issue, with or without the involvement of an"
-                ' Instrument. The possible subtypes of this event \nare either "Violent" or "NonViolent" or "None"."'
+                ' Instrument. The possible subtypes of this event \nare either "Violent" or "NonViolent" or "None".'
             ),
             (
                 "A Die (life) Event takes place when a person passes away in a specific location. The cause of death"
                 " can be either a \nresult of a Killer or a Medical Issue, with or without the use of an Instrument."
-                ' The possible subtypes of this event are either \n"Violent" or "Non-Violent" or "None."'
+                ' The possible subtypes of this event are either \n"Violent" or "Non-Violent" or "None.'
             ),
         ]
     },
@@ -377,12 +377,12 @@ GUIDELINES = {
             (
                 "A Discussion (contact) Event takes place when a group of individuals engage in conversation at a"
                 ' specific location. \nThere are three possible subtypes of this event: "Correspondence," "Meet," or'
-                ' "None."'
+                ' "None.'
             ),
             (
                 "A Discussion (contact) Event takes place when a group of individuals congregate at a particular"
                 " location to engage \nin conversation. There are three possible subtypes of this event, including"
-                ' "Correspondence," "Meet," or "None."'
+                ' "Correspondence," "Meet," or "None.'
             ),
             (
                 "A Discussion Event takes place when multiple individuals converse at a specific location. There are"
@@ -401,8 +401,8 @@ GUIDELINES = {
                 ' event can only be \nclassified as a "DiseaseOutbreak" disaster.'
             ),
             (
-                '"A DiseaseOutbreak event happens when a disease outbreak occurs among several Victims at a particular'
-                ' location. \nThis event can only be classified as a DiseaseOutbreak."'
+                "A DiseaseOutbreak event happens when a disease outbreak occurs among several Victims at a particular"
+                " location. \nThis event can only be classified as a DiseaseOutbreak."
             ),
             (
                 "A Disease Outbreak event happens when a disease spreads among a group of people in a specific"
@@ -425,16 +425,16 @@ GUIDELINES = {
                 " either result in the \ncandidate winning the election or not winning at all."
             ),
             (
-                '"An election event takes place when a voter chooses a candidate in a particular location. The'
-                " possible subtypes of \nthis event are either 'win election' or 'none.'\""
+                "An election event takes place when a voter chooses a candidate in a particular location. The possible"
+                " subtypes of \nthis event are either 'win election' or 'none."
             ),
             (
-                '"When a voter selects a candidate in a specific location, an electoral event takes place, which can'
-                ' have one of two \npossible subtypes: winning the election or having no outcome."'
+                "When a voter selects a candidate in a specific location, an electoral event takes place, which can"
+                " have one of two \npossible subtypes: winning the election or having no outcome."
             ),
             (
                 "A personnel event takes place when a voter selects a candidate in a specific location. There are two"
-                ' possible \nsubtypes of this event: "Win Election" or "None."'
+                ' possible \nsubtypes of this event: "Win Election" or "None.'
             ),
         ]
     },
@@ -482,12 +482,12 @@ GUIDELINES = {
             ),
             (
                 "A FireExplosion event happens when a FireExplosionObject ignites or detonates at a certain location."
-                ' This event \ncan only have one possible subtype, which is "FireExplosion."'
+                ' This event \ncan only have one possible subtype, which is "FireExplosion.'
             ),
             (
                 "A FireExplosion event takes place when a FireExplosionObject ignites or explodes at a specific"
                 " location due to an \ninstrument. This event can only have one possible subtype, which is"
-                ' "FireExplosion."'
+                ' "FireExplosion.'
             ),
         ]
     },
@@ -533,17 +533,17 @@ GUIDELINES = {
             (
                 "A Funeral Vigil Contact Event takes place when several individuals communicate during a memorial"
                 " service or vigil \nfor the Deceased at a specific location. The potential subtypes of this event are"
-                ' either "Meet" or "None."'
+                ' either "Meet" or "None.'
             ),
             (
                 "A Funeral Vigil Contact event takes place when several individuals communicate during a funeral or"
                 " vigil for the \nDeceased at a particular location. There are two possible subtypes of this event,"
-                ' which are "Meet" and "None."'
+                ' which are "Meet" and "None.'
             ),
             (
                 "A Funeral Vigil Contact event takes place when multiple individuals communicate during a funeral or"
                 " vigil for a \nDeceased person at a specific location. There are two possible subtypes of this event,"
-                ' which are either "Meet" or "None."'
+                ' which are either "Meet" or "None.'
             ),
         ]
     },
@@ -565,7 +565,7 @@ GUIDELINES = {
             ),
             (
                 "A crime event is triggered when a perpetrator commits an offense against a victim at a specific"
-                ' location. The only \npossible subtype of this event is "GenericCrime."'
+                ' location. The only \npossible subtype of this event is "GenericCrime.'
             ),
             (
                 "A crime event, known as a GenericCrime, takes place when an individual, referred to as the"
@@ -586,7 +586,7 @@ GUIDELINES = {
                 "A Justice event takes place when a Prosecutor files formal charges or an indictment against a"
                 " Defendant, conducts a \ntrial, or initiates a judicial process before a Judge or Court for a"
                 " particular crime in a specific location. There are three \npossible subtypes of this event,"
-                ' including "Charge/Indict," "Trial/Hearing," or "None."'
+                ' including "Charge/Indict," "Trial/Hearing," or "None.'
             ),
             (
                 "A Justice event takes place when a Prosecutor files a criminal case against a Defendant in a court"
@@ -597,7 +597,7 @@ GUIDELINES = {
                 "A Justice event takes place when a Prosecutor files formal charges or an indictment against a"
                 " Defendant, conducts a \ntrial, or initiates a judicial process before a Judge or Court for a crime"
                 " that occurred in a specific location. This event \nhas several possible subtypes, including"
-                ' "Charge/Indict," "Trial Hearing," or "None."'
+                ' "Charge/Indict," "Trial Hearing," or "None.'
             ),
             (
                 "A Justice event transpires when a Prosecutor files formal charges against, indicts, conducts a trial,"
@@ -621,7 +621,7 @@ GUIDELINES = {
                 " behind it can be \ndue to extreme hunger or thirst, physical degradation, sickness or illness caused"
                 " by a Medical Issue, either infected \nby a Disease or imposed by an Injurer. The injuries can be"
                 " inflicted upon the Victim by means of an Instrument. The \npossible subtypes of this Event are"
-                ' "HungerThirst," "Physical," "Sickness," "Violent," or "None."'
+                ' "HungerThirst," "Physical," "Sickness," "Violent," or "None.'
             ),
             (
                 "A Traumatic Event takes place when a Person is harmed in a certain location. The causes may be due to"
@@ -653,7 +653,7 @@ GUIDELINES = {
             ),
             (
                 "A InvestigateCrime (justice) Event takes place when an Investigator probes a Suspect for a Wrongdoing"
-                ' in a \nparticular Site. The possible Event subtypes are: "InvestigateCrime" or "None."'
+                ' in a \nparticular Site. The possible Event subtypes are: "InvestigateCrime" or "None.'
             ),
             (
                 "A InvestigateCrime (justice) Event happens when an investigator probes a Suspect for a wrongdoing in"
@@ -667,7 +667,7 @@ GUIDELINES = {
             (
                 "A crime investigation (justice) event takes place when an investigator scrutinizes a suspect for a"
                 " committed \noffense in a specific location. The possible subtypes of this event are either"
-                ' "InvestigateCrime" or "None."'
+                ' "InvestigateCrime" or "None.'
             ),
         ]
     },
@@ -681,7 +681,7 @@ GUIDELINES = {
             (
                 "A Judicial Consequence (justice) Event takes place when a Judge or Court imposes a penalty, convicts,"
                 " executes, or \nextradites an individual for an offense in a certain location. There are four"
-                ' possible subtypes of this event, which are: \n"Convict," "Execute," "Extradite," or "None."'
+                ' possible subtypes of this event, which are: \n"Convict," "Execute," "Extradite," or "None.'
             ),
             (
                 "A Judicial Consequences (justice) Event takes place when a Judge or Court imposes a penalty on a"
@@ -710,12 +710,12 @@ GUIDELINES = {
                 ' only possible \nevent subtype is: "Legislate".'
             ),
             (
-                "\"When a government's legislative body passes a law in a specific location, it is referred to as a"
-                ' Legislate event. \nThis is the only type of event that can occur under this classification."'
+                "When a government's legislative body passes a law in a specific location, it is referred to as a"
+                " Legislate event. This \nis the only type of event that can occur under this classification."
             ),
             (
                 "A Legislate event takes place when a government's legislative body passes a law in a particular"
-                ' location. The sole \npossible event subtype is "Legislate."'
+                ' location. The sole \npossible event subtype is "Legislate.'
             ),
             (
                 "A Legislate event takes place when a government legislature passes a law in a particular location."
@@ -723,7 +723,7 @@ GUIDELINES = {
             ),
             (
                 "A Legislate (government) Event takes place when a government legislature passes a law in a specific"
-                ' location. This \ntype of event is the only possible subtype, which is "Legislate."'
+                ' location. This \ntype of event is the only possible subtype, which is "Legislate.'
             ),
         ]
     },
@@ -735,15 +735,14 @@ GUIDELINES = {
                 ' "IntellectualProperty", \n"CreateManufacture"or None.'
             ),
             (
-                '"A ManufactureArtifact (manufacture) Event takes place when a Manufacturer creates, develops, or'
+                "A ManufactureArtifact (manufacture) Event takes place when a Manufacturer creates, develops, or"
                 " produces an \nArtifact utilizing an Instrument at a specific Location. There are various possible"
-                " subtypes of this Event, including \n'Build', 'IntellectualProperty', 'CreateManufacture', or"
-                " 'None'.\""
+                " subtypes of this Event, including \n'Build', 'IntellectualProperty', 'CreateManufacture', or 'None'."
             ),
             (
                 "A ManufactureArtifact (manufacture) event takes place when a manufacturer creates or produces an"
                 " artifact using a \ntool or instrument at a particular location. There are several possible subtypes"
-                ' of this event, including "Build," \n"Intellectual Property," "Create Manufacture," or "None."'
+                ' of this event, including "Build," \n"Intellectual Property," "Create Manufacture," or "None.'
             ),
             (
                 "A ManufactureArtifact event transpires when a producer creates, develops, or generates an item using"
@@ -766,22 +765,22 @@ GUIDELINES = {
             (
                 "A MediaStatement (contact) Event takes place when a Communicator communicates something through media"
                 " to a group \nof Recipients at a particular location. There are two possible subtypes of this event:"
-                ' "Broadcast" or "None."'
+                ' "Broadcast" or "None.'
             ),
             (
                 "A MediaStatement (contact) Event takes place when a Communicator communicates something through media"
                 " to certain \nRecipients at a specific location. There are two possible subtypes of this event, which"
-                ' are either "Broadcast" or "None."'
+                ' are either "Broadcast" or "None.'
             ),
             (
                 "A MediaStatement (contact) Event takes place when a Communicator disseminates information through"
                 " media to a \ngroup of Recipients at a specific location. There are two possible subtypes of this"
-                ' event, which are either "Broadcast" or \n"None."'
+                ' event, which are either "Broadcast" or \n"None.'
             ),
             (
                 "A MediaStatement (contact) Event takes place when a Communicator disseminates information through"
                 " media to some \nRecipients at a specific location. The possible subtypes of this event include"
-                ' "Broadcast" or "None."'
+                ' "Broadcast" or "None.'
             ),
         ]
     },
@@ -792,24 +791,24 @@ GUIDELINES = {
                 ' means of some \nInstrument at some Place. The only possible event subtype is: "Intervention".'
             ),
             (
-                '"A medical intervention occurs when a healthcare professional provides treatment to a patient for a'
+                "A medical intervention occurs when a healthcare professional provides treatment to a patient for a"
                 " medical \ncondition using some tool or device at a specific location. The only possible subtype of"
-                " this event is 'Intervention.'\""
+                " this event is 'Intervention."
             ),
             (
                 "A medical intervention event takes place when a healthcare provider provides treatment to a patient"
                 " for a medical \ncondition using a tool or device at a specific location. The only possible subtype"
-                ' of this event is "intervention."'
+                ' of this event is "intervention.'
             ),
             (
                 "A medical intervention occurs when a healthcare provider provides treatment to a patient for a"
                 " medical condition \nusing some tool or equipment at a specific location. The only possible subtype"
-                ' of this event is "intervention."'
+                ' of this event is "intervention.'
             ),
             (
                 "A medical intervention event takes place when a healthcare provider administers treatment to a"
                 " patient for a \nmedical condition using a tool or device at a particular location. The only possible"
-                ' subtype of this event is \n"intervention."'
+                ' subtype of this event is "intervention.'
             ),
         ]
     },
@@ -820,24 +819,24 @@ GUIDELINES = {
                 ' Topic at some \nPlace. The possible Event subtypes are: "Correspondence", "Meet"or None.'
             ),
             (
-                '"A Negotiate (contact) Event takes place when multiple individuals engage in a discussion about a'
+                "A Negotiate (contact) Event takes place when multiple individuals engage in a discussion about a"
                 " specific subject \nat a particular location. The possible subtypes of this event are:"
-                " 'Correspondence', 'Meet', or 'None'.\""
+                " 'Correspondence', 'Meet', or 'None'."
             ),
             (
                 "A Negotiate (contact) Event takes place when a number of individuals engage in negotiations regarding"
                 " a particular \nsubject at a specific location. There are three possible subtypes of this event,"
-                ' including "Correspondence," "Meet," or \n"None."'
+                ' including "Correspondence," "Meet," or \n"None.'
             ),
             (
                 "An event that involves negotiation between multiple parties about a particular subject matter takes"
                 " place at a \nspecific location. This event can be classified into one of three possible subtypes:"
-                ' "Correspondence," "Meet," or "None."'
+                ' "Correspondence," "Meet," or "None.'
             ),
             (
                 "A Negotiate (contact) Event takes place when multiple individuals engage in negotiations regarding a"
                 " specific \nsubject at a designated location. There are three possible subtypes of this event,"
-                ' including "Correspondence," "Meet," or \n"None."'
+                ' including "Correspondence," "Meet," or \n"None.'
             ),
         ]
     },
@@ -862,12 +861,12 @@ GUIDELINES = {
             (
                 "A Prevarication Event takes place when a Communicator intentionally deceives the Recipient about a"
                 " certain \nSubject at a particular Location. There are several possible subtypes of this event,"
-                ' including: "Broadcast," \n"Correspondence," "Meet," or "None."'
+                ' including: "Broadcast," \n"Correspondence," "Meet," or "None.'
             ),
             (
                 "A Prevarication Event takes place when a Communicator intentionally deceives or misleads the"
                 " Recipient about a \ncertain Subject at a particular Location. There are four possible subtypes of"
-                ' this Event, which are: "Broadcast," \n"Correspondence," "Meet," or "None."'
+                ' this Event, which are: "Broadcast," \n"Correspondence," "Meet," or "None.'
             ),
         ]
     },
@@ -880,22 +879,22 @@ GUIDELINES = {
             (
                 "A Public Statement In Person (contact) event takes place when a Communicator delivers a public"
                 " message to a \nRecipient at a particular location. There are two possible subtypes of this event:"
-                ' "Broadcast" or "None."'
+                ' "Broadcast" or "None.'
             ),
             (
-                '"A Public Statement in Person (contact) event takes place when a Communicator delivers a public'
+                "A Public Statement in Person (contact) event takes place when a Communicator delivers a public"
                 " message to a \nRecipient at a specific location. There are two possible subtypes of this event:"
-                " 'Broadcast' or 'None'.\""
+                " 'Broadcast' or 'None'."
             ),
             (
                 "A Public Statement in Person (contact) event takes place when a Communicator delivers a public"
                 " message to a \nRecipient at a specific location. This event can have two possible subtypes, either"
-                ' "Broadcast" or "None."'
+                ' "Broadcast" or "None.'
             ),
             (
                 "A Public Statement in Person (contact) event takes place when a Communicator delivers a public"
                 " message to a \nRecipient at a specific location. This event can have two possible subtypes:"
-                ' "Broadcast" or "None."'
+                ' "Broadcast" or "None.'
             ),
         ]
     },
@@ -924,7 +923,7 @@ GUIDELINES = {
             (
                 "A RequestAdvice (contact) Event takes place when a Communicator seeks something or provides advice"
                 " regarding a \nSubject to a Recipient at a Location. The possible subtypes of this event include:"
-                ' "Broadcast," "Correspondence," "Meet," \nor "None."'
+                ' "Broadcast," "Correspondence," "Meet," \nor "None.'
             ),
         ]
     },
@@ -938,12 +937,12 @@ GUIDELINES = {
             (
                 "A SensoryObserve event takes place when a person observes, inspects, or monitors a certain entity"
                 " situated in a \nparticular location. There are several possible subtypes of this event, including"
-                ' "InspectPeopleOrganization," \n"MonitorElection," "PhysicalInvestigateInspect," or simply "None."'
+                ' "InspectPeopleOrganization," \n"MonitorElection," "PhysicalInvestigateInspect," or simply "None.'
             ),
             (
                 "A SensoryObserve event takes place when a person observes, inspects, or monitors a certain entity in"
                 " a particular \nlocation. There are various subtypes of this event, such as"
-                ' "InspectPeopleOrganization," "MonitorElection," \n"PhysicalInvestigateInspect," or "None."'
+                ' "InspectPeopleOrganization," "MonitorElection," \n"PhysicalInvestigateInspect," or "None.'
             ),
             (
                 "A SensoryObserve event takes place when a person observes, inspects, or monitors a certain entity in"
@@ -953,7 +952,7 @@ GUIDELINES = {
             (
                 "A SensoryObserve event takes place when a person observes, inspects, or monitors a certain entity in"
                 " a specific \nlocation. There are several possible subtypes of this event, such as"
-                ' "InspectPeopleOrganization," "MonitorElection," \n"PhysicalInvestigateInspect," or "None."'
+                ' "InspectPeopleOrganization," "MonitorElection," \n"PhysicalInvestigateInspect," or "None.'
             ),
         ]
     },
@@ -964,16 +963,16 @@ GUIDELINES = {
                 ' The only \npossible event subtype is: "Shortage".'
             ),
             (
-                '"An event of shortage takes place when an individual perceives a deficiency of a particular supply'
-                " in a specific \nlocation. This type of event is exclusively referred to as 'shortage.'\""
+                "An event of shortage takes place when an individual perceives a deficiency of a particular supply in"
+                " a specific \nlocation. This type of event is exclusively referred to as 'shortage."
             ),
             (
                 "A Shortage Event takes place when an individual known as an Experiencer encounters a lack of Supply"
                 " in a specific \nSetting. This specific type of event is identified as a Shortage."
             ),
             (
-                '"A Shortage Event takes place when an individual, known as an Experiencer, encounters a lack of a'
-                ' particular supply \nin a specific location."'
+                "A Shortage Event takes place when an individual, known as an Experiencer, encounters a lack of a"
+                " particular supply in \na specific location."
             ),
             (
                 'An event classified as a "Shortage (artifact)" takes place when an individual, known as an'
@@ -989,11 +988,11 @@ GUIDELINES = {
             ),
             (
                 "A government spy event takes place when a spy observes an entity for the advantage of a beneficiary"
-                ' in a specific \nlocation. The only possible subtype of this event is "Spy."'
+                ' in a specific \nlocation. The only possible subtype of this event is "Spy.'
             ),
             (
                 "A government spy event occurs when a spy observes a certain entity for the advantage of a particular"
-                ' beneficiary in a \nspecific location. The only possible subtype of this event is "Spy."'
+                ' beneficiary in a \nspecific location. The only possible subtype of this event is "Spy.'
             ),
             (
                 "A government spy event takes place when a spy secretly observes an entity that is of interest to a"
@@ -1001,7 +1000,7 @@ GUIDELINES = {
             ),
             (
                 "A government spy event happens when a spy observes a certain entity for the benefit of a specified"
-                ' recipient in a \nspecific location. The only possible subtype of this event is "Spy."'
+                ' recipient in a \nspecific location. The only possible subtype of this event is "Spy.'
             ),
         ]
     },
@@ -1013,11 +1012,11 @@ GUIDELINES = {
             ),
             (
                 "A Start Position (Personnel) event occurs when an individual begins working for an organization at a"
-                ' specific \nlocation. This event can be categorized into two possible subtypes: "Hiring" or "None."'
+                ' specific \nlocation. This event can be categorized into two possible subtypes: "Hiring" or "None.'
             ),
             (
                 "A Start Position (personnel) event takes place when an employee begins working for an organization in"
-                ' a specific \nlocation. There are two possible subtypes of this event: "Hiring" or "None."'
+                ' a specific \nlocation. There are two possible subtypes of this event: "Hiring" or "None.'
             ),
             (
                 "A Start Position (personnel) event occurs when an individual begins employment with a company in a"
@@ -1026,7 +1025,7 @@ GUIDELINES = {
             ),
             (
                 "A Start Position (personnel) event takes place when an employee begins working for an organization at"
-                ' a specific \nlocation. There are two possible subtypes of this event: "Hiring" and "None."'
+                ' a specific \nlocation. There are two possible subtypes of this event: "Hiring" and "None.'
             ),
         ]
     },
@@ -1037,12 +1036,12 @@ GUIDELINES = {
                 ' Instrument at some \nPlace. The only possible event subtype is: "TargetAimAt".'
             ),
             (
-                '"A TargetAimAt event takes place when a Targeter intentionally directs an Instrument towards a Target'
-                ' at a specific \nlocation."'
+                "A TargetAimAt event takes place when a Targeter intentionally directs an Instrument towards a Target"
+                " at a specific \nlocation."
             ),
             (
-                '"A TargetAimAt event takes place when a Targeter uses an Instrument to target a specific Target at a'
-                ' particular \nPlace."'
+                "A TargetAimAt event takes place when a Targeter uses an Instrument to target a specific Target at a"
+                " particular Place."
             ),
             (
                 "The occurrence of a TargetAimAt (inspection) Event is marked by a Targeter directing an Instrument"
@@ -1065,22 +1064,22 @@ GUIDELINES = {
             (
                 "A ThreatenCoerce (contact) event takes place when a communicator makes a threat or attempts to force"
                 " a recipient \nregarding a certain topic at a specific location. There are several possible subtypes"
-                ' of this event, including: "Broadcast," \n"Correspondence," "Meet," or "None."'
+                ' of this event, including: "Broadcast," \n"Correspondence," "Meet," or "None.'
             ),
             (
                 "An instance of a ThreatenCoerce (contact) Event takes place when a Communicator intimidates or"
                 " pressures a \nRecipient regarding a certain subject at a particular location. There are four"
-                ' possible subtypes of this event, including \n"Broadcast," "Correspondence," "Meet," or "None."'
+                ' possible subtypes of this event, including \n"Broadcast," "Correspondence," "Meet," or "None.'
             ),
             (
                 "An instance of a ThreatenCoerce (contact) Event takes place when a Communicator intimidates or forces"
                 " a Recipient \nregarding a certain subject in a specific location. There are four possible subtypes"
-                ' of this event: "Broadcast," \n"Correspondence," "Meet," or "None."'
+                ' of this event: "Broadcast," \n"Correspondence," "Meet," or "None.'
             ),
             (
                 "A ThreatenCoerce (contact) Event takes place when a Communicator intimidates or forces a Recipient"
                 " regarding a \ncertain subject at a specific location. There are four possible subtypes of this"
-                ' event, including: "Broadcast," \n"Correspondence," "Meet," or "None."'
+                ' event, including: "Broadcast," \n"Correspondence," "Meet," or "None.'
             ),
         ]
     },
@@ -1111,14 +1110,14 @@ GUIDELINES = {
                 " for the benefit \nof a Beneficiary in a specific location. The Participants can be classified as"
                 " Givers and Recipients, and there may be \nsomeone or something that prevents the transaction from"
                 ' happening. There are several possible subtypes of this event, \nincluding "EmbargoSanction,"'
-                ' "GiftGrantProvideAid," "TransferControl," or "None."'
+                ' "GiftGrantProvideAid," "TransferControl," or "None.'
             ),
             (
                 "A Transaction Event takes place when an exchange of a certain Artifact happens between multiple"
                 " Participants, with \nthe intention of benefiting a specific Beneficiary, at a particular Place. The"
                 " Participants can be classified as a \nGiver and Recipient. There may also be a preventer that"
                 " hinders the transaction from happening. The possible subtypes of \nthis Event are:"
-                ' "EmbargoSanction", "GiftGrantProvideAid", "TransferControl" or "None."'
+                ' "EmbargoSanction", "GiftGrantProvideAid", "TransferControl" or "None.'
             ),
         ]
     },
@@ -1134,25 +1133,25 @@ GUIDELINES = {
                 "A TransferMoney event transpires when a donor hands over funds to a recipient for the benefit of a"
                 " beneficiary in a \nparticular location. There may be a factor that hinders the transaction from"
                 ' taking place. The possible subtypes of this event \nare: "BorrowLend," "EmbargoSanction,"'
-                ' "GiftGrantProvideAid," "PayForService," "Purchase," or "None."'
+                ' "GiftGrantProvideAid," "PayForService," "Purchase," or "None.'
             ),
             (
                 "A TransferMoney event takes place when a giver transfers money to a recipient for the benefit of a"
                 " beneficiary in a \nspecific location. However, there may be a preventer that prevents the"
                 ' transaction from happening. The possible subtypes of \nthis event include: "BorrowLend,"'
-                ' "EmbargoSanction," "GiftGrantProvideAid," "PayForService," "Purchase," or \n"None."'
+                ' "EmbargoSanction," "GiftGrantProvideAid," "PayForService," "Purchase," or \n"None.'
             ),
             (
-                '"A TransferMoney event takes place when a Donor transfers funds to a Recipient for the benefit of a'
+                "A TransferMoney event takes place when a Donor transfers funds to a Recipient for the benefit of a"
                 " Beneficiary in a \nparticular location. However, there may be a factor that prevents the transaction"
                 ' from happening. The possible subtypes of \nthis event include: "BorrowLend", "EmbargoSanction",'
-                ' "GiftGrantProvideAid", "PayForService", "Purchase" or \n"None."'
+                ' "GiftGrantProvideAid", "PayForService", "Purchase" or \n"None.'
             ),
             (
                 "A TransferMoney event takes place when a donor transfers funds to a recipient for the benefit of a"
                 " beneficiary in a \nspecific location. However, there may be an obstacle that prevents the"
                 ' transaction from happening. The possible subtypes of \nthis event include: "BorrowLend,"'
-                ' "EmbargoSanction," "GiftGrantProvideAid," "PayForService," "Purchase," or \n"None."'
+                ' "EmbargoSanction," "GiftGrantProvideAid," "PayForService," "Purchase," or \n"None.'
             ),
         ]
     },
@@ -1168,20 +1167,20 @@ GUIDELINES = {
                 "A TransferOwnership (transaction) takes place when a Giver transfers some Artifact to a Recipient for"
                 " the benefit \nof a Beneficiary in a certain Place. However, a preventer can hinder the transaction"
                 ' from happening. The possible \nsubtypes of this event are: "BorrowLend," "EmbargoSanction,"'
-                ' "GiftGrantProvideAid," "Purchase," or "None."'
+                ' "GiftGrantProvideAid," "Purchase," or "None.'
             ),
             (
                 "A TransferOwnership event transpires when a donor bequeaths an artifact to a recipient for the sake"
                 " of a beneficiary \nin a specific location. However, there could be a hindrance that impedes the"
                 ' transaction from taking place. The \nconceivable subtypes of this event are: "BorrowLend",'
-                ' "EmbargoSanction", "GiftGrantProvideAid", "Purchase" or "None."'
+                ' "EmbargoSanction", "GiftGrantProvideAid", "Purchase" or "None.'
             ),
             (
                 "A TransferOwnership (transaction) Event takes place when a person (Giver) transfers an artifact to"
                 " another person \n(Recipient) for the benefit of a third person (Beneficiary) in a specific location."
                 " However, there may be a preventer that \nhinders the transaction from occurring. The possible"
                 ' subtypes of this event include: "BorrowLend," "EmbargoSanction," \n"GiftGrantProvideAid,"'
-                ' "Purchase," or "None."'
+                ' "Purchase," or "None.'
             ),
             (
                 "A TransferOwnership (transaction) Event takes place when a person (Giver) transfers an Artifact to"
@@ -1207,7 +1206,7 @@ GUIDELINES = {
                 " hinder the Transporter from \ntransporting the Artifact. There are several possible subtypes of this"
                 ' event, including "BringCarryUnload," \n"DisperseSeparate," "Fall," "GrantEntry," "Hide,"'
                 ' "LostOfControl," "NonViolentThrowLaunch," "PreventEntry," "PreventExit," \n"ReceiveImport,"'
-                ' "SendSupplyExport," "SmuggleExtract," or "None."'
+                ' "SendSupplyExport," "SmuggleExtract," or "None.'
             ),
             (
                 "A TransportArtifact (transport) event occurs when a transporter moves an artifact from its original"
@@ -1215,14 +1214,14 @@ GUIDELINES = {
                 " hindered by a Preventer entity, which \nhas the ability to prevent the transporter from transporting"
                 ' the artifact. There are several possible subtypes of this \nevent, including "BringCarryUnload,"'
                 ' "DisperseSeparate," "Fall," "GrantEntry," "Hide," "LostOfControl," \n"NonViolentThrowLaunch,"'
-                ' "PreventEntry," "PreventExit," "ReceiveImport," "SendSupplyExport," "SmuggleExtract," or "None."'
+                ' "PreventEntry," "PreventExit," "ReceiveImport," "SendSupplyExport," "SmuggleExtract," or "None.'
             ),
             (
                 "When a Transporter moves an Artifact from its starting point to its final destination, a"
                 " TransportArtifact \n(transport) Event takes place. The movement of the Artifact can be hindered by a"
                 ' Preventer entity. There are several subtypes of \nthis Event, including "BringCarryUnload,"'
                 ' "DisperseSeparate," "Fall," "GrantEntry," "Hide," "LostOfControl," \n"NonViolentThrowLaunch,"'
-                ' "PreventEntry," "PreventExit," "ReceiveImport," "SendSupplyExport," "SmuggleExtract," or "None."'
+                ' "PreventEntry," "PreventExit," "ReceiveImport," "SendSupplyExport," "SmuggleExtract," or "None.'
             ),
             (
                 "A TransportArtifact event occurs when a transporter moves an artifact from its original location to a"
@@ -1230,7 +1229,7 @@ GUIDELINES = {
                 " can prevent the transporter from \ntransporting the artifact. There are several possible subtypes of"
                 ' this event, including "BringCarryUnload," \n"DisperseSeparate," "Fall," "GrantEntry," "Hide,"'
                 ' "LostOfControl," "NonViolentThrowLaunch," "PreventEntry," "PreventExit," \n"ReceiveImport,"'
-                ' "SendSupplyExport," "SmuggleExtract," or "None."'
+                ' "SendSupplyExport," "SmuggleExtract," or "None.'
             ),
         ]
     },
@@ -1249,7 +1248,7 @@ GUIDELINES = {
                 " entity can hinder the Transporter from \ntransporting either itself or the Passenger. There are"
                 ' several possible subtypes of this event, including: \n"BringCarryUnload," "DisperseSeparate,"'
                 ' "EvacuationRescue," "Fall," "GrantedAsylum," "Hide," "PreventEntry," "PreventExit," \n"SelfMotion,"'
-                ' "SmuggleExtract," or "None."'
+                ' "SmuggleExtract," or "None.'
             ),
             (
                 "A TransportPerson (transport) Event takes place when a Transporter either transports itself or a"
@@ -1257,21 +1256,21 @@ GUIDELINES = {
                 " Preventer entity can prevent the \nTransporter from transporting itself or the Passenger. The"
                 ' possible subtypes of this event include: "BringCarryUnload," \n"DisperseSeparate,"'
                 ' "EvacuationRescue," "Fall," "GrantedAsylum," "Hide," "PreventEntry," "PreventExit," "SelfMotion,"'
-                ' \n"SmuggleExtract," or "None."'
+                ' \n"SmuggleExtract," or "None.'
             ),
             (
                 "A TransportPerson event takes place when a Transporter moves either itself or a Passenger from one"
                 " location to \nanother in a Vehicle. In some instances, a Preventer entity can hinder the Transporter"
                 " from transporting itself or the \nPassenger. The possible subtypes of this event include:"
                 ' "BringCarryUnload," "DisperseSeparate," "EvacuationRescue," \n"Fall," "GrantedAsylum," "Hide,"'
-                ' "PreventEntry," "PreventExit," "SelfMotion," "SmuggleExtract," or "None."'
+                ' "PreventEntry," "PreventExit," "SelfMotion," "SmuggleExtract," or "None.'
             ),
             (
                 "A TransportPerson (transport) Event takes place when a Transporter moves itself or a Passenger from"
                 " one location to \nanother in a Vehicle. In some instances, a Preventer entity can hinder the"
                 " Transporter from transporting itself or the \nPassenger. The possible subtypes of this event"
                 ' include: "BringCarryUnload," "DisperseSeparate," "EvacuationRescue," \n"Fall," "GrantedAsylum,"'
-                ' "Hide," "PreventEntry," "PreventExit," "SelfMotion," "SmuggleExtract," or "None."'
+                ' "Hide," "PreventEntry," "PreventExit," "SelfMotion," "SmuggleExtract," or "None.'
             ),
         ]
     },
@@ -1289,21 +1288,21 @@ GUIDELINES = {
                 ' as well as a third option of "None" which denotes that no event \noccurred.'
             ),
             (
-                '"An election event takes place when a voter casts their vote for a candidate on a ballot, resulting'
-                " in a specific \noutcome in a particular location. This event also accounts for instances where a"
+                "An election event takes place when a voter casts their vote for a candidate on a ballot, resulting in"
+                " a specific \noutcome in a particular location. This event also accounts for instances where a"
                 " preventer prevents a voter from voting. The \npossible subtypes of this event are: 'CastVote',"
-                " 'PreventVote', or 'None'.\""
+                " 'PreventVote', or 'None'."
             ),
             (
                 "An election event takes place when a voter casts their ballot for a candidate at a polling station."
                 " This event also \naccounts for instances where a preventer prevents a voter from voting. There are"
-                ' three possible subtypes of this event: \n"CastVote," "PreventVote," and "None."'
+                ' three possible subtypes of this event: \n"CastVote," "PreventVote," and "None.'
             ),
             (
                 'A government event known as a "Vote" takes place when a voter selects a candidate on a ballot,'
                 ' resulting in a specific \nlocation. This event also accounts for instances where a "Preventer"'
                 " prevents a voter from casting their vote. There are three \npossible subtypes of this event:"
-                ' "CastVote," "PreventVote," and "None."'
+                ' "CastVote," "PreventVote," and "None.'
             ),
         ]
     },
@@ -1318,7 +1317,7 @@ GUIDELINES = {
                 "A Yield Event takes place when an Agent (yielder or surrenderer) surrenders or yields to a Recipient"
                 " at a specific \nlocation. Additionally, when an Agent (retreater) retreats from their origin to a"
                 " specific destination, it can also be \nconsidered a Yield Event. There are three possible subtypes"
-                ' of this event, including "Surrender," "Retreat," or "None."'
+                ' of this event, including "Surrender," "Retreat," or "None.'
             ),
             (
                 "An instance of a Yield (conflict) Event takes place when an Agent (yielder or surrender) submits or"

@@ -10,8 +10,8 @@ GUIDELINES = {
                 " a specific \nphysical location, and a nation or region, such as a province, state, country, or city."
             ),
             (
-                '"Geo-Political Entities are made up of a combination of a populace, a governing body, a specific'
-                ' location, and a \nnation (or province, state, city, etc.)."'
+                "Geo-Political Entities are made up of a combination of a populace, a governing body, a specific"
+                " location, and a \nnation (or province, state, city, etc.)."
             ),
             (
                 "Geo-Political Entities are groups made up of a population, a governing body, a specific location, and"
@@ -108,8 +108,8 @@ GUIDELINES = {
                 " Governmental Public \nEntity, its organizational subunits, or its representative persons."
             ),
             (
-                '"A Jail Event takes place when the movement of a person is restricted by a state actor, which may be'
-                ' a GPE, its \nsuborganizations, or its representative people."'
+                "A Jail Event takes place when the movement of a person is restricted by a state actor, which may be a"
+                " GPE, its \nsuborganizations, or its representative people."
             ),
             (
                 "A Jail Event takes place when the movement of a person is restricted by a state actor, which can be a"
@@ -129,9 +129,9 @@ GUIDELINES = {
                 " stated agent."
             ),
             (
-                '"An Attack Event refers to a violent physical act that results in harm or damage. This category of'
+                "An Attack Event refers to a violent physical act that results in harm or damage. This category of"
                 " events encompasses \nany incident that is not covered by the Injure or Die subtypes, including those"
-                ' where the perpetrator is not specified."'
+                " where the perpetrator is not specified."
             ),
             (
                 'An "Attack Event" refers to a violent physical act that results in harm or damage. This category of'
@@ -155,8 +155,8 @@ GUIDELINES = {
             "A BeBorn Event occurs whenever a Person Entity is given birth to.",
             "A BeBorn Event takes place when a Person Entity is born.",
             "A BeBorn Event takes place whenever a Person Entity is born.",
-            '"The occurrence of a BeBorn Event is triggered when a Person Entity is born."',
-            '"The occurrence of a BeBorn Event is triggered whenever a Person Entity is born."',
+            "The occurrence of a BeBorn Event is triggered when a Person Entity is born.",
+            "The occurrence of a BeBorn Event is triggered whenever a Person Entity is born.",
         ]
     },
     "ace_business": {
@@ -246,10 +246,10 @@ GUIDELINES = {
                 " indicates their ethnicity."
             ),
             (
-                '"The CitizenResidentReligionEthnicity relates a Person entity to (1) the General Partnership Entity'
+                "The CitizenResidentReligionEthnicity relates a Person entity to (1) the General Partnership Entity"
                 " (GPE) in \nwhich they hold citizenship, (2) the GPE or Location where they reside, (3) the religious"
                 " Organization or Person entity to \nwhich they are affiliated, and (4) the GPE or Specific Entity"
-                ' (PER) that identifies their ethnicity."'
+                " (PER) that identifies their ethnicity."
             ),
             (
                 "The CitizenReligionEthnicity attribute connects a Person entity to (1) the General Partner Entity"
@@ -338,10 +338,10 @@ GUIDELINES = {
                 " addresses. For \nexample: 'mich...@sumptionandwyland.com', ..."
             ),
             (
-                '"ContactInfo refers to contact information, such as telephone numbers, email addresses, and street'
-                " addresses. \nFor example,"
+                "ContactInfo refers to contact information, such as telephone numbers, email addresses, and street"
+                " addresses. For \nexample,"
                 " '[michael.hayes@sumptionandwyland.com](mailto:michael.hayes@sumptionandwyland.com),' or"
-                " \n'[sales@sumptionandwyland.com](mailto:sales@sumptionandwyland.com).'\""
+                " \n'[sales@sumptionandwyland.com](mailto:sales@sumptionandwyland.com)."
             ),
             (
                 "The ContactInfo value represents a range of contact information, including telephone numbers, email"
@@ -349,14 +349,14 @@ GUIDELINES = {
                 ' "9876543210" could be considered a \nContactInfo value.'
             ),
             (
-                '"A ContactInfo value represents a variety of contact information, including telephone numbers, email'
+                "A ContactInfo value represents a variety of contact information, including telephone numbers, email"
                 " addresses, \nand physical addresses. For example, a ContactInfo value may include a string in the"
                 ' format of \n"[michael.wyland@sumptionandwyland.com](mailto:michael.wyland@sumptionandwyland.com),"'
-                ' or another similar format."'
+                " or another similar format."
             ),
             (
-                '"ContactInfo refers to information such as telephone numbers, email addresses, and physical'
-                " addresses, like \n'[mich...@sumptionandwyland.com](mailto:mich...@sumptionandwyland.com)', etc.\""
+                "ContactInfo refers to information such as telephone numbers, email addresses, and physical addresses,"
+                " like \n'[mich...@sumptionandwyland.com](mailto:mich...@sumptionandwyland.com)', etc."
             ),
         ]
     },
@@ -368,9 +368,9 @@ GUIDELINES = {
                 " guilty of a Crime."
             ),
             (
-                '"A Convict Event takes place when a Trial Event concludes with a verdict of guilty against the'
+                "A Convict Event takes place when a Trial Event concludes with a verdict of guilty against the"
                 " Defendant. This means \nthat a person, organization, or Government, Police, and Enforcement (GPE)"
-                ' entity has been convicted of committing a \ncrime."'
+                " entity has been convicted of committing a \ncrime."
             ),
             (
                 "A conviction event takes place when a trial event concludes with a successful prosecution of the"
@@ -395,12 +395,12 @@ GUIDELINES = {
                 " for. For example: \n'raping', 'murder', 'drug', ..."
             ),
             (
-                '"A Crime value represents the specific offense or infraction (crime) for which a Person can be held'
-                " accountable and \nface legal consequences, such as 'rape', 'murder', or 'drug-related offenses'.\""
+                "A Crime value represents the specific offense or infraction (crime) for which a Person can be held"
+                " accountable and \nface legal consequences, such as 'rape', 'murder', or 'drug-related offenses'."
             ),
             (
                 "A Crime value refers to the specific offense (crime) for which a Person entity can be prosecuted or"
-                ' punished. This can \ninclude crimes such as "raping," "murder," or "drug-related offenses."'
+                ' punished. This can \ninclude crimes such as "raping," "murder," or "drug-related offenses.'
             ),
             (
                 "A Crime value represents the specific offense (crime) for which a Person entity can be prosecuted or"
@@ -408,7 +408,7 @@ GUIDELINES = {
             ),
             (
                 "A Crime value represents the specific offense for which a Person can be prosecuted or punished. This"
-                ' may include \ncrimes such as "raping," "murder," or "drug-related offenses."'
+                ' may include \ncrimes such as "raping," "murder," or "drug-related offenses.'
             ),
         ]
     },
@@ -484,8 +484,8 @@ GUIDELINES = {
                 " either \naccidental, intentional, or self-inflicted."
             ),
             (
-                '"A Die Event takes place when the life of a Person Entity comes to an end. These events can be caused'
-                ' by accident, \nintentional actions, or self-inflicted harm."'
+                "A Die Event takes place when the life of a Person Entity comes to an end. These events can be caused"
+                " by accident, \nintentional actions, or self-inflicted harm."
             ),
         ]
     },
@@ -521,20 +521,20 @@ GUIDELINES = {
                 " of a \nStartPosition Event."
             ),
             (
-                '"An Elect Event happens whenever a candidate is successful in an election that is intended to settle'
-                ' the Person \nargument of a StartPosition Event."'
+                "An Elect Event happens whenever a candidate is successful in an election that is intended to settle"
+                " the Person \nargument of a StartPosition Event."
             ),
             (
-                '"An Elect Event takes place when a candidate is successful in an election that is intended to decide'
-                ' the Person \nargument of a StartPosition Event."'
+                "An Elect Event takes place when a candidate is successful in an election that is intended to decide"
+                " the Person \nargument of a StartPosition Event."
             ),
             (
-                '"An Elect Event takes place when a candidate emerges victorious in an election aimed at settling the'
-                ' Person argument \nof a StartPosition Event."'
+                "An Elect Event takes place when a candidate emerges victorious in an election aimed at settling the"
+                " Person argument \nof a StartPosition Event."
             ),
             (
-                '"An Elect Event takes place when a contender emerges victorious in an election aimed at settling the'
-                ' Person argument \nof a StartPosition Event."'
+                "An Elect Event takes place when a contender emerges victorious in an election aimed at settling the"
+                " Person argument \nof a StartPosition Event."
             ),
         ]
     },
@@ -560,9 +560,9 @@ GUIDELINES = {
                 " receiving remuneration from either the \norganization or the government entity."
             ),
             (
-                '"Employment refers to the connection between individuals and their employers. This connection can'
-                " only be \nclassified as such when it is reasonable to assume that the individual is receiving"
-                ' payment from either the organization or \ngovernment entity."'
+                "Employment refers to the connection between individuals and their employers. This connection can only"
+                " be \nclassified as such when it is reasonable to assume that the individual is receiving payment"
+                " from either the organization or \ngovernment entity."
             ),
         ]
     },
@@ -606,16 +606,16 @@ GUIDELINES = {
                 " Organization subparts, or \nPerson representatives)."
             ),
             (
-                '"The Execute Event happens whenever the life of a person is taken by a state actor, which can be a'
-                " government, its \nagencies, or the person's representatives.\""
+                "The Execute Event happens whenever the life of a person is taken by a state actor, which can be a"
+                " government, its \nagencies, or the person's representatives."
             ),
             (
-                '"The Execute Event happens whenever the life of a person is terminated by a state actor, such as a'
-                ' government, its \nsub-organizations, or representatives of the person."'
+                "The Execute Event happens whenever the life of a person is terminated by a state actor, such as a"
+                " government, its \nsub-organizations, or representatives of the person."
             ),
             (
-                '"The Execute Event takes place when the life of a person is terminated by a state actor, such as a'
-                ' governmental \norganization, its subunits, or representatives of the person."'
+                "The Execute Event takes place when the life of a person is terminated by a state actor, such as a"
+                " governmental \norganization, its subunits, or representatives of the person."
             ),
             (
                 'A "Execute Event" takes place whenever a person\'s life is terminated by a state actor, which'
@@ -631,8 +631,8 @@ GUIDELINES = {
                 " (Location, GPE or Facility) for the \npurposes of legal proceedings there."
             ),
             (
-                '"The extradition event takes place when a person is transferred from one location to another,'
-                " typically from one \nstate actor's territory to another, for the purpose of legal proceedings.\""
+                "The extradition event takes place when a person is transferred from one location to another,"
+                " typically from one \nstate actor's territory to another, for the purpose of legal proceedings."
             ),
             (
                 "An Extradition Event takes place when a person is transferred from one location (usually the place"
@@ -641,8 +641,8 @@ GUIDELINES = {
                 " location."
             ),
             (
-                '"The act of extradition involves the transfer of an individual from one location to another,'
-                ' typically from one \ncountry to another, for the purpose of legal proceedings."'
+                "The act of extradition involves the transfer of an individual from one location to another, typically"
+                " from one \ncountry to another, for the purpose of legal proceedings."
             ),
             (
                 "A rendition event occurs when an individual is transported by a state entity from one location"
@@ -702,8 +702,8 @@ GUIDELINES = {
                 " connection. \nBoth the entities in question must be classified as Persons."
             ),
             (
-                '"The Family Relation refers to the bond that exists between two entities that are connected through a'
-                ' familial \nrelationship. Both the entities in question must be classified as people."'
+                "The Family Relation refers to the bond that exists between two entities that are connected through a"
+                " familial \nrelationship. Both the entities in question must be classified as people."
             ),
             (
                 "The concept of Family Relation pertains to the bond that exists between two entities that have a"
@@ -718,20 +718,20 @@ GUIDELINES = {
                 " Organization \nEntity, typically as a result of court proceedings."
             ),
             (
-                '"When a government official imposes a financial penalty on a GPE, person, or organization as a'
-                ' consequence of legal \nproceedings, it is referred to as a Fine Event."'
+                "When a government official imposes a financial penalty on a GPE, person, or organization as a"
+                " consequence of legal \nproceedings, it is referred to as a Fine Event."
             ),
             (
-                '"A Fine Event occurs when a government entity imposes a financial penalty on a GPE (governmental'
-                ' public entity), \nindividual, or organization, often as a result of legal proceedings."'
+                "A Fine Event occurs when a government entity imposes a financial penalty on a GPE (governmental"
+                " public entity), \nindividual, or organization, often as a result of legal proceedings."
             ),
             (
-                '"A Fine Event occurs when a government official imposes a financial penalty on a GPE (Global Public'
-                ' Entity), \nindividual, or organization, typically as a result of legal proceedings."'
+                "A Fine Event occurs when a government official imposes a financial penalty on a GPE (Global Public"
+                " Entity), \nindividual, or organization, typically as a result of legal proceedings."
             ),
             (
-                '"A Fine Event occurs when a government actor imposes a financial penalty on a General Public, Person,'
-                ' or \nOrganization, usually as a consequence of legal proceedings."'
+                "A Fine Event occurs when a government actor imposes a financial penalty on a General Public, Person,"
+                " or \nOrganization, usually as a consequence of legal proceedings."
             ),
         ]
     },
@@ -817,8 +817,8 @@ GUIDELINES = {
                 " within or at \nanother Facility, Location, or GPE."
             ),
             (
-                '"The Geographical relation refers to the situating of a Facility, Location, or GPE at or in another'
-                ' Facility, \nLocation, or GPE."'
+                "The Geographical relation refers to the situating of a Facility, Location, or GPE at or in another"
+                " Facility, \nLocation, or GPE."
             ),
         ]
     },
@@ -837,8 +837,8 @@ GUIDELINES = {
                 " be accidental, \nintentional, or self-inflicted."
             ),
             (
-                '"An Injure Event takes place when a Person Entity sustains physical harm. This can be either'
-                ' accidental, \nintentional, or self-inflicted."'
+                "An Injure Event takes place when a Person Entity sustains physical harm. This can be either"
+                " accidental, \nintentional, or self-inflicted."
             ),
             (
                 'A "Injure Event" takes place when a "Person Entity" sustains physical harm. These events can be'
@@ -866,9 +866,9 @@ GUIDELINES = {
                 " in other legal entities, such as General Partnerships and \nEntities."
             ),
             (
-                '"InvestorShareholder refers to the connection between an individual or entity that has invested in a'
+                "InvestorShareholder refers to the connection between an individual or entity that has invested in a"
                 " particular \norganization or owns shares/stock in it, where the investment may be in the form of a"
-                ' GPE."'
+                " GPE."
             ),
             (
                 'The term "InvestorShareholder" refers to the connection between an individual or entity that has'
@@ -892,7 +892,7 @@ GUIDELINES = {
             (
                 "A JobTitle refers to the designation of the occupation or position held by an individual within an"
                 ' Organization. \nThis may include titles such as "co-chief executive," "move coordinator," or'
-                ' "interim ED."'
+                ' "interim ED.'
             ),
             (
                 "A JobTitle refers to the designation of the occupation or post held by an individual in an"
@@ -946,16 +946,16 @@ GUIDELINES = {
                 " arguments must be entities of type Person."
             ),
             (
-                '"Lasting-Personal is defined as a relationship that involves personal contact or a reasonable'
+                "Lasting-Personal is defined as a relationship that involves personal contact or a reasonable"
                 " assumption of such \ncontact, and where there is evidence or expectation that the relationship"
                 " exists beyond a specific cited interaction. Both \nparties involved must be classified as type"
-                ' Person."'
+                " Person."
             ),
             (
-                '"Lasting-Personal refers to relationships that meet certain criteria. Firstly, there must be personal'
-                " contact or \na reasonable assumption of it. Secondly, there must be evidence or expectation that the"
-                " relationship exists beyond a \nspecific cited interaction. Both the relationship and the indication"
-                ' or expectation of it must be classified as Person \nentities."'
+                "Lasting-Personal refers to relationships that meet certain criteria. Firstly, there must be personal"
+                " contact or a \nreasonable assumption of it. Secondly, there must be evidence or expectation that the"
+                " relationship exists beyond a specific \ncited interaction. Both the relationship and the indication"
+                " or expectation of it must be classified as Person entities."
             ),
             (
                 "Lasting-Personal is a concept that refers to relationships between individuals that meet certain"
@@ -1053,10 +1053,10 @@ GUIDELINES = {
     "ace_marry": {
         "en": [
             "Marry Events are official Events, where two people are married under the legal definition.",
-            '"Marriage events are formal gatherings where two individuals legally exchange wedding vows."',
-            '"Marriage events are formal gatherings where two individuals legally exchange marriage vows."',
-            '"Marriage events are formal gatherings in which two individuals legally exchange wedding vows."',
-            '"Marriage events are official gatherings where two individuals are legally wedded."',
+            "Marriage events are formal gatherings where two individuals legally exchange wedding vows.",
+            "Marriage events are formal gatherings where two individuals legally exchange marriage vows.",
+            "Marriage events are formal gatherings in which two individuals legally exchange wedding vows.",
+            "Marriage events are official gatherings where two individuals are legally wedded.",
         ]
     },
     "ace_meet": {
@@ -1096,24 +1096,24 @@ GUIDELINES = {
                 " member. \nOrganizations and GPEs can be members of other Organizations (such as NATO or the UN)."
             ),
             (
-                '"The concept of membership pertains to the bond between an individual and a group or organization, of'
+                "The concept of membership pertains to the bond between an individual and a group or organization, of"
                 " which they are a \npart. This bond can extend to organizations being members of other organizations,"
-                ' such as NATO or the United Nations."'
+                " such as NATO or the United Nations."
             ),
             (
-                '"Membership refers to the connection between an individual and a group of which they are a part. This'
+                "Membership refers to the connection between an individual and a group of which they are a part. This"
                 " connection can \nextend to organizations being members of other organizations, such as NATO or the"
-                ' United Nations."'
+                " United Nations."
             ),
             (
-                '"Membership refers to the connection between an individual and a group of which they are a part.'
+                "Membership refers to the connection between an individual and a group of which they are a part."
                 " Groups and \norganizations can also be members of other groups or organizations, such as NATO or the"
-                ' United Nations."'
+                " United Nations."
             ),
             (
-                '"Membership refers to the connection between an individual and a group or entity of which they are a'
+                "Membership refers to the connection between an individual and a group or entity of which they are a"
                 " part. This \nconnection can extend to organizations being members of other organizations, such as"
-                ' NATO or the United Nations."'
+                " NATO or the United Nations."
             ),
         ]
     },
@@ -1130,9 +1130,9 @@ GUIDELINES = {
                 " covers joint ventures."
             ),
             (
-                '"A MergeOrg Event takes place when two or more Organization Entities unite to create a new'
+                "A MergeOrg Event takes place when two or more Organization Entities unite to create a new"
                 " Organization Entity. This \nevent applies to all types of organizations, including government"
-                ' agencies and joint ventures."'
+                " agencies and joint ventures."
             ),
             (
                 "A MergeOrg Event takes place when two or more Organization Entities unite to form a new Organization"
@@ -1154,9 +1154,9 @@ GUIDELINES = {
                 " Person."
             ),
             (
-                '"A TransportEvent takes place when an object, either an Artifact (such as a weapon or vehicle) or a'
+                "A TransportEvent takes place when an object, either an Artifact (such as a weapon or vehicle) or a"
                 " person, is moved \nfrom one location (Place) to another. This event must specifically identify the"
-                ' object being transported."'
+                " object being transported."
             ),
             (
                 "A TransportEvent takes place when an object, either an Artifact (such as a weapon or vehicle) or a"
@@ -1182,20 +1182,20 @@ GUIDELINES = {
                 " other or located \nin/at the other."
             ),
             (
-                '"Near signifies that an entity is in close proximity to another entity, but neither entity is a'
-                ' constituent of the \nother or situated inside/at the other."'
+                "Near signifies that an entity is in close proximity to another entity, but neither entity is a"
+                " constituent of the \nother or situated inside/at the other."
             ),
             (
                 'The term "near" suggests that one entity is in close proximity to another entity, but neither entity'
                 " is a constituent \npart of the other or situated within the other."
             ),
             (
-                '"Near suggests that one entity is in close proximity to another entity, but neither of them are a'
-                ' part of each other or \npositioned within the other."'
+                "Near suggests that one entity is in close proximity to another entity, but neither of them are a part"
+                " of each other or \npositioned within the other."
             ),
             (
-                '"Near signifies that an entity is in close proximity to another entity, but neither entity is an'
-                ' integral part of the \nother or situated within the other."'
+                "Near signifies that an entity is in close proximity to another entity, but neither entity is an"
+                " integral part of the \nother or situated within the other."
             ),
         ]
     },
@@ -1206,16 +1206,16 @@ GUIDELINES = {
                 " Person, through \nofficial channels."
             ),
             (
-                '"A Nominate Event takes place when a person is put forward as a candidate for a StartPosition Event'
-                ' by an appropriate \nperson through official channels."'
+                "A Nominate Event takes place when a person is put forward as a candidate for a StartPosition Event by"
+                " an appropriate \nperson through official channels."
             ),
             (
                 "A nomination event takes place when a person is suggested for a start position event by the"
                 " appropriate person, \nthrough official channels."
             ),
             (
-                '"The Nominate Event takes place when an individual is put forth as a candidate for a StartPosition'
-                ' Event by a suitable \nperson, via official communication channels."'
+                "The Nominate Event takes place when an individual is put forth as a candidate for a StartPosition"
+                " Event by a suitable \nperson, via official communication channels."
             ),
             (
                 "A nomination event takes place when a person is proposed for a start position event by the"
@@ -1231,11 +1231,11 @@ GUIDELINES = {
             ),
             (
                 'A numerical value pertains to specific digits, amounts, and the like. Some examples include "billions'
-                ' of dollars," \n"50 percent," and "100%."'
+                ' of dollars," \n"50 percent," and "100%.'
             ),
             (
                 'A numeric value is a reference to numerical amounts, such as "billions of dollars," "50 percent," or'
-                ' "100%."'
+                ' "100%.'
             ),
             (
                 'A numeric value is a reference to a specific quantity or amount, such as "billions of dollars," "50'
@@ -1243,7 +1243,7 @@ GUIDELINES = {
             ),
             (
                 'A numerical value pertains to specific numbers, amounts, and the like. Examples include "billions of'
-                ' dollars," "50 \npercent," and "100%."'
+                ' dollars," "50 \npercent," and "100%.'
             ),
         ]
     },
@@ -1317,10 +1317,10 @@ GUIDELINES = {
                 " organizations."
             ),
             (
-                '"OrgLocationOrigin defines the connection between an organization and the Location or GPE where it'
+                "OrgLocationOrigin defines the connection between an organization and the Location or GPE where it"
                 " operates, \nresides, or conducts its activities. It is important to note that, for government"
                 " entities, the relationship with the parent \norganization takes precedence over the relationship"
-                ' with the Location or GPE."'
+                " with the Location or GPE."
             ),
             (
                 'The "OrgLocationOrigin" attribute signifies the connection between an organization and the "Location"'
@@ -1328,16 +1328,16 @@ GUIDELINES = {
                 ' for government organizations, a \n"Subsidiary" takes precedence over this relationship.'
             ),
             (
-                '"The OrgLocationOrigin attribute defines the connection between an organization and the Geographic'
+                "The OrgLocationOrigin attribute defines the connection between an organization and the Geographic"
                 ' Political \nEntity (GPE) or location where it is situated, headquartered, or operates." Note: In the'
                 " case of government \norganizations, a subsidiary has higher priority in relation to this"
                 " relationship."
             ),
             (
-                '"The OrgLocationOrigin attribute represents the connection between an organization and the location'
-                " or General \nPlot Entity (GPE) where it operates, is based, or conducts business. It is important to"
+                "The OrgLocationOrigin attribute represents the connection between an organization and the location or"
+                " General \nPlot Entity (GPE) where it operates, is based, or conducts business. It is important to"
                 " note that for government \norganizations, the subsidiary relationship takes precedence over this"
-                ' association."'
+                " association."
             ),
         ]
     },
@@ -1348,14 +1348,14 @@ GUIDELINES = {
                 " `arg2` is not \nan Organization, use the Agent-Artifact relation."
             ),
             (
-                '"The concept of ownership refers to the connection between an individual and an organization that'
-                " they own. If the \nargument passed in as `arg2` is not an organization, then the relationship"
-                ' between the individual and the Agent-Artifact \nshould be considered."'
+                "The concept of ownership refers to the connection between an individual and an organization that they"
+                " own. If the \nargument passed in as `arg2` is not an organization, then the relationship between the"
+                " individual and the Agent-Artifact \nshould be considered."
             ),
             (
-                '"The concept of ownership refers to the connection between an individual and an organization that'
-                " they own. If the \nsecond argument (`arg2`) is not an organization, then the relationship should be"
-                ' represented as an agent-artifact \nassociation."'
+                "The concept of ownership refers to the connection between an individual and an organization that they"
+                " own. If the \nsecond argument (`arg2`) is not an organization, then the relationship should be"
+                " represented as an agent-artifact \nassociation."
             ),
             (
                 "The concept of ownership refers to the connection between an individual and an organization that they"
@@ -1388,8 +1388,8 @@ GUIDELINES = {
                 " sentence imposed by \nthe judiciary."
             ),
             (
-                '"A Pardon Event takes place when the head of state or a designee of the head of state rescinds a'
-                ' sentence that was \nimposed by the judiciary."'
+                "A Pardon Event takes place when the head of state or a designee of the head of state rescinds a"
+                " sentence that was imposed \nby the judiciary."
             ),
         ]
     },
@@ -1475,9 +1475,9 @@ GUIDELINES = {
                 " arranged in any particular order. \nAdditionally, these Relations are symmetric."
             ),
             (
-                '"The Personal-Social Relation pertains to the connection between individuals. Both components are of'
+                "The Personal-Social Relation pertains to the connection between individuals. Both components are of"
                 " the type \nPerson. Please be aware: The components of these Relations are not arranged in a specific"
-                ' order. The Relations are \nsymmetric."'
+                " order. The Relations are \nsymmetric."
             ),
         ]
     },
@@ -1614,17 +1614,17 @@ GUIDELINES = {
             ),
             (
                 "A sentence value refers to the penalties imposed by a court or judge for a particular offense."
-                ' Examples of such \nsentences include "124 years in prison," "a sentence," and "death."'
+                ' Examples of such \nsentences include "124 years in prison," "a sentence," and "death.'
             ),
             (
                 'A "Sentence value" refers to a determination made by a court or judge regarding a specific criminal'
                 ' offense. \nExamples of sentence values include sentences such as "124 years in prison," "a'
-                ' sentence," or "death."'
+                ' sentence," or "death.'
             ),
             (
                 "A sentence value is a term used to describe the verdict handed down by a judge or court for a"
                 ' specific offense. Examples \nof sentence values include prison terms such as "124 years," "a'
-                ' sentence," or "death."'
+                ' sentence," or "death.'
             ),
         ]
     },
@@ -1646,9 +1646,9 @@ GUIDELINES = {
                 " Event."
             ),
             (
-                '"A SentenceAct Event occurs when the penalty, specifically imprisonment, for a Defendant in a Trial'
-                " Event is \nimposed by a government agent, such as a General Purpose Entity, an Organization subunit,"
-                ' or a person representing them."'
+                "A SentenceAct Event occurs when the penalty, specifically imprisonment, for a Defendant in a Trial"
+                " Event is imposed \nby a government agent, such as a General Purpose Entity, an Organization subunit,"
+                " or a person representing them."
             ),
             (
                 "A SentenceAct Event occurs when the penalty, specifically imprisonment, for a Defendant in a Try"
@@ -1665,8 +1665,8 @@ GUIDELINES = {
                 " individual sports teams)."
             ),
             (
-                '"Sports-Affiliation refers to the connection between a player, coach, manager, or assistant and their'
-                ' \nassociation with a sports club or league, as well as individual sports teams."'
+                "Sports-Affiliation refers to the connection between a player, coach, manager, or assistant and their"
+                " association \nwith a sports club or league, as well as individual sports teams."
             ),
             (
                 "The Sports-Affiliation object represents the connection between a player, coach, trainer, or"
@@ -1679,8 +1679,8 @@ GUIDELINES = {
                 " individual sports teams)."
             ),
             (
-                '"Sports-Affiliation refers to the bond that exists between a player, coach, manager, or assistant and'
-                ' their \nconnection to a sports club or league."'
+                "Sports-Affiliation refers to the bond that exists between a player, coach, manager, or assistant and"
+                " their \nconnection to a sports club or league."
             ),
         ]
     },
@@ -1688,8 +1688,8 @@ GUIDELINES = {
         "en": [
             "A StartOrg Event occurs whenever a new Organization is created.",
             "A new organization is established with the occurrence of a StartOrg Event.",
-            '"The creation of a new Organization triggers a StartOrg Event."',
-            '"The occurrence of a StartOrg Event is triggered whenever a new Organization is established."',
+            "The creation of a new Organization triggers a StartOrg Event.",
+            "The occurrence of a StartOrg Event is triggered whenever a new Organization is established.",
             'A "StartOrg Event" takes place whenever a fresh "Organization" is established.',
         ]
     },
@@ -1707,9 +1707,9 @@ GUIDELINES = {
                 " appointed."
             ),
             (
-                '"The StartPosition Event takes place when a Person Entity commences employment with, or transitions'
-                " to a new office \nwithin, an Organization or GPE. This includes government officials who are"
-                ' starting their tenure, whether they were \nelected or appointed."'
+                "The StartPosition Event takes place when a Person Entity commences employment with, or transitions to"
+                " a new office \nwithin, an Organization or GPE. This includes government officials who are starting"
+                " their tenure, whether they were \nelected or appointed."
             ),
             (
                 "A StartPosition Event takes place when a Person Entity starts working for or changes offices within"
@@ -1730,20 +1730,20 @@ GUIDELINES = {
                 " attends or \nattended."
             ),
             (
-                '"StudentAlum is a term that describes the connection between an individual and a school or university'
-                ' they have \nattended or are currently attending."'
+                "StudentAlum is a term that describes the connection between an individual and a school or university"
+                " they have \nattended or are currently attending."
             ),
             (
-                '"StudentAlum defines the connection between a individual and a educational establishment that they or'
-                ' previously \nattended."'
+                "StudentAlum defines the connection between a individual and a educational establishment that they or"
+                " previously \nattended."
             ),
             (
-                '"StudentAlum defines the connection between an individual and a school they have attended or are'
-                ' currently \nattending."'
+                "StudentAlum defines the connection between an individual and a school they have attended or are"
+                " currently \nattending."
             ),
             (
-                '"StudentAlum refers to the connection between an individual and a educational establishment that they'
-                ' are \nassociated with, whether they are currently enrolled or have attended in the past."'
+                "StudentAlum refers to the connection between an individual and a educational establishment that they"
+                " are \nassociated with, whether they are currently enrolled or have attended in the past."
             ),
         ]
     },
@@ -1754,16 +1754,16 @@ GUIDELINES = {
                 " \norganizations and between organizations and GPEs."
             ),
             (
-                '"A subsidiary refers to the ownership, administrative, and other relationships that exist between'
-                ' different \norganizations and between organizations and GPEs."'
+                "A subsidiary refers to the ownership, administrative, and other relationships that exist between"
+                " different \norganizations and between organizations and GPEs."
             ),
             (
-                '"A subsidiary represents the ownership, administrative, and other structural relationships that exist'
-                ' between \ncompanies and between companies and their parent organizations."'
+                "A subsidiary represents the ownership, administrative, and other structural relationships that exist"
+                " between \ncompanies and between companies and their parent organizations."
             ),
             (
-                '"A subsidiary represents the ownership, administrative, and other structural relationships that exist'
-                ' between \norganizations and between organizations and Global Public Entreprises."'
+                "A subsidiary represents the ownership, administrative, and other structural relationships that exist"
+                " between \norganizations and between organizations and Global Public Entreprises."
             ),
             (
                 "The subsidiary encompasses the ownership, operational, and regulatory relationships that exist among"
@@ -1809,19 +1809,19 @@ GUIDELINES = {
             (
                 "A time value is a designation that refers to a specific period of time, often denoted as time"
                 ' expressions. Some \nexamples of time expressions include "4 years," "today," "December," and'
-                ' "future."'
+                ' "future.'
             ),
             (
                 "A time value is a designation that refers to a specific period of time, often denoted as time"
-                ' expressions. Examples of \ntime values include "4 years," "today," "December," and "future."'
+                ' expressions. Examples of \ntime values include "4 years," "today," "December," and "future.'
             ),
             (
                 "A Time value is a designation that pertains to a particular time frame, often referred to as a time"
-                ' expression. \nExamples of time values include "4 years," "today," "December," and "future."'
+                ' expression. \nExamples of time values include "4 years," "today," "December," and "future.'
             ),
             (
                 "A time value is a specific period of time, often referred to as a time expression, and may include"
-                ' designations such as \n"4 years," "today," "December," or "future."'
+                ' designations such as \n"4 years," "today," "December," or "future.'
             ),
         ]
     },
@@ -1847,8 +1847,8 @@ GUIDELINES = {
                 " receiving, borrowing, or lending."
             ),
             (
-                '"A TransactionEvent involves the exchange or transfer of Artifacts or Organizations, as well as the'
-                ' exchange or \ntransfer of money, either through buying, selling, loaning, borrowing, or gifting."'
+                "A TransactionEvent involves the exchange or transfer of Artifacts or Organizations, as well as the"
+                " exchange or \ntransfer of money, either through buying, selling, loaning, borrowing, or gifting."
             ),
         ]
     },
@@ -1866,9 +1866,9 @@ GUIDELINES = {
                 " organizations donate money to charities or \nreceive loans from financial institutions."
             ),
             (
-                '"TransferMoney Events involve the exchange of money without the context of a purchase. This includes'
-                " instances \nsuch as individuals donating money to organizations without receiving anything in"
-                ' return, and organizations lending \nmoney to individuals or other organizations."'
+                "TransferMoney Events involve the exchange of money without the context of a purchase. This includes"
+                " instances such \nas individuals donating money to organizations without receiving anything in"
+                " return, and organizations lending \nmoney to individuals or other organizations."
             ),
             (
                 'The term "TransferMoney Events" refers to instances where money is exchanged without a direct'
@@ -1890,14 +1890,14 @@ GUIDELINES = {
                 " artifacts or \norganizations."
             ),
             (
-                '"TransferOwnership Events encompass the acquisition and disposal of both physical objects and'
+                "TransferOwnership Events encompass the acquisition and disposal of both physical objects and"
                 " entities, such as \nthrough purchasing, selling, lending, borrowing, donating, or accepting"
-                ' ownership."'
+                " ownership."
             ),
             (
-                '"TransferOwnership Events encompass the acquisition and disposal of both physical objects and'
+                "TransferOwnership Events encompass the acquisition and disposal of both physical objects and"
                 " entities, \nincluding but not limited to purchasing, selling, lending, borrowing, donating, and"
-                ' accepting ownership of these items or \nentities."'
+                " accepting ownership of these items or \nentities."
             ),
             (
                 'The "TransferOwnership Events" pertain to the acquisition or disposition of artifacts or entities'
@@ -1905,9 +1905,9 @@ GUIDELINES = {
                 " ownership."
             ),
             (
-                '"TransferOwnership Events encompass the acquisition and disposition of both physical objects and'
+                "TransferOwnership Events encompass the acquisition and disposition of both physical objects and"
                 " entities, such \nas the process of purchasing, selling, lending, borrowing, granting, or accepting"
-                ' ownership of various assets or \nestablishments."'
+                " ownership of various assets or \nestablishments."
             ),
         ]
     },
@@ -1984,10 +1984,10 @@ GUIDELINES = {
                 " be applied, where the first entity is either \na person or an organization."
             ),
             (
-                '"When an agent possesses, utilizes, or has created an artifact, they are associated with it through'
+                "When an agent possesses, utilizes, or has created an artifact, they are associated with it through"
                 " this particular \nrelationship. It is important to note that if 'arg2' is an organization, then"
                 " either the ownership relation (where 'arg1' is an \nindividual) or the subsidiary relation (where"
-                " 'arg1' is an organization or group of people) should be used instead.\""
+                " 'arg1' is an organization or group of people) should be used instead."
             ),
         ]
     },
@@ -2002,13 +2002,12 @@ GUIDELINES = {
                 " vehicles can either \ntransport people or goods, such as cars, planes, and cabins."
             ),
             (
-                '"The Vehicle entity is utilized to represent vehicles that are used for transportation. These'
-                " vehicles can convey \neither humans or objects, such as automobiles, airplanes, and cabins, among"
-                ' others."'
+                "The Vehicle entity is utilized to represent vehicles that are used for transportation. These vehicles"
+                " can convey \neither humans or objects, such as automobiles, airplanes, and cabins, among others."
             ),
             (
-                "\"The term 'Vehicle entity' refers to vehicles that are utilized for transportation. These vehicles"
-                ' are capable of \ntransporting both humans and objects, such as cars, planes, and cabins."'
+                "The term 'Vehicle entity' refers to vehicles that are utilized for transportation. These vehicles are"
+                " capable of \ntransporting both humans and objects, such as cars, planes, and cabins."
             ),
             (
                 "A Vehicle entity represents vehicles utilized for transportation, which can transport either humans"
@@ -2027,13 +2026,12 @@ GUIDELINES = {
                 ' cause fatality. \nExamples include, but are not limited to: "bomb," "M-16s," "missile," etc.'
             ),
             (
-                "A Weapon entity encompasses instruments that can inflict physical harm, cause destruction, or"
-                " result in \nfatalities. Examples of such weapons include 'bomb', 'M-16s', 'missiles', and the"
-                " like."
+                "A Weapon entity encompasses instruments that can inflict physical harm, cause destruction, or result"
+                " in \nfatalities. Examples of such weapons include 'bomb', 'M-16s', 'missiles', and the like."
             ),
             (
-                '"A Weapon entity is defined as an object that can inflict physical harm, cause destruction, or result'
-                ' in fatality. \nExamples of such entities include bombs, M-16s, and missiles."'
+                "A Weapon entity is defined as an object that can inflict physical harm, cause destruction, or result"
+                " in fatality. \nExamples of such entities include bombs, M-16s, and missiles."
             ),
             (
                 "A Weapon entity refers to objects that can inflict physical harm, cause destruction, or result in"

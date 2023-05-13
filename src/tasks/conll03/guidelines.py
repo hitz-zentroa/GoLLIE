@@ -2,13 +2,13 @@ GUIDELINES = {
     "ner_person": {
         "en": [
             "first, middle and last names of people, animals and fictional characters aliases.",
-            '"Aliases for first, middle, and last names of individuals, animals, and fictional characters."',
-            '"Nicknames, pseudonyms, and alter egos of individuals, creatures, and fictional personas."',
+            "Aliases for first, middle, and last names of individuals, animals, and fictional characters.",
+            "Nicknames, pseudonyms, and alter egos of individuals, creatures, and fictional personas.",
             (
-                '"First, middle, and last names are also referred to as aliases of people, animals, and fictional'
-                ' characters."'
+                "First, middle, and last names are also referred to as aliases of people, animals, and fictional"
+                " characters."
             ),
-            '"Aliases for the first, middle, and last names of people, animals, and fictional characters."',
+            "Aliases for the first, middle, and last names of people, animals, and fictional characters.",
         ]
     },
     "ner_organization": {
@@ -30,20 +30,20 @@ GUIDELINES = {
                 " sports clubs, religious orders, and youth organizations."
             ),
             (
-                '"Various organizations such as press agencies, studios, banks, stock markets, manufacturers,'
+                "Various organizations such as press agencies, studios, banks, stock markets, manufacturers,"
                 " cooperatives, \nnewsrooms, political parties, terrorist organizations, government bodies,"
                 " ministries, councils, courts, political \nunions of countries (e.g. the UN), magazines, newspapers,"
                 " journals, bands, choirs, opera companies, orchestras, public \norganizations (schools, universities,"
                 " charities), other collections of people (sports clubs, sports teams, associations, \ntheaters,"
-                ' religious orders, youth organizations are mentioned in the text."'
+                " religious orders, youth organizations are mentioned in the text."
             ),
             (
-                '"There are various types of organizations that can be considered as actors in the media ecosystem,'
+                "There are various types of organizations that can be considered as actors in the media ecosystem,"
                 " including \ncompanies like press agencies, studios, banks, stock markets, manufacturers,"
                 " cooperatives, as well as their subdivisions \nsuch as newsrooms, brands, political movements,"
                 " government bodies, publications, musical companies, public \norganizations, and other collections of"
                 " people like sports clubs, sports teams, associations, theaters, religious orders, and \nyouth"
-                ' organizations."'
+                " organizations."
             ),
             (
                 "There are various types of organizations that can be considered as sources of news, including press"
@@ -76,28 +76,28 @@ GUIDELINES = {
                 " regions such as \nvillages, towns, and countries, structures like bridges and ports, natural"
                 " locations like rivers and forests, public places \nlike squares and parks, and commercial places"
                 " like pubs and hotels. Additionally, there are assorted buildings like \nhouses, monasteries, and"
-                ' factories, and abstract concepts like "the free world."'
+                ' factories, and abstract concepts like "the free world.'
             ),
             (
                 "The following list includes various types of locations: roads and streets, regions such as villages,"
                 " towns, and \ncountries, structures like bridges and ports, natural locations like mountains and"
                 " rivers, public places like squares and \nparks, and commercial places like pubs and industrial"
                 " parks. Additionally, there are assorted buildings like houses and \nmonasteries, and abstract places"
-                ' like "the free world."'
+                ' like "the free world.'
             ),
             (
                 "The following list includes various types of locations: roads and streets, regions such as villages,"
                 " towns, and \ncountries, structures like bridges and ports, natural locations like mountains and"
                 " rivers, public places like squares and \nhospitals, commercial places like pubs and hotels, and"
                 " assorted buildings like houses and army barracks. Additionally, there \nare abstract places like"
-                ' "the free world."'
+                ' "the free world.'
             ),
             (
                 "The following are various types of places: roads and streets, regions including villages, towns, and"
                 " countries, \nstructures such as bridges and ports, natural locations like mountains, rivers, and"
                 " forests, public places like squares, \nmuseums, and parks, commercial places like pubs and hotels,"
                 " and assorted buildings like houses and monasteries. \nAdditionally, there are abstract places like"
-                ' "the free world."'
+                ' "the free world.'
             ),
         ]
     },
@@ -145,7 +145,7 @@ GUIDELINES = {
                 ' \n"Spanish," as well as "program and event nouns" like "conference" or "festival," "war nouns" like'
                 ' "World War II," \n"sport-related nouns" like "NBA," and "time period nouns" like "Renaissance."'
                 ' Additionally, the text includes various slogans, \nlike "Make America Great Again," and eras in'
-                ' time, like "21st century."'
+                ' time, like "21st century.'
             ),
         ]
     },
