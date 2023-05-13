@@ -11,6 +11,7 @@ from src.paraphrase.dataset import ParaphraseDataset
 from src.paraphrase.utils import format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines
 from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
+import rich
 
 
 def run_paraphrasing(
@@ -49,6 +50,13 @@ def run_paraphrasing(
         gen_kwargs = json.load(f)
         logging.info(f"Generation kwargs: {json.dumps(gen_kwargs, indent=2,ensure_ascii=False)}")
 
+    if gen_kwargs["num_beams"] > 1 and gen_kwargs["do_sample"]:
+        logging.warning(
+            "You are using `num_beams` > 1 and `do_sample`. Beam-search multinomial sampling from huggingface"
+            " transformers is not stable, you may get this error: 'RuntimeError: probability tensor contains either"
+            " inf, nan or element < 0'. To avoid this error, set `do_sample` to `False` or use `num_beams` = 1."
+        )
+
     for dataset_name in data_args.datasets:
         logging.info(f"Running inference on {dataset_name}...")
 
@@ -82,6 +90,8 @@ def run_paraphrasing(
             predictions = [
                 prediction[1:].strip() if prediction.startswith(":") else prediction for prediction in predictions
             ]
+
+            rich.print(predictions)
 
             guidelines = update_guidelines(
                 paraphrases=predictions,
