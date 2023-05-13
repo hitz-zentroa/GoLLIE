@@ -408,7 +408,7 @@ class ContactEvent(Event):
 
 @dataclass
 class PersonellEvent(Event):
-    """{ace_personnellevent}"""
+    """{ace_personellevent}"""
 
     mention: str
 
