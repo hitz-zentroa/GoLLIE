@@ -1,11 +1,11 @@
 import logging
 from typing import List
 
-import rich
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
 from src.paraphrase.conversation import get_conv_template
+from src.paraphrase.utils import clean_guidelines
 from src.tasks import task_id_to_guidelines
 from transformers import BatchEncoding, PreTrainedTokenizerBase
 
@@ -35,10 +35,6 @@ def prepare_data(
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
     """
-
-    example = example.replace("\n", " ")
-    example = example.replace("\t", " ")
-    example = " ".join(example.split())
 
     prompt = (
         "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase."
@@ -107,10 +103,11 @@ class ParaphraseDataset(Dataset):
         self.max_length = max_length
         self.conv_template = conv_template
         guidelines = task_id_to_guidelines(dataset_name)
+        guidelines = clean_guidelines(guidelines)
         self.dataset: List[BatchEncoding] = []
         for guideline in tqdm(guidelines.values(), desc="Data Tokenization"):
             for text in guideline[language]:
-                #rich.print(f"Guideline: {text}")
+                # rich.print(f"Guideline: {text}")
                 self.dataset.append(prepare_data(text, tokenizer, is_encoder_decoder, max_length, conv_template))
 
         logging.info(f"Dataset {dataset_name} has {len(self.dataset)} guidelines.")

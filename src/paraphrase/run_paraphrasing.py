@@ -8,10 +8,9 @@ from src.model.load_model import load_model_for_inference
 from src.paraphrase.config import DataInferenceArguments
 from src.paraphrase.conversation import get_conv_template
 from src.paraphrase.dataset import ParaphraseDataset
-from src.paraphrase.utils import format_guidelines_as_py, update_guidelines
+from src.paraphrase.utils import clean_guidelines, format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines
 from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
-import rich
 
 
 def run_paraphrasing(
@@ -57,10 +56,13 @@ def run_paraphrasing(
             " inf, nan or element < 0'. To avoid this error, set `do_sample` to `False` or use `num_beams` = 1."
         )
 
+    num_return_sequences = gen_kwargs.pop("num_return_sequences", 1)
+
     for dataset_name in data_args.datasets:
         logging.info(f"Running inference on {dataset_name}...")
 
         guidelines = task_id_to_guidelines(dataset_name)
+        guidelines = clean_guidelines(guidelines)
 
         test_dataset = ParaphraseDataset(
             tokenizer=tokenizer,
@@ -71,12 +73,12 @@ def run_paraphrasing(
             conv_template=data_args.config_template,
         )
 
-        output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines_paraphrase.py")
+        output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines.py")
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         # Trainer.predict does not support multiple return sequences, so we have to do it manually
-        num_return_sequences = gen_kwargs.pop("num_return_sequences", 1)
+
         for i in range(num_return_sequences):
             predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
             predictions[predictions == -100] = tokenizer.pad_token_id
