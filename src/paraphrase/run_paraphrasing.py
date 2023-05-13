@@ -76,7 +76,8 @@ def run_paraphrasing(
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         # Trainer.predict does not support multiple return sequences, so we have to do it manually
-        for i in range(1 if "num_return_sequences" not in gen_kwargs else gen_kwargs["num_return_sequences"]):
+        num_return_sequences = gen_kwargs.pop("num_return_sequences", 1)
+        for i in range(num_return_sequences):
             predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
             predictions[predictions == -100] = tokenizer.pad_token_id
 
@@ -85,13 +86,14 @@ def run_paraphrasing(
             except OverflowError:
                 raise OverflowError(f"Unable to decode predictions: {predictions}")
             conv = get_conv_template(data_args.config_template)
-            # print(predictions)
+
+            rich.print(predictions)
+
             predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
+            predictions = [prediction.split("\n\n")[-1].strip() for prediction in predictions]
             predictions = [
                 prediction[1:].strip() if prediction.startswith(":") else prediction for prediction in predictions
             ]
-
-            rich.print(predictions)
 
             guidelines = update_guidelines(
                 paraphrases=predictions,
