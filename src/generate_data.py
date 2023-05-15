@@ -137,6 +137,7 @@ def main(args):
     # We generate a new config for each train split and task, so we also parallelize over each split and task
     configs = []
     splits = ["train_file", "dev_file", "test_file"]
+    data_info = {}
     for config_file in config_files:
         with open(config_file, "rt") as f:
             config = json.load(f)
@@ -150,12 +151,25 @@ def main(args):
                             if other_split in new_config:
                                 new_config.pop(other_split)
                     new_config["tasks"] = [task]
+
+                    if config["dataset_name"] not in data_info:
+                        data_info[config["dataset_name"]] = {}
+
+                    if task not in data_info[config["dataset_name"]]:
+                        data_info[config["dataset_name"]][task] = {
+                            "train_file": False,
+                            "dev_file": False,
+                            "test_file": False,
+                        }
+                    data_info[config["dataset_name"]][task][split] = True
                     configs.append(new_config)
 
     generator_fn = partial(
         multicpu_generator,
         args,
     )
+
+    logging.warning(f"We will generate the following data: {json.dumps(data_info, indent=4)})")
 
     with mp.Pool(processes=min(os.cpu_count(), len(configs))) as pool:
         pool.starmap(generator_fn, enumerate(configs))
