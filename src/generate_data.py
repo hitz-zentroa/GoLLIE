@@ -10,7 +10,7 @@ from typing import Type
 
 from tqdm import tqdm
 
-import transformers
+import datasets
 
 
 def get_class(class_path: str) -> Type:
@@ -163,7 +163,7 @@ def main(args):
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
-    transformers.logging.set_verbosity_error()
+    datasets.logging.set_verbosity_error()
     parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
 
     parser.add_argument(
