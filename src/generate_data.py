@@ -156,9 +156,12 @@ def main(args):
     with mp.Pool(processes=min(os.cpu_count(), len(configs))) as pool:
         pool.starmap(generator_fn, enumerate(configs))
 
+    logging.basicConfig(level=logging.ERROR)
+    logging.info(f"Data saved to {os.path.abspath(args.output_dir)}")
+
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.WARNING)
+    logging.basicConfig(level=logging.ERROR)
     parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
 
     parser.add_argument(
