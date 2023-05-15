@@ -134,19 +134,22 @@ def main(args):
     os.makedirs(args.output_dir, exist_ok=True)
 
     config_files = args.configs
-    # We generate a new config for each train split, so we also parallelize over each split
+    # We generate a new config for each train split and task, so we also parallelize over each split and task
     configs = []
     splits = ["train_file", "dev_file", "test_file"]
     for config_file in config_files:
         with open(config_file, "rt") as f:
             config = json.load(f)
-            for file in splits:
+        tasks = config_file["tasks"]
+        for split in splits:
+            for task in tasks:
                 new_config = copy.deepcopy(config)
-                if file in new_config:
+                if split in new_config:
                     for other_split in splits:
-                        if other_split != file:
+                        if other_split != split:
                             if other_split in new_config:
                                 new_config.pop(other_split)
+                    new_config["tasks"] = [task]
                     configs.append(new_config)
 
     generator_fn = partial(
