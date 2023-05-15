@@ -148,10 +148,13 @@ def main(args):
                                 new_config.pop(other_split)
                     configs.append(new_config)
 
-    generator_fn = partial(multicpu_generator, args, list(range(len(configs))))
+    generator_fn = partial(
+        multicpu_generator,
+        args,
+    )
 
     with mp.Pool(processes=min(os.cpu_count(), len(configs))) as pool:
-        pool.map(generator_fn, configs)
+        pool.map(generator_fn, configs, list(range(len(configs))))
 
 
 if __name__ == "__main__":
