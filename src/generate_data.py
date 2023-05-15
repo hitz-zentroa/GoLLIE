@@ -20,7 +20,7 @@ def get_class(class_path: str) -> Type:
     return mod
 
 
-def multicpu_generator(args, config):
+def multicpu_generator(args, config, tqdm_position):
     dataloader_cls = get_class(config["dataloader_cls"])
     sampler_cls = get_class(config["sampler_cls"])
     seeds = config.get("seed", 0)
@@ -53,6 +53,7 @@ def multicpu_generator(args, config):
                 with open(os.path.join(args.output_dir, output_name), "w") as _file, tqdm(
                     total=len(dataloader),
                     desc=f"{config['dataset_name']}-{ie_task}-train-{seed}",
+                    position=tqdm_position,
                 ) as progress:
                     ids = []
                     for elem in sampler:
@@ -84,6 +85,7 @@ def multicpu_generator(args, config):
             with open(os.path.join(args.output_dir, output_name), "w") as _file, tqdm(
                 total=len(dataloader),
                 desc=f"{config['dataset_name']}-{task}-dev",
+                position=tqdm_position,
             ) as progress:
                 ids = []
                 for elem in sampler:
@@ -114,7 +116,8 @@ def multicpu_generator(args, config):
 
             with open(os.path.join(args.output_dir, output_name), "w") as _file, tqdm(
                 total=len(dataloader),
-                desc=f"{config['dataset_name']}-{task}-dev",
+                desc=f"{config['dataset_name']}-{task}-test",
+                position=tqdm_position,
             ) as progress:
                 ids = []
                 for elem in sampler:
@@ -145,7 +148,7 @@ def main(args):
                                 new_config.pop(other_split)
                     configs.append(new_config)
 
-    generator_fn = partial(multicpu_generator, args)
+    generator_fn = partial(multicpu_generator, args, list(range(len(configs))))
 
     with mp.Pool(processes=min(os.cpu_count(), len(configs))) as pool:
         pool.map(generator_fn, configs)
