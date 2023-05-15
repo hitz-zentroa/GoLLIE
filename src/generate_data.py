@@ -20,7 +20,7 @@ def get_class(class_path: str) -> Type:
     return mod
 
 
-def multicpu_generator(args, config, tqdm_position):
+def multicpu_generator(args, tqdm_position, config):
     dataloader_cls = get_class(config["dataloader_cls"])
     sampler_cls = get_class(config["sampler_cls"])
     seeds = config.get("seed", 0)
@@ -154,7 +154,7 @@ def main(args):
     )
 
     with mp.Pool(processes=min(os.cpu_count(), len(configs))) as pool:
-        pool.map(generator_fn, configs, list(range(len(configs))))
+        pool.starmap(generator_fn, enumerate(configs))
 
 
 if __name__ == "__main__":
