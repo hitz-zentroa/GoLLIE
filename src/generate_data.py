@@ -141,7 +141,7 @@ def main(args):
     for config_file in config_files:
         with open(config_file, "rt") as f:
             config = json.load(f)
-        tasks = config_file["tasks"]
+        tasks = config["tasks"]
         for split in splits:
             for task in tasks:
                 new_config = copy.deepcopy(config)
