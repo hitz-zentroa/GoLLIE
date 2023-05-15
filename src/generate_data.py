@@ -1,14 +1,14 @@
+import copy
 import json
 import logging
+import multiprocessing as mp
 import os
 from argparse import ArgumentParser
+from functools import partial
 from itertools import cycle
 from typing import Type
 
-from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
-import multiprocessing as mp
-from functools import partial
-import copy
+from tqdm import tqdm
 
 
 def get_class(class_path: str) -> Type:
@@ -50,21 +50,16 @@ def multicpu_generator(args, config):
                     logging.warning(f"Skipping {output_name} because it already exists.")
                     continue
 
-                with open(os.path.join(args.output_dir, output_name), "w") as _file, Progress(
-                    SpinnerColumn(),
-                    *Progress.get_default_columns(),
-                    TimeElapsedColumn(),
+                with open(os.path.join(args.output_dir, output_name), "w") as _file, tqdm(
+                    total=len(dataloader),
+                    desc=f"{config['dataset_name']}-{ie_task}-train-{seed}",
                 ) as progress:
-                    task = progress.add_task(
-                        f"[cyan]{config['dataset_name']}-{ie_task}-train-{seed}",
-                        total=len(dataloader),
-                    )
                     ids = []
                     for elem in sampler:
                         _file.write(f"{json.dumps(elem, ensure_ascii=False)}\n")
                         if ids != elem["ids"]:
                             ids = elem["ids"]
-                            progress.update(task, advance=len(ids))
+                            progress.update(len(ids))
 
                 logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
 
@@ -86,21 +81,16 @@ def multicpu_generator(args, config):
                 logging.warning(f"Skipping {output_name} because it already exists.")
                 continue
 
-            with open(os.path.join(args.output_dir, output_name), "w") as _file, Progress(
-                SpinnerColumn(),
-                *Progress.get_default_columns(),
-                TimeElapsedColumn(),
+            with open(os.path.join(args.output_dir, output_name), "w") as _file, tqdm(
+                total=len(dataloader),
+                desc=f"{config['dataset_name']}-{task}-dev",
             ) as progress:
-                task = progress.add_task(
-                    f"[cyan]{config['dataset_name']}-{task}-dev",
-                    total=len(dataloader),
-                )
                 ids = []
                 for elem in sampler:
                     _file.write(f"{json.dumps(elem, ensure_ascii=False)}\n")
                     if ids != elem["ids"]:
                         ids = elem["ids"]
-                        progress.update(task, advance=len(ids))
+                        progress.update(len(ids))
 
             logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
 
@@ -122,21 +112,16 @@ def multicpu_generator(args, config):
                 logging.warning(f"Skipping {output_name} because it already exists.")
                 continue
 
-            with open(os.path.join(args.output_dir, output_name), "w") as _file, Progress(
-                SpinnerColumn(),
-                *Progress.get_default_columns(),
-                TimeElapsedColumn(),
+            with open(os.path.join(args.output_dir, output_name), "w") as _file, tqdm(
+                total=len(dataloader),
+                desc=f"{config['dataset_name']}-{task}-dev",
             ) as progress:
-                task = progress.add_task(
-                    f"[cyan]{config['dataset_name']}-{task}-test",
-                    total=len(dataloader),
-                )
                 ids = []
                 for elem in sampler:
                     _file.write(f"{json.dumps(elem, ensure_ascii=False)}\n")
                     if ids != elem["ids"]:
                         ids = elem["ids"]
-                        progress.update(task, advance=len(ids))
+                        progress.update(len(ids))
 
             logging.info(f"Data saved to {os.path.abspath(os.path.join(args.output_dir, output_name))}")
 
