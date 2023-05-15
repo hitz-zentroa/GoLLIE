@@ -30,7 +30,7 @@ def main(args):
         if isinstance(seeds, int):
             seeds = [seeds]
         label_noise = config.get("label_noise_prob", 0.0)
-        if isinstance(label_noise, int):
+        if isinstance(label_noise, float):
             label_noise = cycle([label_noise])
 
         if "train_file" in config:
