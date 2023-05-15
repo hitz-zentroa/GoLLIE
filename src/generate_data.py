@@ -8,9 +8,8 @@ from functools import partial
 from itertools import cycle
 from typing import Type
 
-from tqdm import tqdm
-
 import datasets
+from tqdm import tqdm
 
 
 def get_class(class_path: str) -> Type:
