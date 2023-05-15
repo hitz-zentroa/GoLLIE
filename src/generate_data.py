@@ -163,6 +163,7 @@ def main(args):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.WARNING)
     datasets.logging.set_verbosity_error()
+    datasets.logging.disable_progress_bar()
     parser = ArgumentParser("generate_data", description="Generate Code formatted data.")
 
     parser.add_argument(
