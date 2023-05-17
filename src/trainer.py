@@ -197,12 +197,6 @@ class CollieTrainer(Seq2SeqTrainer):
 
         self.first_train_batch = True
 
-        if tokenizer:
-            # We want the tokenizer to decode the first training batch for debugging purposes
-            self.tokenizer = tokenizer
-        else:
-            self.tokenizer = None
-
         super().__init__(
             model=model,
             args=args,
@@ -220,6 +214,12 @@ class CollieTrainer(Seq2SeqTrainer):
         # _prev_progress_callback = self.pop_callback(ProgressCallback)
         # if _prev_progress_callback:
         #    self.add_callback(RichProgressCallback)
+
+        if tokenizer is not None:
+            # We want the tokenizer to decode the first training batch for debugging purposes
+            self.tokenizer = tokenizer
+        else:
+            self.tokenizer = None
 
     def compute_loss(self, model, inputs, return_outputs=False):
         """
@@ -248,16 +248,16 @@ class CollieTrainer(Seq2SeqTrainer):
             if self.tokenizer is not None:
                 print(self.tokenizer.batch_decode(input_ids))
             else:
-                print(input_ids)
+                print(input_ids.tolist())
             print("-- attention_mask --")
-            print(attention_mask)
+            print(attention_mask.tolist())
             print("-- labels --")
             if self.tokenizer is not None:
                 print(self.tokenizer.batch_decode(labels.clone().detach().cpu()))
             else:
-                print(labels)
+                print(labels.tolist())
             print("-- loss_weight_mask --")
-            print(loss_weight_mask.clone().detach().cpu())
+            print(loss_weight_mask.clone().detach().cpu().tolist())
             print()
 
         outputs = model(**inputs)
