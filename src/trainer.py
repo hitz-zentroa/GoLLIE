@@ -240,24 +240,28 @@ class CollieTrainer(Seq2SeqTrainer):
         # Print first batch of training data for debugging
         if self.first_train_batch:
             self.first_train_batch = False
-            input_ids = inputs["input_ids"].clone().detach().cpu()
-            attention_mask = inputs["attention_mask"].clone().detach().cpu()
+            print_input_ids = inputs["input_ids"][:8].clone().detach().cpu()
+            print_attention_mask = inputs["attention_mask"][:8].clone().detach().cpu()
+            print_labels = labels[:8].clone().detach().cpu()
+            print_loss_weight_mask = loss_weight_mask[:8].clone().detach().cpu()
 
             print("*** First batch of training data ***")
             print("-- input_ids --")
             if self.tokenizer is not None:
-                print(self.tokenizer.batch_decode(input_ids))
+                print_input_ids[print_input_ids == -100] = self.tokenizer.pad_token_id
+                print(self.tokenizer.batch_decode(print_input_ids))
             else:
-                print(input_ids.tolist())
+                print(print_input_ids.tolist())
             print("-- attention_mask --")
-            print(attention_mask.tolist())
+            print(print_attention_mask.tolist())
             print("-- labels --")
             if self.tokenizer is not None:
-                print(self.tokenizer.batch_decode(labels.clone().detach().cpu()))
+                print_labels[print_labels == -100] = self.tokenizer.pad_token_id
+                print(self.tokenizer.batch_decode(print_labels))
             else:
-                print(labels.tolist())
+                print(print_labels[:8].tolist())
             print("-- loss_weight_mask --")
-            print(loss_weight_mask.clone().detach().cpu().tolist())
+            print(print_loss_weight_mask.tolist())
             print()
 
         outputs = model(**inputs)
