@@ -97,6 +97,7 @@ def train_collie(
 
     trainer = CollieTrainer(
         model=model,
+        tokenizer=tokenizer,
         train_dataset=train_dataset,
         eval_dataset=dev_datasets,
         args=training_args,

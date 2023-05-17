@@ -195,13 +195,21 @@ class CollieTrainer(Seq2SeqTrainer):
         else:
             callbacks.append(RotateDatasetCallback())
 
+        self.first_train_batch = True
+
+        if tokenizer:
+            # We want the tokenizer to decode the first training batch for debugging purposes
+            self.tokenizer = tokenizer
+        else:
+            self.tokenizer = None
+
         super().__init__(
             model=model,
             args=args,
             data_collator=data_collator,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
-            tokenizer=tokenizer,
+            tokenizer=None,  # We don't want to save the tokenizer with the model or use it for padding
             model_init=model_init,
             compute_metrics=compute_metrics,
             callbacks=callbacks,
@@ -228,6 +236,29 @@ class CollieTrainer(Seq2SeqTrainer):
             loss_weight_mask = inputs.pop("loss_weight_mask")
         else:
             raise ValueError("You should supply a loss_weight_mask key to compute the loss")
+
+        # Print first batch of training data for debugging
+        if self.first_train_batch:
+            self.first_train_batch = False
+            input_ids = inputs["input_ids"].clone().detach().cpu()
+            attention_mask = inputs["attention_mask"].clone().detach().cpu()
+
+            print("*** First batch of training data ***")
+            print("-- input_ids --")
+            if self.tokenizer is not None:
+                print(self.tokenizer.batch_decode(input_ids))
+            else:
+                print(input_ids)
+            print("-- attention_mask --")
+            print(attention_mask)
+            print("-- labels --")
+            if self.tokenizer is not None:
+                print(self.tokenizer.batch_decode(labels.clone().detach().cpu()))
+            else:
+                print(labels)
+            print("-- loss_weight_mask --")
+            print(loss_weight_mask.clone().detach().cpu())
+            print()
 
         outputs = model(**inputs)
 
