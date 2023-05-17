@@ -241,7 +241,7 @@ class Event:
     mention: str
 
     def __eq__(self: Event, other: Event) -> bool:
-        return type(self) == type(other) and self.mention == other.mention
+        return type(self) == type(other) and self.key() == other.key()
 
     def __and__(self: Event, other: Event) -> Event:
         attrs = {
@@ -353,6 +353,119 @@ class Event:
 
         pos = text.lower().index(self.mention.lower().strip())
         return (pos, pos + len(self.mention))
+
+
+@dataclass
+class Template:
+    """A general class to represent templates."""
+
+    query: str
+
+    def __eq__(self: Template, other: Template) -> bool:
+        return type(self) == type(other) and self.key() == other.key()
+
+    def _get_attributes(self) -> Dict[str, Any]:
+        """Returns the non-positional attributes of a Template instance."""
+        return {
+            attr: []
+            for attr, values in inspect.getmembers(self)
+            if not (attr.startswith("__") or attr in ["query"] or inspect.ismethod(values))
+        }
+
+    def _get_pos_attributes(self: Template) -> List[Any]:
+        """Return the positional attributes of a Template instance."""
+        return [getattr(self, attr) for attr in ["query"]]
+
+    def __and__(self: Template, other: Template) -> Template:
+        attrs = self._get_attributes()
+        if self == other:
+            for attr in attrs.keys():
+                self_values = getattr(self, attr)
+                other_values = deepcopy(getattr(other, attr))
+                for value in self_values:
+                    if value in other_values:
+                        attrs[attr].append(value)
+                        other_values.pop(other_values.index(value))
+
+        pos_args = self._get_pos_attributes()
+
+        return type(self)(*pos_args, **attrs)
+
+    def __len__(self: Template) -> int:
+        attrs = self._get_attributes()
+        _len = 0
+        for values in attrs.values():
+            _len += len(values)
+
+        return _len
+
+    def key(self: Template) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        if self.query:
+            return self.query.lower()
+
+        return None
+
+    def exists_in(self: Template, text: str) -> Template:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
+        text = text.lower()
+        # Only return None if the key is defined and is not in the text
+        if self.key() and self.key() not in text:
+            return None
+
+        attrs = self._get_attributes()
+        for attr in attrs.keys():
+            self_values = getattr(self, attr)
+            for value in self_values:
+                if value.lower() in text:
+                    attrs[attr].append(value)
+
+        pos_args = self._get_pos_attributes()
+
+        return type(self)(*pos_args, **attrs)
+
+    def index(self, text: str) -> int:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `int`:
+                The position of the span in the text.
+        """
+        # Return len(text) if there is no mention defined
+        if not self.key():
+            return (len(text), len(text))
+
+        if not self.exists_in(text):
+            raise IndexError("The span is not in text.")
+
+        pos = text.lower().index(self.key().strip())
+        return (pos, pos + len(self.key()))
 
 
 class AnnotationList(list):
