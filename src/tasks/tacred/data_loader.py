@@ -2,6 +2,7 @@ import json
 from collections import defaultdict
 from typing import Tuple, Union
 
+from src.tasks.tacred.guidelines import GUIDELINES
 from src.tasks.tacred.prompts import (
     RELATION_DEFINITIONS,
     OrganizationAlternateName,
@@ -239,5 +240,6 @@ class TACREDSampler(Sampler):
             scorer=scorer,
             task_definitions=RELATION_DEFINITIONS,
             task_target="labels",
+            definitions=GUIDELINES,
             **kwargs,
         )

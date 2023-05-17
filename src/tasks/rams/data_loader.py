@@ -2,6 +2,7 @@ import inspect
 import json
 from typing import Tuple, Union
 
+from src.tasks.rams.guidelines import GUIDELINES
 from src.tasks.rams.prompts import (
     EVENT_DEFINITIONS,
     AccidentCrash,
@@ -636,5 +637,6 @@ class RAMSSampler(Sampler):
             scorer=scorer,
             task_definitions=EVENT_DEFINITIONS,
             task_target="labels",
+            definitions=GUIDELINES,
             **kwargs,
         )

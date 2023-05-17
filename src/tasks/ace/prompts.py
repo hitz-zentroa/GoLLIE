@@ -12,73 +12,49 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-entities-guideli
 
 @dataclass
 class Person(Entity):
-    """Each distinct person or set of people mentioned in a document refers
-    to an entity of type Person. For example, people may be specified by name
-    ("John Smith"), occupation ("the butcher"), family relation ("dad"),
-    pronoun ("he"), etc., or by some combination of these.
-    """
+    """{ace_person}"""
 
     span: str
 
 
 @dataclass
 class Organization(Entity):
-    """Each organization or set of organizations mentioned in a document gives
-    rise to an entity of type Organization. Typical examples are businesses,
-    government units, sports teams, and formally organized music groups.
-    """
+    """{ace_organization}"""
 
     span: str
 
 
 @dataclass
 class GPE(Entity):
-    """Geo-Political Entities are composite entities comprised of a population,
-    a government, a physical location, and a nation (or province, state,
-    country, city, etc.).
-    """
+    """{ace_gpe}"""
 
     span: str
 
 
 @dataclass
 class Location(Entity):
-    """Places defined on a geographical or astronomical basis which are
-    mentioned in a document and do not constitute a political entity give rise
-    to Location entities. These include, for example, the solar system, Mars,
-    the Hudson River, Mt. Everest, and Death Valley.
-    """
+    """{ace_location}"""
 
     span: str
 
 
 @dataclass
 class Facility(Entity):
-    """A facility is a functional, primarily man-made structure. These include
-    buildings and similar facilities designed for human habitation, such as
-    houses, factories, stadiums, office buildings, ... Roughly speaking,
-    facilities are artifacts falling under the domains of architecture and
-    civil engineering.
-    """
+    """{ace_facility}"""
 
     span: str
 
 
 @dataclass
 class Weapon(Entity):
-    """A Weapon entity refers to instruments that can be used to deal physical damage,
-    destroy something or kill someone. For example: 'bomb', 'm-16s', 'missile', ...
-    """
+    """{ace_weapon}"""
 
     span: str
 
 
 @dataclass
 class Vehicle(Entity):
-    """A Vehicle entity refers to vehicles that are used for transportation. The
-    vehicles can transport either persons or artifacts. For example: 'car', 'plane',
-    'cabin', ...
-    """
+    """{ace_vehicle}"""
 
     span: str
 
@@ -103,55 +79,42 @@ annotated as time expressions or value/numeric data.
 
 @dataclass
 class Time(Value):
-    """A Time value refers to a specific time frame. Usually known as time
-    expressions. For example: '4 years', 'today', 'December', 'future', ...
-    """
+    """{ace_time}"""
 
     span: str
 
 
 @dataclass
 class Numeric(Value):
-    """A Numeric value refers to relevant numbers, amounts, etc. For example:
-    'billions of dollars', '50 percent', '100%', ...
-    """
+    """{ace_numeric}"""
 
     span: str
 
 
 @dataclass
 class JobTitle(Value):
-    """A JobTitle value refers to the name of the job or position of a Person
-    entity in a Organization. For example: 'co-chief executive', 'move coordinator',
-    'interim ED', ...
-    """
+    """{ace_jobtitle}"""
 
     span: str
 
 
 @dataclass
 class Crime(Value):
-    """A Crime value refers to the specific reason (crime) that a Person entity can
-    be judged or sentenced for. For example: 'raping', 'murder', 'drug', ...
-    """
+    """{ace_crime}"""
 
     span: str
 
 
 @dataclass
 class Sentence(Value):
-    """A Sentence value refers to sentences decided by a court or judge for a
-    specific crime. For example: '124 years in prison', 'a sentence', 'death'...
-    """
+    """{ace_sentence}"""
 
     span: str
 
 
 @dataclass
 class ContactInfo(Value):
-    """A ContactInfo value refers to contact information values such as telephone
-    numbers, emails, addresses. For example: 'mich...@sumptionandwyland.com', ...
-    """
+    """{ace_contactinfo}"""
 
     span: str
 
@@ -175,10 +138,7 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-relations-guidel
 
 @dataclass
 class PhysicalRelation(Relation):
-    """The Physical Relation captures the physical location relation of entities such as:
-    a Person entity located in a Facility, Location or GPE; or two entities that are near,
-    but neither entity is a part of the other or located in/at the other.
-    """
+    """{ace_physicalrelation}"""
 
     arg1: str
     arg2: str
@@ -186,11 +146,7 @@ class PhysicalRelation(Relation):
 
 @dataclass
 class PartWholeRelation(Relation):
-    """The PartWhole Relation refers to the semantic relation between two entities that
-    are parts of a larger whole or vice versa. For example, the relation between a
-    country and its states, or between a company and its subsidiaries, are instances of
-    PartWhole relations.
-    """
+    """{ace_partwholerelation}"""
 
     arg1: str
     arg2: str
@@ -198,10 +154,7 @@ class PartWholeRelation(Relation):
 
 @dataclass
 class PersonalSocialRelation(Relation):
-    """The Personal-Social Relation describe the relationship between people. Both arguments
-    must be entities of type Person. Please note: The arguments of these Relations are
-    not ordered. The Relations are symmetric.
-    """
+    """{ace_personalsocialrelation}"""
 
     arg1: str
     arg2: str
@@ -209,11 +162,7 @@ class PersonalSocialRelation(Relation):
 
 @dataclass
 class OrganizationAffiliationRelation(Relation):
-    """The OrganizationAffiliation Relation describes the relations between a Person (or
-    other Organizations) and a related Organization. This relation includes: employment,
-    ownership, founder, student or alumn, sport affiliation, inverstor or shareholder
-    and membership relations.
-    """
+    """{ace_organizationaffiliationrelation}"""
 
     arg1: str
     arg2: str
@@ -221,11 +170,7 @@ class OrganizationAffiliationRelation(Relation):
 
 @dataclass
 class AgentArtifactRelationRelation(Relation):
-    """The AgentArtifact Relation applies when an agent owns an artifact, has possession
-    of an artifact, uses an artifact, or caused an artifact to come into being. Note:
-    if the `arg2` is an Organization, use OrganizationAffiliation when `arg1` is a Person
-    or PartWhole when `arg1` is an Organization or GPE.
-    """
+    """{ace_agentartifactrelationrelation}"""
 
     arg1: str
     arg2: str
@@ -233,10 +178,7 @@ class AgentArtifactRelationRelation(Relation):
 
 @dataclass
 class GenAffiliationRelation(Relation):
-    """The GenAffiliation Relation describes the citizen, resident, religion or ethnicity
-    relation when the `arg1` is a Person. When the `arg1` is an Organization, the relation
-    describes where it is located, based or does business.
-    """
+    """{ace_genaffiliationrelation}"""
 
     arg1: str
     arg2: str
@@ -254,10 +196,7 @@ COARSE_RELATION_DEFINITIONS: List[Relation] = [
 
 @dataclass
 class Located(PhysicalRelation):
-    """The Located relation captures the physical location of an entity. This
-    relation is restricted to people. In other words, `arg1` in Located
-    relations can only be occupied by mentions of Entities of type Person.
-    """
+    """{ace_located}"""
 
     arg1: str
     arg2: str
@@ -265,9 +204,7 @@ class Located(PhysicalRelation):
 
 @dataclass
 class Near(PhysicalRelation):
-    """Near indicates that an entity is explicitly near another entity, but
-    neither entity is a part of the other or located in/at the other.
-    """
+    """{ace_near}"""
 
     arg1: str
     arg2: str
@@ -275,9 +212,7 @@ class Near(PhysicalRelation):
 
 @dataclass
 class Geographical(PartWholeRelation):
-    """The Geographical relation captures the location of a Facility, Location,
-    or GPE in or at or as a part of another Facility, Location, or GPE.
-    """
+    """{ace_geographical}"""
 
     arg1: str
     arg2: str
@@ -285,9 +220,7 @@ class Geographical(PartWholeRelation):
 
 @dataclass
 class Subsidiary(PartWholeRelation):
-    """Subsidiary captures the ownership, administrative, and other hierarchical
-    relationships between organizations and between organizations and GPEs.
-    """
+    """{ace_subsidiary}"""
 
     arg1: str
     arg2: str
@@ -295,9 +228,7 @@ class Subsidiary(PartWholeRelation):
 
 @dataclass
 class Business(PersonalSocialRelation):
-    """The Business Relation captures the connection between two entities in any
-    professional relationship. Both arguments must be entities of type Person.
-    """
+    """{ace_business}"""
 
     arg1: str
     arg2: str
@@ -305,10 +236,7 @@ class Business(PersonalSocialRelation):
 
 @dataclass
 class Family(PersonalSocialRelation):
-    """The Family Relation captures the connection between one entity and another
-    with which it is in any familial relationship. Both arguments must be entities
-    of type Person.
-    """
+    """{ace_family}"""
 
     arg1: str
     arg2: str
@@ -316,13 +244,7 @@ class Family(PersonalSocialRelation):
 
 @dataclass
 class LastingPersonal(PersonalSocialRelation):
-    """Lasting-Personal captures relationships that meet the following conditions:
-    (1) The relationship must involve personal contact (or a reasonable assumption
-    thereof).
-    (2) There must be some indication or expectation that the relationship exists
-    outside of a particular cited interaction.
-    Both arguments must be entities of type Person.
-    """
+    """{ace_lastingpersonal}"""
 
     arg1: str
     arg2: str
@@ -330,10 +252,7 @@ class LastingPersonal(PersonalSocialRelation):
 
 @dataclass
 class Employment(OrganizationAffiliationRelation):
-    """Employment captures the relationship between Persons and their employers.
-    This Relation is only taggable when it can be reasonably assumed that the
-    Person is paid by the ORG or GPE.
-    """
+    """{ace_employment}"""
 
     arg1: str
     arg2: str
@@ -341,10 +260,7 @@ class Employment(OrganizationAffiliationRelation):
 
 @dataclass
 class Ownership(OrganizationAffiliationRelation):
-    """Ownership captures the relationship between a Person and an Organization
-    owned by that Person. If the `arg2` is not an Organization, use the
-    Agent-Artifact relation.
-    """
+    """{ace_ownership}"""
 
     arg1: str
     arg2: str
@@ -352,9 +268,7 @@ class Ownership(OrganizationAffiliationRelation):
 
 @dataclass
 class Founder(OrganizationAffiliationRelation):
-    """Founder captures the relationship between an agent (Person, Organization,
-    or GPE) and an Organization or GPE established or set up by that agent.
-    """
+    """{ace_founder}"""
 
     arg1: str
     arg2: str
@@ -362,9 +276,7 @@ class Founder(OrganizationAffiliationRelation):
 
 @dataclass
 class StudentAlum(OrganizationAffiliationRelation):
-    """StudentAlum captures the relationship between a Person and an educational
-    institution the Person attends or attended.
-    """
+    """{ace_studentalum}"""
 
     arg1: str
     arg2: str
@@ -372,10 +284,7 @@ class StudentAlum(OrganizationAffiliationRelation):
 
 @dataclass
 class SportsAffiliation(OrganizationAffiliationRelation):
-    """Sports-Affiliation captures the relationship between a player, coach, manager,
-    or assistant and his or her affiliation with a sports organization (including
-    sports leagues or divisions as well as individual sports teams).
-    """
+    """{ace_sportsaffiliation}"""
 
     arg1: str
     arg2: str
@@ -383,11 +292,7 @@ class SportsAffiliation(OrganizationAffiliationRelation):
 
 @dataclass
 class InvestorShareholder(OrganizationAffiliationRelation):
-    """InvestorShareholder captures the relationship between an agent (Person,
-    Organization, or GPE) and an Organization in which the agent has invested or in
-    which the agent owns shares/stock. Please note that agents may invest in
-    GPEs.
-    """
+    """{ace_investorshareholder}"""
 
     arg1: str
     arg2: str
@@ -395,10 +300,7 @@ class InvestorShareholder(OrganizationAffiliationRelation):
 
 @dataclass
 class Membership(OrganizationAffiliationRelation):
-    """Membership captures the relationship between an agent and an organization of
-    which the agent is a member. Organizations and GPEs can be members of other
-    Organizations (such as NATO or the UN).
-    """
+    """{ace_membership}"""
 
     arg1: str
     arg2: str
@@ -406,11 +308,7 @@ class Membership(OrganizationAffiliationRelation):
 
 @dataclass
 class UserOwnerInventorManufacturer(AgentArtifactRelationRelation):
-    """This Relation applies when an agent owns an artifact, has possession of an
-    artifact, uses an artifact, or caused an artifact to come into being. Note:
-    if `arg2` is an Organization, use Ownership relation (arg1=PER) or Subsidiary
-    relation (arg1=ORG or GPE).
-    """
+    """{ace_userownerinventormanufacturer}"""
 
     arg1: str
     arg2: str
@@ -418,11 +316,7 @@ class UserOwnerInventorManufacturer(AgentArtifactRelationRelation):
 
 @dataclass
 class CitizenResidentReligionEthnicity(GenAffiliationRelation):
-    """CitizenResidentReligionEthnicity describes the relation between a Person
-    entity and (1) the GPE in which they have citizenship, (2) the GPE or Location
-    in which they live, the religious Organization or Person entity with which they
-    have affiliation and (3) the GPE or PER entity that indicates their ethnicity.
-    """
+    """{ace_citizenresidentreligionethnicity}"""
 
     arg1: str
     arg2: str
@@ -430,10 +324,7 @@ class CitizenResidentReligionEthnicity(GenAffiliationRelation):
 
 @dataclass
 class OrgLocationOrigin(GenAffiliationRelation):
-    """OrgLocationOrigin captures the relationship between an organization and the
-    Location or GPE where it is located, based, or does business. Note: Subsidiary
-    trumps this relation for government organizations.
-    """
+    """{ace_orglocationorigin}"""
 
     arg1: str
     arg2: str
@@ -475,81 +366,56 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-events-guideline
 
 @dataclass
 class LifeEvent(Event):
-    """A LifeEvent occurs whenever a Person Entity borns, dies, gets married, divorced
-    or gets injured.
-    """
+    """{ace_lifeevent}"""
 
     mention: str
 
 
 @dataclass
 class MovementEvent(Event):
-    """A TransportEvent occurs whenever an Artifact (Weapon or Vehicle) or a
-    Person is moved from one Place (GPE, Facility, Location) to another. This
-    event requires the explicit mention of the Artifact or Person.
-    """
+    """{ace_movementevent}"""
 
     mention: str
 
 
 @dataclass
 class TransactionEvent(Event):
-    """A TransactionEvent refers to buying, selling, loaning, borrowing, giving, or
-    receving of Artifacts or Organizations; or giving, receiving, borrowing, or
-    lending Money.
-    """
+    """{ace_transactionevent}"""
 
     mention: str
 
 
 @dataclass
 class BusinessEvent(Event):
-    """A BusinessEvent refers to actions related to Organizations such as: creating,
-    merging, declaring bankruptcy or ending organizations (including government
-    agencies).
-    """
+    """{ace_businessevent}"""
 
     mention: str
 
 
 @dataclass
 class ConflictEvent(Event):
-    """A ConflictEvent refers to either violent physical acts causing harm or damage,
-    but are not covered by Life events (conflicts, clashes, fighting, gunfire, ...) or
-    demonstrations (protests, sit-ins, strikes, riots, ...).
-    """
+    """{ace_conflictevent}"""
 
     mention: str
 
 
 @dataclass
 class ContactEvent(Event):
-    """A ContactEvent occurs whenever two or more entities (persons or organization's
-    representatives) come together at a single location and interact with one another
-    face-to-face or directly enages in discussion via written or telephone communication.
-    """
+    """{ace_contactevent}"""
 
     mention: str
 
 
 @dataclass
 class PersonellEvent(Event):
-    """A PersonellEvent occurs when a Person entity changes its job position (JobTitle
-    entity) with respect an Organization entity. It includes when a person starts
-    working, ends working, changes offices within, gets nominated or is elected for a
-    position in a Organization.
-    """
+    """{ace_personellevent}"""
 
     mention: str
 
 
 @dataclass
 class JusticeEvent(Event):
-    """A JusticeEvent refers to any judicial action such as: arresting, jailing,
-    releasing, granting parole, trial starting, hearing, charging, indicting, suing,
-    convicting, sentencing, fine, executing, extraditing, adquiting, appealing or
-    pardoning a Person entity.
-    """
+    """{ace_justiceevent}"""
 
     mention: str
 
@@ -578,9 +444,7 @@ class BeBorn(LifeEvent):
 
 @dataclass
 class Marry(LifeEvent):
-    """Marry Events are official Events, where two people are married under the
-    legal definition.
-    """
+    """{ace_marry}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The people who are married
@@ -590,9 +454,7 @@ class Marry(LifeEvent):
 
 @dataclass
 class Divorce(LifeEvent):
-    """A Divorce Event occurs whenever two people are officially divorced under the
-    legal definition of divorce. We do not include separations or church annulments.
-    """
+    """{ace_divorce}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The people who are divorced
@@ -602,9 +464,7 @@ class Divorce(LifeEvent):
 
 @dataclass
 class Injure(LifeEvent):
-    """An Injure Event occurs whenever a Person Entity experiences physical harm.
-    Injure Events can be accidental, intentional or self-inflicted.
-    """
+    """{ace_injure}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     agent: List[str]  # The attacking agent / The one that enacts the harm
@@ -616,9 +476,7 @@ class Injure(LifeEvent):
 
 @dataclass
 class Die(LifeEvent):
-    """A Die Event occurs whenever the life of a Person Entity ends. Die Events
-    can be accidental, intentional or self-inflicted
-    """
+    """{ace_die}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     agent: List[str]  # (Optional) The attacking agent / The killer
@@ -630,9 +488,7 @@ class Die(LifeEvent):
 
 @dataclass
 class Transport(MovementEvent):
-    """A Transport Event occurs whenever an Artifact (Weapon or Vehicle) or a
-    Person is moved from one Place (GPE, Facility, Location) to another.
-    """
+    """{ace_transport}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     agent: List[str]  # The agent responsible for the transport Event
@@ -646,9 +502,7 @@ class Transport(MovementEvent):
 
 @dataclass
 class TransferOwnership(TransactionEvent):
-    """TransferOwnership Events refer to the buying, selling, loaning,
-    borrowing, giving, or receiving of artifacts or organizations.
-    """
+    """{ace_transferownership}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     buyer: List[str]  # The buying agent
@@ -662,12 +516,7 @@ class TransferOwnership(TransactionEvent):
 
 @dataclass
 class TransferMoney(TransactionEvent):
-    """TransferMoney Events refer to the giving, receiving, borrowing, or
-    lending money when it is not in the context of purchasing something. The
-    canonical examples are: (1) people giving money to organizations (and getting
-    nothing tangible in return); and (2) organizations lending money to people or
-    other orgs.
-    """
+    """{ace_transfermoney}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     giver: List[str]  # The donating agent
@@ -680,7 +529,7 @@ class TransferMoney(TransactionEvent):
 
 @dataclass
 class StartOrg(BusinessEvent):
-    """A StartOrg Event occurs whenever a new Organization is created."""
+    """{ace_startorg}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     agent: List[str]  # The agent responsible for the StattOrg Event (the founder)
@@ -691,11 +540,7 @@ class StartOrg(BusinessEvent):
 
 @dataclass
 class MergeOrg(BusinessEvent):
-    """A MergeOrg Event occurs whenever two or more Organization Entities
-    come together to form a new Organization Entity. This Event applies to any
-    kind of Organization, including government agencies. It also includes joint
-    venture.
-    """
+    """{ace_mergeorg}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     org: List[str]  # The organization(s) that are merged
@@ -705,10 +550,7 @@ class MergeOrg(BusinessEvent):
 
 @dataclass
 class DeclareBankruptcy(BusinessEvent):
-    """A DeclareBankruptcy Event will occur whenever an Entity officially
-    requests legal protection from debt collection due to an extremely negative
-    balance sheet.
-    """
+    """{ace_declarebankruptcy}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     org: List[str]  # The Organization declaring bankruptcy
@@ -718,9 +560,7 @@ class DeclareBankruptcy(BusinessEvent):
 
 @dataclass
 class EndOrg(BusinessEvent):
-    """An EndOrg Event occurs whenever an Organization ceases to exist (in
-    other words 'goes out of business').
-    """
+    """{ace_endorg}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     org: List[str]  # The Organization that is ended
@@ -730,10 +570,7 @@ class EndOrg(BusinessEvent):
 
 @dataclass
 class Attack(ConflictEvent):
-    """An Attack Event is defined as a violent physical act causing harm or damage.
-    Attack Events include any such Event not covered by the Injure or Die
-    subtypes, including Events where there is no stated agent.
-    """
+    """{ace_attack}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     attacker: List[str]  # The attacking/instigating agent
@@ -745,11 +582,7 @@ class Attack(ConflictEvent):
 
 @dataclass
 class Demonstrate(ConflictEvent):
-    """A Demonstrate Event occurs whenever a large number of people come
-    together in a public area to protest or demand some sort of official action.
-    Demonstrate Events include, but are not limited to, protests, sit-ins, strikes,
-    and riots.
-    """
+    """{ace_demonstrate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     entity: List[str]  # The demonstrating agent
@@ -759,11 +592,7 @@ class Demonstrate(ConflictEvent):
 
 @dataclass
 class Meet(ContactEvent):
-    """A Meet Event occurs whenever two or more Entities come together at a single
-    location and interact with one another face-to-face. Meet Events include talks,
-    summits, conferences, meetings, visits, and any other Event where two or more
-    parties get together at some location.
-    """
+    """{ace_meet}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     entity: List[str]  # The agents who are meeting
@@ -773,11 +602,7 @@ class Meet(ContactEvent):
 
 @dataclass
 class PhoneWrite(ContactEvent):
-    """A PhoneWrite Event occurs when two or more people directly engage in
-    discussion which does not take place 'face-to-face'. To make this Event less
-    open-ended, we limit it to written or telephone communication where at least two
-    parties are specified.
-    """
+    """{ace_phonewrite}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     entity: List[str]  # The communicating agents
@@ -786,10 +611,7 @@ class PhoneWrite(ContactEvent):
 
 @dataclass
 class StartPosition(PersonellEvent):
-    """A StartPosition Event occurs whenever a Person Entity begins working
-    for (or changes offices within) an Organization or GPE. This includes
-    government officials starting their terms, whether elected or appointed.
-    """
+    """{ace_startposition}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The employee
@@ -801,9 +623,7 @@ class StartPosition(PersonellEvent):
 
 @dataclass
 class EndPosition(PersonellEvent):
-    """An EndPosition Event occurs whenever a Person Entity stops working for
-    (or changes offices within) an Organization or GPE.
-    """
+    """{ace_endposition}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The employee
@@ -815,9 +635,7 @@ class EndPosition(PersonellEvent):
 
 @dataclass
 class Nominate(PersonellEvent):
-    """A Nominate Event occurs whenever a Person is proposed for a StartPosition
-    Event by the appropriate Person, through official channels.
-    """
+    """{ace_nominate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person(s) nominated
@@ -829,9 +647,7 @@ class Nominate(PersonellEvent):
 
 @dataclass
 class Elect(PersonellEvent):
-    """An Elect Event occurs whenever a candidate wins an election designed to
-    determine the Person argument of a StartPosition Event.
-    """
+    """{ace_elect}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person elected
@@ -843,9 +659,7 @@ class Elect(PersonellEvent):
 
 @dataclass
 class ArrestJail(JusticeEvent):
-    """A Jail Event occurs whenever the movement of a Person is constrained by a
-    state actor (a GPE, its Organization subparts, or its Person representatives).
-    """
+    """{ace_arrestjail}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person who is jailed or arrested
@@ -857,9 +671,7 @@ class ArrestJail(JusticeEvent):
 
 @dataclass
 class ReleaseParole(JusticeEvent):
-    """A Release Event occurs whenever a state actor (GPE, Organization
-    subpart, or Person representative) ends its custody of a Person Entity.
-    """
+    """{ace_releaseparole}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person who is released
@@ -871,10 +683,7 @@ class ReleaseParole(JusticeEvent):
 
 @dataclass
 class TrialHearing(JusticeEvent):
-    """A Trial Event occurs whenever a court proceeding has been initiated for the
-    purposes of determining the guilt or innocence of a Person, Organization
-    or GPE accused of committing a crime.
-    """
+    """{ace_trialhearing}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The agent on trial
@@ -887,10 +696,7 @@ class TrialHearing(JusticeEvent):
 
 @dataclass
 class ChargeIndict(JusticeEvent):
-    """A Charge Event occurs whenever a Person, Organization or GPE is
-    accused of a crime by a state actor (GPE, an Organization subpart of a GPE
-    or a Person representing a GPE).
-    """
+    """{ace_chargeindict}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The agent that is indicted
@@ -903,10 +709,7 @@ class ChargeIndict(JusticeEvent):
 
 @dataclass
 class Sue(JusticeEvent):
-    """A Sue Event occurs whenever a court proceeding has been initiated for the
-    purposes of determining the liability of a Person, Organization or GPE
-    accused of committing a crime or neglecting a commitment.
-    """
+    """{ace_sue}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     plaintiff: List[str]  # The suing agent
@@ -919,11 +722,7 @@ class Sue(JusticeEvent):
 
 @dataclass
 class Convict(JusticeEvent):
-    """A Convict Event occurs whenever a Try Event ends with a successful
-    prosecution of the Defendant. In other words, a Person,
-    Organization or GPE Entity is convicted whenever that Entity has been found
-    guilty of a Crime.
-    """
+    """{ace_convict}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The convicted agent(s)
@@ -935,10 +734,7 @@ class Convict(JusticeEvent):
 
 @dataclass
 class SentenceAct(JusticeEvent):
-    """A SentenceAct Event takes place whenever the punishment (particularly
-    incarceration) for the Defendant of a Try Event is issued by a state
-    actor (a GPE, an Organization subpart or a Person representing them)
-    """
+    """{ace_sentenceact}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The agent who is sentenced
@@ -951,10 +747,7 @@ class SentenceAct(JusticeEvent):
 
 @dataclass
 class Fine(JusticeEvent):
-    """A Fine Event takes place whenever a state actor issues a financial punishment
-    to a GPE, Person or Organization Entity, typically as a result of court
-    proceedings.
-    """
+    """{ace_fine}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     entity: List[str]  # The Entity that was fined
@@ -967,9 +760,7 @@ class Fine(JusticeEvent):
 
 @dataclass
 class Execute(JusticeEvent):
-    """An Execute Event occurs whenever the life of a Person is taken by a state
-    actor (a GPE, its Organization subparts, or Person representatives).
-    """
+    """{ace_execute}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     person: List[str]  # The person executed
@@ -981,11 +772,7 @@ class Execute(JusticeEvent):
 
 @dataclass
 class Extradite(JusticeEvent):
-    """An Extradite Event occurs whenever a Person is sent by a state actor from
-    one Place (normally the GPE associated with the state actor, but sometimes a
-    Facility under its control) to another place (Location, GPE or Facility) for
-    the purposes of legal proceedings there.
-    """
+    """{ace_extradite}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     agent: List[str]  # The extraditing agent
@@ -998,9 +785,7 @@ class Extradite(JusticeEvent):
 
 @dataclass
 class Acquit(JusticeEvent):
-    """An Acquit Event occurs whenever a trial ends but fails to produce a conviction.
-    This will include cases where the charges are dropped by the Prosecutor.
-    """
+    """{ace_acquit}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The agent being acquitted
@@ -1012,9 +797,7 @@ class Acquit(JusticeEvent):
 
 @dataclass
 class Pardon(JusticeEvent):
-    """A Pardon Event occurs whenever a head-of-state or their appointed
-    representative lifts a sentence imposed by the judiciary.
-    """
+    """{ace_pardon}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The agent being pardoned
@@ -1026,9 +809,7 @@ class Pardon(JusticeEvent):
 
 @dataclass
 class Appeal(JusticeEvent):
-    """An Appeal Event occurs whenever the decision of a court is taken to a higher
-    court for review.
-    """
+    """{ace_appeal}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     defendant: List[str]  # The defendant
