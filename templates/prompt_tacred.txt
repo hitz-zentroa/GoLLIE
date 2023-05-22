@@ -6,9 +6,9 @@
 # This is the text to analyze
 text = {{ text.__repr__() }}
 
-# The list called result contains the relations (if exist) for the following entity pairs:
+# The list called result contains the templates instances for the following entity queries:
 {%- for ann in gold %}
-#    - (arg1: {{ann.subj_type}} = "{{ann.arg1}}", arg2: {{ann.subj_type}} = "{{ann.arg2}}")
+#    - {{ann.query}}: {{ann.__class__.__name__}}
 {%- endfor %}
 # 
 result = [

@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Type, Union
 
 from typing_extensions import override
 
-from .utils_typing import Entity, Event, Relation, Value
+from .utils_typing import Entity, Event, Relation, Template, Value
 
 
 class Scorer:
@@ -145,5 +145,59 @@ class EventScorer(Scorer):
                 "precision": a_precision,
                 "recall": a_recall,
                 "f1-score": a_f1_score,
+            },
+        }
+
+
+class TemplateScorer(Scorer):
+    """A general scorer implementation for template extraction."""
+
+    valid_types: List[Type] = [Template]
+
+    @override
+    def __call__(self, reference: Any, predictions: Any) -> Dict[str, Dict[str, float]]:
+        if not len(reference) or (len(reference) and not isinstance(reference[0], list)):
+            reference = [reference]
+        if not len(predictions) or (len(predictions) and not isinstance(predictions[0], list)):
+            predictions = [predictions]
+
+        assert len(reference) == len(
+            predictions
+        ), f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount must be equal."
+        t_tp = t_total_pos = t_total_pre = 0
+        s_tp = s_total_pos = s_total_pre = 0
+        for ref, pre in zip(reference, predictions):
+            ref = self._filter_valid_types(ref)
+            pre = self._filter_valid_types(pre)
+
+            t_total_pos += len(ref)
+            for template in ref:
+                s_total_pos += len(template)
+
+            t_total_pre += len(pre)
+            for pre_temp in pre:
+                s_total_pre += len(pre_temp)
+                if pre_temp in ref:
+                    ref_temp = ref.pop(ref.index(pre_temp))
+                    t_tp += 1
+                    s_tp += len(ref_temp & pre_temp)
+
+        t_precision = t_tp / t_total_pre if t_total_pre > 0.0 else 0.0
+        s_precision = s_tp / s_total_pre if s_total_pre > 0.0 else 0.0
+        t_recall = t_tp / t_total_pos if t_total_pos > 0.0 else 0.0
+        s_recall = s_tp / s_total_pos if s_total_pos > 0.0 else 0.0
+        t_f1_score = 2 * t_precision * t_recall / (t_precision + t_recall) if (t_precision + t_recall) > 0.0 else 0.0
+        s_f1_score = 2 * s_precision * s_recall / (s_precision + s_recall) if (s_precision + s_recall) > 0.0 else 0.0
+
+        return {
+            "templates": {
+                "precision": t_precision,
+                "recall": t_recall,
+                "f1-score": t_f1_score,
+            },
+            "slots": {
+                "precision": s_precision,
+                "recall": s_recall,
+                "f1-score": s_f1_score,
             },
         }

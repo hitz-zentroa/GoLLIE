@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import dataclasses
 import importlib
 import inspect
 import logging
@@ -15,7 +16,7 @@ def dataclass(
     /,
     *,
     init=True,
-    repr=True,
+    repr=False,
     eq=False,
     order=False,
     unsafe_hash=False,
@@ -60,6 +61,21 @@ class HallucinatedType:
         return True
 
 
+class Name(str):
+    def __repr__(self):
+        return f"Name({super().__repr__()})"
+
+
+class Value(str):
+    def __repr__(self) -> str:
+        return f"Value({super().__repr__()})"
+
+
+class String(str):
+    def __repr__(self) -> str:
+        return f"String({super().__repr__()})"
+
+
 @dataclass
 class Entity:
     """A general class to represent entities."""
@@ -70,6 +86,15 @@ class Entity:
         self_span = self.span.lower().strip()
         other_span = other.span.lower().strip()
         return type(self) == type(other) and self_span == other_span
+
+    def __repr__(self) -> str:
+        """Returns a string containing only the non-default field values."""
+        s = ", ".join(
+            f"{field.name}={getattr(self, field.name)!r}"
+            for field in dataclasses.fields(self)
+            if getattr(self, field.name) != field.default
+        )
+        return f"{type(self).__name__}({s})"
 
     def key(self) -> Union[str, None]:
         """
@@ -120,63 +145,6 @@ class Entity:
 
 
 @dataclass
-class Value:
-    """A general class to represent values."""
-
-    span: str
-
-    def __eq__(self: Value, other: Value) -> bool:
-        return type(self) == type(other) and self.span == other.span
-
-    def key(self) -> Union[str, None]:
-        """
-        Return the key span.
-
-        Returns:
-            Union[str, None]:
-                The span that represents the annotation.
-        """
-        return self.span.lower()
-
-    def exists_in(self, text: str) -> bool:
-        """
-        Checks whether the annotation exists on a given text. This function is used to
-        identify model alucinations.
-
-        Args:
-            text (`str`):
-                The text used to check whether the annotation is an alucionation or not.
-
-        Returns:
-            `bool`:
-                Whether the annotation exists on the input text or not.
-        """
-        return self.span.lower() in text.lower()
-
-    def index(self, text: str) -> int:
-        """
-        Returns the first position of the span given the text.
-
-        Args:
-            text (`str`):
-                The text to search the span on.
-
-        Raises:
-            IndexError:
-                Raised when the span does not exist in the text
-
-        Returns:
-            `Tuple[int, int]`:
-                The position of the span in the text.
-        """
-        if not self.exists_in(text):
-            raise IndexError("The span is not in text.")
-
-        pos = text.lower().index(self.span.lower().strip())
-        return (pos, pos + len(self.span))
-
-
-@dataclass
 class Relation:
     """A general class to represent relations."""
 
@@ -185,6 +153,15 @@ class Relation:
 
     def __eq__(self: Value, other: Value) -> bool:
         return type(self) == type(other) and self.arg1 == other.arg1 and self.arg2 == other.arg2
+
+    def __repr__(self) -> str:
+        """Returns a string containing only the non-default field values."""
+        s = ", ".join(
+            f"{field.name}={getattr(self, field.name)!r}"
+            for field in dataclasses.fields(self)
+            if getattr(self, field.name) != field.default
+        )
+        return f"{type(self).__name__}({s})"
 
     def key(self) -> Union[str, None]:
         """
@@ -241,7 +218,7 @@ class Event:
     mention: str
 
     def __eq__(self: Event, other: Event) -> bool:
-        return type(self) == type(other) and self.mention == other.mention
+        return type(self) == type(other) and self.key() == other.key()
 
     def __and__(self: Event, other: Event) -> Event:
         attrs = {
@@ -278,6 +255,15 @@ class Event:
 
         return _len
 
+    def __repr__(self) -> str:
+        """Returns a string containing only the non-default field values."""
+        s = ", ".join(
+            f"{field.name}={getattr(self, field.name)!r}"
+            for field in dataclasses.fields(self)
+            if getattr(self, field.name) != field.default
+        )
+        return f"{type(self).__name__}({s})"
+
     def key(self) -> Union[str, None]:
         """
         Return the key span.
@@ -310,7 +296,7 @@ class Event:
             return None
 
         attrs = {
-            attr: []
+            attr: values
             for attr, values in inspect.getmembers(self)
             if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
@@ -353,6 +339,203 @@ class Event:
 
         pos = text.lower().index(self.mention.lower().strip())
         return (pos, pos + len(self.mention))
+
+
+@dataclass
+class Template:
+    """A general class to represent templates."""
+
+    query: str
+
+    def __eq__(self: Template, other: Template) -> bool:
+        return type(self) == type(other) and self.key() == other.key()
+
+    def __repr__(self) -> str:
+        """Returns a string containing only the non-default field values."""
+        s = ", ".join(
+            f"{field.name}={getattr(self, field.name)!r}"
+            for field in dataclasses.fields(self)
+            if getattr(self, field.name) != field.default
+        )
+        return f"{type(self).__name__}({s})"
+
+    def _get_attributes(self, ignore: bool = False) -> Dict[str, Any]:
+        """Returns the non-positional attributes of a Template instance."""
+        attrs = {}
+        for attr, values in inspect.getmembers(self):
+            if attr.startswith("__") or attr in ["query"] or inspect.ismethod(values):
+                continue
+            if ignore and values:
+                attrs[attr] = type(values)()
+            else:
+                attrs[attr] = values
+        return attrs
+
+    def _get_pos_attributes(self: Template) -> List[Any]:
+        """Return the positional attributes of a Template instance."""
+        return [getattr(self, attr) for attr in ["query"]]
+
+    def __and__(self: Template, other: Template) -> Template:
+        attrs = self._get_attributes(ignore=True)
+        if self == other:
+            for attr in attrs.keys():
+                self_values = getattr(self, attr)
+                other_values = deepcopy(getattr(other, attr))
+                if self_values is None:
+                    continue
+                if isinstance(self_values, list):
+                    if not isinstance(other_values, list):
+                        other_values = [other_values]
+                    for value in self_values:
+                        if value in other_values:
+                            attrs[attr].append(value)
+                            other_values.pop(other_values.index(value))
+                else:
+                    if isinstance(other_values, list):
+                        attrs[attr] = self_values if self_values in other_values else None
+                    else:
+                        attrs[attr] = self_values if self_values == other_values else None
+
+        pos_args = self._get_pos_attributes()
+
+        return type(self)(*pos_args, **attrs)
+
+    def __len__(self: Template) -> int:
+        attrs = self._get_attributes()
+        _len = 0
+        for values in attrs.values():
+            if not values:
+                continue
+            _len += len(values) if isinstance(values, list) else 1
+
+        return _len
+
+    def key(self: Template) -> Union[str, None]:
+        """
+        Return the key span.
+
+        Returns:
+            Union[str, None]:
+                The span that represents the annotation.
+        """
+        if self.query:
+            return self.query.lower()
+
+        return None
+
+    def exists_in(self: Template, text: str) -> Template:
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
+        text = text.lower()
+        # Only return None if the key is defined and is not in the text
+        if self.key() and self.key() not in text:
+            return None
+
+        attrs = self._get_attributes()
+        for attr in attrs.keys():
+            self_values = getattr(self, attr)
+            for value in self_values:
+                if value.lower() in text:
+                    attrs[attr].append(value)
+
+        pos_args = self._get_pos_attributes()
+
+        return type(self)(*pos_args, **attrs)
+
+    def index(self, text: str) -> int:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `int`:
+                The position of the span in the text.
+        """
+        # Return len(text) if there is no mention defined
+        if not self.key():
+            return (len(text), len(text))
+
+        if not self.exists_in(text):
+            raise IndexError("The span is not in text.")
+
+        pos = text.lower().index(self.key().strip())
+        return (pos, pos + len(self.key()))
+
+    def assert_typing_constraints(self):
+        import typing
+
+        def check_types(var: Any, _type: TypeVar) -> Tuple[bool, Any]:
+            if _type is type(None):
+                return (var is None, var)
+            elif isinstance(_type, type):
+                is_correct = isinstance(var, _type)
+                if not is_correct:
+                    if isinstance(var, list):
+                        var = var[0] if len(var) else _type()
+                    var = _type(var)
+                return (is_correct, var)
+            # elif _type is type(None):
+            #     return (var is None, var)
+            elif isinstance(_type, typing._GenericAlias):
+                origin = _type.__origin__
+                if origin is typing.Union:
+                    is_correct = False
+                    _var = None
+                    for _t in _type.__args__:
+                        _is_correct, tmp_var = check_types(var, _t)
+                        if _is_correct:
+                            return (_is_correct, tmp_var)
+                        if _t is not type(None):
+                            _var = tmp_var
+                        is_correct |= _is_correct
+                    # return any(check_types(var, _t) for _t in _type.__args__)
+                    return (is_correct, _var)
+                elif origin is list:
+                    if not isinstance(var, list):
+                        var = [var]
+                    for _t in _type.__args__:
+                        _var = []
+                        is_correct = True
+                        for v in var:
+                            _is_correct, v = check_types(v, _t)
+                            is_correct &= _is_correct
+                            _var.append(v)
+                        if is_correct:
+                            return (is_correct, _var if len(_var) else None)
+
+                    return (is_correct, _var)
+                    # return any(all(check_types(v, _t) for v in var) if isinstance(var, list) else False for _t in _type.__args__)
+                elif any(issubclass(origin, _t) for _t in [str, int, float, bool]):
+                    return check_types(var, origin)
+                else:
+                    raise ValueError(f"Unsupported type: {origin}")
+            else:
+                raise ValueError("Only native types or typing module types are supported.")
+
+        correct = True
+        for field in dataclasses.fields(self):
+            _correct, value = check_types(getattr(self, field.name), field.type)
+            correct &= _correct
+            setattr(self, field.name, value)
+
+        return correct
 
 
 class AnnotationList(list):

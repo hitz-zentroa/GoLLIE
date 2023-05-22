@@ -1,6 +1,6 @@
 from typing import Dict, List, Type
 
-from ..utils_typing import Entity, Event, Relation, Value, dataclass
+from ..utils_typing import Entity, Event, Relation, dataclass
 
 
 """Entity definitions
@@ -78,48 +78,48 @@ annotated as time expressions or value/numeric data.
 
 
 @dataclass
-class Time(Value):
+class Time(Entity):
     """{ace_time}"""
 
     span: str
 
 
 @dataclass
-class Numeric(Value):
+class Numeric(Entity):
     """{ace_numeric}"""
 
     span: str
 
 
 @dataclass
-class JobTitle(Value):
+class JobTitle(Entity):
     """{ace_jobtitle}"""
 
     span: str
 
 
 @dataclass
-class Crime(Value):
+class Crime(Entity):
     """{ace_crime}"""
 
     span: str
 
 
 @dataclass
-class Sentence(Value):
+class Sentence(Entity):
     """{ace_sentence}"""
 
     span: str
 
 
 @dataclass
-class ContactInfo(Value):
+class ContactInfo(Entity):
     """{ace_contactinfo}"""
 
     span: str
 
 
-VALUE_DEFINITIONS: List[Value] = [
+VALUE_DEFINITIONS: List[Entity] = [
     Time,
     Numeric,
     JobTitle,
