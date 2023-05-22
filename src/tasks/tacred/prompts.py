@@ -1,4 +1,6 @@
-from ..utils_typing import Relation, dataclass
+from typing import List, Optional
+
+from ..utils_typing import Name, String, Template, Value, dataclass
 
 
 """Relation definitions
@@ -9,373 +11,99 @@ https://tac.nist.gov/2014/KBP/ColdStart/guidelines/TAC_KBP_2014_Slot_Description
 
 
 @dataclass
-class PersonAlternateNames(Relation):
-    """{tacred_personalternatenames}"""
+class PersonTemplate(Template):
+    """{tacred_person}"""
 
-    arg1: str  # The original name
-    arg2: str  # The alias
-
-
-@dataclass
-class PersonDateOfBirth(Relation):
-    """{tacred_persondateofbirth}"""
-
-    arg1: str  # The person
-    arg2: str  # The birth date
-
-
-@dataclass
-class PersonAge(Relation):
-    """{tacred_personage}"""
-
-    arg1: str  # The person
-    arg2: str  # The age
-
-
-@dataclass
-class PersonCountryOfBirth(Relation):
-    """{tacred_personcountryofbirth}"""
-
-    arg1: str  # The person
-    arg2: str  # The country of birth
-
-
-@dataclass
-class PersonStateOrProvinceOfBirth(Relation):
-    """{tacred_personstateorprovinceofbirth}"""
-
-    arg1: str  # The person
-    arg2: str  # The state or province
-
-
-@dataclass
-class PersonCityOfBirth(Relation):
-    """{tacred_personcityofbirth}"""
-
-    arg1: str  # The person
-    arg2: str  # The city, town or village
-
-
-@dataclass
-class PersonOrigin(Relation):
-    """{tacred_personorigin}"""
-
-    arg1: str  # The person
-    arg2: str  # The origin
-
-
-@dataclass
-class PersonDateOfDeath(Relation):
-    """{tacred_persondateofdeath}"""
-
-    arg1: str  # The person
-    arg2: str  # The date of death
+    query: str  # The Person entity query
+    alternate_names: Optional[List[Name]] = None
+    """{tacred_person_alternate_names}"""
+    date_of_birth: Optional[Value] = None
+    """{tacred_person_date_of_birth}"""
+    age: Optional[Value] = None
+    """{tacred_person_age}"""
+    country_of_birth: Optional[Name] = None
+    """{tacred_person_country_of_birth}"""
+    state_or_province_of_birth: Optional[Name] = None
+    """{tacred_person_state_or_province_of_birth}"""
+    city_of_birth: Optional[Name] = None
+    """{tacred_person_city_of_birth}"""
+    origin: Optional[List[Name]] = None
+    """{tacred_person_origin}"""
+    date_of_death: Optional[Value] = None
+    """{tacred_person_date_of_death}"""
+    country_of_death: Optional[Name] = None
+    """{tacred_person_country_of_death}"""
+    state_or_province_of_death: Optional[Name] = None
+    """{tacred_person_state_or_province_of_death}"""
+    city_of_death: Optional[Name] = None
+    """{tacred_person_city_of_death}"""
+    cause_of_death: Optional[String] = None
+    """{tacred_person_cause_of_death}"""
+    countries_of_residence: Optional[List[Name]] = None
+    """{tacred_person_countries_of_residence}"""
+    states_or_provinces_of_residence: Optional[List[Name]] = None
+    """{tacred_person_states_or_provinces_of_residence}"""
+    cities_of_residence: Optional[List[Name]] = None
+    """{tacred_person_cities_of_residence}"""
+    schools_attended: Optional[List[Name]] = None
+    """{tacred_person_schools_attended}"""
+    title: Optional[List[String]] = None
+    """{tacred_person_title}"""
+    employee_or_member_of: Optional[List[Name]] = None
+    """{tacred_person_employee_or_member_of}"""
+    religion: Optional[String] = None
+    """{tacred_person_religion}"""
+    spouse: Optional[List[Name]] = None
+    """{tacred_person_spouse}"""
+    children: Optional[List[Name]] = None
+    """{tacred_person_children}"""
+    parents: Optional[List[Name]] = None
+    """{tacred_person_parents}"""
+    siblings: Optional[List[Name]] = None
+    """{tacred_person_siblings}"""
+    other_family: Optional[List[Name]] = None
+    """{tacred_person_other_family}"""
+    charges: Optional[List[String]] = None
+    """{tacred_person_charges}"""
 
 
 @dataclass
-class PersonCountryOfDeath(Relation):
-    """{tacred_personcountryofdeath}"""
-
-    arg1: str  # The person
-    arg2: str  # The country of death
-
-
-@dataclass
-class PersonStateOrProvinceOfDeath(Relation):
-    """{tacred_personstateorprovinceofdeath}"""
-
-    arg1: str  # The person
-    arg2: str  # The state or province of death
-
-
-@dataclass
-class PersonCityOfDeath(Relation):
-    """{tacred_personcityofdeath}"""
-
-    arg1: str  # The person
-    arg2: str  # The city, town or village
-
-
-@dataclass
-class PersonCauseOfDeath(Relation):
-    """{tacred_personcauseofdeath}"""
-
-    arg1: str  # The person
-    arg2: str  # Cause of the death
-
-
-@dataclass
-class PersonCountryOfResidence(Relation):
-    """{tacred_personcountryofresidence}"""
-
-    arg1: str  # The person
-    arg2: str  # The country
-
-
-@dataclass
-class PersonStateOrProvinceOfResidence(Relation):
-    """{tacred_personstateorprovinceofresidence}"""
-
-    arg1: str  # The person
-    arg2: str  # The state or province
-
-
-@dataclass
-class PersonCityOfResidence(Relation):
-    """{tacred_personcityofresidence}"""
-
-    arg1: str  # The person
-    arg2: str  # The city, town or village
-
-
-@dataclass
-class PersonSchoolAttended(Relation):
-    """{tacred_personschoolattended}"""
-
-    arg1: str  # The person
-    arg2: str  # The school (college, high school, university, etc.)
-
-
-@dataclass
-class PersonTitle(Relation):
-    """{tacred_persontitle}"""
-
-    arg1: str  # The person
-    arg2: str  # The position or title
-
-
-@dataclass
-class PersonEmployeeOrMemberOf(Relation):
-    """{tacred_personemployeeormemberof}"""
-
-    arg1: str  # The person
-    arg2: str  # The organization or entity
-
-
-@dataclass
-class PersonReligion(Relation):
-    """{tacred_personreligion}"""
-
-    arg1: str  # The person
-    arg2: str  # The religion to which the person belongs
-
-
-@dataclass
-class PersonSpouse(Relation):
-    """{tacred_personspouse}"""
-
-    arg1: str  # The person
-    arg2: str  # The spouse (wife or husband)
-
-
-@dataclass
-class PersonChildren(Relation):
-    """{tacred_personchildren}"""
-
-    arg1: str  # The person (parent)
-    arg2: str  # The child
-
-
-@dataclass
-class PersonParents(Relation):
-    """{tacred_personparents}"""
-
-    arg1: str  # The person (child)
-    arg2: str  # The parent
-
-
-@dataclass
-class PersonSiblings(Relation):
-    """{tacred_personsiblings}"""
-
-    arg1: str  # The person
-    arg2: str  # A sibling
-
-
-@dataclass
-class PersonOtherFamily(Relation):
-    """{tacred_personotherfamily}"""
-
-    arg1: str  # The person
-    arg2: str  # The family member
-
-
-@dataclass
-class PersonCharges(Relation):
-    """{tacred_personcharges}"""
-
-    arg1: str  # The person
-    arg2: str  # The crime
-
-
-@dataclass
-class OrganizationAlternateName(Relation):
-    """{tacred_organizationalternatename}"""
-
-    arg1: str  # The organization name
-    arg2: str  # The alias
-
-
-@dataclass
-class OrganizationPoliticalReligiousAffiliation(Relation):
-    """{tacred_organizationpoliticalreligiousaffiliation}"""
-
-    arg1: str  # The organization
-    arg2: str  # The affiliation
-
-
-@dataclass
-class OrganizationTopMembersEmployees(Relation):
-    """{tacred_organizationtopmembersemployees}"""
-
-    arg1: str  # The organization
-    arg2: str  # The top member or employee
-
-
-@dataclass
-class OrganizationNumberOfEmployeesMembers(Relation):
-    """{tacred_organizationnumberofemployeesmembers}"""
-
-    arg1: str  # The organization
-    arg2: str  # The number of members or employees
-
-
-@dataclass
-class OrganizationMember(Relation):
-    """{tacred_organizationmember}"""
-
-    arg1: str  # The organization
-    arg2: str  # The organization member of the first
-
-
-@dataclass
-class OrganizationMemberOf(Relation):
-    """{tacred_organizationmemberof}"""
-
-    arg1: str  # The organization
-    arg2: str  # The organization which the first is member of
-
-
-@dataclass
-class OrganizationSubsidiary(Relation):
-    """{tacred_organizationsubsidiary}"""
-
-    arg1: str  # The organization
-    arg2: str  # The subsidiary
-
-
-@dataclass
-class OrganizationParent(Relation):
-    """{tacred_organizationparent}"""
-
-    arg1: str  # The organization
-    arg2: str  # The parent organization
-
-
-@dataclass
-class OrganizationFoundedBy(Relation):
-    """{tacred_organizationfoundedby}"""
-
-    arg1: str  # The organization
-    arg2: str  # The founder
-
-
-@dataclass
-class OrganizationDateFounded(Relation):
-    """{tacred_organizationdatefounded}"""
-
-    arg1: str  # The organization
-    arg2: str  # The date
-
-
-@dataclass
-class OrganizationDateDissolved(Relation):
-    """{tacred_organizationdatedissolved}"""
-
-    arg1: str  # The organization
-    arg2: str  # The date
-
-
-@dataclass
-class OrganizationCountryOfHeadquarters(Relation):
-    """{tacred_organizationcountryofheadquarters}"""
-
-    arg1: str  # The organization
-    arg2: str  # The country
-
-
-@dataclass
-class OrganizationStateOrProvinceOfHeadquarters(Relation):
-    """{tacred_organizationstateorprovinceofheadquarters}"""
-
-    arg1: str  # The organization
-    arg2: str  # The state or province
-
-
-@dataclass
-class OrganizationCityOfHeadquarters(Relation):
-    """{tacred_organizationcityofheadquarters}"""
-
-    arg1: str  # The organization
-    arg2: str  # The city, town, ow village name
-
-
-@dataclass
-class OrganizationShareholders(Relation):
-    """{tacred_organizationshareholders}"""
-
-    arg1: str  # The organization
-    arg2: str  # The shareholder
-
-
-@dataclass
-class OrganizationWebsite(Relation):
-    """{tacred_organizationwebsite}"""
-
-    arg1: str  # The organization
-    arg2: str  # The website url
-
-
-RELATION_DEFINITIONS = [
-    OrganizationAlternateName,
-    OrganizationCityOfHeadquarters,
-    OrganizationCountryOfHeadquarters,
-    OrganizationDateDissolved,
-    OrganizationDateFounded,
-    OrganizationFoundedBy,
-    OrganizationMember,
-    OrganizationMemberOf,
-    OrganizationNumberOfEmployeesMembers,
-    OrganizationParent,
-    OrganizationPoliticalReligiousAffiliation,
-    OrganizationShareholders,
-    OrganizationStateOrProvinceOfHeadquarters,
-    OrganizationSubsidiary,
-    OrganizationTopMembersEmployees,
-    OrganizationWebsite,
-    PersonAge,
-    PersonAlternateNames,
-    PersonCauseOfDeath,
-    PersonCharges,
-    PersonChildren,
-    PersonCityOfBirth,
-    PersonCityOfDeath,
-    PersonCityOfResidence,
-    PersonCountryOfBirth,
-    PersonCountryOfDeath,
-    PersonCountryOfResidence,
-    PersonDateOfBirth,
-    PersonDateOfDeath,
-    PersonEmployeeOrMemberOf,
-    PersonOrigin,
-    PersonOtherFamily,
-    PersonParents,
-    PersonReligion,
-    PersonSchoolAttended,
-    PersonSiblings,
-    PersonSpouse,
-    PersonStateOrProvinceOfBirth,
-    PersonStateOrProvinceOfDeath,
-    PersonStateOrProvinceOfResidence,
-    PersonTitle,
-]
+class OrganizationTemplate(Template):
+    """{tacred_organization_template}"""
+
+    query: str  # The Organization entity query
+    alternate_names: Optional[List[Name]] = None
+    """{tacred_organization_alternate_names}"""
+    political_or_religious_affiliation: Optional[List[Name]] = None
+    """{tacred_organnization_political_or_religious_affiliation}"""
+    top_members_employees: Optional[List[Name]] = None
+    """{tacred_organization_top_members_employees}"""
+    number_of_employees_members: Optional[Value] = None
+    """{tacred_organization_number_of_employees_members}"""
+    members: Optional[List[Name]] = None
+    """{tacred_organization_members}"""
+    member_of: Optional[List[Name]] = None
+    """{tacred_organization_member_of}"""
+    subsidiaries: Optional[List[Name]] = None
+    """{tacred_organization_subsidiaries}"""
+    parents: Optional[List[Name]] = None
+    """{tacred_organization_parents}"""
+    founded_by: Optional[List[Name]] = None
+    """{tacred_organization_founded_by}"""
+    date_founded: Optional[Value] = None
+    """{tacred_organization_date_founded}"""
+    date_dissolved: Optional[Value] = None
+    """{tacred_organization_date_dissolved}"""
+    country_of_headquarters: Optional[Name] = None
+    """{tacred_organization_country_of_headquarters}"""
+    state_or_province_of_headquarters: Optional[Name] = None
+    """{tacred_organization_state_or_province_of_headquarters}"""
+    city_of_headquarters: Optional[Name] = None
+    """{tacred_organization_city_of_headquarters}"""
+    shareholders: Optional[List[Name]] = None
+    """{tacred_organization_shareholders}"""
+    website: Optional[String] = None
+    """{tacred_organization_website}"""
+
+
+TEMPLATE_DEFINITIONS = [PersonTemplate, OrganizationTemplate]

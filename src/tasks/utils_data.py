@@ -333,10 +333,8 @@ class Sampler:
             labels to coarse labels. Defaults to `None`.
         lang (`str`, optional):
             Language of the guidelines to sample. Defaults to `"en"`.
-        definitions: Dict[str, Any] = None,
         definitions (`Dict[str, Any]`, optional):
             Dictionary from where to sample the guideline definitions. Defaults to None.
-        label_noise_prob: float = 0.0,
         label_noise_prob (`float`, optional):
             The probability to hide the label names. Defaults to `0.0`.
 

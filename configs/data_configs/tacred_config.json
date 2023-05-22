@@ -1,7 +1,7 @@
 {
     "dataset_name": "TACRED",
     "tasks": [
-        "RE"
+        "SF"
     ],
     "dataloader_cls": "src.tasks.tacred.data_loader.TACREDDatasetLoader",
     "sampler_cls": "src.tasks.tacred.data_loader.TACREDSampler",
@@ -12,12 +12,12 @@
     "seed": [0, 24, 42],
     "label_noise_prob": [0.15, 0.50, 0.75],
     "task_configuration": {
-        "RE": {
+        "SF": {
             "parallel_instances": 1,
-            "max_guidelines": 5,
-            "guideline_dropout": 0.15,
-            "scorer": "src.tasks.ace.scorer.TACREDRelationScorer",
-            "ensure_positives_on_train": true
+            "max_guidelines": 1,
+            "guideline_dropout": 0.0,
+            "scorer": "src.tasks.ace.scorer.TACREDTemplateScorer",
+            "sample_only_gold_guidelines": true
         }
     }
 }

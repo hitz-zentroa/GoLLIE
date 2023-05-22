@@ -12,6 +12,7 @@ class TestDataLoaders(unittest.TestCase):
             config = json.load(f)
         if isinstance(config["seed"], list):
             config["seed"] = 0
+            config["label_noise_prob"] = 0.0
 
         dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
 
@@ -27,6 +28,7 @@ class TestDataLoaders(unittest.TestCase):
             config = json.load(f)
         if isinstance(config["seed"], list):
             config["seed"] = 0
+            config["label_noise_prob"] = 0.0
 
         dataloader = RAMSDatasetLoader("data/rams/dev.jsonlines")
 
@@ -42,8 +44,9 @@ class TestDataLoaders(unittest.TestCase):
             config = json.load(f)
         if isinstance(config["seed"], list):
             config["seed"] = 0
+            config["label_noise_prob"] = 0.0
 
-        dataloader = TACREDDatasetLoader("data/tacred/train.json")
+        dataloader = TACREDDatasetLoader("data/tacred/train.json")[:10]
 
         _ = list(TACREDSampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
 
@@ -55,6 +58,7 @@ class TestDataLoaders(unittest.TestCase):
             config = json.load(f)
         if isinstance(config["seed"], list):
             config["seed"] = 0
+            config["label_noise_prob"] = 0.0
 
         config["task_configuration"] = {
             "NER": {

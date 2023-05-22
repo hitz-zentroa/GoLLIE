@@ -169,3 +169,60 @@ class TestRAMSScorers(unittest.TestCase):
                 "f1-score": 0.6666666666666666,
             },
         )
+
+
+class TestTACREDScorers(unittest.TestCase):
+    def test_template_scorer(self):
+        from src.tasks.tacred.prompts import PersonTemplate
+        from src.tasks.tacred.scorer import TACREDTemplateScorer
+        from src.tasks.utils_typing import Name, String, Value
+
+        scorer = TACREDTemplateScorer()
+
+        reference = [
+            PersonTemplate(
+                query="Peter",
+                city_of_birth=Name("Lasarte"),
+                age=[Value("26")],
+                title=[String("Researcher"), String("Student")],
+            )
+        ]
+
+        # Assert the typing constrains are satisfied
+        for template in reference:
+            template.assert_typing_constraints()
+
+        # Perfect alingment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=reference)["slots"],
+            {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
+        )
+
+        # No alignment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=[])["slots"],
+            {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
+        )
+
+        predictions = [
+            PersonTemplate(query="Peter", city_of_birth=Name("Lasarte"), age=Value("26"), origin=Name("Spain"))
+        ]
+
+        # Partially aligned
+        # TP = 2 (city_of_birth=Name("Lasarte"), age=Value("26"))
+        # FP = 1 (origin=Name("Spain"))
+        # FN = 2 (title=[String("Researcher"), String("Student"))
+
+        # precision -> 2 / 3 = 0.6666666666666666
+        # recall -> 2 / 4 = 0.5
+        # F1 -> 2 * (0.6666666666666666 * 0.5) / (0.6666666666666666 + 0.5) = 0.5714285714285715
+
+        # No alignment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=predictions)["slots"],
+            {
+                "precision": 0.6666666666666666,
+                "recall": 0.5,
+                "f1-score": 0.5714285714285715,
+            },
+        )

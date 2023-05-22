@@ -2,54 +2,13 @@ import json
 from collections import defaultdict
 from typing import Tuple, Union
 
+import rich
+
 from src.tasks.tacred.guidelines import GUIDELINES
-from src.tasks.tacred.prompts import (
-    RELATION_DEFINITIONS,
-    OrganizationAlternateName,
-    OrganizationCityOfHeadquarters,
-    OrganizationCountryOfHeadquarters,
-    OrganizationDateDissolved,
-    OrganizationDateFounded,
-    OrganizationFoundedBy,
-    OrganizationMember,
-    OrganizationMemberOf,
-    OrganizationNumberOfEmployeesMembers,
-    OrganizationParent,
-    OrganizationPoliticalReligiousAffiliation,
-    OrganizationShareholders,
-    OrganizationStateOrProvinceOfHeadquarters,
-    OrganizationSubsidiary,
-    OrganizationTopMembersEmployees,
-    OrganizationWebsite,
-    PersonAge,
-    PersonAlternateNames,
-    PersonCauseOfDeath,
-    PersonCharges,
-    PersonChildren,
-    PersonCityOfBirth,
-    PersonCityOfDeath,
-    PersonCityOfResidence,
-    PersonCountryOfBirth,
-    PersonCountryOfDeath,
-    PersonCountryOfResidence,
-    PersonDateOfBirth,
-    PersonDateOfDeath,
-    PersonEmployeeOrMemberOf,
-    PersonOrigin,
-    PersonOtherFamily,
-    PersonParents,
-    PersonReligion,
-    PersonSchoolAttended,
-    PersonSiblings,
-    PersonSpouse,
-    PersonStateOrProvinceOfBirth,
-    PersonStateOrProvinceOfDeath,
-    PersonStateOrProvinceOfResidence,
-    PersonTitle,
-)
+from src.tasks.tacred.prompts import TEMPLATE_DEFINITIONS, OrganizationTemplate, PersonTemplate
 
 from ..utils_data import DatasetLoader, Sampler
-from ..utils_typing import Relation, dataclass
+from ..utils_typing import Relation, Template, dataclass
 
 
 @dataclass
@@ -71,52 +30,59 @@ class TACREDDatasetLoader(DatasetLoader):
             raised when a not defined value found.
     """
 
-    RELATION_TO_CLASS_MAPPING = {
-        "no_relation": NoneRelation,
-        "org:alternate_names": OrganizationAlternateName,
-        "org:city_of_headquarters": OrganizationCityOfHeadquarters,
-        "org:country_of_headquarters": OrganizationCountryOfHeadquarters,
-        "org:dissolved": OrganizationDateDissolved,
-        "org:founded": OrganizationDateFounded,
-        "org:founded_by": OrganizationFoundedBy,
-        "org:member_of": OrganizationMemberOf,
-        "org:members": OrganizationMember,
-        "org:number_of_employees/members": OrganizationNumberOfEmployeesMembers,
-        "org:parents": OrganizationParent,
-        "org:political/religious_affiliation": OrganizationPoliticalReligiousAffiliation,
-        "org:shareholders": OrganizationShareholders,
-        "org:stateorprovince_of_headquarters": OrganizationStateOrProvinceOfHeadquarters,
-        "org:subsidiaries": OrganizationSubsidiary,
-        "org:top_members/employees": OrganizationTopMembersEmployees,
-        "org:website": OrganizationWebsite,
-        "per:age": PersonAge,
-        "per:alternate_names": PersonAlternateNames,
-        "per:cause_of_death": PersonCauseOfDeath,
-        "per:charges": PersonCharges,
-        "per:children": PersonChildren,
-        "per:cities_of_residence": PersonCityOfResidence,
-        "per:city_of_birth": PersonCityOfBirth,
-        "per:city_of_death": PersonCityOfDeath,
-        "per:countries_of_residence": PersonCountryOfResidence,
-        "per:country_of_birth": PersonCountryOfBirth,
-        "per:country_of_death": PersonCountryOfDeath,
-        "per:date_of_birth": PersonDateOfBirth,
-        "per:date_of_death": PersonDateOfDeath,
-        "per:employee_of": PersonEmployeeOrMemberOf,
-        "per:origin": PersonOrigin,
-        "per:other_family": PersonOtherFamily,
-        "per:parents": PersonParents,
-        "per:religion": PersonReligion,
-        "per:schools_attended": PersonSchoolAttended,
-        "per:siblings": PersonSiblings,
-        "per:spouse": PersonSpouse,
-        "per:stateorprovince_of_birth": PersonStateOrProvinceOfBirth,
-        "per:stateorprovince_of_death": PersonStateOrProvinceOfDeath,
-        "per:stateorprovinces_of_residence": PersonStateOrProvinceOfResidence,
-        "per:title": PersonTitle,
+    TEMPLATE_TO_CLASS_MAPPING = {
+        "PERSON": {
+            "class": PersonTemplate,
+            "per:alternate_names": "alternate_names",
+            "per:date_of_birth": "date_of_birth",
+            "per:age": "age",
+            "per:country_of_birth": "country_of_birth",
+            "per:stateorprovince_of_birth": "state_or_province_of_birth",
+            "per:city_of_birth": "city_of_birth",
+            "per:origin": "origin",
+            "per:date_of_death": "date_of_death",
+            "per:country_of_death": "country_of_death",
+            "per:stateorprovince_of_death": "state_or_province_of_death",
+            "per:city_of_death": "city_of_death",
+            "per:cause_of_death": "cause_of_death",
+            "per:countries_of_residence": "countries_of_residence",
+            "per:stateorprovinces_of_residence": "states_or_provinces_of_residence",
+            "per:cities_of_residence": "cities_of_residence",
+            "per:schools_attended": "schools_attended",
+            "per:title": "title",
+            "per:employee_of": "employee_or_member_of",
+            "per:religion": "religion",
+            "per:spouse": "spouse",
+            "per:children": "children",
+            "per:parents": "parents",
+            "per:siblings": "siblings",
+            "per:other_family": "other_family",
+            "per:charges": "charges",
+        },
+        "ORGANIZATION": {
+            "class": OrganizationTemplate,
+            "org:alternate_names": "alternate_names",
+            "org:political/religious_affiliation": "political_or_religious_affiliation",
+            "org:top_members/employees": "top_members_employees",
+            "org:number_of_employees/members": "number_of_employees_members",
+            "org:members": "members",
+            "org:member_of": "member_of",
+            "org:subsidiaries": "subsidiaries",
+            "org:parents": "parents",
+            "org:founded_by": "founded_by",
+            "org:founded": "date_founded",
+            "org:dissolved": "date_dissolved",
+            "org:country_of_headquarters": "country_of_headquarters",
+            "org:stateorprovince_of_headquarters": "state_or_province_of_headquarters",
+            "org:city_of_headquarters": "city_of_headquarters",
+            "per:cities_of_residence": "city_of_headquarters", # Bug on data
+            "org:shareholders": "shareholders",
+            "org:website": "website",
+        },
     }
 
     def __init__(self, path: str, **kwargs) -> None:
+        """TODO REWRITE TO WORK WITH TEMPLATES"""
         self.elements = {}
         with open(path, "rt", encoding="utf-8") as in_f:
             data = json.load(in_f)
@@ -128,8 +94,11 @@ class TACREDDatasetLoader(DatasetLoader):
 
         for text, instances in data_by_sentence.items():
             text = text.replace("-LRB-", "(").replace("-RRB-", ")").replace("-LSB-", "[").replace("-RSB-", "]")
-            relations = []
+            templates = {}
             for inst in instances:
+                if inst["relation"] == "no_relation":
+                    continue
+
                 subj = (
                     " ".join(inst["token"][inst["subj_start"] : inst["subj_end"] + 1])
                     .replace("-LRB-", "(")
@@ -137,6 +106,11 @@ class TACREDDatasetLoader(DatasetLoader):
                     .replace("-LSB-", "[")
                     .replace("-RSB-", "]")
                 )
+                if f"{subj}-{inst['subj_type']}" not in templates:
+                    _info = self.TEMPLATE_TO_CLASS_MAPPING[inst["subj_type"]]
+                    templates[f"{subj}-{inst['subj_type']}"] = {"query": subj, "_info": _info}
+                _info = templates[f"{subj}-{inst['subj_type']}"]['_info']
+
                 obj = (
                     " ".join(inst["token"][inst["obj_start"] : inst["obj_end"] + 1])
                     .replace("-LRB-", "(")
@@ -144,20 +118,32 @@ class TACREDDatasetLoader(DatasetLoader):
                     .replace("-LSB-", "[")
                     .replace("-RSB-", "]")
                 )
-                relation_cls = self.RELATION_TO_CLASS_MAPPING[inst["relation"]]
+                slot_name = _info[inst["relation"]]
+                if slot_name not in templates[f"{subj}-{inst['subj_type']}"]:
+                    templates[f"{subj}-{inst['subj_type']}"][slot_name] = []
 
-                relation = relation_cls(arg1=subj, arg2=obj)
-                relation.subj_type = inst["subj_type"]
-                relation.subj_type = inst["obj_type"]
-                relations.append(relation)
+                templates[f"{subj}-{inst['subj_type']}"][slot_name].append(obj)
 
             key = str(hash(text))
+            labels, gold = [], []
+            for temp in templates.values():
+                _info = temp.pop("_info")
+                try:
+                    template: Template = _info["class"](**temp)
+                except Exception as e:
+                    rich.print(_info)
+                    rich.print(temp)
+                    raise e
+                template.assert_typing_constraints()
+                labels.append(template)
+                gold.append(template.query)
+
             self.elements[key] = {
                 "id": key,
                 "doc_id": instances[0]["docid"],
                 "text": text,
-                "labels": [rel for rel in relations if not isinstance(rel, NoneRelation)],
-                "gold": relations,
+                "labels": labels,
+                "gold": labels,
             }
 
         assert len(self.elements) == len(data_by_sentence), "The hash function failed."
@@ -222,8 +208,8 @@ class TACREDSampler(Sampler):
         **kwargs,
     ) -> None:
         assert task in [
-            "RE",
-        ], f"{task} can only be 'RE'."
+            "SF",
+        ], f"{task} can only be 'SF'."
 
         super().__init__(
             dataset_loader=dataset_loader,
@@ -238,7 +224,7 @@ class TACREDSampler(Sampler):
             sample_only_gold_guidelines=sample_only_gold_guidelines,
             dataset_name=dataset_name,
             scorer=scorer,
-            task_definitions=RELATION_DEFINITIONS,
+            task_definitions=TEMPLATE_DEFINITIONS,
             task_target="labels",
             definitions=GUIDELINES,
             **kwargs,
