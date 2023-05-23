@@ -6,13 +6,13 @@
     "test_file": "data/europarl/en.europarl.test.tsv",
     "prompt_template": "templates/prompt.txt",
     "seed": 0,
-    "include_misc": false,
+    "include_misc": true,
     "task_configuration": {
         "NER": {
             "parallel_instances": 1,
             "max_guidelines": -1,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorerNoMisc"
+            "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorer"
         }
     }
 }

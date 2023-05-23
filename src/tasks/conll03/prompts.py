@@ -14,9 +14,7 @@ Based on: Nancy Chinchor, Erica Brown, Lisa Ferro, Patty Robinson,
 
 @dataclass
 class Person(Entity):
-    """Persons: first, middle and last names of people, animals and fictional
-            characters
-    aliases."""
+    """{ner_person}"""
 
     span: str
 
