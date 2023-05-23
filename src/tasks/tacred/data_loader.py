@@ -75,7 +75,7 @@ class TACREDDatasetLoader(DatasetLoader):
             "org:country_of_headquarters": "country_of_headquarters",
             "org:stateorprovince_of_headquarters": "state_or_province_of_headquarters",
             "org:city_of_headquarters": "city_of_headquarters",
-            "per:cities_of_residence": "city_of_headquarters", # Bug on data
+            "per:cities_of_residence": "city_of_headquarters",  # Bug on data
             "org:shareholders": "shareholders",
             "org:website": "website",
         },
@@ -109,7 +109,7 @@ class TACREDDatasetLoader(DatasetLoader):
                 if f"{subj}-{inst['subj_type']}" not in templates:
                     _info = self.TEMPLATE_TO_CLASS_MAPPING[inst["subj_type"]]
                     templates[f"{subj}-{inst['subj_type']}"] = {"query": subj, "_info": _info}
-                _info = templates[f"{subj}-{inst['subj_type']}"]['_info']
+                _info = templates[f"{subj}-{inst['subj_type']}"]["_info"]
 
                 obj = (
                     " ".join(inst["token"][inst["obj_start"] : inst["obj_end"] + 1])
