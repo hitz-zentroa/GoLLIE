@@ -48,7 +48,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = TACREDDatasetLoader("data/tacred/train.json")[:10]
 
-        _ = list(TACREDSampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
+        _ = list(TACREDSampler(dataloader, task="SF", **config, **config["task_configuration"]["SF"]))
 
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader

@@ -296,7 +296,7 @@ class Event:
             return None
 
         attrs = {
-            attr: values
+            attr: []
             for attr, values in inspect.getmembers(self)
             if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
@@ -441,7 +441,7 @@ class Template:
         if self.key() and self.key() not in text:
             return None
 
-        attrs = self._get_attributes()
+        attrs = self._get_attributes(ignore=True)
         for attr in attrs.keys():
             self_values = getattr(self, attr)
             for value in self_values:
@@ -548,7 +548,7 @@ class AnnotationList(list):
     """
 
     SIMPLE_TYPES = [Entity, Value, Relation]
-    COMPLEX_TYPES = [Event]
+    COMPLEX_TYPES = [Event, Template]
 
     def __init__(self, elems: List[Any], hallucinated_no: int = 0, parse_error: bool = False):
         self._hallucinated_no = hallucinated_no
