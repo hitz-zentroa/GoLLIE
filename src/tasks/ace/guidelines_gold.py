@@ -346,9 +346,9 @@ GUIDELINES = {
             "symmetric.\n"
         ]
     },
-    "ace_personellevent": {
+    "ace_personnelevent": {
         "en": [
-            "A PersonellEvent occurs when a Person entity changes its job position (JobTitle entity) with respect an\n"
+            "A PersonnelEvent occurs when a Person entity changes its job position (JobTitle entity) with respect an\n"
             "Organization entity. It includes when a person starts working, ends working, changes offices within,\n"
             "gets nominated or is elected for a position in a Organization.\n"
         ]
