@@ -1,10 +1,10 @@
 Dataset, Implemented
 Conll, Yes
-Ncbi-disease,
-bc5cdr
+Ncbi-disease, Yes
+bc5cdr, Yes
 diann
 E3C
-OntonotesV3
+OntonotesV5, Yes
 WNUT 2017
 Open Entity
 Few-NERD
