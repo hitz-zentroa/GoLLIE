@@ -1,0 +1,23 @@
+{
+    "dataset_name": "MultiNERD",
+    "tasks": ["NER"],
+    "dataloader_cls": "src.tasks.multinerd.data_loader.MultinerdDatasetLoader",
+    "sampler_cls": "src.tasks.multinerd.data_loader.MultinerdSampler",
+    "train_file": "train",
+    "dev_file": "validation",
+    "test_file": "test",
+    "language": "en",
+    "prompt_template": "templates/prompt.txt",
+    "seed": [0, 24, 42],
+    "label_noise_prob": [0.15, 0.50, 0.75],
+    "task_configuration": {
+        "NER": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.multinerd.scorer.MultinerdEntityScorer",
+            "paraphrase_train": true,
+            "label_noise": 0.5
+        }
+    }
+}
