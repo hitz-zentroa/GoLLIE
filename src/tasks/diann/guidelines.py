@@ -12,4 +12,7 @@ GUIDELINES = {
             " term."
         ]
     },
+    "diann_negation": {
+        "en": ["Negation triggers are annotated when it affects one or more disabilities."],
+    },
 }

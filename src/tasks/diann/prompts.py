@@ -17,6 +17,12 @@ class Disability(Entity):
     span: str
 
 
-ENTITY_DEFINITIONS: List[Entity] = [Disability]
+class Negation(Entity):
+    """{diann_negation}"""
+
+    span: str
+
+
+ENTITY_DEFINITIONS: List[Entity] = [Disability, Negation]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

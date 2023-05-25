@@ -4,7 +4,7 @@ from ..utils_typing import Entity
 from src.tasks.diann.guidelines import GUIDELINES
 from src.tasks.diann.prompts import (
     ENTITY_DEFINITIONS,
-    Disability,
+    Disability,Negation
 )
 from src.tasks.label_encoding import rewrite_labels
 
@@ -30,6 +30,7 @@ class DiannDatasetLoader(DatasetLoader):
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.ENTITY_TO_CLASS_MAPPING = {
             "Dis": Disability,
+            "Neg": Negation,
         }
 
         self.elements = {}
