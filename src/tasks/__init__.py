@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from . import ace, conll03, rams, tacred, ontonotes, ncbidisease, bc5cdr
+from . import ace, conll03, rams, tacred, ontonotes, ncbidisease, bc5cdr, diann
 
 
 TASK_ID_TO_TASKS = {
@@ -16,9 +16,20 @@ TASK_ID_TO_TASKS = {
     "TACRED_SF": "src.tasks.tacred",
     "OntoNotes5_NER": "src.tasks.ontonotes",
     "NcbiDisease_NER": "src.tasks.ncbidisease",
+    "DIANN": "src.tasks.diann",
 }
 
-__all__ = ["ace", "rams", "conll03", "tacred", "ontonotes", "ncbidisease","bc5cdr", "TASK_ID_TO_TASKS", "task_id_to_guidelines"]
+__all__ = [
+    "ace",
+    "rams",
+    "conll03",
+    "tacred",
+    "ontonotes",
+    "ncbidisease",
+    "bc5cdr",
+    "TASK_ID_TO_TASKS",
+    "task_id_to_guidelines",
+]
 
 
 def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
@@ -57,6 +68,10 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "bc5cdr":
         from src.tasks.bc5cdr.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "diann":
+        from src.tasks.diann.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     else:

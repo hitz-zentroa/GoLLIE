@@ -1,5 +1,5 @@
 from typing import Dict, List, Tuple, Type, Union
-
+from ..utils_typing import Entity
 from src.tasks.conll03.guidelines import GUIDELINES
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
@@ -17,8 +17,8 @@ from ..utils_data import DatasetLoader, Sampler
 def get_conll_hf(
     split: str,
     include_misc: bool,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Location, Organization, Person, Miscellaneous]]],
-) -> Tuple[List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]]:
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
+) -> Tuple[List[List[str]], List[List[Entity]]]:
     """
     Get the conll dataset from the huggingface datasets library
     Args:
@@ -32,7 +32,7 @@ def get_conll_hf(
     dataset = load_dataset("conll2003")
     id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
     dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Union[Location, Organization, Person, Miscellaneous]]] = []
+    dataset_entities: List[List[Entity]] = []
 
     for example in dataset[split]:
         words = example["tokens"]
@@ -110,8 +110,8 @@ def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
 def load_conll_tsv(
     path: str,
     include_misc: bool,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Location, Organization, Person, Miscellaneous]]],
-) -> Tuple[List[List[str]], List[List[Union[Location, Organization, Person, Miscellaneous]]]]:
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
+) -> Tuple[List[List[str]], List[List[Entity]]]:
     """
     Load the conll dataset from a tsv file
     Args:
@@ -121,7 +121,7 @@ def load_conll_tsv(
         (List[str],List[Union[Location,Organization,Person,Miscellaneous]]): The text and the entities
     """
     dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Union[Location, Organization, Person, Miscellaneous]]] = []
+    dataset_entities: List[List[Entity]] = []
 
     dataset_words, dataset_labels = read_tsv(path)
 

@@ -1,69 +1,24 @@
 from typing import Dict, List, Tuple, Type, Union
 from ..utils_typing import Entity
 
-from src.tasks.ncbidisease.guidelines import GUIDELINES
-from src.tasks.ncbidisease.prompts import (
+from src.tasks.diann.guidelines import GUIDELINES
+from src.tasks.diann.prompts import (
     ENTITY_DEFINITIONS,
-    Disease,
+    Disability,
 )
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from src.tasks.conll03.data_loader import load_conll_tsv
 
 
-def get_ncbidisease_hf(
-    split: str,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
-) -> Tuple[List[List[str]], List[List[Entity]]]:
+class DiannDatasetLoader(DatasetLoader):
     """
-    Get the NCBI-disease dataset from the huggingface datasets library
-    Args:
-        split (str): The path_or_split to load. Can be one of `train`, `validation` or `test`.
-    Returns:
-        (List[str],List[Union[Location,Organization,Person,Miscellaneous]]): The text and the entities
-    """
-    from datasets import load_dataset
-
-    dataset = load_dataset("ncbi_disease")
-    id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
-    dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Entity]] = []
-
-    for example in dataset[split]:
-        words = example["tokens"]
-        # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
-
-        # Get labeled word spans
-        spans = []
-        for i, label in enumerate(labels):
-            if label == "O":
-                continue
-            elif label.startswith("B-"):
-                spans.append([label[2:], i, i + 1])
-            elif label.startswith("I-"):
-                spans[-1][2] += 1
-            else:
-                raise ValueError(f"Found an unexpected label: {label}")
-
-        # Get entities
-        entities = []
-        for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
-
-        dataset_sentences.append(words)
-        dataset_entities.append(entities)
-
-    return dataset_sentences, dataset_entities
-
-
-class NcbiDiseaseDatasetLoader(DatasetLoader):
-    """
-    A `DatasetLoader` for the ncbi-disease dataset.
+    A `DatasetLoader` for the diann dataset.
 
     Args:
-        split (`str`):
-            The split to load. Can be one of `train`, `validation` or `test`.
+        path (`str`):
+            The path to the dataset to load.
 
     Raises:
         `ValueError`:
@@ -74,13 +29,14 @@ class NcbiDiseaseDatasetLoader(DatasetLoader):
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.ENTITY_TO_CLASS_MAPPING = {
-            "Disease": Disease,
+            "Dis": Disability,
         }
 
         self.elements = {}
 
-        dataset_words, dataset_entities = get_ncbidisease_hf(
-            split=path_or_split,
+        dataset_words, dataset_entities = load_conll_tsv(
+            path=path_or_split,
+            include_misc=True,
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
         )
 
@@ -94,12 +50,12 @@ class NcbiDiseaseDatasetLoader(DatasetLoader):
             }
 
 
-class NcbiDiseaseSampler(Sampler):
+class DiannSampler(Sampler):
     """
-    A data `Sampler` for the NCBI Disease dataset.
+    A data `Sampler` for the Diann dataset.
 
     Args:
-        dataset_loader (`NcbiDiseaseDatasetLoader`):
+        dataset_loader (`DiannDiseaseDatasetLoader`):
             The dataset loader that contains the data information.
         task (`str`, optional):
             The task to sample. It must be one of the following: NER, VER, RE, EE.
@@ -138,7 +94,7 @@ class NcbiDiseaseSampler(Sampler):
 
     def __init__(
         self,
-        dataset_loader: NcbiDiseaseDatasetLoader,
+        dataset_loader: DiannDatasetLoader,
         task: str = None,
         split: str = "train",
         parallel_instances: Union[int, Tuple[int, int]] = 1,
@@ -154,7 +110,7 @@ class NcbiDiseaseSampler(Sampler):
     ) -> None:
         assert task in [
             "NER",
-        ], f"Ncbi Disease only supports NER task. {task} is not supported."
+        ], f"Diann Disease only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
             "NER": (ENTITY_DEFINITIONS, "entities"),

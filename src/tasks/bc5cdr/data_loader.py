@@ -2,10 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 from ..utils_typing import Entity
 
 from src.tasks.bc5cdr.guidelines import GUIDELINES
-from src.tasks.bc5cdr.prompts import (
-    ENTITY_DEFINITIONS,
-    Disease,Chemical
-)
+from src.tasks.bc5cdr.prompts import ENTITY_DEFINITIONS, Disease, Chemical
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
@@ -13,21 +10,21 @@ from ..utils_data import DatasetLoader, Sampler
 
 def get_bc5cdr_hf(
     split: str,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Entity]]],
-) -> Tuple[List[List[str]], List[List[Union[Entity]]]]:
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
+) -> Tuple[List[List[str]], List[List[Entity]]]:
     """
     Get the Bc5cdr dataset from the huggingface datasets library
     Args:
         split (str): The path_or_split to load. Can be one of `train`, `validation` or `test`.
     Returns:
-        (List[str],List[Union[Entity]]): The text and the entities
+        (List[str],List[Entity]): The text and the entities
     """
     from datasets import load_dataset
 
     dataset = load_dataset("ghadeermobasher/BC5CDR-Chemical-Disease")
     id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
     dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Union[Entity]]] = []
+    dataset_entities: List[List[Entity]] = []
 
     for example in dataset[split]:
         words = example["tokens"]

@@ -30,8 +30,8 @@ from ..utils_data import DatasetLoader, Sampler
 
 def get_ontonotes_hf(
     split: str,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Union[Entity]]],
-) -> Tuple[List[List[str]], List[List[Union[Entity]]]]:
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
+) -> Tuple[List[List[str]], List[List[Entity]]]:
     """
     Get the OntoNotes dataset from the huggingface datasets library
     Args:
@@ -44,7 +44,7 @@ def get_ontonotes_hf(
     dataset = load_dataset("conll2012_ontonotesv5", "english_v12")
     id2label = dict(enumerate(dataset["train"].features["sentences"][0]["named_entities"].feature.names))
     dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Union[Entity]]] = []
+    dataset_entities: List[List[Entity]] = []
 
     for example in dataset[split]:
         for sentence in example["sentences"]:
