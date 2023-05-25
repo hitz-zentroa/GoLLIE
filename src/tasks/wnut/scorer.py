@@ -1,11 +1,11 @@
 from typing import Dict, List, Type
 
-from src.tasks.bc5cdr.prompts import ENTITY_DEFINITIONS
+from src.tasks.wnut.prompts import ENTITY_DEFINITIONS
 from src.tasks.utils_scorer import SpanScorer
 from src.tasks.utils_typing import Entity
 
 
-class Bc5cdrEntityScorer(SpanScorer):
+class WnutEntityScorer(SpanScorer):
     """CoNLL03 Entity identification and classification scorer."""
 
     valid_types: List[Type] = ENTITY_DEFINITIONS

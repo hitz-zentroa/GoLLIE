@@ -1,19 +1,19 @@
 from typing import Dict, List, Tuple, Type, Union
 from ..utils_typing import Entity
 
-from src.tasks.bc5cdr.guidelines import GUIDELINES
-from src.tasks.bc5cdr.prompts import ENTITY_DEFINITIONS, Disease, Chemical
+from src.tasks.wnut.guidelines import GUIDELINES
+from src.tasks.wnut.prompts import ENTITY_DEFINITIONS, Person, Location, Corporation, Product, CreativeWork, Group
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
 
 
-def get_bc5cdr_hf(
+def get_bwnut_hf(
     split: str,
     ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
 ) -> Tuple[List[List[str]], List[List[Entity]]]:
     """
-    Get the Bc5cdr dataset from the huggingface datasets library
+    Get the Wnut dataset from the huggingface datasets library
     Args:
         split (str): The path_or_split to load. Can be one of `train`, `validation` or `test`.
     Returns:
@@ -21,11 +21,15 @@ def get_bc5cdr_hf(
     """
     from datasets import load_dataset
 
-    dataset = load_dataset("ghadeermobasher/BC5CDR-Chemical-Disease")
+    dataset = load_dataset("wnut_17")
+    # Dirty fix to prevent errors reading the labels
     label_names = dataset["train"].features["ner_tags"].feature.names
+    i = label_names.index("B-creative-work")
+    label_names[i] = "B-creative_work"
+    i = label_names.index("I-creative-work")
+    label_names[i] = "I-creative_work"
 
-    id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
-
+    id2label = dict(enumerate(label_names))
     dataset_sentences: List[List[str]] = []
     dataset_entities: List[List[Entity]] = []
 
@@ -57,9 +61,9 @@ def get_bc5cdr_hf(
     return dataset_sentences, dataset_entities
 
 
-class Bc5cdrDatasetLoader(DatasetLoader):
+class WnutDatasetLoader(DatasetLoader):
     """
-    A `DatasetLoader` for the Bc5cdr dataset.
+    A `DatasetLoader` for the Wnut dataset.
 
     Args:
         split (`str`):
@@ -74,13 +78,17 @@ class Bc5cdrDatasetLoader(DatasetLoader):
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.ENTITY_TO_CLASS_MAPPING = {
-            "Disease": Disease,
-            "Chemical": Chemical,
+            "corporation": Corporation,
+            "creative_work": CreativeWork,
+            "group": Group,
+            "location": Location,
+            "person": Person,
+            "product": Product,
         }
 
         self.elements = {}
 
-        dataset_words, dataset_entities = get_bc5cdr_hf(
+        dataset_words, dataset_entities = get_bwnut_hf(
             split=path_or_split,
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
         )
@@ -95,12 +103,12 @@ class Bc5cdrDatasetLoader(DatasetLoader):
             }
 
 
-class Bc5cdrSampler(Sampler):
+class WnutSampler(Sampler):
     """
-    A data `Sampler` for the BC5cdr dataset.
+    A data `Sampler` for the Wnut dataset.
 
     Args:
-        dataset_loader (`Bc5cdrDatasetLoader`):
+        dataset_loader (`WnutDatasetLoader`):
             The dataset loader that contains the data information.
         task (`str`, optional):
             The task to sample. It must be one of the following: NER, VER, RE, EE.
@@ -139,7 +147,7 @@ class Bc5cdrSampler(Sampler):
 
     def __init__(
         self,
-        dataset_loader: Bc5cdrDatasetLoader,
+        dataset_loader: WnutDatasetLoader,
         task: str = None,
         split: str = "train",
         parallel_instances: Union[int, Tuple[int, int]] = 1,
@@ -155,7 +163,7 @@ class Bc5cdrSampler(Sampler):
     ) -> None:
         assert task in [
             "NER",
-        ], f"BC5cdr only supports NER task. {task} is not supported."
+        ], f"Wnut only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
             "NER": (ENTITY_DEFINITIONS, "entities"),
