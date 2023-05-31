@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from . import ace, conll03, rams, tacred, ontonotes, ncbidisease, bc5cdr, diann, wnut, multinerd
+from . import ace, bc5cdr, conll03, diann, multinerd, ncbidisease, ontonotes, rams, tacred, wnut
 
 
 TASK_ID_TO_TASKS = {

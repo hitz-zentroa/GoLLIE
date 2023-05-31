@@ -39,10 +39,11 @@ def train_collie(
     logging.info(f"Loading {model_args.model_name_or_path} model...")
     model, tokenizer = load_model_for_training(
         model_weights_name_or_path=model_args.model_name_or_path,
-        int8_quantization=model_args.int8_quantization,
+        quantization=model_args.quantization,
         use_lora=model_args.use_lora,
         lora_target_modules=model_args.lora_target_modules,
         torch_dtype=model_args.torch_dtype,
+        force_auto_device_map=model_args.force_auto_device_map,
     )
 
     logging.info("Loading datasets...")
@@ -186,8 +187,9 @@ def inference_collie(
 
     model, tokenizer = load_model_for_inference(
         weights_path=model_path,
-        int8_quantization=model_args.int8_quantization,
+        quantization=model_args.quantization,
         lora_weights_name_or_path=lora_weights_name_or_path,
+        force_auto_device_map=model_args.force_auto_device_map,
     )
 
     trainer = CollieTrainer(

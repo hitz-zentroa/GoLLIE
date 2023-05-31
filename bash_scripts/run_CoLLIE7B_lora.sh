@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE7B5%_eval
+#SBATCH --job-name=CoLLIE7B
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE7B5%_eval.out.txt
-#SBATCH --error=.slurm/CoLLIE7B5%_eval.err.txt
+#SBATCH --output=.slurm/CoLLIE7B.out.txt
+#SBATCH --error=.slurm/CoLLIE7B.err.txt
 
 source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
@@ -17,5 +17,12 @@ export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=CoLLIE
 
 
-python3 -m src.run configs/model_configs/CoLLIE-7B-prompt5%_eval.yaml
+CONFIGS_FOLDER="configs/model_configs"
+
+# cd ../src || exit
+
+# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
+
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora8.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora4.yaml
 

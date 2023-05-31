@@ -1,12 +1,9 @@
 from typing import Dict, List, Tuple, Type, Union
-from ..utils_typing import Entity
 
+from src.tasks.label_encoding import rewrite_labels
 from src.tasks.multinerd.guidelines import GUIDELINES
 from src.tasks.multinerd.prompts import (
     ENTITY_DEFINITIONS,
-    Person,
-    Location,
-    Organization,
     Animal,
     Biological,
     Celestial,
@@ -14,15 +11,18 @@ from src.tasks.multinerd.prompts import (
     Event,
     Food,
     Instrument,
+    Location,
     Media,
-    Plant,
     Mythological,
+    Organization,
+    Person,
+    Plant,
     Time,
     Vehicle,
 )
-from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
 
 
 def get_multinerd_hf(

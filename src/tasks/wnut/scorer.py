@@ -1,8 +1,8 @@
 from typing import Dict, List, Type
 
-from src.tasks.wnut.prompts import ENTITY_DEFINITIONS
 from src.tasks.utils_scorer import SpanScorer
 from src.tasks.utils_typing import Entity
+from src.tasks.wnut.prompts import ENTITY_DEFINITIONS
 
 
 class WnutEntityScorer(SpanScorer):

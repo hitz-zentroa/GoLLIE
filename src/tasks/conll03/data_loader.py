@@ -1,5 +1,5 @@
 from typing import Dict, List, Tuple, Type, Union
-from ..utils_typing import Entity
+
 from src.tasks.conll03.guidelines import GUIDELINES
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
@@ -12,6 +12,7 @@ from src.tasks.conll03.prompts import (
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
 
 
 def get_conll_hf(

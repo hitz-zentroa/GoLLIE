@@ -19,7 +19,7 @@ class ModelArguments:
             "help": (
                 "Override the default `torch.dtype` and load the model under this"
                 " dtype. If `auto` is passed, the dtype will be automatically derived"
-                " from the model's weights."
+                " from the model's weights. We will override this if we use quantization."
             ),
             "choices": ["auto", "bfloat16", "float16", "float32"],
         },
@@ -34,11 +34,11 @@ class ModelArguments:
         },
     )
 
-    int8_quantization: bool = field(
-        default=False,
+    quantization: Optional[int] = field(
+        default=None,
         metadata={
             "help": (
-                "Whether to use int8 quantization. Requires bitsandbytes library:"
+                "Whether to use '4' or '8' bit quantization. Requires bitsandbytes library:"
                 " https://github.com/TimDettmers/bitsandbytes"
             )
         },
@@ -73,6 +73,17 @@ class ModelArguments:
             "help": (
                 "The target modules to which LoRA will be applied. If not specified, We"
                 " will use the default modules for the model in huggingface PEFT library."
+            )
+        },
+    )
+
+    force_auto_device_map: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to force the use of the auto device map. If set to True, the model will be split across "
+                "GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded "
+                "into each GPU. Defaults to False."
             )
         },
     )
