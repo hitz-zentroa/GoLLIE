@@ -33,7 +33,7 @@ def load_model_for_training(
     lora_dropout: Optional[float] = 0.05,
     torch_dtype: Optional[str] = None,
     force_auto_device_map: bool = False,
-    use_gradient_checkpointing:bool = False,
+    use_gradient_checkpointing: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -119,8 +119,6 @@ def load_model_for_training(
         trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
     )
 
-    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
-    logging.info(f"Loading model with dtype: {torch_dtype}")
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
@@ -135,7 +133,7 @@ def load_model_for_training(
             bnb_4bit_quant_type="nf4",
             bnb_4bit_compute_dtype=torch.bfloat16,
         )
-        if quantization==4:
+        if quantization == 4:
             torch_dtype = torch.bfloat16
         logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
     else:
@@ -205,8 +203,8 @@ def load_model_for_training(
     if quantization is not None:
         from peft import prepare_model_for_kbit_training
 
-        #model.gradient_checkpointing_enable()
-        model = prepare_model_for_kbit_training(model,use_gradient_checkpointing=use_gradient_checkpointing)
+        # model.gradient_checkpointing_enable()
+        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
 
     if use_lora:
         from peft import LoraConfig, PeftModel, TaskType, get_peft_model
