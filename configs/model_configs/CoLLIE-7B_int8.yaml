@@ -1,10 +1,10 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
-torch_dtype: "auto"
+torch_dtype: "bfloat16"
 use_lora: false
 quantization: null
 force_auto_device_map: true
-#deepspeed: /ikerlariak/osainz006/CoLLIE/configs/deepspeed_configs/
+#deepspeed: /ikerlariak/osainz006/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
@@ -66,7 +66,7 @@ gradient_accumulation_steps: 4
 generation_num_beams: 1
 
 # optimizer settings
-optim: paged_adamw_8bit
+optim: adamw_bnb_8bit
 learning_rate: 0.0003
 weight_decay: 0
 num_train_epochs: 3
@@ -98,6 +98,6 @@ resume_from_checkpoint: false
 
 # performance
 bf16: false
-fp16: true
+fp16: false
 torch_compile: false
 ddp_find_unused_parameters: false
