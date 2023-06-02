@@ -96,7 +96,7 @@ push_to_hub: false
 resume_from_checkpoint: false
 
 # performance
-bf16: false
-fp16: true
+bf16: true
+fp16: false
 torch_compile: false
 ddp_find_unused_parameters: false

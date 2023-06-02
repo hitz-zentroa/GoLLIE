@@ -44,6 +44,7 @@ def train_collie(
         lora_target_modules=model_args.lora_target_modules,
         torch_dtype=model_args.torch_dtype,
         force_auto_device_map=model_args.force_auto_device_map,
+        use_gradient_checkpointing=training_args.gradient_checkpointing,
     )
 
     logging.info("Loading datasets...")
