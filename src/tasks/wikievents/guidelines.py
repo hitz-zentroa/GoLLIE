@@ -1,8 +1,8 @@
 GUIDELINES = {
     "wikievents_ner_abstract": {
         "en": [
-            "Abstract, non-tangible artifacts such as software (e.g., programs, tool kits, apps, e-mail), measureable\n"
-            " intellectual property, contracts, etc. (nb: does not include laws, which are LAW type)\n"
+            "Abstract, non-tangible artifacts such as software (e.g., programs, tool kits, apps, e-mail),"
+            " measureable\n intellectual property, contracts, etc. (nb: does not include laws, which are LAW type)\n"
         ]
     },
     "wikievents_ner_bodypart": {
@@ -10,23 +10,23 @@ GUIDELINES = {
     },
     "wikievents_ner_commercialproduct": {
         "en": [
-            "A tangible product or article of trade for which someone pays or barters, or more generally, an artifact\n"
-            " or a thing.\n"
+            "A tangible product or article of trade for which someone pays or barters, or more generally, an"
+            " artifact\n or a thing.\n"
         ]
     },
     "wikievents_ner_facility": {
         "en": [
             "A functional, primarily man-made structure. Facilities are artifacts falling under the domains of\n"
-            " architecture and civil engineering, including more temporary human constructs, such as police lines and\n"
-            " checkpoints.\n"
+            " architecture and civil engineering, including more temporary human constructs, such as police lines"
+            " and\n checkpoints.\n"
         ]
     },
     "wikievents_ner_gpe": {
         "en": [
             "Geopolitical entities such as countries, provinces, states, cities, towns, etc. GPEs are composite\n"
-            " entities, consisting of a physical location, a government, and a population. All three of these elements\n"
-            " must be present for an entity to be tagged as a GPE. A GPE entity may be a single geopolitical entity or\n"
-            " a group.\n"
+            " entities, consisting of a physical location, a government, and a population. All three of these"
+            " elements\n must be present for an entity to be tagged as a GPE. A GPE entity may be a single"
+            " geopolitical entity or\n a group.\n"
         ]
     },
     "wikievents_ner_information": {
@@ -52,8 +52,8 @@ GUIDELINES = {
     },
     "wikievents_ner_organization": {
         "en": [
-            "Corporations, agencies, and other groups of people defined by an established organizational structure. An\n"
-            " ORG entity may be a single organization or a group. A key feature of an ORG is that it can change\n"
+            "Corporations, agencies, and other groups of people defined by an established organizational structure."
+            " An\n ORG entity may be a single organization or a group. A key feature of an ORG is that it can change\n"
             " members without changing identity.\n"
         ]
     },
@@ -63,27 +63,29 @@ GUIDELINES = {
     "wikievents_ner_side_of_conflict": {
         "en": [
             "The different sides of a conflict, such as  philosophical, cultural, ideological, religious, political,\n"
-            " guiding philosophical movement or group orientation.  This will encompass sides of the battle/conflict,\n"
-            " sports fans when salient, and other such affiliations, in addition to religions, political parties, and\n"
-            " other philosophies.\n"
+            " guiding philosophical movement or group orientation.  This will encompass sides of the"
+            " battle/conflict,\n sports fans when salient, and other such affiliations, in addition to religions,"
+            " political parties, and\n other philosophies.\n"
         ]
     },
     "wikievents_ner_job_title": {"en": ["A person's title or job role."]},
     "wikievents_ner_numeric": {
         "en": [
-            "A numerical value or non-numerical value such as an informational property such as color or make or URL.\n"
+            "A numerical value or non-numerical value such as an informational property such as color or make or"
+            " URL.\n"
         ]
     },
     "wikievents_ner_vehicle": {
         "en": [
             "A physical device primarily designed to move an object from one location to another, by (for example)\n"
-            " carrying, flying, pulling, or pushing the transported object. Vehicle entities may or may not have their\n"
-            " own power source.\n"
+            " carrying, flying, pulling, or pushing the transported object. Vehicle entities may or may not have"
+            " their\n own power source.\n"
         ]
     },
     "wikievents_ner_weapon": {
         "en": [
-            "A physical device that is primarily used as an instrument for physically harming or destroying entities.\n"
+            "A physical device that is primarily used as an instrument for physically harming or destroying"
+            " entities.\n"
         ]
     },
     "wikievents_ee_artifact_existance": {
@@ -94,8 +96,8 @@ GUIDELINES = {
     },
     "wikievents_ee_cognitive": {
         "en": [
-            "The act of establishing the identity of an entity or event, or establishing the relevant category that an\n"
-            " entity or event belongs to, such as being a suspect or a target or an attack. An observation or\n"
+            "The act of establishing the identity of an entity or event, or establishing the relevant category that"
+            " an\n entity or event belongs to, such as being a suspect or a target or an attack. An observation or\n"
             " inspection event, with any target of inspection. Explicit mention of researching the answer to a\n"
             " question by analyzing literature or testing hypotheses through experiments or reviewing opinions from\n"
             " experts in a field. The action of teaching a person or animal a particular skill or type of behavior,\n"
@@ -104,21 +106,21 @@ GUIDELINES = {
     },
     "wikievents_ee_conflict": {
         "en": [
-            "An attack event, a violent physical act causing harm or damage. Defeat in a conflict or an election, but\n"
-            " not a game-style competition. A demonstration, march, protest, or political gathering.\n"
+            "An attack event, a violent physical act causing harm or damage. Defeat in a conflict or an election,"
+            " but\n not a game-style competition. A demonstration, march, protest, or political gathering.\n"
         ]
     },
     "wikievents_ee_contact": {
         "en": [
             "An event where two or more participants communicate over any medium, where the context does not\n"
             " distinguish the nature of the contact or whether the communication is in person or remote. Any\n"
-            " communication over any medium where the communicator intentionally deceives the addressee or continue an\n"
-            " ongoing deception, either by knowingly conveying false information, or conveying information with the\n"
-            " intent of the addressee drawing the wrong conclusion, or omitting information. A statement making a\n"
-            " request, appeal, command, or order, where the context does not distinguish whether the communication is\n"
-            " one-way or two-way, or whether it is in person or remote. A statement offering threat or coercion, where\n"
-            " the context does not distinguish whether the communication is one-way or two-way, or whether it is in\n"
-            " person or remote.\n"
+            " communication over any medium where the communicator intentionally deceives the addressee or continue"
+            " an\n ongoing deception, either by knowingly conveying false information, or conveying information with"
+            " the\n intent of the addressee drawing the wrong conclusion, or omitting information. A statement making"
+            " a\n request, appeal, command, or order, where the context does not distinguish whether the communication"
+            " is\n one-way or two-way, or whether it is in person or remote. A statement offering threat or coercion,"
+            " where\n the context does not distinguish whether the communication is one-way or two-way, or whether it"
+            " is in\n person or remote.\n"
         ]
     },
     "wikievents_ee_control": {
@@ -129,9 +131,9 @@ GUIDELINES = {
     },
     "wikievents_ee_disaster": {
         "en": [
-            "Vehicular collision or the crashing of any type of vehicle. Explicit mentions of an outbreak of a disease\n"
-            " in an area, region, or country. A damaging fire or explosion, either natural or caused but without the\n"
-            " intent of attacking\n"
+            "Vehicular collision or the crashing of any type of vehicle. Explicit mentions of an outbreak of a"
+            " disease\n in an area, region, or country. A damaging fire or explosion, either natural or caused but"
+            " without the\n intent of attacking\n"
         ]
     },
     "wikievents_ee_generic_crime": {
@@ -162,8 +164,8 @@ GUIDELINES = {
     },
     "wikievents_ee_movement_transport": {
         "en": [
-            "Physical movement or transportation of a person or artifact between places, includes putting and placing\n"
-            " objects in locations.\n"
+            "Physical movement or transportation of a person or artifact between places, includes putting and"
+            " placing\n objects in locations.\n"
         ]
     },
     "wikievents_ee_personnel": {
@@ -178,8 +180,8 @@ GUIDELINES = {
     "wikievents_eae_damage_destroy": {"en": ["The damaging or destruction of a thing."]},
     "wikievents_eae_disable_defuse": {
         "en": [
-            "Disabling the expected functioning of a mechanical device, or software, for example defusing or removing\n"
-            " a fuse from an explosive.\n"
+            "Disabling the expected functioning of a mechanical device, or software, for example defusing or"
+            " removing\n a fuse from an explosive.\n"
         ]
     },
     "wikievents_eae_dismantle": {"en": ["Disassembling an artifact in such a way that it could be reassembled."]},
@@ -191,8 +193,8 @@ GUIDELINES = {
     },
     "wikievents_eae_identify_categorize": {
         "en": [
-            "The act of establishing the identity of an entity or event, or establishing the relevant category that an\n"
-            " entity or event belongs to, such as being a suspect or a target or an attack.\n"
+            "The act of establishing the identity of an entity or event, or establishing the relevant category that"
+            " an\n entity or event belongs to, such as being a suspect or a target or an attack.\n"
         ]
     },
     "wikievents_eae_inspection": {"en": ["An observation or inspection event, with any target of inspection."]},
@@ -204,8 +206,8 @@ GUIDELINES = {
     },
     "wikievents_eae_teaching_training_learning": {
         "en": [
-            "The action of teaching a person or animal a particular skill or type of behavior, where the learner does\n"
-            " not have complete mastery of the skill until the end\n"
+            "The action of teaching a person or animal a particular skill or type of behavior, where the learner"
+            " does\n not have complete mastery of the skill until the end\n"
         ]
     },
     "wikievents_eae_attack": {"en": ["An attack event, a violent physical act causing harm or damage."]},
@@ -219,9 +221,9 @@ GUIDELINES = {
     },
     "wikievents_eae_prevarication": {
         "en": [
-            "Any communication over any medium where the communicator intentionally deceives the addressee or continue\n"
-            " an ongoing deception, either by knowingly conveying false information, or conveying information with the\n"
-            " intent of the addressee drawing the wrong conclusion, or omitting information.\n"
+            "Any communication over any medium where the communicator intentionally deceives the addressee or"
+            " continue\n an ongoing deception, either by knowingly conveying false information, or conveying"
+            " information with the\n intent of the addressee drawing the wrong conclusion, or omitting information.\n"
         ]
     },
     "wikievents_eae_request_command": {
@@ -232,8 +234,8 @@ GUIDELINES = {
     },
     "wikievents_eae_threaten_coerce": {
         "en": [
-            "A statement offering threat or coercion, where the context does not distinguish whether the communication\n"
-            " is one-way or two-way, or whether it is in person or remote.\n"
+            "A statement offering threat or coercion, where the context does not distinguish whether the"
+            " communication\n is one-way or two-way, or whether it is in person or remote.\n"
         ]
     },
     "wikievents_eae_impede_interfere_with": {
@@ -257,8 +259,8 @@ GUIDELINES = {
     },
     "wikievents_eae_acquit": {
         "en": [
-            "An acquit event occurs whenever a trial ends but fails to produce a conviction, including cases where the\n"
-            " charges are dropped by the prosecutor.\n"
+            "An acquit event occurs whenever a trial ends but fails to produce a conviction, including cases where"
+            " the\n charges are dropped by the prosecutor.\n"
         ]
     },
     "wikievents_eae_arrest_jail_detain": {
@@ -272,21 +274,22 @@ GUIDELINES = {
     },
     "wikievents_eae_convict": {
         "en": [
-            "A person, organization or GPE entity is convicted whenever that entity has been found guilty of a crime.\n"
+            "A person, organization or GPE entity is convicted whenever that entity has been found guilty of a"
+            " crime.\n"
         ]
     },
     "wikievents_eae_investigate_crime": {"en": ["Legal, journalistic, and other investigations of crimes."]},
     "wikievents_eae_release_parole": {
         "en": [
             "A release-parole event occurs whenever a state actor (GPE, organization subpart, or person\n"
-            " representative) ends its custody of a person entity because the sentence has ended, because the charges\n"
-            " are dropped, or because parole has been granted.\n"
+            " representative) ends its custody of a person entity because the sentence has ended, because the"
+            " charges\n are dropped, or because parole has been granted.\n"
         ]
     },
     "wikievents_eae_sentence": {
         "en": [
-            "A sentence event takes place whenever the punishment, particularly incarceration, for the defendant of a\n"
-            " trial event is issued by a state actor.\n"
+            "A sentence event takes place whenever the punishment, particularly incarceration, for the defendant of"
+            " a\n trial event is issued by a state actor.\n"
         ]
     },
     "wikievents_eae_trial_hearing": {
@@ -310,8 +313,8 @@ GUIDELINES = {
     },
     "wikievents_eae_intervention": {
         "en": [
-            "Any kind of medical treatment or intervention for a person or an animal, often following a diagnosis of a\n"
-            " medical condition.\n"
+            "Any kind of medical treatment or intervention for a person or an animal, often following a diagnosis of"
+            " a\n medical condition.\n"
         ]
     },
     "wikievents_eae_vaccinate": {"en": ["A person or an animal is inoculated against a disease."]},
@@ -326,15 +329,15 @@ GUIDELINES = {
     },
     "wikievents_eae_illegal_transportation": {
         "en": [
-            "Explicit mention of illegal physical transporting of people or things between places, such as smuggling,\n"
-            " trafficking, illegal border crossings.\n"
+            "Explicit mention of illegal physical transporting of people or things between places, such as"
+            " smuggling,\n trafficking, illegal border crossings.\n"
         ]
     },
     "wikievents_eae_prevent_passage": {"en": ["Explicit mention of preventing entry or exit from a location."]},
     "wikievents_eae_transportation": {
         "en": [
-            "Physical movement or transportation of a person or artifact between places, includes putting and placing\n"
-            " objects in locations.\n"
+            "Physical movement or transportation of a person or artifact between places, includes putting and"
+            " placing\n objects in locations.\n"
         ]
     },
     "wikievents_eae_change_job_location": {
@@ -360,20 +363,20 @@ GUIDELINES = {
     },
     "wikievents_eae_aid_between_governments": {
         "en": [
-            "A voluntary transfer of resources from one GPE to another from the perspective of governments, often with\n"
-            " strings attached.\n"
+            "A voluntary transfer of resources from one GPE to another from the perspective of governments, often"
+            " with\n strings attached.\n"
         ]
     },
     "wikievents_eae_donation": {
         "en": [
-            "The voluntary provision, donation, or extension of material aid in the form of assets or commodities (nb:\n"
-            " use AidBetweenGovernments instead for GPE to GPE donations).\n"
+            "The voluntary provision, donation, or extension of material aid in the form of assets or commodities"
+            " (nb:\n use AidBetweenGovernments instead for GPE to GPE donations).\n"
         ]
     },
     "wikievents_eae_exchange_buy_sell": {
         "en": [
-            "A transaction transferring or obtaining money, ownership, possession, or control of something, applicable\n"
-            " to any type, nature, or method of acquisition including barter.\n"
+            "A transaction transferring or obtaining money, ownership, possession, or control of something,"
+            " applicable\n to any type, nature, or method of acquisition including barter.\n"
         ]
     },
 }

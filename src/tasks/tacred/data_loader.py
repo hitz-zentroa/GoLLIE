@@ -82,7 +82,6 @@ class TACREDDatasetLoader(DatasetLoader):
     }
 
     def __init__(self, path: str, **kwargs) -> None:
-        """TODO REWRITE TO WORK WITH TEMPLATES"""
         self.elements = {}
         with open(path, "rt", encoding="utf-8") as in_f:
             data = json.load(in_f)
