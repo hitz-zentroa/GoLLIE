@@ -1,8 +1,8 @@
 import inspect
 import json
 from typing import Tuple, Union
-from src.tasks.wikievents.guidelines import GUIDELINES
 
+from src.tasks.wikievents.guidelines import GUIDELINES
 from src.tasks.wikievents.prompts import (
     COARSE_EVENT_DEFINITIONS,
     COARSE_TO_FINE_EVENTS,
@@ -134,7 +134,7 @@ class WikiEventsDatasetLoader(DatasetLoader):
             "Artifact": "artifact",
             "Components": "components",
             "Dismantler": "agent",
-            "Instrument": "instrument"
+            "Instrument": "instrument",
         },
         "ArtifactExistence.DamageDestroyDisableDismantle.Unspecified": {
             "coarse": ArtifactExistanceEvent,
@@ -602,4 +602,3 @@ class WikiEventsSampler(Sampler):
             definitions=GUIDELINES,
             **kwargs,
         )
-

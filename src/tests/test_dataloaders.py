@@ -30,7 +30,7 @@ class TestDataLoaders(unittest.TestCase):
             config["seed"] = 0
             config["label_noise_prob"] = 0.0
 
-        dataloader = WikiEventsDatasetLoader("data/wikievents/train.sentence.jsonl", group_by="sentence")
+        WikiEventsDatasetLoader("data/wikievents/train.sentence.jsonl", group_by="sentence")
 
         # _ = list(ACESampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
 

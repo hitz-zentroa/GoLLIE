@@ -4,9 +4,10 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
 #SBATCH --output=.slurm/CoLLIE7B_lora.out.txt
-#SBATCH --error=.slurm/CoLLIE7B:lora.err.txt
+#SBATCH --error=.slurm/CoLLIE7B_lora.err.txt
 
-source /ikerlariak/osainz006/venvs/collie/bin/activate
+source /ikerlariak/osainz006/venvs/collie-old/bin/activate
+# source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -25,4 +26,3 @@ CONFIGS_FOLDER="configs/model_configs"
 
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora8.yaml
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora4.yaml
-

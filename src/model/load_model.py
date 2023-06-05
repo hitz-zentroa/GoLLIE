@@ -125,16 +125,22 @@ def load_model_for_training(
         trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
     )
 
+    quant_args = {}
     if quantization is not None:
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=quantization == 4,
-            load_in_8bit=quantization == 8,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
-        )
+        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
         if quantization == 4:
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16,
+            )
             torch_dtype = torch.bfloat16
+
+        else:
+            bnb_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+            )
         logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
     else:
         torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
@@ -157,11 +163,10 @@ def load_model_for_training(
 
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=quantization == 8,
-            load_in_4bit=quantization == 4,
             device_map="auto" if force_auto_device_map else (device_map if quantization else None),
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
+            **quant_args,
         )
 
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
@@ -170,12 +175,11 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=quantization == 8,
-            load_in_4bit=quantization == 4,
             device_map="auto" if force_auto_device_map else (device_map if quantization else None),
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+            **quant_args,
         )
 
         # Ensure that the padding token is added to the left of the input sequence.
@@ -201,7 +205,12 @@ def load_model_for_training(
             tokenizer.pad_token_id = tokenizer.eos_token_id
 
     if quantization is not None:
-        from peft import prepare_model_for_kbit_training
+        try:
+            from peft import prepare_model_for_kbit_training
+        except ImportError:
+            import peft
+            from peft import prepare_model_for_int8_training as prepare_model_for_kbit_training
+            logging.warning("You are using an old version of PEFT. Please update PEFT version. Current: " + peft.__version__)
 
         # model.gradient_checkpointing_enable()
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
@@ -315,15 +324,22 @@ def load_model_for_inference(
         trust_remote_code=True if "mpt" in weights_path else False,
     )
 
+    quant_args = {}
     if quantization is not None:
-        bnb_config = BitsAndBytesConfig(
-            load_in_4bit=quantization == 4,
-            load_in_8bit=quantization == 8,
-            bnb_4bit_use_double_quant=True,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_compute_dtype=torch.bfloat16,
-        )
-        torch_dtype = torch.bfloat16
+        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
+        if quantization == 4:
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.bfloat16,
+            )
+            torch_dtype = torch.bfloat16
+
+        else:
+            bnb_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+            )
         logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
     else:
         torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
@@ -334,23 +350,21 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            load_in_8bit=quantization == 8,
-            load_in_4bit=quantization == 4,
             device_map="auto" if force_auto_device_map else (device_map if quantization else None),
             torch_dtype=torch_dtype,
             quantization_config=bnb_config,
+            **quant_args,
         )
 
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            load_in_8bit=quantization == 8,
-            load_in_4bit=quantization == 4,
             device_map="auto" if force_auto_device_map else (device_map if quantization else None),
             torch_dtype=torch_dtype,
             trust_remote_code=True if "mpt" in weights_path else False,
             quantization_config=bnb_config,
+            **quant_args,
         )
 
         # Ensure that the padding token is added to the left of the input sequence.
