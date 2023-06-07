@@ -112,17 +112,27 @@ def load_model_for_training(
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
-    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update({"mpt": "MPTForCausalLM"})  # MPT not in transformers yet
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
+        {
+            "mpt": "MPTForCausalLM",
+            "RefinedWebModel": "RWForCausalLM",
+            "RefinedWeb": "RWForCausalLM",
+        }
+    )  # MPT and Falcon are not in transformers yet
 
     config = AutoConfig.from_pretrained(
         model_weights_name_or_path,
-        trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+        trust_remote_code=(
+            True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+        ),
     )
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
-        trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+        trust_remote_code=(
+            True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+        ),
     )
 
     quant_args = {}
@@ -178,7 +188,9 @@ def load_model_for_training(
             device_map="auto" if force_auto_device_map else (device_map if quantization else None),
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
-            trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+            trust_remote_code=(
+                True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+            ),
             **quant_args,
         )
 
@@ -210,7 +222,10 @@ def load_model_for_training(
         except ImportError:
             import peft
             from peft import prepare_model_for_int8_training as prepare_model_for_kbit_training
-            logging.warning("You are using an old version of PEFT. Please update PEFT version. Current: " + peft.__version__)
+
+            logging.warning(
+                "You are using an old version of PEFT. Please update PEFT version. Current: " + peft.__version__
+            )
 
         # model.gradient_checkpointing_enable()
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
@@ -309,11 +324,17 @@ def load_model_for_inference(
 
     logging.info(f"Loading model from {weights_path}")
 
-    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update({"mpt": "MPTForCausalLM"})  # MPT not in transformers yet
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
+        {
+            "mpt": "MPTForCausalLM",
+            "RefinedWebModel": "RWForCausalLM",
+            "RefinedWeb": "RWForCausalLM",
+        }
+    )  # MPT and Falcon are not in transformers yet
 
     config = AutoConfig.from_pretrained(
         weights_path,
-        trust_remote_code=True if "mpt" in weights_path else False,
+        trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
 
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
@@ -321,7 +342,7 @@ def load_model_for_inference(
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         weights_path,
         add_eos_token=True,
-        trust_remote_code=True if "mpt" in weights_path else False,
+        trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
 
     quant_args = {}
@@ -362,7 +383,7 @@ def load_model_for_inference(
             pretrained_model_name_or_path=weights_path,
             device_map="auto" if force_auto_device_map else (device_map if quantization else None),
             torch_dtype=torch_dtype,
-            trust_remote_code=True if "mpt" in weights_path else False,
+            trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
             quantization_config=bnb_config,
             **quant_args,
         )
