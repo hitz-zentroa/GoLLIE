@@ -135,7 +135,7 @@ def load_model_for_training(
                 bnb_4bit_quant_type="nf4",
                 bnb_4bit_compute_dtype=torch.bfloat16,
             )
-            torch_dtype = torch.bfloat16
+            # torch_dtype = torch.bfloat16
 
         else:
             bnb_config = BitsAndBytesConfig(
@@ -205,12 +205,7 @@ def load_model_for_training(
             tokenizer.pad_token_id = tokenizer.eos_token_id
 
     if quantization is not None:
-        try:
-            from peft import prepare_model_for_kbit_training
-        except ImportError:
-            import peft
-            from peft import prepare_model_for_int8_training as prepare_model_for_kbit_training
-            logging.warning("You are using an old version of PEFT. Please update PEFT version. Current: " + peft.__version__)
+        from .model_utils import prepare_model_for_kbit_training
 
         # model.gradient_checkpointing_enable()
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
@@ -334,7 +329,7 @@ def load_model_for_inference(
                 bnb_4bit_quant_type="nf4",
                 bnb_4bit_compute_dtype=torch.bfloat16,
             )
-            torch_dtype = torch.bfloat16
+            # torch_dtype = torch.bfloat16
 
         else:
             bnb_config = BitsAndBytesConfig(
