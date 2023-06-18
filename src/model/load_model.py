@@ -355,7 +355,7 @@ def load_model_for_inference(
             )
         logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
     else:
-        torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
+        # torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
         logging.info(f"Loading model with dtype: {torch_dtype}")
         bnb_config = None
 
