@@ -42,8 +42,8 @@ def get_device_map(force_auto_device_map: bool) -> str:
         word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
         if word_size > 1:
             logging.info(
-                f"Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
-                f"on each GPU."
+                "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
+                "on each GPU."
             )
             device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
         else:
