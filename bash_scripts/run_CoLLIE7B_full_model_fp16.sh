@@ -18,11 +18,12 @@ export WANDB_PROJECT=CoLLIE
 
 
 CONFIGS_FOLDER="configs/model_configs"
+export PYTHONPATH="$PYTHONPATH:$PWD"
 
 # cd ../src || exit
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
-# python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_int8.yaml
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
+
+torchrun --standalone --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
 
