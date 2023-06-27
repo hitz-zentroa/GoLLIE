@@ -67,7 +67,7 @@ generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch_fused
-learning_rate: 0.0003
+learning_rate: 0.00002
 weight_decay: 0
 num_train_epochs: 3
 lr_scheduler_type: cosine
