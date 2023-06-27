@@ -99,14 +99,6 @@ def load_model_for_training(
             "argument (e.g 'adamw_bnb_8bit', 'lion_8bit', 'paged_adamw_8bit', ...)."
         )
 
-    device_map = "auto"
-    world_size = int(os.environ.get("WORLD_SIZE", 1))
-    ddp = world_size != 1
-    if ddp:
-        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-
-    if quantization is not None and not force_auto_device_map:
-        logging.info(f"Device map: {device_map}")
     if force_auto_device_map:
         logging.info("Device map: auto")
 
@@ -173,7 +165,7 @@ def load_model_for_training(
 
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            device_map="auto" if force_auto_device_map else (device_map if quantization else None),
+            device_map="auto" if force_auto_device_map else None,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             **quant_args,
@@ -185,7 +177,7 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            device_map="auto" if force_auto_device_map else (device_map if quantization else None),
+            device_map="auto" if force_auto_device_map else None,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             trust_remote_code=(
@@ -307,14 +299,6 @@ def load_model_for_inference(
         quantization in [4, 8]
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
-    device_map = "auto"
-    world_size = int(os.environ.get("WORLD_SIZE", 1))
-    ddp = world_size != 1
-    if ddp:
-        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-
-    if quantization is not None and not force_auto_device_map:
-        logging.info(f"Device map: {device_map}")
     if force_auto_device_map:
         logging.info("Device map: auto")
 
@@ -367,7 +351,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            device_map="auto" if force_auto_device_map else (device_map if quantization else None),
+            device_map="auto" if force_auto_device_map else None,
             torch_dtype=torch_dtype,
             quantization_config=bnb_config,
             **quant_args,
@@ -377,7 +361,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            device_map="auto" if force_auto_device_map else (device_map if quantization else None),
+            device_map="auto" if force_auto_device_map else None,
             torch_dtype=torch_dtype,
             trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
             quantization_config=bnb_config,
