@@ -240,13 +240,6 @@ def load_model_for_training(
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
 
-    if device_map == "auto":
-        """
-        Fixes: WARNING:accelerate.utils.modeling:The model weights are not tied. Please use the `tie_weights`
-        method before using the `infer_auto_device` function.
-        """
-        model.tie_weights()
-
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     if tokenizer.pad_token_id is None:
@@ -425,13 +418,6 @@ def load_model_for_inference(
             f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
-
-    if device_map == "auto":
-        """
-        Fixes: WARNING:accelerate.utils.modeling:The model weights are not tied. Please use the `tie_weights`
-        method before using the `infer_auto_device` function.
-        """
-        model.tie_weights()
 
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
