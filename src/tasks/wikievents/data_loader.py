@@ -209,7 +209,7 @@ class WikiEventsDatasetLoader(DatasetLoader):
             "Demonstrator": "demonstrator",
             "Target": "target",
             "Topic": "topic",
-            "Regulator": "regulator"
+            "Regulator": "regulator",
         },
         "Contact.Contact.Broadcast": {
             "coarse": ContactEvent,

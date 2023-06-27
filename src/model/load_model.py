@@ -205,6 +205,8 @@ def load_model_for_training(
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
 
+    logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
+
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
             # StabilityLM specific fix
@@ -218,6 +220,8 @@ def load_model_for_training(
 
     if quantization is not None:
         from .model_utils import prepare_model_for_kbit_training
+
+        # from peft import prepare_model_for_kbit_training
 
         # model.gradient_checkpointing_enable()
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)

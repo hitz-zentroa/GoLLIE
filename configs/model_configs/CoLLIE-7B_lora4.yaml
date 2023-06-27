@@ -3,7 +3,7 @@ model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
 torch_dtype: "auto"
 use_lora: true
 quantization: 4
-
+gradient_checkpointing: true
 
 # dataset arguments
 dataset_dir:
