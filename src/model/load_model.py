@@ -36,6 +36,18 @@ def get_device_map(force_auto_device_map: bool) -> str:
             The device map to use for loading the model
     """
     if force_auto_device_map:
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
+        if word_size > 1:
+            raise ValueError(
+                "Found DDP environment and force_auto_device_map is set to True, this configuration "
+                "is not supported. If you want to use DPP, set force_auto_device_map to False, so "
+                "a copy of the model is loaded in each GPU. If you want the split the model across "
+                "GPUs (force_auto_device_map=True), do not use DDP (launch your script with "
+                "pyton -m src/run.py config.json). If you are not in a DDP environment but you see "
+                "this error, you might have manually set the environment variable 'LOCAL_WORLD_SIZE' to a "
+                "number different than 1, please, remove this environment variable or set it to 1"
+            )
+
         logging.info("Using auto device map, we will split the model across GPUs and CPU to fit the model in memory.")
         device_map = "auto"
     else:
@@ -228,6 +240,13 @@ def load_model_for_training(
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
 
+    if device_map == "auto":
+        """
+        Fixes: WARNING:accelerate.utils.modeling:The model weights are not tied. Please use the `tie_weights`
+        method before using the `infer_auto_device` function.
+        """
+        model.tie_weights()
+
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     if tokenizer.pad_token_id is None:
@@ -406,6 +425,13 @@ def load_model_for_inference(
             f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
+
+    if device_map == "auto":
+        """
+        Fixes: WARNING:accelerate.utils.modeling:The model weights are not tied. Please use the `tie_weights`
+        method before using the `infer_auto_device` function.
+        """
+        model.tie_weights()
 
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
