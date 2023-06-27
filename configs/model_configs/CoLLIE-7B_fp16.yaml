@@ -1,6 +1,6 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
-torch_dtype: auto
+torch_dtype: float16
 use_lora: false
 quantization: null
 force_auto_device_map: true
