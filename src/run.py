@@ -13,7 +13,7 @@ from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
 from src.evaluate import evaluate
 from src.model.load_model import load_model_for_inference, load_model_for_training
-from src.trainer import CollieTrainer, ConcatDataset
+from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
 from transformers import (
     HfArgumentParser,
     Seq2SeqTrainingArguments,
@@ -37,12 +37,13 @@ def train_collie(
     training_args: Seq2SeqTrainingArguments,
 ):
     logging.info(f"Loading {model_args.model_name_or_path} model...")
+
     model, tokenizer = load_model_for_training(
         model_weights_name_or_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         use_lora=model_args.use_lora,
         lora_target_modules=model_args.lora_target_modules,
-        torch_dtype=model_args.torch_dtype,
+        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
     )
@@ -191,6 +192,7 @@ def inference_collie(
         quantization=model_args.quantization,
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
+        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
     )
 
     trainer = CollieTrainer(

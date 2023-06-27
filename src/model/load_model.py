@@ -141,6 +141,8 @@ def load_model_for_training(
     )
 
     quant_args = {}
+    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
+
     if quantization is not None:
         quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
         if quantization == 4:
@@ -148,7 +150,7 @@ def load_model_for_training(
                 load_in_4bit=True,
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
-                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_compute_dtype=torch.float16 if torch_dtype in ["auto", None] else torch_dtype,
             )
             # torch_dtype = torch.bfloat16
 
@@ -158,7 +160,6 @@ def load_model_for_training(
             )
         logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
     else:
-        torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
         logging.info(f"Loading model with dtype: {torch_dtype}")
         bnb_config = None
 
@@ -359,7 +360,7 @@ def load_model_for_inference(
                 load_in_4bit=True,
                 bnb_4bit_use_double_quant=True,
                 bnb_4bit_quant_type="nf4",
-                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_compute_dtype=torch.float16 if torch_dtype in ["auto", None] else torch_dtype,
             )
             # torch_dtype = torch.bfloat16
 

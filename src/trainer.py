@@ -18,6 +18,7 @@ from transformers import (
     TrainerControl,
     TrainerState,
     TrainingArguments,
+    Seq2SeqTrainingArguments,
 )
 from transformers.modeling_utils import unwrap_model
 from transformers.models.auto.modeling_auto import MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
@@ -25,7 +26,7 @@ from transformers.trainer import TRAINING_ARGS_NAME, logger
 from transformers.trainer_callback import TrainerCallback
 from transformers.trainer_utils import EvalPrediction, has_length
 from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_available
-
+from src.config import ModelArguments
 
 if is_safetensors_available():
     import safetensors.torch
@@ -403,3 +404,48 @@ class RotateDatasetCallback(TrainerCallback):
             kwargs["train_dataloader"].dataset.rotate_split()
         else:
             logging.warning("No train_dataloader in kwargs. Skipping rotate_split()")
+
+
+def get_correct_torch_dtype(
+    model_args: ModelArguments,
+    training_args: Seq2SeqTrainingArguments,
+) -> "str":
+    """
+    Returns the correct torch dtype based on the model and training arguments (if quantization is enabled).
+
+    Args:
+        model_args (:class:`~transformers.ModelArguments`):
+            The model arguments.
+        training_args (:class:`~transformers.Seq2SeqTrainingArguments`):
+            The training arguments.
+
+    Returns:
+        :obj:`str`: The correct torch dtype.
+    """
+    if model_args.quantization in [4, 8]:
+        if training_args.fp16:
+            if model_args.torch_dtype in ["auto", None]:
+                logging.warning(
+                    "Quantification and fp16 are enabled, but torch_dtype is not set. Setting torch_dtype to float16."
+                )
+
+            elif model_args.torch_dtype != "float16":
+                logging.warning(
+                    f"Quantification and fp16 are enabled, but torch_dtype is set to {model_args.torch_dtype}. "
+                    "This can cause issues. We will override torch_dtype to float16."
+                )
+            return "float16"
+
+        elif training_args.bf16:
+            if model_args.torch_dtype in ["auto", None]:
+                logging.warning(
+                    "Quantification and bf16 are enabled, but torch_dtype is not set. Setting torch_dtype to bfloat16."
+                )
+            elif model_args.torch_dtype != "bfloat16":
+                logging.warning(
+                    f"Quantification and bf16 are enabled, but torch_dtype is set to {model_args.torch_dtype}. "
+                    "This can cause issues. We will override torch_dtype to bfloat16."
+                )
+            return "bfloat16"
+
+    return model_args.torch_dtype
