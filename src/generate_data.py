@@ -141,6 +141,11 @@ def main(args):
     for config_file in config_files:
         with open(config_file, "rt") as f:
             config = json.load(f)
+
+        # Remove guidelines if baseline
+        config["remove_guidelines"] = args.baseline
+
+        # We generate a new config for each train split and task
         tasks = config["tasks"]
         for split in splits:
             for task in tasks:
@@ -203,6 +208,12 @@ if __name__ == "__main__":
         "--overwrite_output_dir",
         action="store_true",
         help="Whether to overwrite the output dir.",
+    )
+    parser.add_argument(
+        "--baseline",
+        action="store_true",
+        default=False,
+        help="Whether to generate baseline data.",
     )
 
     args = parser.parse_args()
