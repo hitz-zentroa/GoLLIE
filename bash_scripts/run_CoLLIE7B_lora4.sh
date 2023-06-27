@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE7B_lora
+#SBATCH --job-name=CoLLIE7B_lora4
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
