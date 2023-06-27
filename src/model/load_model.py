@@ -100,7 +100,20 @@ def load_model_for_training(
         )
 
     if force_auto_device_map:
-        logging.info("Device map: auto")
+        word_size = int(os.environ.get("WORD_SIZE", 1))
+        if word_size > 1:
+            logging.info(
+                f"Using auto device map with DDP. The model will be split across {word_size} GPUs and CPU to fit the"
+                " model in memory."
+            )
+            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
+        else:
+            logging.info("Using auto device map with with a single GPU or CPU. The model will be split between them.")
+            device_map = "auto"
+    else:
+        device_map = None
+
+    logging.info(f"We will load the model using the following device map: {device_map}")
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
@@ -165,7 +178,7 @@ def load_model_for_training(
 
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            device_map="auto" if force_auto_device_map else None,
+            device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             **quant_args,
@@ -177,7 +190,7 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            device_map="auto" if force_auto_device_map else None,
+            device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             trust_remote_code=(
@@ -300,7 +313,20 @@ def load_model_for_inference(
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
     if force_auto_device_map:
-        logging.info("Device map: auto")
+        word_size = int(os.environ.get("WORD_SIZE", 1))
+        if word_size > 1:
+            logging.info(
+                f"Using auto device map with DDP. The model will be split across {word_size} GPUs and CPU to fit the"
+                " model in memory."
+            )
+            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
+        else:
+            logging.info("Using auto device map with with a single GPU or CPU. The model will be split between them.")
+            device_map = "auto"
+    else:
+        device_map = None
+
+    logging.info(f"We will load the model using the following device map: {device_map}")
 
     logging.info(f"Loading model from {weights_path}")
 
@@ -351,7 +377,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            device_map="auto" if force_auto_device_map else None,
+            device_map=device_map,
             torch_dtype=torch_dtype,
             quantization_config=bnb_config,
             **quant_args,
@@ -361,7 +387,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            device_map="auto" if force_auto_device_map else None,
+            device_map=device_map,
             torch_dtype=torch_dtype,
             trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
             quantization_config=bnb_config,
