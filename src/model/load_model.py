@@ -100,7 +100,7 @@ def load_model_for_training(
         )
 
     if force_auto_device_map:
-        word_size = int(os.environ.get("WORD_SIZE", 1))
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
         if word_size > 1:
             logging.info(
                 f"Using auto device map with DDP. The model will be split across {word_size} GPUs and CPU to fit the"
@@ -314,7 +314,7 @@ def load_model_for_inference(
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
     if force_auto_device_map:
-        word_size = int(os.environ.get("WORD_SIZE", 1))
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
         if word_size > 1:
             logging.info(
                 f"Using auto device map with DDP. The model will be split across {word_size} GPUs and CPU to fit the"
