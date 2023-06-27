@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE7B_full_8bits
+#SBATCH --job-name=CoLLIE7B_full_fp16
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:4
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE7B_full_8bits.out.txt
-#SBATCH --error=.slurm/CoLLIE7B_full_8bits.err.txt
+#SBATCH --output=.slurm/CoLLIE7B_full_fp16.out.txt
+#SBATCH --error=.slurm/CoLLIE7B_full_fp16.err.txt
 
 source /ikerlariak/osainz006/venvs/collie/bin/activate
 
@@ -23,6 +23,6 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_int8.yaml
-#python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
+# python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_int8.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
 
