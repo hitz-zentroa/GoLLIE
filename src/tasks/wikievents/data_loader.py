@@ -201,7 +201,7 @@ class WikiEventsDatasetLoader(DatasetLoader):
             "coarse": ConflictEvent,
             "class": Demonstrate,
             "Demonstrator": "demonstrator",
-            "Regulator": "Regulator",
+            "Regulator": "regulator",
         },
         "Conflict.Demonstrate.Unspecified": {
             "coarse": ConflictEvent,
@@ -209,6 +209,7 @@ class WikiEventsDatasetLoader(DatasetLoader):
             "Demonstrator": "demonstrator",
             "Target": "target",
             "Topic": "topic",
+            "Regulator": "regulator"
         },
         "Contact.Contact.Broadcast": {
             "coarse": ContactEvent,

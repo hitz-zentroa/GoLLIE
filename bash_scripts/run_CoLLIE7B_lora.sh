@@ -6,7 +6,9 @@
 #SBATCH --output=.slurm/CoLLIE7B_lora.out.txt
 #SBATCH --error=.slurm/CoLLIE7B_lora.err.txt
 
-source /ikerlariak/osainz006/venvs/collie-new/bin/activate
+# El bueno
+# source /ikerlariak/osainz006/venvs/collie-new/bin/activate
+source /ikerlariak/osainz006/venvs/collie/bin/activate
 # source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
@@ -16,6 +18,8 @@ export TOKENIZERS_PARALLELISM=true
 export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=CoLLIE
+
+echo ${CUDA_VISIBLE_DEVICES}
 
 
 CONFIGS_FOLDER="configs/model_configs"

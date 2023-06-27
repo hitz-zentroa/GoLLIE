@@ -7,9 +7,9 @@
     ],
     "dataloader_cls": "src.tasks.wikievents.data_loader.WikiEventsDatasetLoader",
     "sampler_cls": "src.tasks.wikievents.data_loader.WikiEventsSampler",
-    "train_file": "data/wikievents/train.sentence.json",
-    "dev_file": "data/wikievents/dev.sentence.json",
-    "test_file": "data/wikievents/test.sentence.json",
+    "train_file": "data/wikievents/train.sentence.jsonl",
+    "dev_file": "data/wikievents/dev.sentence.jsonl",
+    "test_file": "data/wikievents/test.sentence.jsonl",
     "prompt_template": "templates/prompt.txt",
     "seed": [0, 24, 42],
     "label_noise_prob": [0.15, 0.50, 0.75],
@@ -17,7 +17,7 @@
         "NER": {
             "group_by": "sentence",
             "parallel_instances": 1,
-            "max_guidelines": -1,
+            "max_guidelines": 5,
             "guideline_dropout": 0.15,
             "scorer": "src.tasks.wikievents.scorer.WikiEventsEntityScorer"
         },
