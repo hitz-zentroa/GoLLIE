@@ -22,6 +22,50 @@ from transformers.models.auto.modeling_auto import (
 from .model_utils import get_trainable_parameters
 
 
+def get_device_map(force_auto_device_map: bool) -> str:
+    """
+    Get the device map to use for loading the model
+
+    Args:
+        force_auto_device_map (`bool`):
+            Whether to force the use of the auto device map. If set to True, the model will be split across
+            GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
+            into each GPU.
+    Returns:
+        `str`:
+            The device map to use for loading the model
+    """
+    if force_auto_device_map:
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
+        if word_size > 1:
+            raise ValueError(
+                "Found DDP environment and force_auto_device_map is set to True, this configuration "
+                "is not supported. If you want to use DPP, set force_auto_device_map to False, so "
+                "a copy of the model is loaded in each GPU. If you want the split the model across "
+                "GPUs (force_auto_device_map=True), do not use DDP (launch your script with "
+                "pyton -m src/run.py config.json). If you are not in a DDP environment but you see "
+                "this error, you might have manually set the environment variable 'LOCAL_WORLD_SIZE' to a "
+                "number different than 1, please, remove this environment variable or set it to 1"
+            )
+
+        logging.info("Using auto device map, we will split the model across GPUs and CPU to fit the model in memory.")
+        device_map = "auto"
+    else:
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
+        if word_size > 1:
+            logging.info(
+                "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
+                "on each GPU."
+            )
+            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
+        else:
+            device_map = None
+
+    logging.info(f"We will load the model using the following device map: {device_map}")
+
+    return device_map
+
+
 def load_model_for_training(
     model_weights_name_or_path: str,
     quantization: Optional[int] = None,
@@ -99,23 +143,8 @@ def load_model_for_training(
             "argument (e.g 'adamw_bnb_8bit', 'lion_8bit', 'paged_adamw_8bit', ...)."
         )
 
-    if force_auto_device_map:
-        word_size = int(os.environ.get("WORD_SIZE", 1))
-        if word_size > 1:
-            logging.info(
-                f"Using auto device map with DDP. The model will be split across {word_size} GPUs and CPU to fit the"
-                " model in memory."
-            )
-            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
-        else:
-            logging.info("Using auto device map with with a single GPU or CPU. The model will be split between them.")
-            device_map = "auto"
-    else:
-        device_map = None
-
-    logging.info(f"We will load the model using the following device map: {device_map}")
-
     logging.info(f"Loading model model from {model_weights_name_or_path}")
+    device_map = get_device_map(force_auto_device_map=force_auto_device_map)
 
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
         {
@@ -211,6 +240,7 @@ def load_model_for_training(
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
 
+    logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     if tokenizer.pad_token_id is None:
@@ -313,23 +343,8 @@ def load_model_for_inference(
         quantization in [4, 8]
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
-    if force_auto_device_map:
-        word_size = int(os.environ.get("WORD_SIZE", 1))
-        if word_size > 1:
-            logging.info(
-                f"Using auto device map with DDP. The model will be split across {word_size} GPUs and CPU to fit the"
-                " model in memory."
-            )
-            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
-        else:
-            logging.info("Using auto device map with with a single GPU or CPU. The model will be split between them.")
-            device_map = "auto"
-    else:
-        device_map = None
-
-    logging.info(f"We will load the model using the following device map: {device_map}")
-
     logging.info(f"Loading model from {weights_path}")
+    device_map = get_device_map(force_auto_device_map=force_auto_device_map)
 
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
         {
@@ -404,6 +419,9 @@ def load_model_for_inference(
             f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
+
+    logging.info(f"Model dtype: {model.dtype}")
+    logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
