@@ -24,7 +24,7 @@
         "EE": {
             "group_by": "sentence",
             "parallel_instances": 1,
-            "max_guidelines": -1,
+            "max_guidelines": 5,
             "guideline_dropout": 0.15,
             "scorer": "src.tasks.wikievents.scorer.WikiEventsEventScorer"
         },

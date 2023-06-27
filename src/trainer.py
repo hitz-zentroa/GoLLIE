@@ -9,16 +9,17 @@ from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import Iterable, IterableDataset, T_co
 
+from src.config import ModelArguments
 from src.dataset.dataset import CollieDataset
 from transformers import (
     DataCollator,
     PreTrainedModel,
     PreTrainedTokenizerBase,
     Seq2SeqTrainer,
+    Seq2SeqTrainingArguments,
     TrainerControl,
     TrainerState,
     TrainingArguments,
-    Seq2SeqTrainingArguments,
 )
 from transformers.modeling_utils import unwrap_model
 from transformers.models.auto.modeling_auto import MODEL_FOR_CAUSAL_LM_MAPPING_NAMES
@@ -26,7 +27,7 @@ from transformers.trainer import TRAINING_ARGS_NAME, logger
 from transformers.trainer_callback import TrainerCallback
 from transformers.trainer_utils import EvalPrediction, has_length
 from transformers.utils import SAFE_WEIGHTS_NAME, WEIGHTS_NAME, is_safetensors_available
-from src.config import ModelArguments
+
 
 if is_safetensors_available():
     import safetensors.torch
