@@ -19,7 +19,7 @@ export WANDB_PROJECT=CoLLIE
 
 CONFIGS_FOLDER="configs/model_configs"
 export PYTHONPATH="$PYTHONPATH:$PWD"
-ecport OMP_NUM_THREADS=16
+export OMP_NUM_THREADS=16
 
 # cd ../src || exit
 
