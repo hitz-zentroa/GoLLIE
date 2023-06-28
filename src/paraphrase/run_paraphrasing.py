@@ -23,13 +23,13 @@ def run_paraphrasing(
 
     logging.info(
         f"Loading model from {model_args.model_name_or_path}.\n"
-        f"   - int8_quantization: {model_args.int8_quantization}\n"
+        f"   - quantization: {model_args.quantization}\n"
         f"   - lora_weights_name_or_path: {model_args.lora_weights_name_or_path}\n"
     )
 
     model, tokenizer = load_model_for_inference(
         weights_path=model_args.model_name_or_path,
-        int8_quantization=model_args.int8_quantization,
+        quantization=model_args.quantization,
         lora_weights_name_or_path=model_args.lora_weights_name_or_path,
     )
 

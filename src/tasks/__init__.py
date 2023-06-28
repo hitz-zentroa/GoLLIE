@@ -93,8 +93,7 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
 
         return GUIDELINES
     elif task_id.lower() == "wikievents":
-        logging.info("No gold guidelines defined for WikiEvents!")
-        from src.tasks.wikievents.guidelines import GUIDELINES
+        from src.tasks.wikievents.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     else:
