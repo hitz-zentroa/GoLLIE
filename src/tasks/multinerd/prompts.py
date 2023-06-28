@@ -31,16 +31,20 @@ class Location(Entity):
 
     span: str
 
+
 @dataclass
 class Animal(Entity):
     """{multinerd_animal}"""
 
     span: str
+
+
 @dataclass
 class Biological(Entity):
     """{multinerd_biological}"""
 
     span: str
+
 
 @dataclass
 class Celestial(Entity):
@@ -112,6 +116,22 @@ class Vehicle(Entity):
     span: str
 
 
-ENTITY_DEFINITIONS: List[Entity] = [Person, Location, Organization, Animal, Biological, Celestial, Disease, Event, Food, Instrument, Media, Plant, Mythological, Time, Vehicle]
+ENTITY_DEFINITIONS: List[Entity] = [
+    Person,
+    Location,
+    Organization,
+    Animal,
+    Biological,
+    Celestial,
+    Disease,
+    Event,
+    Food,
+    Instrument,
+    Media,
+    Plant,
+    Mythological,
+    Time,
+    Vehicle,
+]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

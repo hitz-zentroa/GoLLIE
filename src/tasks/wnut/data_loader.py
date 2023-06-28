@@ -1,11 +1,11 @@
 from typing import Dict, List, Tuple, Type, Union
-from ..utils_typing import Entity
 
-from src.tasks.wnut.guidelines import GUIDELINES
-from src.tasks.wnut.prompts import ENTITY_DEFINITIONS, Person, Location, Corporation, Product, CreativeWork, Group
 from src.tasks.label_encoding import rewrite_labels
+from src.tasks.wnut.guidelines import GUIDELINES
+from src.tasks.wnut.prompts import ENTITY_DEFINITIONS, Corporation, CreativeWork, Group, Location, Person, Product
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
 
 
 def get_bwnut_hf(

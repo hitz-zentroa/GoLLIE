@@ -1,14 +1,14 @@
 from typing import Dict, List, Tuple, Type, Union
-from ..utils_typing import Entity
 
+from src.tasks.label_encoding import rewrite_labels
 from src.tasks.ncbidisease.guidelines import GUIDELINES
 from src.tasks.ncbidisease.prompts import (
     ENTITY_DEFINITIONS,
     Disease,
 )
-from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
 
 
 def get_ncbidisease_hf(

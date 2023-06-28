@@ -18,11 +18,13 @@ class Disease(Entity):
 
     span: str
 
+
 class Chemical(Entity):
     """{bc5cdr_chemical}"""
 
     span: str
 
-ENTITY_DEFINITIONS: List[Entity] = [Disease,Chemical]
+
+ENTITY_DEFINITIONS: List[Entity] = [Disease, Chemical]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

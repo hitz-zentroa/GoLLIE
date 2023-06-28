@@ -1,11 +1,11 @@
 from typing import Dict, List, Tuple, Type, Union
-from ..utils_typing import Entity
 
 from src.tasks.bc5cdr.guidelines import GUIDELINES
-from src.tasks.bc5cdr.prompts import ENTITY_DEFINITIONS, Disease, Chemical
+from src.tasks.bc5cdr.prompts import ENTITY_DEFINITIONS, Chemical, Disease
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
 
 
 def get_bc5cdr_hf(
@@ -22,7 +22,7 @@ def get_bc5cdr_hf(
     from datasets import load_dataset
 
     dataset = load_dataset("ghadeermobasher/BC5CDR-Chemical-Disease")
-    label_names = dataset["train"].features["ner_tags"].feature.names
+    dataset["train"].features["ner_tags"].feature.names
 
     id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
 

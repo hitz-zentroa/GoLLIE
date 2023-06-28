@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=MPT7B
+#SBATCH --job-name=CoLLIE7B_full_8bits
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/MPT7B.out.txt
-#SBATCH --error=.slurm/MPT7B.err.txt
+#SBATCH --output=.slurm/CoLLIE7B_full_8bits.out.txt
+#SBATCH --error=.slurm/CoLLIE7B_full_8bits.err.txt
 
-source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
+source /ikerlariak/osainz006/venvs/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -23,5 +23,6 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
-python3 -m src.run ${CONFIGS_FOLDER}/MPT-7B.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_int8.yaml
+# python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
 

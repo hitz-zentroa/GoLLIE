@@ -1481,10 +1481,10 @@ GUIDELINES = {
             ),
         ]
     },
-    "ace_personellevent": {
+    "ace_personnelevent": {
         "en": [
             (
-                "A PersonellEvent occurs when a Person entity changes its job position (JobTitle entity) with respect"
+                "A PersonnelEvent occurs when a Person entity changes its job position (JobTitle entity) with respect"
                 " an \nOrganization entity. It includes when a person starts working, ends working, changes offices"
                 " within, gets nominated or is \nelected for a position in a Organization."
             ),
@@ -1506,7 +1506,7 @@ GUIDELINES = {
                 " organization, being nominated or elected to a specific role within \nthe organization."
             ),
             (
-                "A PersonellEvent takes place when a Person entity undergoes a change in its job position, which is"
+                "A PersonnelEvent takes place when a Person entity undergoes a change in its job position, which is"
                 " represented by a \nJobTitle entity in relation to an Organization entity. This can include instances"
                 " such as when a person begins working, ends \ntheir employment, switches offices within the"
                 " organization, is appointed or elected to a position within the \norganization."

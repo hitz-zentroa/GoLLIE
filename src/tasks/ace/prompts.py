@@ -59,7 +59,7 @@ class Vehicle(Entity):
     span: str
 
 
-ENTITY_DEFINITIONS: List[Entity] = [
+ENTITY_DEFINITIONS: List[Type] = [
     Person,
     Organization,
     GPE,
@@ -119,7 +119,7 @@ class ContactInfo(Entity):
     span: str
 
 
-VALUE_DEFINITIONS: List[Entity] = [
+VALUE_DEFINITIONS: List[Type] = [
     Time,
     Numeric,
     JobTitle,
@@ -184,7 +184,7 @@ class GenAffiliationRelation(Relation):
     arg2: str
 
 
-COARSE_RELATION_DEFINITIONS: List[Relation] = [
+COARSE_RELATION_DEFINITIONS: List[Type] = [
     PhysicalRelation,
     PartWholeRelation,
     PersonalSocialRelation,
@@ -330,7 +330,7 @@ class OrgLocationOrigin(GenAffiliationRelation):
     arg2: str
 
 
-RELATION_DEFINITIONS: List[Relation] = [
+RELATION_DEFINITIONS: List[Type] = [
     Located,
     Near,
     Geographical,
@@ -407,8 +407,8 @@ class ContactEvent(Event):
 
 
 @dataclass
-class PersonellEvent(Event):
-    """{ace_personellevent}"""
+class PersonnelEvent(Event):
+    """{ace_personnelevent}"""
 
     mention: str
 
@@ -420,14 +420,14 @@ class JusticeEvent(Event):
     mention: str
 
 
-COARSE_EVENT_DEFINITIONS: List[Event] = [
+COARSE_EVENT_DEFINITIONS: List[Type] = [
     LifeEvent,
     MovementEvent,
     TransactionEvent,
     BusinessEvent,
     ConflictEvent,
     ContactEvent,
-    PersonellEvent,
+    PersonnelEvent,
     JusticeEvent,
 ]
 
@@ -610,7 +610,7 @@ class PhoneWrite(ContactEvent):
 
 
 @dataclass
-class StartPosition(PersonellEvent):
+class StartPosition(PersonnelEvent):
     """{ace_startposition}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -622,7 +622,7 @@ class StartPosition(PersonellEvent):
 
 
 @dataclass
-class EndPosition(PersonellEvent):
+class EndPosition(PersonnelEvent):
     """{ace_endposition}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -634,7 +634,7 @@ class EndPosition(PersonellEvent):
 
 
 @dataclass
-class Nominate(PersonellEvent):
+class Nominate(PersonnelEvent):
     """{ace_nominate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -646,7 +646,7 @@ class Nominate(PersonellEvent):
 
 
 @dataclass
-class Elect(PersonellEvent):
+class Elect(PersonnelEvent):
     """{ace_elect}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
@@ -820,7 +820,7 @@ class Appeal(JusticeEvent):
     place: List[str]  # Where the appeal takes place
 
 
-EVENT_DEFINITIONS: List[Event] = [
+EVENT_DEFINITIONS: List[Type] = [
     BeBorn,
     Marry,
     Divorce,

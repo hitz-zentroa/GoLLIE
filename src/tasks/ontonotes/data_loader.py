@@ -1,31 +1,31 @@
 from typing import Dict, List, Tuple, Type, Union
-from ..utils_typing import Entity
 
+from src.tasks.label_encoding import rewrite_labels
 from src.tasks.ontonotes.guidelines import GUIDELINES
 from src.tasks.ontonotes.prompts import (
     ENTITY_DEFINITIONS,
-    Person,
-    Organization,
-    Location,
-    NORP,
-    Facility,
     GPE,
-    Product,
-    Event,
-    WorkOfArt,
-    Law,
-    Language,
-    Date,
-    Time,
-    Percentage,
-    Money,
-    Quantity,
-    Ordinal,
+    NORP,
     Cardinal,
+    Date,
+    Event,
+    Facility,
+    Language,
+    Law,
+    Location,
+    Money,
+    Ordinal,
+    Organization,
+    Percentage,
+    Person,
+    Product,
+    Quantity,
+    Time,
+    WorkOfArt,
 )
-from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
 
 
 def get_ontonotes_hf(

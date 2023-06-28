@@ -20,6 +20,22 @@ class TestDataLoaders(unittest.TestCase):
 
         # TODO: Implement a better TEST
 
+    @unittest.skipIf(not os.path.exists("data/wikievents/train.sentence.jsonl"), "No WikiEvents data available")
+    def test_WikiEvents(self):
+        from src.tasks.wikievents.data_loader import WikiEventsDatasetLoader, WikiEventsSampler
+
+        with open("configs/data_configs/wikievents_config.json") as f:
+            config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
+            config["label_noise_prob"] = 0.0
+
+        dataloader = WikiEventsDatasetLoader("data/wikievents/train.sentence.jsonl", group_by="sentence")
+
+        _ = list(WikiEventsSampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"]))
+
+        # TODO: Implement a better TEST
+
     @unittest.skipIf(not os.path.exists("data/rams/dev.jsonlines"), "No RAMS data available")
     def test_RAMS(self):
         from src.tasks.rams.data_loader import RAMSDatasetLoader, RAMSSampler
@@ -48,7 +64,7 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = TACREDDatasetLoader("data/tacred/train.json")[:10]
 
-        _ = list(TACREDSampler(dataloader, task="RE", **config, **config["task_configuration"]["RE"]))
+        _ = list(TACREDSampler(dataloader, task="SF", **config, **config["task_configuration"]["SF"]))
 
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader

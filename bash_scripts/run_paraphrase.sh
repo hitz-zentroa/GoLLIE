@@ -21,5 +21,5 @@ CONFIGS_FOLDER="configs/pharapharse_config"
 
 
 
-python3 -m src.paraphrase.run_paraphrasing ${CONFIGS_FOLDER}/Vicuna-13B.yaml
+python3 -m src.paraphrase.run_paraphrasing ${CONFIGS_FOLDER}/Vicunav1.3-33B.yaml
 

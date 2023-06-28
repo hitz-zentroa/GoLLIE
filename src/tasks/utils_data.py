@@ -473,12 +473,12 @@ class Sampler:
                 _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
                 # Apply guideline dropout
                 if self.split == "train":
-                    #_guidelines = [
+                    # _guidelines = [
                     #    _def
                     #    for _def in _guidelines
                     #    if random.random() > self.guideline_dropout
                     #    or (_def in positive_guidelines and self.ensure_positives_on_train)
-                    #]
+                    # ]
 
                     _guidelines_dropout = [
                         _def
@@ -491,8 +491,6 @@ class Sampler:
                         # Ensure at least one guideline is used
                         _guidelines_dropout.append(random.choice(_guidelines))
                     _guidelines = _guidelines_dropout
-
-
 
                 _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
                 _text = " ".join([inst["text"] for inst in instances]).strip()
