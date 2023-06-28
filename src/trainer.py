@@ -9,12 +9,14 @@ from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from torch.utils.data import Dataset
 from torch.utils.data.dataset import Iterable, IterableDataset, T_co
 
+from src.config import ModelArguments
 from src.dataset.dataset import CollieDataset
 from transformers import (
     DataCollator,
     PreTrainedModel,
     PreTrainedTokenizerBase,
     Seq2SeqTrainer,
+    Seq2SeqTrainingArguments,
     TrainerControl,
     TrainerState,
     TrainingArguments,
@@ -195,13 +197,15 @@ class CollieTrainer(Seq2SeqTrainer):
         else:
             callbacks.append(RotateDatasetCallback())
 
+        self.first_train_batch = True
+
         super().__init__(
             model=model,
             args=args,
             data_collator=data_collator,
             train_dataset=train_dataset,
             eval_dataset=eval_dataset,
-            tokenizer=tokenizer,
+            tokenizer=None,  # We don't want to save the tokenizer with the model or use it for padding
             model_init=model_init,
             compute_metrics=compute_metrics,
             callbacks=callbacks,
@@ -212,6 +216,12 @@ class CollieTrainer(Seq2SeqTrainer):
         # _prev_progress_callback = self.pop_callback(ProgressCallback)
         # if _prev_progress_callback:
         #    self.add_callback(RichProgressCallback)
+
+        if tokenizer is not None:
+            # We want the tokenizer to decode the first training batch for debugging purposes
+            self.tokenizer = tokenizer
+        else:
+            self.tokenizer = None
 
     def compute_loss(self, model, inputs, return_outputs=False):
         """
@@ -228,6 +238,33 @@ class CollieTrainer(Seq2SeqTrainer):
             loss_weight_mask = inputs.pop("loss_weight_mask")
         else:
             raise ValueError("You should supply a loss_weight_mask key to compute the loss")
+
+        # Print first batch of training data for debugging
+        if self.first_train_batch:
+            self.first_train_batch = False
+            print_input_ids = inputs["input_ids"][:8].clone().detach().cpu()
+            print_attention_mask = inputs["attention_mask"][:8].clone().detach().cpu()
+            print_labels = labels[:8].clone().detach().cpu()
+            print_loss_weight_mask = loss_weight_mask[:8].clone().detach().cpu()
+
+            print("*** First batch of training data ***")
+            print("-- input_ids --")
+            if self.tokenizer is not None:
+                print_input_ids[print_input_ids == -100] = self.tokenizer.pad_token_id
+                print(self.tokenizer.batch_decode(print_input_ids))
+            else:
+                print(print_input_ids.tolist())
+            print("-- attention_mask --")
+            print(print_attention_mask.tolist())
+            print("-- labels --")
+            if self.tokenizer is not None:
+                print_labels[print_labels == -100] = self.tokenizer.pad_token_id
+                print(self.tokenizer.batch_decode(print_labels))
+            else:
+                print(print_labels[:8].tolist())
+            print("-- loss_weight_mask --")
+            print(print_loss_weight_mask.tolist())
+            print()
 
         outputs = model(**inputs)
 
@@ -368,3 +405,48 @@ class RotateDatasetCallback(TrainerCallback):
             kwargs["train_dataloader"].dataset.rotate_split()
         else:
             logging.warning("No train_dataloader in kwargs. Skipping rotate_split()")
+
+
+def get_correct_torch_dtype(
+    model_args: ModelArguments,
+    training_args: Seq2SeqTrainingArguments,
+) -> "str":
+    """
+    Returns the correct torch dtype based on the model and training arguments (if quantization is enabled).
+
+    Args:
+        model_args (:class:`~transformers.ModelArguments`):
+            The model arguments.
+        training_args (:class:`~transformers.Seq2SeqTrainingArguments`):
+            The training arguments.
+
+    Returns:
+        :obj:`str`: The correct torch dtype.
+    """
+    if model_args.quantization in [4, 8]:
+        if training_args.fp16:
+            if model_args.torch_dtype in ["auto", None]:
+                logging.warning(
+                    "Quantification and fp16 are enabled, but torch_dtype is not set. Setting torch_dtype to float16."
+                )
+
+            elif model_args.torch_dtype != "float16":
+                logging.warning(
+                    f"Quantification and fp16 are enabled, but torch_dtype is set to {model_args.torch_dtype}. "
+                    "This can cause issues. We will override torch_dtype to float16."
+                )
+            return "float16"
+
+        elif training_args.bf16:
+            if model_args.torch_dtype in ["auto", None]:
+                logging.warning(
+                    "Quantification and bf16 are enabled, but torch_dtype is not set. Setting torch_dtype to bfloat16."
+                )
+            elif model_args.torch_dtype != "bfloat16":
+                logging.warning(
+                    f"Quantification and bf16 are enabled, but torch_dtype is set to {model_args.torch_dtype}. "
+                    "This can cause issues. We will override torch_dtype to bfloat16."
+                )
+            return "bfloat16"
+
+    return model_args.torch_dtype

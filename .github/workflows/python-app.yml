@@ -25,13 +25,13 @@ jobs:
         python-version: "3.10"
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install black numpy torch transformers datasets tqdm scikit-learn rich psutil
+        python -m pip install --upgrade pip pytest
+        pip install black numpy torch transformers datasets tqdm scikit-learn rich psutil ruff bitsandbytes peft wandb
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Lint with black
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        black .
+        make style
     - name: Test with unittest
       run: |
         python -m unittest  discover -v -s ./src/tests -p test_*.py

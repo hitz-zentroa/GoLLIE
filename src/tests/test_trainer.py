@@ -28,7 +28,7 @@ class TestCollieTrainer(unittest.TestCase):
                 lora_weights_name_or_path=None,
                 torch_dtype="auto",
                 use_lora=True,
-                int8_quantization=True,
+                quantization=4,
             )
 
             training_args = Seq2SeqTrainingArguments(
@@ -37,7 +37,7 @@ class TestCollieTrainer(unittest.TestCase):
 
             model, _ = load_model_for_training(
                 model_weights_name_or_path=model_args.model_name_or_path,
-                int8_quantization=model_args.int8_quantization,
+                quantization=model_args.quantization,
                 use_lora=model_args.use_lora,
                 lora_target_modules=model_args.lora_target_modules,
                 torch_dtype=model_args.torch_dtype,
@@ -61,7 +61,7 @@ class TestCollieTrainer(unittest.TestCase):
                 lora_weights_name_or_path=None,
                 torch_dtype="auto",
                 use_lora=False,
-                int8_quantization=False,
+                quantization=None,
             )
 
             training_args = Seq2SeqTrainingArguments(
@@ -70,7 +70,7 @@ class TestCollieTrainer(unittest.TestCase):
 
             model, _ = load_model_for_training(
                 model_weights_name_or_path=model_args.model_name_or_path,
-                int8_quantization=model_args.int8_quantization,
+                quantization=model_args.quantization,
                 use_lora=model_args.use_lora,
                 lora_target_modules=model_args.lora_target_modules,
                 torch_dtype=model_args.torch_dtype,
@@ -106,7 +106,7 @@ class TestCollieTrainer(unittest.TestCase):
 
             model, tokenizer = load_model_for_training(
                 model_weights_name_or_path="EleutherAI/gpt-neo-125m",
-                int8_quantization=False,
+                quantization=None,
                 use_lora=False,
                 lora_target_modules=None,
                 torch_dtype="float32",
@@ -168,7 +168,7 @@ class TestCollieTrainer(unittest.TestCase):
 
             model, tokenizer = load_model_for_training(
                 model_weights_name_or_path="EleutherAI/gpt-neo-125m",
-                int8_quantization=False,
+                quantization=None,
                 use_lora=True,
                 torch_dtype="float32",
             )

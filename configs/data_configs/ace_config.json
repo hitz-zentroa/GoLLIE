@@ -15,6 +15,7 @@
     "test_file": "data/ace05/test.sentence.json",
     "prompt_template": "templates/prompt.txt",
     "seed": [0, 24, 42],
+    "label_noise_prob": [0.15, 0.50, 0.75],
     "task_configuration": {
         "NER": {
             "group_by": "sentence",

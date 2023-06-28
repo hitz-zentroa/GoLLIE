@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 from typing import List, Optional, Tuple
@@ -9,6 +10,7 @@ from transformers import (
     AutoModelForCausalLM,
     AutoModelForSeq2SeqLM,
     AutoTokenizer,
+    BitsAndBytesConfig,
     PreTrainedModel,
     PreTrainedTokenizerBase,
 )
@@ -20,9 +22,53 @@ from transformers.models.auto.modeling_auto import (
 from .model_utils import get_trainable_parameters
 
 
+def get_device_map(force_auto_device_map: bool) -> str:
+    """
+    Get the device map to use for loading the model
+
+    Args:
+        force_auto_device_map (`bool`):
+            Whether to force the use of the auto device map. If set to True, the model will be split across
+            GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
+            into each GPU.
+    Returns:
+        `str`:
+            The device map to use for loading the model
+    """
+    if force_auto_device_map:
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
+        if word_size > 1:
+            raise ValueError(
+                "Found DDP environment and force_auto_device_map is set to True, this configuration "
+                "is not supported. If you want to use DPP, set force_auto_device_map to False, so "
+                "a copy of the model is loaded in each GPU. If you want the split the model across "
+                "GPUs (force_auto_device_map=True), do not use DDP (launch your script with "
+                "pyton -m src/run.py config.json). If you are not in a DDP environment but you see "
+                "this error, you might have manually set the environment variable 'LOCAL_WORLD_SIZE' to a "
+                "number different than 1, please, remove this environment variable or set it to 1"
+            )
+
+        logging.info("Using auto device map, we will split the model across GPUs and CPU to fit the model in memory.")
+        device_map = "auto"
+    else:
+        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
+        if word_size > 1:
+            logging.info(
+                "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
+                "on each GPU."
+            )
+            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
+        else:
+            device_map = None
+
+    logging.info(f"We will load the model using the following device map: {device_map}")
+
+    return device_map
+
+
 def load_model_for_training(
     model_weights_name_or_path: str,
-    int8_quantization: bool = False,
+    quantization: Optional[int] = None,
     use_lora: bool = False,
     lora_weights_name_or_path: Optional[str] = None,
     lora_target_modules: Optional[List[str]] = None,
@@ -30,6 +76,8 @@ def load_model_for_training(
     lora_alpha: Optional[int] = 16,
     lora_dropout: Optional[float] = 0.05,
     torch_dtype: Optional[str] = None,
+    force_auto_device_map: bool = False,
+    use_gradient_checkpointing: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -37,8 +85,8 @@ def load_model_for_training(
     Args:
         model_weights_name_or_path (`str`):
             The path to your local model weights and tokenizer or huggingface model name.
-        int8_quantization (`bool`, optional):
-            Whether to use int8 quantization. Defaults to `False`.
+        quantization (`int`, optional):
+            '4' or '8' for 4 bits or 8 bits quantization or None for 16/32bits training. Defaults to `None`.
 
             Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
         use_lora (`bool`, optional):
@@ -65,6 +113,12 @@ def load_model_for_training(
             Override the default `torch.dtype` and load the model under this dtype. If
             `auto` is passed, the dtype will be automatically derived from the model's
             weights. Defaults to `None`.
+        force_auto_device_map (`bool`, optional):
+            Whether to force the use of the auto device map. If set to True, the model will be split across
+            GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
+            into each GPU. Defaults to False.
+        use_gradient_checkpointing (`bool`, optiona):
+            Whether to use gradient checkpointing for training
 
     Raises:
         `ValueError`:
@@ -75,38 +129,68 @@ def load_model_for_training(
             The loaded model and tokenizer.
     """
 
-    if int8_quantization and not use_lora:
+    if type(quantization) == str:
+        quantization = int(quantization)
+    assert (quantization is None) or (
+        quantization in [4, 8]
+    ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
+
+    if quantization is not None and not use_lora:
         raise ValueError(
-            "Training with Int8 quantization is only supported with LoRA. If you want"
-            " to train in Int8, please add the flag --use_lora. You can only evaluate"
-            " in Int8 without LoRA."
+            "'Quantization' == 4/8 is only supported with LoRA. If you want "
+            "to train a 4/8bits quantified model, you must set `use_lora=True`. If you want to "
+            "use a 4/8 bits optimizer, set `quantization=None` and choose a 4/8 bit optimizer using 'optim' "
+            "argument (e.g 'adamw_bnb_8bit', 'lion_8bit', 'paged_adamw_8bit', ...)."
         )
 
-    device_map = "auto"
-    world_size = int(os.environ.get("WORLD_SIZE", 1))
-    ddp = world_size != 1
-    if ddp:
-        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-
-    if int8_quantization:
-        logging.info(f"Device map: {device_map}")
-
     logging.info(f"Loading model model from {model_weights_name_or_path}")
+    device_map = get_device_map(force_auto_device_map=force_auto_device_map)
 
-    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update({"mpt": "MPTForCausalLM"})  # MPT not in transformers yet
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
+        {
+            "mpt": "MPTForCausalLM",
+            "RefinedWebModel": "RWForCausalLM",
+            "RefinedWeb": "RWForCausalLM",
+        }
+    )  # MPT and Falcon are not in transformers yet
 
     config = AutoConfig.from_pretrained(
         model_weights_name_or_path,
-        trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+        trust_remote_code=(
+            True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+        ),
     )
 
-    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
-    logging.info(f"Loading model with dtype: {torch_dtype}")
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
         add_eos_token=True,
-        trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+        trust_remote_code=(
+            True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+        ),
     )
+
+    quant_args = {}
+    torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
+
+    if quantization is not None:
+        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
+        if quantization == 4:
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.float16 if torch_dtype in ["auto", None] else torch_dtype,
+            )
+            # torch_dtype = torch.bfloat16
+
+        else:
+            bnb_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+            )
+        logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
+    else:
+        logging.info(f"Loading model with dtype: {torch_dtype}")
+        bnb_config = None
 
     if config.model_type in MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(
@@ -124,9 +208,10 @@ def load_model_for_training(
 
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=int8_quantization and use_lora,
-            device_map=device_map if int8_quantization else None,
+            device_map=device_map,
+            quantization_config=bnb_config,
             torch_dtype=torch_dtype,
+            **quant_args,
         )
 
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
@@ -135,9 +220,13 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
-            load_in_8bit=int8_quantization and use_lora,
-            device_map=device_map if int8_quantization else None,
-            trust_remote_code=True if "mpt" in model_weights_name_or_path else False,
+            device_map=device_map,
+            quantization_config=bnb_config,
+            torch_dtype=torch_dtype,
+            trust_remote_code=(
+                True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+            ),
+            **quant_args,
         )
 
         # Ensure that the padding token is added to the left of the input sequence.
@@ -151,6 +240,9 @@ def load_model_for_training(
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
 
+    logging.info(f"Model dtype: {model.dtype}")
+    logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
+
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
             # StabilityLM specific fix
@@ -162,10 +254,13 @@ def load_model_for_training(
             logging.warning("Model does not have a pad token. We will use the eos token as pad token.")
             tokenizer.pad_token_id = tokenizer.eos_token_id
 
-    if int8_quantization:
-        from peft import prepare_model_for_int8_training
+    if quantization is not None:
+        from .model_utils import prepare_model_for_kbit_training
 
-        model = prepare_model_for_int8_training(model)
+        # from peft import prepare_model_for_kbit_training
+
+        # model.gradient_checkpointing_enable()
+        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
 
     if use_lora:
         from peft import LoraConfig, PeftModel, TaskType, get_peft_model
@@ -209,9 +304,10 @@ def load_model_for_training(
 
 def load_model_for_inference(
     weights_path: str,
-    int8_quantization: bool = False,
+    quantization: Optional[int] = None,
     lora_weights_name_or_path: Optional[str] = None,
     torch_dtype: Optional[str] = None,
+    force_auto_device_map: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
@@ -220,8 +316,8 @@ def load_model_for_inference(
         weights_path (`str`):
             The path to your local model weights and tokenizer. You can also provide a
             huggingface hub model name.
-        int8_quantization (`bool`, optional):
-            Whether to use int8 quantization. Defaults to `False`.
+        quantization (`int`, optional):
+            '4' or '8' for 4 bits or 8 bits quantization or None for 16/32bits training. Defaults to `None`.
 
             Requires bitsandbytes library: https://github.com/TimDettmers/bitsandbytes
         lora_weights_name_or_path (`Optional[str]`, optional):
@@ -229,29 +325,38 @@ def load_model_for_inference(
             pretrained weights. Defaults to `None`.
         torch_dtype (`Optional[str]`, optional):
             The torch dtype to use for the model. If set to `"auto"`, the dtype will be
-            automatically derived. Defaults to `None`.
+            automatically derived. Defaults to `None`. If quantization is enabled, we will override
+            this to 'torch.bfloat16'.
+        force_auto_device_map (`bool`, optional):
+            Whether to force the use of the auto device map. If set to True, the model will be split across
+            GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
+            into each GPU. Defaults to False.
 
     Returns:
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
 
-    device_map = "auto"
-    world_size = int(os.environ.get("WORLD_SIZE", 1))
-    ddp = world_size != 1
-    if ddp:
-        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
-
-    if int8_quantization:
-        logging.info(f"Device map: {device_map}")
+    if type(quantization) == str:
+        quantization = int(quantization)
+    assert (quantization is None) or (
+        quantization in [4, 8]
+    ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
     logging.info(f"Loading model from {weights_path}")
+    device_map = get_device_map(force_auto_device_map=force_auto_device_map)
 
-    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update({"mpt": "MPTForCausalLM"})  # MPT not in transformers yet
+    MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
+        {
+            "mpt": "MPTForCausalLM",
+            "RefinedWebModel": "RWForCausalLM",
+            "RefinedWeb": "RWForCausalLM",
+        }
+    )  # MPT and Falcon are not in transformers yet
 
     config = AutoConfig.from_pretrained(
         weights_path,
-        trust_remote_code=True if "mpt" in weights_path else False,
+        trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
 
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
@@ -259,26 +364,50 @@ def load_model_for_inference(
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         weights_path,
         add_eos_token=True,
-        trust_remote_code=True if "mpt" in weights_path else False,
+        trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
+
+    quant_args = {}
+    if quantization is not None:
+        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
+        if quantization == 4:
+            bnb_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_use_double_quant=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=torch.float16 if torch_dtype in ["auto", None] else torch_dtype,
+            )
+            # torch_dtype = torch.bfloat16
+
+        else:
+            bnb_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+            )
+        logging.info(f"Bits and Bytes config: {json.dumps(bnb_config.to_dict(),indent=4,ensure_ascii=False)}")
+    else:
+        # torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
+        logging.info(f"Loading model with dtype: {torch_dtype}")
+        bnb_config = None
 
     if config.model_type in MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            load_in_8bit=int8_quantization,
-            device_map=device_map if int8_quantization else None,
+            device_map=device_map,
             torch_dtype=torch_dtype,
+            quantization_config=bnb_config,
+            **quant_args,
         )
 
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
-            load_in_8bit=int8_quantization,
-            device_map=device_map if int8_quantization else None,
+            device_map=device_map,
             torch_dtype=torch_dtype,
-            trust_remote_code=True if "mpt" in weights_path else False,
+            trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
+            quantization_config=bnb_config,
+            **quant_args,
         )
 
         # Ensure that the padding token is added to the left of the input sequence.
@@ -290,6 +419,9 @@ def load_model_for_inference(
             f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
+
+    logging.info(f"Model dtype: {model.dtype}")
+    logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     if tokenizer.pad_token_id is None:
         if "<|padding|>" in tokenizer.get_vocab():
@@ -308,9 +440,9 @@ def load_model_for_inference(
         logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
         model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
 
-        if not int8_quantization:
-            # If we are not using int8 quantization, we need to merge the LoRA layers into the model
-            # This is not possible if we are using int8 quantization.
+        if quantization is None:
+            # If we are not using quantization, we merge the LoRA layers into the model for faster inference.
+            # This is not possible if we are using 4/8 bit quantization.
             model = model.merge_and_unload()
 
     return model, tokenizer

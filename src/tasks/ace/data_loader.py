@@ -1,13 +1,8 @@
 import inspect
 import json
-import math
-import random
 from typing import Tuple, Union
 
-import black
-import numpy as np
-from typing_extensions import override
-
+from src.tasks.ace.guidelines import GUIDELINES
 from src.tasks.ace.prompts import (
     COARSE_EVENT_DEFINITIONS,
     COARSE_RELATION_DEFINITIONS,
@@ -75,7 +70,7 @@ from src.tasks.ace.prompts import (
     PartWholeRelation,
     Person,
     PersonalSocialRelation,
-    PersonellEvent,
+    PersonnelEvent,
     PhoneWrite,
     PhysicalRelation,
     ReleaseParole,
@@ -97,7 +92,6 @@ from src.tasks.ace.prompts import (
     Vehicle,
     Weapon,
 )
-from src.tasks.utils_typing import cast_to
 
 from ..utils_data import DatasetLoader, Sampler
 
@@ -351,28 +345,28 @@ class ACEDatasetLoader(DatasetLoader):
             "Price": "price",
         },
         "Personnel:Elect": {
-            "coarse": PersonellEvent,
+            "coarse": PersonnelEvent,
             "class": Elect,
             "Entity": "entity",
             "Person": "person",
             "Position": "position",
         },
         "Personnel:End-Position": {
-            "coarse": PersonellEvent,
+            "coarse": PersonnelEvent,
             "class": EndPosition,
             "Entity": "entity",
             "Person": "person",
             "Position": "position",
         },
         "Personnel:Nominate": {
-            "coarse": PersonellEvent,
+            "coarse": PersonnelEvent,
             "class": Nominate,
             "Agent": "agent",
             "Person": "person",
             "Position": "position",
         },
         "Personnel:Start-Position": {
-            "coarse": PersonellEvent,
+            "coarse": PersonnelEvent,
             "class": StartPosition,
             "Entity": "entity",
             "Person": "person",
@@ -482,6 +476,176 @@ class ACEDatasetLoader(DatasetLoader):
                 self.elements[key]["gold"] += entities  # Is not used anyway
 
 
+# class ACESampler(Sampler):
+#     """
+#     A data `Sampler` for the ACE05 dataset.
+
+#     Args:
+#         dataset_loader (`ACEDatasetLoader`):
+#             The dataset loader that contains the data information.
+#         task (`str`, optional):
+#             The task to sample. It must be one of the following: NER, VER, RE, EE.
+#             Defaults to `None`.
+#         split (`str`, optional):
+#             The split to sample. It must be one of the following: "train", "dev" or
+#             "test". Depending on the split the sampling strategy differs. Defaults to
+#             `"train"`.
+#         parallel_instances (`Union[int, Tuple[int, int]]`, optional):
+#             The number of sentences sampled in parallel. Options:
+
+#                 * **`int`**: The amount of elements that will be sampled in parallel.
+#                 * **`tuple`**: The range of elements that will be sampled in parallel.
+
+#             Defaults to 1.
+#         max_guidelines (`int`, optional):
+#             The number of guidelines to append to the example at the same time. If `-1`
+#             is given then all the guidelines are appended. Defaults to `-1`.
+#         guideline_dropout (`float`, optional):
+#             The probability to dropout a guideline definition for the given example. This
+#             is only applied on training. Defaults to `0.0`.
+#         seed (`float`, optional):
+#             The seed to sample the examples. Defaults to `0`.
+#         prompt_template (`str`, optional):
+#             The path to the prompt template. Defaults to `"templates/prompt.txt"`.
+#         ensure_positives_on_train (bool, optional):
+#             Whether to ensure that the guidelines of annotated examples are not removed.
+#             Defaults to `False`.
+#         dataset_name (str, optional):
+#             The name of the dataset. Defaults to `None`.
+#         scorer (`str`, optional):
+#            The scorer class import string. Defaults to `None`.
+#         sample_only_gold_guidelines (`bool`, optional):
+#             Whether to sample only guidelines of present annotations. Defaults to `False`.
+#     """
+
+#     def __init__(
+#         self,
+#         dataset_loader: ACEDatasetLoader,
+#         task: str = None,
+#         split: str = "train",
+#         parallel_instances: Union[int, Tuple[int, int]] = 1,
+#         max_guidelines: int = -1,
+#         guideline_dropout: float = 0.0,
+#         seed: float = 0,
+#         ensure_positives_on_train: bool = False,
+#         dataset_name: str = None,
+#         scorer: str = None,
+#         sample_only_gold_guidelines: bool = False,
+#         **kwargs,
+#     ) -> None:
+#         assert task in [
+#             "NER",
+#             "VER",
+#             "RE",
+#             "RC",
+#             "EE",
+#             "EAE",
+#         ], f"{task} must be either 'NER', 'VER', 'RE', 'RC', 'EE', 'EAE'."
+
+#         task_definitions, task_target, task_template = {
+#             "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt.txt"),
+#             "VER": (VALUE_DEFINITIONS, "values", "templates/prompt.txt"),
+#             "RE": (COARSE_RELATION_DEFINITIONS, "coarse_relations", "templates/prompt_ace_re.txt"),
+#             "RC": (RELATION_DEFINITIONS, "relations", "templates/prompt_ace_rc.txt"),
+#             "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
+#             "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
+#         }[task]
+
+#         kwargs.pop("prompt_template")
+
+#         super().__init__(
+#             dataset_loader=dataset_loader,
+#             task=task,
+#             split=split,
+#             parallel_instances=parallel_instances,
+#             max_guidelines=max_guidelines,
+#             guideline_dropout=guideline_dropout,
+#             seed=seed,
+#             prompt_template=task_template,
+#             ensure_positives_on_train=ensure_positives_on_train,
+#             sample_only_gold_guidelines=sample_only_gold_guidelines,
+#             dataset_name=dataset_name,
+#             scorer=scorer,
+#             task_definitions=task_definitions,
+#             task_target=task_target,
+#             **kwargs,
+#         )
+
+#     @override
+#     def _sample(self, instances):
+#         if self.task not in ["RC", "EAE"]:
+#             for inst in super()._sample(instances):
+#                 yield inst
+#         else:
+#             COARSE_TO_FINE = COARSE_TO_FINE_EVENTS if self.task == "EAE" else COARSE_TO_FINE_RELATIONS
+#             FINE_TO_COARSE = FINE_TO_COARSE_EVENTS if self.task == "EAE" else FINE_TO_COARSE_RELATIONS
+#             positive_guidelines = {type(ann) for inst in instances for ann in inst[self.task_target]}
+#             for coarse_type in {FINE_TO_COARSE[_def] for _def in positive_guidelines}:
+#                 # guidelines = {_type for _def in positive_guidelines for _type in COARSE_TO_FINE[FINE_TO_COARSE[_def]]}
+#                 guidelines = COARSE_TO_FINE[coarse_type]
+#                 if self.sample_only_gold_guidelines:
+#                     guidelines = [
+#                         definition
+#                         for definition in guidelines
+#                         if any(isinstance(ann, definition) for inst in instances for ann in inst[self.task_target])
+#                     ]
+
+#                 if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
+#                     p = np.asarray(
+#                         [
+#                             (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+#                             for _def in guidelines
+#                         ]
+#                     )
+#                     p += 1.0 / p.shape[0]
+#                     p /= p.sum()
+#                     guidelines = np.random.choice(
+#                         np.asarray(guidelines),
+#                         size=(self.sample_total_guidelines,),
+#                         replace=False,
+#                         p=p,
+#                     ).tolist()
+
+#                 # guidelines = list(self.task_definitions)
+#                 random.shuffle(guidelines)
+#                 splits = math.ceil(len(guidelines) / self.max_guidelines)
+#                 for i in range(splits):
+#                     _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
+#                     # Apply guideline dropout
+#                     if self.split == "train":
+#                         _guidelines = [
+#                             _def
+#                             for _def in _guidelines
+#                             if random.random() > self.guideline_dropout
+#                             or (_def in positive_guidelines and self.ensure_positives_on_train)
+#                         ]
+
+#                     _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
+#                     _gold = [cast_to(ann, coarse_type) for ann in _ann]
+#                     _text = " ".join([inst["text"] for inst in instances]).strip()
+
+#                     # Remove the chances for hallucination because the task is classification
+#                     if not len(_ann):
+#                         continue
+
+#                     _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+#                     if self.remove_guidelines:
+#                         _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
+#                         _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+
+#                     yield {
+#                         "ids": [inst["id"] for inst in instances],
+#                         "task_id": f"{self.dataset_name}_{self.task}",
+#                         "scorer_cls": self.scorer_cls,
+#                         "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
+#                         "text": black.format_str(
+#                             self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
+#                             mode=self._black_mode,
+#                         ),
+#                         "unlabelled_sentence": _text,
+#                     }
+
+
 class ACESampler(Sampler):
     """
     A data `Sampler` for the ACE05 dataset.
@@ -557,6 +721,15 @@ class ACESampler(Sampler):
             "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
         }[task]
 
+        if task in ["RC", "EAE"]:
+            is_coarse_to_fine: bool = True
+            COARSE_TO_FINE = COARSE_TO_FINE_EVENTS if task == "EAE" else COARSE_TO_FINE_RELATIONS
+            FINE_TO_COARSE = FINE_TO_COARSE_EVENTS if task == "EAE" else FINE_TO_COARSE_RELATIONS
+        else:
+            is_coarse_to_fine = False
+            COARSE_TO_FINE = None
+            FINE_TO_COARSE = None
+
         kwargs.pop("prompt_template")
 
         super().__init__(
@@ -574,79 +747,9 @@ class ACESampler(Sampler):
             scorer=scorer,
             task_definitions=task_definitions,
             task_target=task_target,
+            is_coarse_to_fine=is_coarse_to_fine,
+            coarse_to_fine=COARSE_TO_FINE,
+            fine_to_coarse=FINE_TO_COARSE,
+            definitions=GUIDELINES,
             **kwargs,
         )
-
-    @override
-    def _sample(self, instances):
-        if self.task not in ["RC", "EAE"]:
-            for inst in super()._sample(instances):
-                yield inst
-        else:
-            COARSE_TO_FINE = COARSE_TO_FINE_EVENTS if self.task == "EAE" else COARSE_TO_FINE_RELATIONS
-            FINE_TO_COARSE = FINE_TO_COARSE_EVENTS if self.task == "EAE" else FINE_TO_COARSE_RELATIONS
-            positive_guidelines = {type(ann) for inst in instances for ann in inst[self.task_target]}
-            for coarse_type in {FINE_TO_COARSE[_def] for _def in positive_guidelines}:
-                # guidelines = {_type for _def in positive_guidelines for _type in COARSE_TO_FINE[FINE_TO_COARSE[_def]]}
-                guidelines = COARSE_TO_FINE[coarse_type]
-                if self.sample_only_gold_guidelines:
-                    guidelines = [
-                        definition
-                        for definition in guidelines
-                        if any(isinstance(ann, definition) for inst in instances for ann in inst[self.task_target])
-                    ]
-
-                if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
-                    p = np.asarray(
-                        [
-                            (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
-                            for _def in guidelines
-                        ]
-                    )
-                    p += 1.0 / p.shape[0]
-                    p /= p.sum()
-                    guidelines = np.random.choice(
-                        np.asarray(guidelines),
-                        size=(self.sample_total_guidelines,),
-                        replace=False,
-                        p=p,
-                    ).tolist()
-
-                # guidelines = list(self.task_definitions)
-                random.shuffle(guidelines)
-                splits = math.ceil(len(guidelines) / self.max_guidelines)
-                for i in range(splits):
-                    _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
-                    # Apply guideline dropout
-                    if self.split == "train":
-                        _guidelines = [
-                            _def
-                            for _def in _guidelines
-                            if random.random() > self.guideline_dropout
-                            or (_def in positive_guidelines and self.ensure_positives_on_train)
-                        ]
-
-                    _ann = [ann for inst in instances for ann in inst[self.task_target] if type(ann) in _guidelines]
-                    _gold = [cast_to(ann, coarse_type) for ann in _ann]
-                    _text = " ".join([inst["text"] for inst in instances]).strip()
-
-                    # Remove the chances for hallucination because the task is classification
-                    if not len(_ann):
-                        continue
-
-                    _guidelines = [inspect.getsource(definition) for definition in _guidelines]
-                    if self.remove_guidelines:
-                        _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
-                        _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
-
-                    yield {
-                        "ids": [inst["id"] for inst in instances],
-                        "task_id": f"{self.dataset_name}_{self.task}",
-                        "scorer_cls": self.scorer_cls,
-                        "labels": black.format_str(_ann.__repr__(), mode=self._black_mode),
-                        "text": black.format_str(
-                            self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold),
-                            mode=self._black_mode,
-                        ),
-                        "unlabelled_sentence": _text,
-                    }

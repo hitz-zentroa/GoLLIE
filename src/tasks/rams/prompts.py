@@ -12,11 +12,7 @@ https://github.com/raspberryice/gen-arg/blob/main/aida_ontology_cleaned.csv
 
 @dataclass
 class ArtifactFailure(Event):
-    """An ArtifactFailure (artifact) Event occurs whenever a (mechanical) Artifact
-    failed due to some Instrument at some Place.
-
-    The possible Event subtypes are: "MechanicalFailure" or None.
-    """
+    """{rams_artifactfailure}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype.
@@ -27,11 +23,7 @@ class ArtifactFailure(Event):
 
 @dataclass
 class DamageDestroy(Event):
-    """A DamageDestroy (artifact) Event occurs when an Artifact is damaged or destroyed
-    by some Agent (damager or destroyer) using an Instrument at some Place.
-
-    The possible Event subtypes are: "Damage", "Destroy" or None.
-    """
+    """{rams_damagedestroy}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype.
@@ -43,11 +35,7 @@ class DamageDestroy(Event):
 
 @dataclass
 class Shortage(Event):
-    """A Shortage (artifact) Event occurs when a Experiencer experienced a shortage of
-    Supply in some Place.
-
-    The only possible event subtype is: "Shortage".
-    """
+    """{rams_shortage}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype.
@@ -58,14 +46,7 @@ class Shortage(Event):
 
 @dataclass
 class Attack(Event):
-    """An Attack (conflict) Event occurs when an Attacker attacks a Target with some
-    Instrument at some Place.
-
-    The possible Event subtypes are: "AirStrikeMissileStrike",
-    "BiologicalChemicalPoisonAttack", "Bombing", "FireArmAttack", "Hanging",
-    "Invade", "SelfDirectedBattle", "SetFire", "Stabbing", "StealRobHijack",
-    "Strangling" or None.
-    """
+    """{rams_attack}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -78,11 +59,7 @@ class Attack(Event):
 
 @dataclass
 class Coup(Event):
-    """A Coup (conflict) Event occurs when a DeposedEntity was desposed by a
-    DeposingEntity at some Place.
-
-    The only possible event subtype is: "Coup".
-    """
+    """{rams_coup}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -93,11 +70,7 @@ class Coup(Event):
 
 @dataclass
 class Demonstrate(Event):
-    """A Demonstrate (conflict) Event occurs when a Demonstrator(s) protest at some
-    Place.
-
-    The possible Event subtypes are: "MarchProtestPoliticalGathering" or None.
-    """
+    """{rams_demonstrate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -107,12 +80,7 @@ class Demonstrate(Event):
 
 @dataclass
 class Yield(Event):
-    """A Yield (conflict) Event occurs when an Agent (yielder or surrender)
-    yields or surrenders to a Recipient at some Place. But also, when an Agent
-    (retreater) retreats from Origin to some Destination.
-
-    The possible Event subtypes are: "Surrender", "Retreat" or None
-    """
+    """{rams_yield}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -125,11 +93,7 @@ class Yield(Event):
 
 @dataclass
 class Collaborate(Event):
-    """A Collaborate (contact) Event occurs when some Participants
-    communicates (remotely or face-to-face) at some Place.
-
-    The possible Event subtypes are: "Correspondence", "Meet" or None.
-    """
+    """{rams_collaborate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -139,12 +103,7 @@ class Collaborate(Event):
 
 @dataclass
 class CommandOrder(Event):
-    """A CommandOrder (contact) Event occurs when a Communicator communicates
-    with/to Recipient about a Topic at some Place.
-
-    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet"
-    or None.
-    """
+    """{rams_commandorder}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -156,11 +115,7 @@ class CommandOrder(Event):
 
 @dataclass
 class CommitmentPromiseExpressIntent(Event):
-    """A CommitmentPromiseExpressIntent (contact) Event occurs when a Communicator
-    commits, promises, expresses an intent to Recipient about a Topic at some Place.
-
-    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
-    """
+    """{rams_commitmentpromiseexpressintent}"""
 
     mention: str  # # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -172,11 +127,7 @@ class CommitmentPromiseExpressIntent(Event):
 
 @dataclass
 class Discussion(Event):
-    """A Discussion (contact) Event occurs when some Participants discuss at some
-    place.
-
-    The possible Event subtypes are: "Correspondence", "Meet" or None.
-    """
+    """{rams_discussion}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -186,11 +137,7 @@ class Discussion(Event):
 
 @dataclass
 class FuneralVigil(Event):
-    """A FuneralVigil (contact) Event occurs when some Participants communicate
-    during a funeral or vigil for Deceased at some Place.
-
-    The possible Event subtypes are: "Meet" or None.
-    """
+    """{rams_funeralvigil}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -201,11 +148,7 @@ class FuneralVigil(Event):
 
 @dataclass
 class MediaStatement(Event):
-    """A MediaStatement (contact) Event occurs when a Communicator communicates
-    something on media to some Recipients at some Place.
-
-    The possible Event subtypes are: "Broadcast" or None.
-    """
+    """{rams_mediastatement}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -216,11 +159,7 @@ class MediaStatement(Event):
 
 @dataclass
 class Negotiate(Event):
-    """A Negotiate (contact) Event occurs when some Participants participate on
-    a negotiation about some Topic at some Place.
-
-    The possible Event subtypes are: "Correspondence", "Meet" or None.
-    """
+    """{rams_negotiate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -231,11 +170,7 @@ class Negotiate(Event):
 
 @dataclass
 class Prevarication(Event):
-    """A Prevarication (contact) Event occurs when a Communicator prevaricate about
-    some Topic to a Recipient at some Place.
-
-    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
-    """
+    """{rams_prevarication}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -247,11 +182,7 @@ class Prevarication(Event):
 
 @dataclass
 class PublicStatementInPerson(Event):
-    """A PublicStatementInPerson (contact) Event occurs when a Communicator gives
-    a public statement to a Recipient at some Place.
-
-    The possible Event subtypes are: "Broadcast" or None.
-    """
+    """{rams_publicstatementinperson}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -262,11 +193,7 @@ class PublicStatementInPerson(Event):
 
 @dataclass
 class RequestAdvice(Event):
-    """A RequestAdvice (contact) Event occurs when a Communicator requests something
-    or gives advice about a Topic to a Recipient at some Place.
-
-    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
-    """
+    """{rams_requestadvice}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -278,11 +205,7 @@ class RequestAdvice(Event):
 
 @dataclass
 class ThreatenCoerce(Event):
-    """A ThreatenCoerce (contact) Event occurs when a Communicator threats or coerces
-    a Recipient about a Topic at some Place.
-
-    The possible Event subtypes are: "Broadcast", "Correspondence", "Meet" or None.
-    """
+    """{rams_threatencoerce}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -294,11 +217,7 @@ class ThreatenCoerce(Event):
 
 @dataclass
 class AccidentCrash(Event):
-    """An AccidentCrash (disaster) Event occurs when a Driver/Passenger in a
-    Vehicle crashes into CrashObject at some place.
-
-    The only possible event subtype is: "AccidentCrash".
-    """
+    """{rams_accidentcrash}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -310,11 +229,7 @@ class AccidentCrash(Event):
 
 @dataclass
 class DiseaseOutbreak(Event):
-    """A DiseaseOutbreak (disaster) Event occurs when a Disease broke out
-    among some Victims at some Place.
-
-    The only possible event subtype is: "DiseaseOutbreak".
-    """
+    """{rams_diseaseoutbreak}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -325,11 +240,7 @@ class DiseaseOutbreak(Event):
 
 @dataclass
 class FireExplosion(Event):
-    """A FireExplosion (disaster) Event occurs when a FireExplosionObject caught fire
-    or exploded from an Instrument at some Place.
-
-    The only possible event subtype is: "FireExplosion".
-    """
+    """{rams_fireexplosion}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -340,11 +251,7 @@ class FireExplosion(Event):
 
 @dataclass
 class GenericCrime(Event):
-    """A GenericCrime (crime) Event occurs when a Perpetrator commits a crime against
-    a Victim at some Place.
-
-    The only possible event subtype is: "GenericCrime".
-    """
+    """{rams_genericcrime}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -355,11 +262,7 @@ class GenericCrime(Event):
 
 @dataclass
 class Agreement(Event):
-    """An Agreement (government) Event occurs when a Participant signed, rejected,
-    nullified or violated an agreement at some Place.
-
-    The possible Event subtypes are: "Accept", "RejectNullify", "Violate" or None.
-    """
+    """{rams_agreement}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -372,11 +275,7 @@ class Agreement(Event):
 
 @dataclass
 class Convene(Event):
-    """A Convene (government) Event occurs when a Convener convened a ConvenedEntity
-    at some Place.
-
-    The only possible event subtype is: "Convene".
-    """
+    """{rams_convene}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -387,11 +286,7 @@ class Convene(Event):
 
 @dataclass
 class Formation(Event):
-    """A Formation (government) Event occurs when some Participant (GPEs) are merged or
-    when a GPE is formed/started by a Founder at some Place.
-
-    The possible Event subtypes are: "Merge", "Start", None.
-    """
+    """{rams_formation}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -403,11 +298,7 @@ class Formation(Event):
 
 @dataclass
 class Legislate(Event):
-    """A Legislate (government) Event occurs when a Government legislature enacted
-    a Law in some Place.
-
-    The only possible event subtype is: "Legislate".
-    """
+    """{rams_legislate}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -418,11 +309,7 @@ class Legislate(Event):
 
 @dataclass
 class Spy(Event):
-    """An Spy (government) Event occurs when a Spy spied on a ObservedEntity to the
-    benefit of a Beneficiary in some Place.
-
-    The only possible event subtype is: "Spy".
-    """
+    """{rams_spy}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -434,12 +321,7 @@ class Spy(Event):
 
 @dataclass
 class Vote(Event):
-    """A Vote (government) Event occurs when a Voter votes for a Candidate on a
-    Ballot with a Result in some Place. This event also handles the situations when
-    a Preventer prevents a Voter for voting.
-
-    The possible Event subtypes are: "CastVote", "PreventVote", None.
-    """
+    """{rams_vote}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -453,12 +335,7 @@ class Vote(Event):
 
 @dataclass
 class SensoryObserve(Event):
-    """A SensoryObserve (inspection) Event occurs when a Observer observed, inspected or
-    monitored a ObservedEntity in some Place.
-
-    The possible Event subtypes are: "InspectPeopleOrganization", "MonitorElection",
-    "PhysicalInvestigateInspect" or None.
-    """
+    """{rams_sensoryobserve}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -469,11 +346,7 @@ class SensoryObserve(Event):
 
 @dataclass
 class TargetAimAt(Event):
-    """A TargetAimAt (inspection) Event occurs when a Targeter physically targeted a
-    Target with a Instrument at some Place.
-
-    The only possible event subtype is: "TargetAimAt".
-    """
+    """{rams_targetaimat}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -485,11 +358,7 @@ class TargetAimAt(Event):
 
 @dataclass
 class ArrestJailDetain(Event):
-    """An ArrestJailDetain (justice) Event occurs when a Jailer arrested or jailed
-    a Detainee for a Crime at some Place.
-
-    The only possible event subtype is: "ArrestJailDetain".
-    """
+    """{rams_arrestjaildetain}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -501,12 +370,7 @@ class ArrestJailDetain(Event):
 
 @dataclass
 class InitiateJudicialProcess(Event):
-    """An InitiateJudicialProcess (justice) Event occurs when a Prosecutor charged,
-    indicted, tried or initiated a judicial process pertaining to a Defendant before
-    a JudgeCourt for a Crime in some Place.
-
-    The possible Event subtypes are: "ChargeIndict", "TrialHearing" or None.
-    """
+    """{rams_initiatejudicialprocess}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -519,11 +383,7 @@ class InitiateJudicialProcess(Event):
 
 @dataclass
 class InvestigateCrime(Event):
-    """An InvestigateCrime (justice) Event occurs when a Investigator investigated
-    a Defendant for a Crime in some Place.
-
-    The possible Event subtypes are: "InvestigateCrime" or None.
-    """
+    """{rams_investigatecrime}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -535,12 +395,7 @@ class InvestigateCrime(Event):
 
 @dataclass
 class JudicialConsequences(Event):
-    """A JudicialConsequence (justice) Event occurs when a JudgeCourt decided
-    the consequences, convicted, executed or extradited a Defendant for a Crime
-    in some Place.
-
-    The possible Event subtypes are: "Convict", "Execute", "Extradite" or None.
-    """
+    """{rams_judicialconsequences}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -554,12 +409,7 @@ class JudicialConsequences(Event):
 
 @dataclass
 class Die(Event):
-    """A Die (life) Event occurs when a Victim died in some Place. The reason
-    of the death can be: killed by a Killer or by a MedicalIssue, with or without
-    an Instrument.
-
-    The possible Event subtypes are: "Violent", "NonViolent" or None.
-    """
+    """{rams_die}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -572,14 +422,7 @@ class Die(Event):
 
 @dataclass
 class Injure(Event):
-    """An Injure (life) Event occurs when a Victim is injured in some Place. The
-    reasons can be: have extreme hunger or thirst, some physical degradation and
-    sickness or illness by some MedicalIssue either infected by some Disease or imposed
-    by some Injurer. The injures can be caused by some Instrument.
-
-    The possible Event subtypes are: "HungerThirst", "Physical", "Sickness",
-    "Violent" or None
-    """
+    """{rams_injure}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -593,13 +436,7 @@ class Injure(Event):
 
 @dataclass
 class ManufactureArtifact(Event):
-    """A ManufactureArtifact (manufacture) Event occurs when a Manufacturer
-    manufactured, created or produced an Artifact using an Instrument at
-    some Place.
-
-    The possible Event subtypes are: "Build", "IntellectualProperty",
-    "CreateManufacture" or None.
-    """
+    """{rams_manufactureartifact}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -611,12 +448,7 @@ class ManufactureArtifact(Event):
 
 @dataclass
 class MedicalIntervention(Event):
-    """A MedicalIntervention (medical) Event occurs when a Treater treated
-    a Patient for a MedicalIssue by means of some Instrument at some
-    Place.
-
-    The only possible event subtype is: "Intervention".
-    """
+    """{rams_medicalintervention}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -629,15 +461,7 @@ class MedicalIntervention(Event):
 
 @dataclass
 class TransportArtifact(Event):
-    """A TransportArtifact (transport) Event occurs when a Transporter transports
-    an Artifact from the Origin to the Destination in some Vehicle. For some cases
-    a Preventer entity can prevent the Transporter to transport the Artifact.
-
-    The possible Event subtypes are: "BringCarryUnload", "DisperseSeparate",
-    "Fall", "GrantEntry", "Hide", "LostOfControl", "NonViolentThrowLaunch",
-    "PreventEntry", "PreventExit", "ReceiveImport", "SendSupplyExport",
-    "SmuggleExtract" or None.
-    """
+    """{rams_transportartifact}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -652,15 +476,7 @@ class TransportArtifact(Event):
 
 @dataclass
 class TransportPerson(Event):
-    """A TransportPerson (transport) Event occurs when a Transporter transports
-    itself or a Passanger from the Origin to the Destination in some Vehicle. For
-    some cases a Preventer entity can prevent the Transporter to transport itself or
-    the Passenger.
-
-    The possible Event subtypes are: "BringCarryUnload", "DisperseSeparate",
-    "EvacuationRescue", "Fall", "GrantedAsylum", "Hide", "PreventEntry",
-    "PreventExit", "SelfMotion", "SmuggleExtract" or None.
-    """
+    """{rams_transportperson}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -676,11 +492,7 @@ class TransportPerson(Event):
 
 @dataclass
 class Elect(Event):
-    """An Elect (personell) Event occurs when a Voter elects a Candidate in some
-    Place.
-
-    The possible Event subtypes are: "WinElection" or None.
-    """
+    """{rams_elect}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -691,11 +503,7 @@ class Elect(Event):
 
 @dataclass
 class EndPossition(Event):
-    """An EndPossition (personell) Event occurs when an Employee stops working on
-    a Organization in some Place.
-
-    The possible Event subtypes are: "FiringLayOff", "QuitRetire" or None.
-    """
+    """{rams_endpossition}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -706,11 +514,7 @@ class EndPossition(Event):
 
 @dataclass
 class StartPossition(Event):
-    """An StartPossition (personell) Event occurs when an Employee starts working on
-    a Organization in some Place.
-
-    The possible Event subtypes are: "Hiring" or None.
-    """
+    """{rams_startpossition}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -721,14 +525,7 @@ class StartPossition(Event):
 
 @dataclass
 class Transaction(Event):
-    """A Transaction (transaction) Event occurs when a transaction of some Artifact
-    occurred between some Participants for the benefit of a Beneficiary at some Place.
-    The Participants can be characterized into Giver and Recipient. There can be a
-    preventer that prevents the transaction to occur.
-
-    The possible Event subtypes are: "EmbargoSanction", "GiftGrantProvideAid",
-    "TransferControl" or None.
-    """
+    """{rams_transaction}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -743,13 +540,7 @@ class Transaction(Event):
 
 @dataclass
 class TransferMoney(Event):
-    """A TransferMoney (transaction) Event occurs when a Giver gives Money to a
-    Recipient for the benefit of Beneficiary in some Place. There can be a
-    preventer that prevents the transaction to occur.
-
-    The possible Event subtypes are: "BorrowLend", "EmbargoSanction",
-    "GiftGrantProvideAid", "PayForService", "Purchase" or None.
-    """
+    """{rams_transfermoney}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype
@@ -763,13 +554,7 @@ class TransferMoney(Event):
 
 @dataclass
 class TransferOwnership(Event):
-    """A TransferOwnership (transaction) Event occurs when a Giver gives some Artifact to
-    a Recipient for the benefit of Beneficiary in some Place. There can be a
-    preventer that prevents the transaction to occur.
-
-    The possible Event subtypes are: "BorrowLend", "EmbargoSanction",
-    "GiftGrantProvideAid", "Purchase" or None.
-    """
+    """{rams_transferownership}"""
 
     mention: str  # The text span that most clearly expresses (triggers) the event
     subtype: Union[str, None]  # Possible event subtype

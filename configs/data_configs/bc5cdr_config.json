@@ -1,0 +1,22 @@
+{
+    "dataset_name": "BC5CDR",
+    "tasks": ["NER"],
+    "dataloader_cls": "src.tasks.bc5cdr.data_loader.Bc5cdrDatasetLoader",
+    "sampler_cls": "src.tasks.bc5cdr.data_loader.Bc5cdrSampler",
+    "train_file": "train",
+    "dev_file": "validation",
+    "test_file": "test",
+    "prompt_template": "templates/prompt.txt",
+    "seed": [0, 24, 42],
+    "label_noise_prob": [0.15, 0.50, 0.75],
+    "task_configuration": {
+        "NER": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.bc5cdr.scorer.Bc5cdrEntityScorer",
+            "paraphrase_train": true,
+            "label_noise": 0.5
+        }
+    }
+}

@@ -6,7 +6,7 @@
 #SBATCH --output=.slurm/CoLLIE7B.out.txt
 #SBATCH --error=.slurm/CoLLIE7B.err.txt
 
-source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
+source /ikerlariak/osainz006/venvs/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -23,5 +23,4 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B.yaml
-
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora8.yaml
