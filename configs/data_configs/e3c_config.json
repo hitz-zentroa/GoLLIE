@@ -1,0 +1,22 @@
+{
+    "dataset_name": "E3C",
+    "tasks": ["NER"],
+    "dataloader_cls": "src.tasks.e3c.data_loader.E3CDatasetLoader",
+    "sampler_cls": "src.tasks.e3c.data_loader.E3CSampler",
+    "train_file": "data/e3c/en-e3c-train.tsv",
+    "dev_file": "data/e3c/en-e3c-dev.tsv",
+    "test_file": "data/e3c/en-e3c-test.tsv",
+    "prompt_template": "templates/prompt.txt",
+    "seed": [0, 24, 42],
+    "label_noise_prob": [0.15, 0.50, 0.75],
+    "task_configuration": {
+        "NER": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.0,
+            "scorer": "src.tasks.e3c.scorer.E3CEntityScorer",
+            "paraphrase_train": true,
+            "label_noise": 0.5
+        }
+    }
+}
