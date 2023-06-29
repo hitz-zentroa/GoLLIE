@@ -367,6 +367,7 @@ class Sampler:
         lang: str = "en",
         definitions: Dict[str, Any] = None,
         label_noise_prob: float = 0.0,
+        coarse_dropout: float = 0.0,
         **kwargs,
     ) -> None:
         self.loader = dataset_loader
@@ -381,6 +382,7 @@ class Sampler:
             parallel_instances = (1, parallel_instances)
         self.parallel_instances = tuple(parallel_instances)
         self.guideline_dropout = guideline_dropout
+        self.coarse_dropout = coarse_dropout
         self.seed = seed
         if not task_definitions or not len(task_definitions):
             raise ValueError("task_definitions argument must not be None or empty")
@@ -436,6 +438,8 @@ class Sampler:
         all_guidelines = [guidelines] if not self.is_coarse_to_fine else coarse_guidelines
         for guidelines in all_guidelines:
             if self.is_coarse_to_fine:
+                if self.coarse_dropout and random.random() < self.coarse_dropout:
+                    continue
                 # In case of `is_coarse_to_fine` the guidelines variable is a single type
                 coarse_type = guidelines
                 guidelines = self._coarse_to_fine[coarse_type]
