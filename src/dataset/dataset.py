@@ -104,7 +104,7 @@ def prepare_data(
                 truncation=True,
                 padding=False,
                 return_tensors=None,
-                add_special_tokens=True,
+                add_special_tokens=False,
             )
 
             # Remove the last token if it is an eos token
@@ -119,7 +119,7 @@ def prepare_data(
                 truncation=True,
                 padding=False,
                 return_tensors=None,
-                add_special_tokens=True,
+                add_special_tokens=False,
             )
 
             # Make sure the `eos_token_id` is added at the end
