@@ -75,6 +75,12 @@ GUIDELINES = {
             ),
         ]
     },
+    "multinerd_animal": {
+        "en": [
+            "Breeds of dogs, cats and other animals, including their scientific names. Examples: Maine Coon, African"
+            " Wild Dog, Great White Shark, New Zealand Bellbird."
+        ]
+    },
     "multinerd_biological": {
         "en": [
             (
