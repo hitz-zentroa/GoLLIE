@@ -88,6 +88,19 @@ class ModelArguments:
         },
     )
 
+    use_better_transformer: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to transform the model using Better Transformer library:"
+                "https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum"
+                "'https://huggingface.co/docs/optimum/installation'. Defaults to False. This flag is "
+                "only supported for inference, we will override it for training as BetterTransformer does not"
+                "support custom attention masks during training."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:

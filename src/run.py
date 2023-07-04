@@ -46,6 +46,7 @@ def train_collie(
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
+        use_better_transformer=model_args.use_better_transformer,
     )
 
     logging.info("Loading datasets...")
@@ -193,6 +194,7 @@ def inference_collie(
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        use_better_transformer=model_args.use_better_transformer,
     )
 
     trainer = CollieTrainer(
