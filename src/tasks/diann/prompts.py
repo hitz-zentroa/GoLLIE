@@ -16,7 +16,7 @@ class Disability(Entity):
 
     span: str
 
-
+@dataclass
 class Negation(Entity):
     """{diann_negation}"""
 
