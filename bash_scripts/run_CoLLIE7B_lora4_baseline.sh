@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE7B_lora4
+#SBATCH --job-name=CoLLIE7B_lora4_base
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE7B_lora_4.out.txt
-#SBATCH --error=.slurm/CoLLIE7B_lora_4.err.txt
+#SBATCH --output=.slurm/CoLLIE7B_lora_4_base.out.txt
+#SBATCH --error=.slurm/CoLLIE7B_lora_4_base.err.txt
 
 # El bueno
 # source /ikerlariak/osainz006/venvs/collie-new/bin/activate
