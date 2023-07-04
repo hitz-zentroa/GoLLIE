@@ -1,4 +1,3 @@
-import logging
 from typing import Dict, List
 
 from . import ace, bc5cdr, conll03, diann, multinerd, ncbidisease, ontonotes, rams, tacred, wikievents, wnut, e3c

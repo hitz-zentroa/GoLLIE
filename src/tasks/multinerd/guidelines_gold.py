@@ -15,6 +15,12 @@ GUIDELINES = {
             " Rushmore, Mississippi River."
         ]
     },
+    "multinerd_animal": {
+        "en": [
+            "Breeds of dogs, cats and other animals, including their scientific names. Examples: Maine Coon, African"
+            " Wild Dog, Great White Shark, New Zealand Bellbird."
+        ]
+    },
     "multinerd_biological": {
         "en": [
             "Genus of fungus, bacteria and protoctists, families of viruses, and other biological entities. Examples:"

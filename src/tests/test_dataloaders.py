@@ -66,6 +66,7 @@ class TestDataLoaders(unittest.TestCase):
 
         _ = list(TACREDSampler(dataloader, task="SF", **config, **config["task_configuration"]["SF"]))
 
+    @unittest.skipIf(not os.path.exists("data/conll/en.conll.train.tsv"), "No CoNLL data available")
     def test_CoNLL03(self):
         from src.tasks.conll03.data_loader import CoNLL03Sampler, CoNLLDatasetLoader
         from src.tasks.conll03.prompts import Miscellaneous, Organization, Person
@@ -81,7 +82,7 @@ class TestDataLoaders(unittest.TestCase):
                 "parallel_instances": 1,
                 "max_guidelines": -1,
                 "guideline_dropout": 0,
-                "scorer": "src.tasks.ace.scorer.CoNLL03EntityScorer",
+                "scorer": "src.tasks.conll03.scorer.CoNLL03EntityScorer",
             }
         }
 

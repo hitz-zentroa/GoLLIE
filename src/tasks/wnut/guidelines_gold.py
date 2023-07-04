@@ -9,8 +9,8 @@ GUIDELINES = {
     "wnut_location": {
         "en": [
             "Names that are locations (e.g. France). Don’t mark locations that don’t have their own name. Include"
-            " punctuation in the middle of names. Fictional locations can be included, as long as they’re referred to"
-            " by name (e.g. Hogwarts)."
+            " punctuation in the middle of names. Fictional locations can be included, as long as they’re referred to"
+            " by name (e.g. Hogwarts)."
         ]
     },
     "wnut_corporation": {
@@ -23,7 +23,7 @@ GUIDELINES = {
         "en": [
             "Name of products (e.g. iPhone). Don’t mark products that don’t have their own name. Include punctuation"
             " in the middle of names. Fictional products can be included, as long as they’re referred to by name (e.g."
-            " Everlasting Gobstopper). It’s got to be something you can touch, and it’s got to be the official name."
+            " Everlasting Gobstopper). It’s got to be something you can touch, and it’s got to be the official name."
         ]
     },
     "wnut_creativework": {

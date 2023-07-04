@@ -88,6 +88,19 @@ class ModelArguments:
         },
     )
 
+    use_better_transformer: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to transform the model using Better Transformer library:"
+                "https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum"
+                "'https://huggingface.co/docs/optimum/installation'. Defaults to False. This flag is "
+                "only supported for inference, we will override it for training as BetterTransformer does not"
+                "support custom attention masks during training."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:
@@ -149,6 +162,37 @@ class DataTrainingArguments:
                 "The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total"
                 " weight of 5% in the loss while the result tokens will have a total weight of 95%. Only used for"
                 " computing the loss in the training data. Defaults to `0.05`."
+            )
+        },
+    )
+
+    max_examples_per_task_train: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for training. "
+                "If set to None, all examples will be"
+                " used."
+            )
+        },
+    )
+
+    max_examples_per_task_val: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for development. "
+                "If set to None, all examples will be used."
+            )
+        },
+    )
+
+    max_examples_per_task_test: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for inference. "
+                "If set to None, all examples will be used."
             )
         },
     )

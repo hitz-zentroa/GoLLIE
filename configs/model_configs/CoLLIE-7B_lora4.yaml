@@ -10,32 +10,59 @@ force_auto_device_map: false
 dataset_dir:
   /ikerlariak/osainz006/CoLLIE/data/processed
 train_tasks:
-  - ace05.ner
-  - ace05.re
-  - ace05.rc
-  - ace05.ee
   - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
   - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
   - rams.eae
+  - tacred.sf
+  - wnut17.ner
 validation_tasks:
-  - ace05.ner
-  - ace05.ver
-  - ace05.re
-  - ace05.rc
-  - ace05.ee
   - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
   - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
   - rams.eae
+  - tacred.sf
+  - wikievents.eae
+  - wikievents.ee
+  - wikievents.ner
+  - wnut17.ner
 test_tasks:
-  - ace05.ner
-  - ace05.ver
-  - ace05.re
-  - ace05.rc
-  - ace05.ee
   - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
   - conll03.ner
-  - europarl.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
   - rams.eae
+  - tacred.sf
+  - wikievents.eae
+  - wikievents.ee
+  - wikievents.ner
+  - wnut17.ner
+max_examples_per_task_train: 30000
+max_examples_per_task_val: 5000
+max_examples_per_task_test: 5000
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true

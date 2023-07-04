@@ -283,6 +283,10 @@ class CollieDataset(Dataset):
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
+        max_examples (`Optional[int]`, optional):
+            The maximum number of examples to load. Defaults to `None`. If `None` all
+            examples will be loaded. If `max_examples` is smaller is set we will randomly
+            sample `max_examples` examples from the dataset.
     """
 
     def __init__(
@@ -294,10 +298,12 @@ class CollieDataset(Dataset):
         inference: bool = False,
         prompt_loss_weight: float = 0.0,
         num_workers: int = min(os.cpu_count(), 16),
+        max_examples: Optional[int] = None,
     ):
         self.is_encoder_decoder = is_encoder_decoder
         self.max_length = max_length
         self.inference = inference
+        self.max_examples = max_examples
 
         assert (
             prompt_loss_weight >= 0.0 and prompt_loss_weight < 1.0
@@ -400,6 +406,9 @@ class CollieDataset(Dataset):
             examples = f.readlines()
 
         examples = [json.loads(example.strip())["text"] for example in examples]
+
+        if self.max_examples is not None and self.max_examples < len(examples):
+            examples = random.sample(examples, self.max_examples)
 
         if num_workers <= 1:
             return batch_tokenization(

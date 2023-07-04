@@ -22,7 +22,7 @@ from transformers.models.auto.modeling_auto import (
 from .model_utils import get_trainable_parameters
 
 
-def get_device_map(force_auto_device_map: bool) -> str:
+def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
     """
     Get the device map to use for loading the model
 
@@ -31,6 +31,11 @@ def get_device_map(force_auto_device_map: bool) -> str:
             Whether to force the use of the auto device map. If set to True, the model will be split across
             GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
             into each GPU.
+        use_better_transformer (`bool`, optional):
+            Whether to transform the model using Better Transformer library:
+            https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
+            'https://huggingface.co/docs/optimum/installation'. Defaults to False.
+
     Returns:
         `str`:
             The device map to use for loading the model
@@ -48,18 +53,24 @@ def get_device_map(force_auto_device_map: bool) -> str:
                 "number different than 1, please, remove this environment variable or set it to 1"
             )
 
-        logging.info("Using auto device map, we will split the model across GPUs and CPU to fit the model in memory.")
+        logging.warning(
+            "Using auto device map, we will split the model across GPUs and CPU to fit the model in memory."
+        )
         device_map = "auto"
     else:
         word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
         if word_size > 1:
-            logging.info(
+            logging.warning(
                 "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
                 "on each GPU."
             )
             device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
         else:
-            device_map = None
+            if not use_better_transformer:
+                device_map = None
+            else:
+                logging.warning("Setting device map to 'auto' to use Better Transformers library.")
+                device_map = "auto"
 
     logging.info(f"We will load the model using the following device map: {device_map}")
 
@@ -78,6 +89,7 @@ def load_model_for_training(
     torch_dtype: Optional[str] = None,
     force_auto_device_map: bool = False,
     use_gradient_checkpointing: bool = False,
+    use_better_transformer: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -119,7 +131,12 @@ def load_model_for_training(
             into each GPU. Defaults to False.
         use_gradient_checkpointing (`bool`, optiona):
             Whether to use gradient checkpointing for training
-
+        use_better_transformer (`bool`, optional):
+            Whether to transform the model using Better Transformer library:
+            https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
+            'https://huggingface.co/docs/optimum/installation'. Defaults to False. NOTE: This
+            is a placeholder for future updates, currently, better transformers is not supported for training.
+            We will enable this feature in the future if they support custom attention masks for training.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -135,6 +152,15 @@ def load_model_for_training(
         quantization in [4, 8]
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
+    if use_better_transformer:
+        logging.warning(
+            "You have set the flag 'use_better_transformer=True', this is a placeholder for future updates, "
+            "currently, better transformers is not supported for training. We will enable this feature in the "
+            "future if they support custom attention masks for training. We will override this flag to False. "
+            "You can still use BetterTransformers for inference."
+        )
+        use_better_transformer = False
+
     if quantization is not None and not use_lora:
         raise ValueError(
             "'Quantization' == 4/8 is only supported with LoRA. If you want "
@@ -144,7 +170,9 @@ def load_model_for_training(
         )
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
-    device_map = get_device_map(force_auto_device_map=force_auto_device_map)
+    device_map = get_device_map(
+        force_auto_device_map=force_auto_device_map, use_better_transformer=use_better_transformer
+    )
 
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
         {
@@ -240,6 +268,11 @@ def load_model_for_training(
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
 
+    if use_better_transformer:
+        from optimum.bettertransformer import BetterTransformer
+
+        model = BetterTransformer.transform(model)
+
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
@@ -261,6 +294,17 @@ def load_model_for_training(
 
         # model.gradient_checkpointing_enable()
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
+
+    """
+    Currently BetterTransformer does not support padding, 8 / 4 bits training, and other important features
+    to train models. We leave it here in case they are supported in the future. For now BetterTransformer is only
+    supported for inference.
+
+    if use_better_transformer:
+        from optimum.bettertransformer import BetterTransformer
+
+        model = BetterTransformer.transform(model)
+    """
 
     if use_lora:
         from peft import LoraConfig, PeftModel, TaskType, get_peft_model
@@ -308,6 +352,7 @@ def load_model_for_inference(
     lora_weights_name_or_path: Optional[str] = None,
     torch_dtype: Optional[str] = None,
     force_auto_device_map: bool = False,
+    use_better_transformer: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
@@ -331,6 +376,10 @@ def load_model_for_inference(
             Whether to force the use of the auto device map. If set to True, the model will be split across
             GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
             into each GPU. Defaults to False.
+        use_better_transformer (`bool`, optional):
+            Whether to transform the model using Better Transformer library:
+            https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
+            'https://huggingface.co/docs/optimum/installation'. Defaults to False.
 
     Returns:
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
@@ -344,7 +393,9 @@ def load_model_for_inference(
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
     logging.info(f"Loading model from {weights_path}")
-    device_map = get_device_map(force_auto_device_map=force_auto_device_map)
+    device_map = get_device_map(
+        force_auto_device_map=force_auto_device_map, use_better_transformer=use_better_transformer
+    )
 
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
         {
@@ -419,6 +470,11 @@ def load_model_for_inference(
             f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
             f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
         )
+
+    if use_better_transformer:
+        from optimum.bettertransformer import BetterTransformer
+
+        model = BetterTransformer.transform(model)
 
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")

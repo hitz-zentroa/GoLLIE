@@ -46,6 +46,7 @@ def train_collie(
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
+        use_better_transformer=model_args.use_better_transformer,
     )
 
     logging.info("Loading datasets...")
@@ -80,6 +81,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=data_args.prompt_loss_weight,
+            max_examples=data_args.max_examples_per_task_train,
         )
         training_datasets.append(train_dataset)
 
@@ -95,6 +97,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=0.0,
+            max_examples=data_args.max_examples_per_task_val,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -193,6 +196,7 @@ def inference_collie(
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        use_better_transformer=model_args.use_better_transformer,
     )
 
     trainer = CollieTrainer(
@@ -219,6 +223,7 @@ def inference_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
             prompt_loss_weight=0.0,
+            max_examples=data_args.max_examples_per_task_test,
         )
 
         logging.info(f"Running inference on {test_task}...")
