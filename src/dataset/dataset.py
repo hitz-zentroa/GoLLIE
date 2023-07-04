@@ -407,7 +407,7 @@ class CollieDataset(Dataset):
 
         examples = [json.loads(example.strip())["text"] for example in examples]
 
-        if self.max_examples is not None:
+        if self.max_examples is not None and self.max_examples < len(examples):
             examples = random.sample(examples, self.max_examples)
 
         if num_workers <= 1:
