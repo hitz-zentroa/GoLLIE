@@ -165,3 +165,34 @@ class DataTrainingArguments:
             )
         },
     )
+
+    max_examples_per_task_train: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for training. "
+                "If set to None, all examples will be"
+                " used."
+            )
+        },
+    )
+
+    max_examples_per_task_val: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for development. "
+                "If set to None, all examples will be used."
+            )
+        },
+    )
+
+    max_examples_per_task_test: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for inference. "
+                "If set to None, all examples will be used."
+            )
+        },
+    )

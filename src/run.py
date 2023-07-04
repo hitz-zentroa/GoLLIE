@@ -81,6 +81,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=data_args.prompt_loss_weight,
+            max_examples=data_args.max_examples_per_task_train,
         )
         training_datasets.append(train_dataset)
 
@@ -96,6 +97,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=0.0,
+            max_examples=data_args.max_examples_per_task_val,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -221,6 +223,7 @@ def inference_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
             prompt_loss_weight=0.0,
+            max_examples=data_args.max_examples_per_task_test,
         )
 
         logging.info(f"Running inference on {test_task}...")

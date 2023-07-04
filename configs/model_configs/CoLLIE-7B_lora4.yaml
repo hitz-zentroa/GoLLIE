@@ -60,6 +60,9 @@ test_tasks:
   - wikievents.ee
   - wikievents.ner
   - wnut17.ner
+max_examples_per_task_train: 30000
+max_examples_per_task_val: 5000
+max_examples_per_task_test: 5000
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
