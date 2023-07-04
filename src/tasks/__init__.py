@@ -1,6 +1,6 @@
 from typing import Dict, List
 
-from . import ace, bc5cdr, conll03, diann, multinerd, ncbidisease, ontonotes, rams, tacred, wikievents, wnut, e3c
+from . import ace, bc5cdr, conll03, diann, multinerd, ncbidisease, ontonotes, rams, tacred, wikievents, wnut, fabner, e3c
 
 
 TASK_ID_TO_TASKS = {
@@ -22,6 +22,7 @@ TASK_ID_TO_TASKS = {
     "WikiEvents_NER": "src.tasks.wikievents",
     "WikiEvents_EE": "src.tasks.wikievents",
     "WikiEvents_EAE": "src.tasks.wikievents",
+    "FabNER_NER": "src.tasks.fabner",
     "E3C_NER": "src.tasks.e3c",
 }
 
@@ -37,6 +38,7 @@ __all__ = [
     "wnut",
     "multinerd",
     "wikievents",
+    "fabner",
     "e3c",
     "TASK_ID_TO_TASKS",
     "task_id_to_guidelines",
@@ -96,6 +98,9 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
     elif task_id.lower() == "wikievents":
         from src.tasks.wikievents.guidelines_gold import GUIDELINES
 
+        return GUIDELINES
+    elif task_id.lower() == "fabner":
+        from src.tasks.fabner.guidelines_gold import GUIDELINES
         return GUIDELINES
     elif task_id.lower() == "e3c":
         from src.tasks.e3c.guidelines_gold import GUIDELINES
