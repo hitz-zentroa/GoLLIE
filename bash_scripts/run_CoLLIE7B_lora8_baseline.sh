@@ -28,5 +28,5 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora8.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora8_baseline.yaml
 # python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_lora4.yaml

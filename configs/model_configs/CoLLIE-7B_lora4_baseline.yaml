@@ -116,7 +116,7 @@ logging_first_step: true
 logging_steps: 25
 report_to: wandb
 #report_to: none
-run_name: "CoLLIE-7b_lora4"
+run_name: "CoLLIE-7b_lora4_baseline"
 disable_tqdm: false
 
 # hub settings
