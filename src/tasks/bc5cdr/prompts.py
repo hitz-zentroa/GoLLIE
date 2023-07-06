@@ -18,6 +18,7 @@ class Disease(Entity):
 
     span: str
 
+
 @dataclass
 class Chemical(Entity):
     """{bc5cdr_chemical}"""

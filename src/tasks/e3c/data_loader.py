@@ -1,7 +1,6 @@
-from typing import Dict, List, Tuple, Type, Union
+from typing import Tuple, Union
 
 from src.tasks.conll03.data_loader import load_conll_tsv
-from src.tasks.label_encoding import rewrite_labels
 from src.tasks.e3c.guidelines import GUIDELINES
 from src.tasks.e3c.prompts import (
     ENTITY_DEFINITIONS,
@@ -9,7 +8,6 @@ from src.tasks.e3c.prompts import (
 )
 
 from ..utils_data import DatasetLoader, Sampler
-from ..utils_typing import Entity
 
 
 class E3CDatasetLoader(DatasetLoader):
