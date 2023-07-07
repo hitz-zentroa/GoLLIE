@@ -303,7 +303,8 @@ class Event:
         for attr in attrs.keys():
             self_values = getattr(self, attr)
             for value in self_values:
-                if value.lower() in text:
+                # Avoid calling lower to a list when the model hallucinates
+                if hasattr(value, "lower") and value.lower() in text:
                     attrs[attr].append(value)
 
         pos_args = []

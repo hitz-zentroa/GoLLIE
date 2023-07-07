@@ -1,5 +1,6 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
+lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b_lora4_baseline
 torch_dtype: float16
 use_lora: true
 quantization: 4
@@ -62,7 +63,6 @@ test_tasks:
   - wnut17.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
-max_examples_per_task_test: 5000
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
@@ -77,7 +77,7 @@ save_steps: 1000
 save_total_limit: 999
 
 # evaluation
-do_train: true
+do_train: false
 do_eval: true
 do_predict: true
 evaluation_strategy: "steps"
