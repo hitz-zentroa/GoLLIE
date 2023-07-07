@@ -266,7 +266,7 @@ class CollieTrainer(Seq2SeqTrainer):
             print(print_loss_weight_mask.tolist())
             print()
 
-        outputs = model(**inputs)
+        outputs = model(**inputs, use_cache=False)
 
         logits = outputs["logits"] if isinstance(outputs, dict) else outputs[0]
 
