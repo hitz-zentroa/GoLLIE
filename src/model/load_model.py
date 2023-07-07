@@ -294,6 +294,9 @@ def load_model_for_training(
 
         # model.gradient_checkpointing_enable()
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
+    else:
+        if use_gradient_checkpointing:
+            model.gradient_checkpointing_enable()
 
     """
     Currently BetterTransformer does not support padding, 8 / 4 bits training, and other important features
@@ -308,6 +311,8 @@ def load_model_for_training(
 
     if use_lora:
         from peft import LoraConfig, PeftModel, TaskType, get_peft_model
+
+        model.enable_input_require_grads()  #  Enables the gradients for the input embeddings
 
         if lora_weights_name_or_path is None:
             logging.info("No pretrained LORA weights provided, we will initialize the weights randomly.")
