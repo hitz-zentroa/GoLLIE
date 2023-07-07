@@ -283,7 +283,7 @@ if __name__ == "__main__":
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    if data_args.train_tasks is not None:
+    if training_args.do_train and data_args.train_tasks is not None:
         train_collie(
             model_args,
             data_args,
@@ -291,7 +291,7 @@ if __name__ == "__main__":
         )
         clean_cache()
 
-    if data_args.test_tasks is not None:
+    if training_args.do_predict and data_args.test_tasks is not None:
         if not data_args.evaluate_all_checkpoints:
             inference_collie(
                 model_args,

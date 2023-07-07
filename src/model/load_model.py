@@ -451,7 +451,7 @@ def load_model_for_inference(
         )
 
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
-        logging.warning(f"Model {weights_path} is an encoder-only model. We will load it as a CausalLM model.")
+        logging.warning(f"Model {weights_path} is an decoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
             device_map=device_map,

@@ -1,6 +1,20 @@
 from typing import Dict, List
 
-from . import ace, bc5cdr, conll03, diann, multinerd, ncbidisease, ontonotes, rams, tacred, wikievents, wnut, fabner, e3c
+from . import (
+    ace,
+    bc5cdr,
+    conll03,
+    diann,
+    e3c,
+    fabner,
+    multinerd,
+    ncbidisease,
+    ontonotes,
+    rams,
+    tacred,
+    wikievents,
+    wnut,
+)
 
 
 TASK_ID_TO_TASKS = {
@@ -16,14 +30,15 @@ TASK_ID_TO_TASKS = {
     "TACRED_SF": "src.tasks.tacred",
     "OntoNotes5_NER": "src.tasks.ontonotes",
     "NcbiDisease_NER": "src.tasks.ncbidisease",
-    "DIANN": "src.tasks.diann",
-    "WNUT17": "src.tasks.wnut",
+    "DIANN_NER": "src.tasks.diann",
+    "WNUT17_NER": "src.tasks.wnut",
     "MultiNERD": "src.tasks.multinerd",
     "WikiEvents_NER": "src.tasks.wikievents",
     "WikiEvents_EE": "src.tasks.wikievents",
     "WikiEvents_EAE": "src.tasks.wikievents",
     "FabNER_NER": "src.tasks.fabner",
     "E3C_NER": "src.tasks.e3c",
+    "BC5CDR_NER": "src.tasks.bc5cdr",
 }
 
 __all__ = [
@@ -101,6 +116,7 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "fabner":
         from src.tasks.fabner.guidelines_gold import GUIDELINES
+
         return GUIDELINES
     elif task_id.lower() == "e3c":
         from src.tasks.e3c.guidelines_gold import GUIDELINES
