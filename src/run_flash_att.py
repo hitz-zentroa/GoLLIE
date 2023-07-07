@@ -8,7 +8,7 @@ import logging
 import os
 import sys
 
-from run import clean_cache, inference_collie, train_collie
+from src.run import clean_cache, inference_collie, train_collie
 
 from src.config import DataTrainingArguments, ModelArguments
 from transformers import (
