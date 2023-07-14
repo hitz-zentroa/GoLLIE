@@ -314,6 +314,9 @@ if __name__ == "__main__":
             # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
             checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
 
+            # Add also the last checkpoint (stored in the output_dir)
+            checkpoints.append(training_args.output_dir)
+
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
                 f" {checkpoints} . We will evaluate each of them."

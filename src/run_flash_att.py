@@ -8,9 +8,8 @@ import logging
 import os
 import sys
 
-from src.run import clean_cache, inference_collie, train_collie
-
 from src.config import DataTrainingArguments, ModelArguments
+from src.run import clean_cache, inference_collie, train_collie
 from transformers import (
     HfArgumentParser,
     Seq2SeqTrainingArguments,
