@@ -90,6 +90,7 @@ def load_model_for_training(
     force_auto_device_map: bool = False,
     use_gradient_checkpointing: bool = False,
     use_better_transformer: bool = False,
+    use_auth_token: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -137,6 +138,9 @@ def load_model_for_training(
             'https://huggingface.co/docs/optimum/installation'. Defaults to False. NOTE: This
             is a placeholder for future updates, currently, better transformers is not supported for training.
             We will enable this feature in the future if they support custom attention masks for training.
+        use_auth_token (`bool`, optional):
+            Whether to use an authentication token when loading a private model from huggingface.co.
+            Defaults to False.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -184,6 +188,7 @@ def load_model_for_training(
 
     config = AutoConfig.from_pretrained(
         model_weights_name_or_path,
+        use_auth_token=use_auth_token,
         trust_remote_code=(
             True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
         ),
@@ -191,6 +196,7 @@ def load_model_for_training(
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
+        use_auth_token=use_auth_token,
         add_eos_token=True,
         trust_remote_code=(
             True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
@@ -236,6 +242,7 @@ def load_model_for_training(
 
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
@@ -248,6 +255,7 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
@@ -338,7 +346,7 @@ def load_model_for_training(
         else:
             logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
 
-            model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+            model = PeftModel.from_pretrained(model, lora_weights_name_or_path, use_auth_token=use_auth_token)
 
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
 
@@ -358,6 +366,7 @@ def load_model_for_inference(
     torch_dtype: Optional[str] = None,
     force_auto_device_map: bool = False,
     use_better_transformer: bool = False,
+    use_auth_token: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
@@ -385,6 +394,9 @@ def load_model_for_inference(
             Whether to transform the model using Better Transformer library:
             https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
             'https://huggingface.co/docs/optimum/installation'. Defaults to False.
+        use_auth_token (`bool`, optional):
+            Whether to use an authentication token when loading a private model from huggingface.co.
+            Defaults to False.
 
     Returns:
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
@@ -412,6 +424,7 @@ def load_model_for_inference(
 
     config = AutoConfig.from_pretrained(
         weights_path,
+        use_auth_token=use_auth_token,
         trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
 
@@ -419,6 +432,7 @@ def load_model_for_inference(
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         weights_path,
+        use_auth_token=use_auth_token,
         add_eos_token=True,
         trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
@@ -449,6 +463,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             torch_dtype=torch_dtype,
             quantization_config=bnb_config,
@@ -459,6 +474,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is an decoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             torch_dtype=torch_dtype,
             trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
@@ -499,7 +515,7 @@ def load_model_for_inference(
         from peft import PeftModel
 
         logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
-        model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+        model = PeftModel.from_pretrained(model, lora_weights_name_or_path, use_auth_token=use_auth_token)
 
         if quantization is None:
             # If we are not using quantization, we merge the LoRA layers into the model for faster inference.

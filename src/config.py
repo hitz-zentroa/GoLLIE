@@ -101,6 +101,16 @@ class ModelArguments:
         },
     )
 
+    use_auth_token: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to use an authentication token when downloading the model from huggingface hub."
+                "Defaults to False."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:

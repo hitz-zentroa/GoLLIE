@@ -31,6 +31,7 @@ def run_paraphrasing(
         weights_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         lora_weights_name_or_path=model_args.lora_weights_name_or_path,
+        use_auth_token=model_args.use_auth_token,
     )
 
     trainer = Seq2SeqTrainer(
