@@ -5,11 +5,12 @@ from functools import partial
 from typing import Callable, Optional
 
 import torch.nn as nn
-import transformers
-from transformers import AutoConfig, GPTNeoXForCausalLM, GPTNeoXModel, LlamaForCausalLM, LlamaModel
 
-from .patching_llama import llama_forward_with_flash_attn
-from .patching_neox import neox_forward_with_flash_attn
+import transformers
+from src.model.patch_models.patching_llama import llama_forward_with_flash_attn
+from src.model.patch_models.patching_neox import neox_forward_with_flash_attn
+from transformers import GPTNeoXForCausalLM, GPTNeoXModel, LlamaForCausalLM, LlamaModel
+
 
 SUPPORTED_MODELS = [
     GPTNeoXModel,
@@ -83,12 +84,10 @@ def patch_model(
         try:
             from flash_attn.modules.mha import FlashSelfAttention  # pyright: reportMissingImports=false
         except ModuleNotFoundError:
-            warnings.warn(
-                """\nmodule flash_attn not found - either install:
+            warnings.warn("""\nmodule flash_attn not found - either install:
   pip3 install flash_attn
 or run with:
-  --use_flash_attention=false """
-            )
+  --use_flash_attention=false """)
             exit(1)
     if (resid_pdrop is None or resid_pdrop == 0.0) and not flash_attention:
         print("Continuing without patching")

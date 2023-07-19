@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
-import transformers
 
-from .patching_utils import compute_flash_attention
+import transformers
+from src.model.patch_models.patching_utils import compute_flash_attention
 
 
 def neox_forward_with_flash_attn(

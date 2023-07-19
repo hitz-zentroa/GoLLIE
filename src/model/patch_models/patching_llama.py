@@ -4,9 +4,9 @@ from typing import Optional, Tuple
 
 import torch
 import torch.nn as nn
-from transformers.models.llama.modeling_llama import LlamaAttention, apply_rotary_pos_emb
 
-from .patching_utils import compute_flash_attention
+from src.model.patch_models.patching_utils import compute_flash_attention
+from transformers.models.llama.modeling_llama import LlamaAttention, apply_rotary_pos_emb
 
 
 # adapted from https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py#L185

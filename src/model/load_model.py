@@ -289,7 +289,7 @@ def load_model_for_training(
         model = BetterTransformer.transform(model)
 
     if use_flash_attention:
-        from src.model.path_models.patching import patch_model
+        from src.model.patch_models.patching import patch_model
 
         logging.info("Patching model to use flash attention")
         patch_model(model, resid_pdrop=None, flash_attention=True)
@@ -507,7 +507,7 @@ def load_model_for_inference(
         model = BetterTransformer.transform(model)
 
     if use_flash_attention:
-        from src.model.path_models.patching import patch_model
+        from src.model.patch_models.patching import patch_model
 
         logging.info("Patching model to use flash attention")
         patch_model(model, resid_pdrop=None, flash_attention=True)
