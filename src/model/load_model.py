@@ -90,6 +90,8 @@ def load_model_for_training(
     force_auto_device_map: bool = False,
     use_gradient_checkpointing: bool = False,
     use_better_transformer: bool = False,
+    use_auth_token: bool = False,
+    use_flash_attention: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -137,6 +139,12 @@ def load_model_for_training(
             'https://huggingface.co/docs/optimum/installation'. Defaults to False. NOTE: This
             is a placeholder for future updates, currently, better transformers is not supported for training.
             We will enable this feature in the future if they support custom attention masks for training.
+        use_auth_token (`bool`, optional):
+            Whether to use an authentication token when loading a private model from huggingface.co.
+            Defaults to False.
+        use_flash_attention (`bool`, optional):
+            Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
+            'https://github.com/Dao-AILab/flash-attention' for more details.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -145,6 +153,9 @@ def load_model_for_training(
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
+
+    if use_better_transformer and use_flash_attention:
+        raise ValueError("You cannot use both Better Transformer and Flash Attention at the same time.")
 
     if type(quantization) == str:
         quantization = int(quantization)
@@ -184,6 +195,7 @@ def load_model_for_training(
 
     config = AutoConfig.from_pretrained(
         model_weights_name_or_path,
+        use_auth_token=use_auth_token,
         trust_remote_code=(
             True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
         ),
@@ -191,6 +203,7 @@ def load_model_for_training(
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
+        use_auth_token=use_auth_token,
         add_eos_token=True,
         trust_remote_code=(
             True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
@@ -236,6 +249,7 @@ def load_model_for_training(
 
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
@@ -248,6 +262,7 @@ def load_model_for_training(
         )
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
@@ -273,6 +288,12 @@ def load_model_for_training(
 
         model = BetterTransformer.transform(model)
 
+    if use_flash_attention:
+        from src.model.patch_models.patching import patch_model
+
+        logging.info("Patching model to use flash attention")
+        patch_model(model, resid_pdrop=None, flash_attention=True)
+
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
@@ -297,17 +318,6 @@ def load_model_for_training(
     else:
         if use_gradient_checkpointing:
             model.gradient_checkpointing_enable()
-
-    """
-    Currently BetterTransformer does not support padding, 8 / 4 bits training, and other important features
-    to train models. We leave it here in case they are supported in the future. For now BetterTransformer is only
-    supported for inference.
-
-    if use_better_transformer:
-        from optimum.bettertransformer import BetterTransformer
-
-        model = BetterTransformer.transform(model)
-    """
 
     if use_lora:
         from peft import LoraConfig, PeftModel, TaskType, get_peft_model
@@ -338,7 +348,7 @@ def load_model_for_training(
         else:
             logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
 
-            model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+            model = PeftModel.from_pretrained(model, lora_weights_name_or_path, use_auth_token=use_auth_token)
 
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
 
@@ -358,6 +368,8 @@ def load_model_for_inference(
     torch_dtype: Optional[str] = None,
     force_auto_device_map: bool = False,
     use_better_transformer: bool = False,
+    use_auth_token: bool = False,
+    use_flash_attention: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
@@ -385,11 +397,20 @@ def load_model_for_inference(
             Whether to transform the model using Better Transformer library:
             https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
             'https://huggingface.co/docs/optimum/installation'. Defaults to False.
+        use_auth_token (`bool`, optional):
+            Whether to use an authentication token when loading a private model from huggingface.co.
+            Defaults to False.
+        use_flash_attention (`bool`, optional):
+            Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
+            'https://github.com/Dao-AILab/flash-attention' for more details.
 
     Returns:
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
+
+    if use_better_transformer and use_flash_attention:
+        raise ValueError("You cannot use both Better Transformer and Flash Attention at the same time.")
 
     if type(quantization) == str:
         quantization = int(quantization)
@@ -412,6 +433,7 @@ def load_model_for_inference(
 
     config = AutoConfig.from_pretrained(
         weights_path,
+        use_auth_token=use_auth_token,
         trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
 
@@ -419,6 +441,7 @@ def load_model_for_inference(
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         weights_path,
+        use_auth_token=use_auth_token,
         add_eos_token=True,
         trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
     )
@@ -449,6 +472,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is a encoder-decoder model. We will load it as a Seq2SeqLM model.")
         model: PreTrainedModel = AutoModelForSeq2SeqLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             torch_dtype=torch_dtype,
             quantization_config=bnb_config,
@@ -459,6 +483,7 @@ def load_model_for_inference(
         logging.warning(f"Model {weights_path} is an decoder-only model. We will load it as a CausalLM model.")
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
+            use_auth_token=use_auth_token,
             device_map=device_map,
             torch_dtype=torch_dtype,
             trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
@@ -481,6 +506,12 @@ def load_model_for_inference(
 
         model = BetterTransformer.transform(model)
 
+    if use_flash_attention:
+        from src.model.patch_models.patching import patch_model
+
+        logging.info("Patching model to use flash attention")
+        patch_model(model, resid_pdrop=None, flash_attention=True)
+
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
@@ -499,7 +530,7 @@ def load_model_for_inference(
         from peft import PeftModel
 
         logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
-        model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+        model = PeftModel.from_pretrained(model, lora_weights_name_or_path, use_auth_token=use_auth_token)
 
         if quantization is None:
             # If we are not using quantization, we merge the LoRA layers into the model for faster inference.
