@@ -26,5 +26,4 @@ CONFIGS_FOLDER="configs/model_configs"
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
 
-python3 -m src.run_flash_att ${CONFIGS_FOLDER}/run_CoLLIE7B_LLAMA2_lora4_flash.sh
-python3 -m src.run ${CONFIGS_FOLDER}/run_CoLLIE7B_LLAMA2_lora4_flash_eval.sh
+python3 -m src.run ${CONFIGS_FOLDER}/run_CoLLIE7B_LLAMA2_lora4_flash.sh
