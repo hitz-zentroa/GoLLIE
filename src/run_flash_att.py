@@ -1,14 +1,10 @@
-from src.model.path_flash_att_llama import replace_llama_attn_with_flash_attn
-
-
-replace_llama_attn_with_flash_attn()
-
 import glob
 import logging
 import os
 import sys
 
 from src.config import DataTrainingArguments, ModelArguments
+from src.model.path_flash_att_llama import replace_llama_attn_with_flash_attn
 from src.run import clean_cache, inference_collie, train_collie
 from transformers import (
     HfArgumentParser,
@@ -36,6 +32,10 @@ if __name__ == "__main__":
     else:
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
+
+    if model_args.use_flash_attention:
+        logging.info("Replacing llama attention with flash attention.")
+        replace_llama_attn_with_flash_attn()
 
     if training_args.do_train and data_args.train_tasks is not None:
         train_collie(
