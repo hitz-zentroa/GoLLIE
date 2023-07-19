@@ -48,6 +48,7 @@ def train_collie(
         use_gradient_checkpointing=training_args.gradient_checkpointing,
         use_better_transformer=model_args.use_better_transformer,
         use_auth_token=model_args.use_auth_token,
+        use_flash_attention=model_args.use_flash_attention,
     )
 
     logging.info("Loading datasets...")
@@ -199,6 +200,7 @@ def inference_collie(
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         use_better_transformer=model_args.use_better_transformer,
         use_auth_token=model_args.use_auth_token,
+        use_flash_attention=model_args.use_flash_attention,
     )
 
     trainer = CollieTrainer(

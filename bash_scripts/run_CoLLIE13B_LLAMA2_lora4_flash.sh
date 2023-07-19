@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE13B_lora4_flash
+#SBATCH --job-name=CoLLIE13B_LLAMA2_lora4_flash
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE13B_lora_4_flash.out.txt
-#SBATCH --error=.slurm/CoLLIE13B_lora_4_flash.err.txt
+#SBATCH --output=.slurm/CoLLIE13B_LLAMA2_lora4_flash.out.txt
+#SBATCH --error=.slurm/CoLLIE13B_LLAMA2_lora4_flash.err.txt
 
 
 source /ikerlariak/osainz006/venvs/collie/bin/activate

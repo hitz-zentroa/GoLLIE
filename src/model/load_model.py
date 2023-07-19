@@ -91,6 +91,7 @@ def load_model_for_training(
     use_gradient_checkpointing: bool = False,
     use_better_transformer: bool = False,
     use_auth_token: bool = False,
+    use_flash_attention: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -141,6 +142,9 @@ def load_model_for_training(
         use_auth_token (`bool`, optional):
             Whether to use an authentication token when loading a private model from huggingface.co.
             Defaults to False.
+        use_flash_attention (`bool`, optional):
+            Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
+            'https://github.com/Dao-AILab/flash-attention' for more details.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -149,6 +153,9 @@ def load_model_for_training(
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
+
+    if use_better_transformer and use_flash_attention:
+        raise ValueError("You cannot use both Better Transformer and Flash Attention at the same time.")
 
     if type(quantization) == str:
         quantization = int(quantization)
@@ -281,6 +288,12 @@ def load_model_for_training(
 
         model = BetterTransformer.transform(model)
 
+    if use_flash_attention:
+        from src.model.path_models.patching import patch_model
+
+        logging.info("Patching model to use flash attention")
+        patch_model(model, resid_pdrop=None, flash_attention=True)
+
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
@@ -305,17 +318,6 @@ def load_model_for_training(
     else:
         if use_gradient_checkpointing:
             model.gradient_checkpointing_enable()
-
-    """
-    Currently BetterTransformer does not support padding, 8 / 4 bits training, and other important features
-    to train models. We leave it here in case they are supported in the future. For now BetterTransformer is only
-    supported for inference.
-
-    if use_better_transformer:
-        from optimum.bettertransformer import BetterTransformer
-
-        model = BetterTransformer.transform(model)
-    """
 
     if use_lora:
         from peft import LoraConfig, PeftModel, TaskType, get_peft_model
@@ -367,6 +369,7 @@ def load_model_for_inference(
     force_auto_device_map: bool = False,
     use_better_transformer: bool = False,
     use_auth_token: bool = False,
+    use_flash_attention: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
@@ -397,11 +400,17 @@ def load_model_for_inference(
         use_auth_token (`bool`, optional):
             Whether to use an authentication token when loading a private model from huggingface.co.
             Defaults to False.
+        use_flash_attention (`bool`, optional):
+            Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
+            'https://github.com/Dao-AILab/flash-attention' for more details.
 
     Returns:
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
+
+    if use_better_transformer and use_flash_attention:
+        raise ValueError("You cannot use both Better Transformer and Flash Attention at the same time.")
 
     if type(quantization) == str:
         quantization = int(quantization)
@@ -496,6 +505,12 @@ def load_model_for_inference(
         from optimum.bettertransformer import BetterTransformer
 
         model = BetterTransformer.transform(model)
+
+    if use_flash_attention:
+        from src.model.path_models.patching import patch_model
+
+        logging.info("Patching model to use flash attention")
+        patch_model(model, resid_pdrop=None, flash_attention=True)
 
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")

@@ -111,6 +111,17 @@ class ModelArguments:
         },
     )
 
+    use_flash_attention: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to use FlashAttention. If True, the model will be trained with FlashAttention."
+                "Flash attention must be installed, see: https://github.com/Dao-AILab/flash-attention "
+                "for more details."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:
