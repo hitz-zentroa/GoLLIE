@@ -193,13 +193,24 @@ def load_model_for_training(
         }
     )  # MPT and Falcon are not in transformers yet
 
-    config = AutoConfig.from_pretrained(
-        model_weights_name_or_path,
-        use_auth_token=use_auth_token,
-        trust_remote_code=(
-            True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
-        ),
-    )
+    if use_lora:
+        config = AutoConfig.from_pretrained(
+            model_weights_name_or_path,
+            use_auth_token=use_auth_token,
+            trust_remote_code=(
+                True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+            ),
+            pretraining_tp=1,  # Fix mat1 and mat2 shapes cannot be multiplied  error with LLaMA-2
+            # See https://github.com/huggingface/transformers/pull/24906
+        )
+    else:
+        config = AutoConfig.from_pretrained(
+            model_weights_name_or_path,
+            use_auth_token=use_auth_token,
+            trust_remote_code=(
+                True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
+            ),
+        )
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
@@ -253,6 +264,7 @@ def load_model_for_training(
             device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
+            config=config,
             **quant_args,
         )
 
@@ -266,6 +278,7 @@ def load_model_for_training(
             device_map=device_map,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
+            config=config,
             trust_remote_code=(
                 True if ("mpt" in model_weights_name_or_path or "falcon" in model_weights_name_or_path) else False
             ),
@@ -334,7 +347,7 @@ def load_model_for_training(
                 )
                 lora_target_modules = None
 
-            config = LoraConfig(
+            lora_config = LoraConfig(
                 r=lora_r,
                 lora_alpha=lora_alpha,
                 lora_dropout=lora_dropout,
@@ -343,7 +356,7 @@ def load_model_for_training(
                 target_modules=lora_target_modules,
             )
 
-            model = get_peft_model(model, config)
+            model = get_peft_model(model, lora_config)
 
         else:
             logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
@@ -431,11 +444,20 @@ def load_model_for_inference(
         }
     )  # MPT and Falcon are not in transformers yet
 
-    config = AutoConfig.from_pretrained(
-        weights_path,
-        use_auth_token=use_auth_token,
-        trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
-    )
+    if lora_weights_name_or_path is not None:
+        config = AutoConfig.from_pretrained(
+            weights_path,
+            use_auth_token=use_auth_token,
+            trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
+            pretraining_tp=1,  # Fix mat1 and mat2 shapes cannot be multiplied  error with LLaMA-2
+            # See https://github.com/huggingface/transformers/pull/24906
+        )
+    else:
+        config = AutoConfig.from_pretrained(
+            weights_path,
+            use_auth_token=use_auth_token,
+            trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
+        )
 
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
 
@@ -475,6 +497,7 @@ def load_model_for_inference(
             use_auth_token=use_auth_token,
             device_map=device_map,
             torch_dtype=torch_dtype,
+            config=config,
             quantization_config=bnb_config,
             **quant_args,
         )
@@ -487,6 +510,7 @@ def load_model_for_inference(
             device_map=device_map,
             torch_dtype=torch_dtype,
             trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
+            config=config,
             quantization_config=bnb_config,
             **quant_args,
         )
