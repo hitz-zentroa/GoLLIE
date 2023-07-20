@@ -89,13 +89,13 @@ predict_with_generate: true
 evaluate_all_checkpoints: false
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
-per_device_train_batch_size: 32
+per_device_train_batch_size: 8
 per_device_eval_batch_size: 8
-gradient_accumulation_steps: 1
+gradient_accumulation_steps: 4
 generation_num_beams: 1
 
 # optimizer settings
-optim: adamw_torch_fused
+optim: paged_adamw_8bit
 learning_rate: 0.0003
 weight_decay: 0
 num_train_epochs: 3
