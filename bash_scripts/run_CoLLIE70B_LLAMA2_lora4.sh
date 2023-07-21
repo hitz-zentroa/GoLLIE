@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE70B_LLAMA2_lora4_flash
+#SBATCH --job-name=CoLLIE70B_LLAMA2_lora4
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE70B_LLAMA2_lora4_flash.out.txt
-#SBATCH --error=.slurm/CoLLIE70B_LLAMA2_lora4_flash.err.txt
+#SBATCH --output=.slurm/CoLLIE70B_LLAMA2_lora4.out.txt
+#SBATCH --error=.slurm/CoLLIE70B_LLAMA2_lora4.err.txt
 
 
 source /ikerlariak/osainz006/venvs/collie/bin/activate
@@ -27,4 +27,4 @@ CONFIGS_FOLDER="configs/model_configs"
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE70B.sh
 
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-70B_LLaMA2_lora4_flash.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-70B_LLaMA2_lora4.yaml
