@@ -268,6 +268,8 @@ def load_model_for_training(
             **quant_args,
         )
 
+        model_type = "seq2seq"
+
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(
             f"Model {model_weights_name_or_path} is an decoder-only model. We will load it as a CausalLM model."
@@ -287,6 +289,8 @@ def load_model_for_training(
 
         # Ensure that the padding token is added to the left of the input sequence.
         tokenizer.padding_side = "left"
+
+        model_type = "causal"
 
     else:
         raise ValueError(
@@ -352,7 +356,7 @@ def load_model_for_training(
                 lora_alpha=lora_alpha,
                 lora_dropout=lora_dropout,
                 bias="none",
-                task_type=TaskType.CAUSAL_LM,
+                task_type=TaskType.CAUSAL_LM if model_type == "causal" else TaskType.SEQ_2_SEQ_LM,
                 target_modules=lora_target_modules,
             )
 
