@@ -7,19 +7,17 @@ from argparse import ArgumentParser
 from collections import defaultdict, namedtuple
 from typing import Dict, Iterable, List, Tuple
 
-import rich
-
 
 class CasieProcessor:
     trigger = namedtuple("Trigger", ["start", "end", "text"])
     argument = namedtuple("Argument", ["start", "end", "text", "role"])
 
     EVENT_MAPPING: Dict[str, str] = {
-        'Vulnerability-related_DiscoverVulnerability': "Vulnerability:Discover",
-        'Attack_Phishing': "Attack:Phising",
-        'Vulnerability-related_PatchVulnerability': "Vulnerability:Patch",
-        'Attack_Databreach': "Attack:Databreach",
-        'Attack_Ransom': "Attack:Ransom"
+        "Vulnerability-related_DiscoverVulnerability": "Vulnerability:Discover",
+        "Attack_Phishing": "Attack:Phising",
+        "Vulnerability-related_PatchVulnerability": "Vulnerability:Patch",
+        "Attack_Databreach": "Attack:Databreach",
+        "Attack_Ransom": "Attack:Ransom",
     }
 
     def __init__(self) -> CasieProcessor:
@@ -48,67 +46,75 @@ class CasieProcessor:
                 data = json.load(f)
             except json.decoder.JSONDecodeError:
                 return []
-            doc_name = os.path.basename(input_path).replace('.json', '')
+            doc_name = os.path.basename(input_path).replace(".json", "")
             text = data["content"]
             sentences = list(self._sent_tokenize(text, 0))
 
             events = [event for idx in data["cyberevent"]["hopper"] for event in idx["events"]]
             for event in events:
-                _type = self.EVENT_MAPPING[event['type'] + "_" + event['subtype']]
+                _type = self.EVENT_MAPPING[event["type"] + "_" + event["subtype"]]
                 try:
-                    sentence_id = self.get_sent_id((event['nugget']['startOffset'], event['nugget']['endOffset']), sentences)
+                    sentence_id = self.get_sent_id(
+                        (event["nugget"]["startOffset"], event["nugget"]["endOffset"]), sentences
+                    )
                 except ValueError:
                     continue
                 start_idx, sentence = sentences[sentence_id]
 
                 # Normalize the trigger
-                if event['nugget']['text'] != sentence[event['nugget']['startOffset'] - start_idx: event['nugget']['endOffset'] - start_idx]:
-                    event['nugget']['startOffset'] = sentence.find(event['nugget']['text']) + start_idx
-                    event['nugget']['endOffset'] = event['nugget']['startOffset'] + len(event['nugget']['text'])
-                trigger = self.trigger(event['nugget']['startOffset'] - start_idx, event['nugget']['endOffset'] - start_idx, event['nugget']['text'])
-                try:
-                    assert trigger.text == sentence[trigger.start:trigger.end]
-                except:
-                    print(trigger.text, sentence[trigger.start:trigger.end], trigger.start, trigger.end)
-                    exit()
+                if (
+                    event["nugget"]["text"]
+                    != sentence[event["nugget"]["startOffset"] - start_idx : event["nugget"]["endOffset"] - start_idx]
+                ):
+                    event["nugget"]["startOffset"] = sentence.find(event["nugget"]["text"]) + start_idx
+                    event["nugget"]["endOffset"] = event["nugget"]["startOffset"] + len(event["nugget"]["text"])
+                trigger = self.trigger(
+                    event["nugget"]["startOffset"] - start_idx,
+                    event["nugget"]["endOffset"] - start_idx,
+                    event["nugget"]["text"],
+                )
+                assert trigger.text == sentence[trigger.start : trigger.end]
 
                 arguments = []
-                if 'argument' not in event:
-                    event['argument'] = []
-                for argument in event['argument']:
+                if "argument" not in event:
+                    event["argument"] = []
+                for argument in event["argument"]:
                     try:
-                        arg_sent_id = self.get_sent_id((argument['startOffset'], argument['endOffset']), sentences)
+                        arg_sent_id = self.get_sent_id((argument["startOffset"], argument["endOffset"]), sentences)
                     except ValueError:
                         continue
                     if sentence_id != arg_sent_id:
                         print("skip")
                         continue
 
-                    if argument['text'] != sentence[argument['startOffset'] - start_idx: argument['endOffset'] - start_idx]:
-                        argument['startOffset'] = sentence.find(argument['text']) + start_idx
-                        argument['endOffset'] = argument['startOffset'] + len(argument['text'])
+                    if (
+                        argument["text"]
+                        != sentence[argument["startOffset"] - start_idx : argument["endOffset"] - start_idx]
+                    ):
+                        argument["startOffset"] = sentence.find(argument["text"]) + start_idx
+                        argument["endOffset"] = argument["startOffset"] + len(argument["text"])
 
-                    argument = self.argument(argument['startOffset'] - start_idx, argument['endOffset'] - start_idx, argument['text'], argument['role']['type'])
+                    argument = self.argument(
+                        argument["startOffset"] - start_idx,
+                        argument["endOffset"] - start_idx,
+                        argument["text"],
+                        argument["role"]["type"],
+                    )
 
-                    assert argument.text == sentence[argument.start:argument.end]
+                    assert argument.text == sentence[argument.start : argument.end]
                     arguments.append(argument)
 
-                annotations[sentence_id].append({
-                    "type": _type,
-                    "trigger": trigger._asdict(),
-                    "arguments": [arg._asdict() for arg in arguments]
-                })
+                annotations[sentence_id].append(
+                    {"type": _type, "trigger": trigger._asdict(), "arguments": [arg._asdict() for arg in arguments]}
+                )
 
         for sent_id, anns in annotations.items():
-            yield {
-                "sent_id": f"{doc_name}:{sent_id}",
-                "text": sentences[sent_id][-1],
-                "events": anns
-            }
+            yield {"sent_id": f"{doc_name}:{sent_id}", "text": sentences[sent_id][-1], "events": anns}
+
 
 def main(args):
     processor = CasieProcessor()
-    with open(os.path.join(args.path, "data.jsonl"), 'wt', encoding="utf-8") as f:
+    with open(os.path.join(args.path, "data.jsonl"), "wt", encoding="utf-8") as f:
         for _file in glob.glob(os.path.join(args.path, "annotation", "*.json")):
             for anns in processor(_file):
                 f.write(json.dumps(anns, ensure_ascii=False) + "\n")
