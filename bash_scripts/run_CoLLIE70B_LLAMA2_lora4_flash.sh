@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=CoLLIE70B_LLAMA2_lora4_flash
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 #SBATCH --mem=128G
 #SBATCH --output=.slurm/CoLLIE70B_LLAMA2_lora4_flash.out.txt
 #SBATCH --error=.slurm/CoLLIE70B_LLAMA2_lora4_flash.err.txt
