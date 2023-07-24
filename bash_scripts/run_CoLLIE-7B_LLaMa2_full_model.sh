@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=CoLLIE7B_full_fp16
+#SBATCH --job-name=CoLLIE-7B_LLaMa2
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:2
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/CoLLIE7B_full_fp16.out.txt
-#SBATCH --error=.slurm/CoLLIE7B_full_fp16.err.txt
+#SBATCH --output=.slurm/CoLLIE-7B_LLaMa2.out.txt
+#SBATCH --error=.slurm/CoLLIE-7B_LLaMa2.err.txt
 
 source /ikerlariak/osainz006/venvs/collie/bin/activate
 
@@ -21,11 +21,6 @@ CONFIGS_FOLDER="configs/model_configs"
 export PYTHONPATH="$PYTHONPATH:$PWD"
 export OMP_NUM_THREADS=16
 
-# cd ../src || exit
+CONFIGS_FOLDER="configs/model_configs"
 
-# Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
-
-
-#torchrun --standalone --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
-
-python3 -m src.run_flash_att ${CONFIGS_FOLDER}/CoLLIE-7B_fp16.yaml
+deepspeed src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2.yaml
