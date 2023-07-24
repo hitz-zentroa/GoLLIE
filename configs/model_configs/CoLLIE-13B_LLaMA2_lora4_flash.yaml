@@ -71,7 +71,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/collie/CoLLIE-13b_LLaMA2_lora4_flash_8bit_optim
+output_dir: /ikerlariak/osainz006/models/collie/CoLLIE-13b_LLaMA2_lora4_flash
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -89,13 +89,13 @@ predict_with_generate: true
 evaluate_all_checkpoints: false
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
-per_device_train_batch_size: 32
+per_device_train_batch_size: 16
 per_device_eval_batch_size: 8
-gradient_accumulation_steps: 1
+gradient_accumulation_steps: 2
 generation_num_beams: 1
 
 # optimizer settings
-optim: paged_adamw_8bit
+optim: adamw_torch_fused
 learning_rate: 0.0003
 weight_decay: 0
 num_train_epochs: 3
@@ -118,7 +118,7 @@ logging_first_step: true
 logging_steps: 25
 report_to: wandb
 #report_to: none
-run_name: "CoLLIE-13b_LLaMA2_lora4_flash_8bit_optim"
+run_name: "CoLLIE-13b_LLaMA2_lora4_flash"
 disable_tqdm: false
 
 # hub settings
