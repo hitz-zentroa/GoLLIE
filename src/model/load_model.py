@@ -64,7 +64,7 @@ def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
                 "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
                 "on each GPU."
             )
-            device_map = {"": int(os.environ.get("LOCAL_RANK", 0))}
+            device_map = None  # {"": int(os.environ.get("LOCAL_RANK", 0))}
         else:
             if not use_better_transformer:
                 device_map = None
