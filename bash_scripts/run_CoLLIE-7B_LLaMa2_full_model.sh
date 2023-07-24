@@ -23,4 +23,4 @@ export OMP_NUM_THREADS=16
 
 CONFIGS_FOLDER="configs/model_configs"
 
-deepspeed src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2.yaml
+torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2.yaml
