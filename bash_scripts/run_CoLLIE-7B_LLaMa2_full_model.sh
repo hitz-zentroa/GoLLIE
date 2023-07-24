@@ -16,11 +16,9 @@ export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=CoLLIE
 export WANDB__SERVICE_WAIT=300
-
-CONFIGS_FOLDER="configs/model_configs"
-export PYTHONPATH="$PYTHONPATH:$PWD"
 export OMP_NUM_THREADS=16
 
+export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs"
 
 torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2.yaml
