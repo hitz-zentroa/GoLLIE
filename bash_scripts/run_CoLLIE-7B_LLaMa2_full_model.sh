@@ -6,7 +6,7 @@
 #SBATCH --output=.slurm/CoLLIE-7B_LLaMa2.out.txt
 #SBATCH --error=.slurm/CoLLIE-7B_LLaMa2.err.txt
 
-source /ikerlariak/osainz006/venvs/collie/bin/activate
+source /ikerlariak/osainz006/venvs/collie_deepspeed/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8

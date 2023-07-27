@@ -19,7 +19,7 @@ from transformers.models.auto.modeling_auto import (
     MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES,
 )
 
-from .model_utils import get_trainable_parameters
+from .model_utils import get_trainable_parameters, find_all_linear_names
 
 
 def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
@@ -351,6 +351,9 @@ def load_model_for_training(
                 )
                 lora_target_modules = None
 
+            if lora_target_modules == ["all"]:
+                lora_target_modules = find_all_linear_names(model, quantization=quantization)
+
             lora_config = LoraConfig(
                 r=lora_r,
                 lora_alpha=lora_alpha,
@@ -368,6 +371,30 @@ def load_model_for_training(
             model = PeftModel.from_pretrained(model, lora_weights_name_or_path, use_auth_token=use_auth_token)
 
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
+
+    """
+    Convert the model layers to the correct dtype
+    If LoRA and bf16 is used, we convert the LoRA layers to bf16 for faster training
+    """
+
+    if use_lora:
+        from peft.tuners.lora import LoraLayer
+
+        for name, module in model.named_modules():
+            if isinstance(module, LoraLayer):
+                if torch_dtype == torch.bfloat16:
+                    logging.info(f"Converting LoRA layer {name} to bf16")
+                    module = module.to(torch.bfloat16)
+
+    for name, module in model.named_modules():
+        if "norm" in name:
+            logging.info(f"Converting layer {name} to fp32")
+            module = module.to(torch.float32)
+        if "lm_head" in name or "embed_tokens" in name:
+            if hasattr(module, "weight"):
+                if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
+                    logging.info(f"Converting layer {name} to bf16")
+                    module = module.to(torch.bfloat16)
 
     trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
     logging.info(
