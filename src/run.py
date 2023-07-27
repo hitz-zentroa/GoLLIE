@@ -42,6 +42,7 @@ def train_collie(
         model_weights_name_or_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         use_lora=model_args.use_lora,
+        lora_r=model_args.lora_r,
         lora_target_modules=model_args.lora_target_modules,
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         force_auto_device_map=model_args.force_auto_device_map,
