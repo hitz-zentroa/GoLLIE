@@ -7,7 +7,8 @@ quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: false
-deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
+fsdp: full_shard auto_wrap
+fsdp_transformer_layer_cls_to_wrap: LlamaDecoderLayer
 
 # dataset arguments
 dataset_dir:
@@ -96,7 +97,7 @@ gradient_accumulation_steps: 16
 generation_num_beams: 1
 
 # optimizer settings
-optim: adamw_hf
+optim: adamw_torch
 learning_rate: 1e-5
 weight_decay: 0
 num_train_epochs: 3
@@ -104,7 +105,7 @@ lr_scheduler_type: cosine
 warmup_ratio: 0.03
 
 # lora settings
-lora_r: 16
+lora_r: 8
 lora_alpha: 16
 lora_dropout: 0.05
 lora_target_modules:

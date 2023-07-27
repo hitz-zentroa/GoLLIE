@@ -6,7 +6,7 @@
 #SBATCH --output=.slurm/CoLLIE-7B_LLaMa2.out.txt
 #SBATCH --error=.slurm/CoLLIE-7B_LLaMa2.err.txt
 
-source /gscratch4/users/osainz006/CoLLIE/venv/collie_deepspeed/bin/activate
+source /ikerlariak/osainz006/venvs/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -21,4 +21,4 @@ export OMP_NUM_THREADS=16
 export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs"
 
-torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2.yaml
+torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed.yaml
