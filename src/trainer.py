@@ -199,6 +199,17 @@ class CollieTrainer(Seq2SeqTrainer):
 
         self.first_train_batch = True
 
+        # Ensure that the values are floats
+        args.set_optimizer(
+            name=args.optim,
+            learning_rate=float(args.learning_rate),
+            weight_decay=float(args.weight_decay),
+            beta1=float(args.adam_beta1),
+            beta2=float(args.adam_beta2),
+            epsilon=float(args.adam_epsilon),
+            args=args.optim_args,
+        )
+
         super().__init__(
             model=model,
             args=args,

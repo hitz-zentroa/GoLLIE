@@ -19,7 +19,7 @@ from transformers.models.auto.modeling_auto import (
     MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES,
 )
 
-from .model_utils import get_trainable_parameters, find_all_linear_names
+from .model_utils import find_all_linear_names, get_trainable_parameters
 
 
 def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
