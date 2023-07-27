@@ -383,17 +383,17 @@ def load_model_for_training(
         for name, module in model.named_modules():
             if isinstance(module, LoraLayer):
                 if torch_dtype == torch.bfloat16:
-                    logging.info(f"Converting LoRA layer {name} to bf16")
+                    logging.info(f"Converting LoRA layer {name} from {module.lora_A.dype} to {torch_dtype}")
                     module = module.to(torch.bfloat16)
 
     for name, module in model.named_modules():
         if "norm" in name:
-            logging.info(f"Converting layer {name} to fp32")
+            logging.info(f"Converting layer {name} from {module.weight.dtype} to {torch_dtype}")
             module = module.to(torch.float32)
         if "lm_head" in name or "embed_tokens" in name:
             if hasattr(module, "weight"):
                 if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
-                    logging.info(f"Converting layer {name} to bf16")
+                    logging.info(f"Converting layer {name} from {module.weight.dtype} to {torch_dtype}")
                     module = module.to(torch.bfloat16)
 
     trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
