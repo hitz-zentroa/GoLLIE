@@ -20,6 +20,10 @@ class TestDataLoaders(unittest.TestCase):
 
         # TODO: Implement a better TEST
 
+    @unittest.skipIf(not os.path.exists("data/casie/data.jsonl"), "No CASIE data available")
+    def test_CASIE(self):
+        ...
+
     @unittest.skipIf(not os.path.exists("data/wikievents/train.sentence.jsonl"), "No WikiEvents data available")
     def test_WikiEvents(self):
         from src.tasks.wikievents.data_loader import WikiEventsDatasetLoader, WikiEventsSampler
