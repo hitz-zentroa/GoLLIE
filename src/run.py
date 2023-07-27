@@ -50,6 +50,7 @@ def train_collie(
         use_better_transformer=model_args.use_better_transformer,
         use_auth_token=model_args.use_auth_token,
         use_flash_attention=model_args.use_flash_attention,
+        fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
     )
 
     logging.info("Loading datasets...")

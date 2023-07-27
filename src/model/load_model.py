@@ -92,6 +92,7 @@ def load_model_for_training(
     use_better_transformer: bool = False,
     use_auth_token: bool = False,
     use_flash_attention: bool = False,
+    fsdp_training: bool = False,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -145,6 +146,10 @@ def load_model_for_training(
         use_flash_attention (`bool`, optional):
             Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
             'https://github.com/Dao-AILab/flash-attention' for more details.
+        fsdp_training: (`bool`, optional):
+            Whether Fully Sharded Data Parallelism is enabled for training. Defaults to False.
+            Used to prevent casting layers to fp32 if the model is already in fp16, which causes
+            an error: ValueError: Must flatten tensors with uniform dtype but got torch.float16 and torch.float32
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -386,15 +391,16 @@ def load_model_for_training(
                     logging.debug(f"Converting LoRA layer {name} to {torch_dtype}")
                     module = module.to(torch.bfloat16)
 
-    for name, module in model.named_modules():
-        if "norm" in name:
-            logging.debug(f"Converting layer {name} to {torch_dtype}")
-            module = module.to(torch.float32)
-        if "lm_head" in name or "embed_tokens" in name:
-            if hasattr(module, "weight"):
-                if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
-                    logging.debug(f"Converting layer {name} to {torch_dtype}")
-                    module = module.to(torch.bfloat16)
+    if not fsdp_training:
+        for name, module in model.named_modules():
+            if "norm" in name:
+                logging.debug(f"Converting layer {name} to {torch.float32}")
+                module = module.to(torch.float32)
+            if "lm_head" in name or "embed_tokens" in name:
+                if hasattr(module, "weight"):
+                    if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
+                        logging.debug(f"Converting layer {name} to {torch_dtype}")
+                        module = module.to(torch.bfloat16)
 
     trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
     logging.info(
