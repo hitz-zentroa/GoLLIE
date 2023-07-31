@@ -1,12 +1,12 @@
 #Training args
 model_name_or_path: meta-llama/Llama-2-7b-hf
 use_auth_token: true
-torch_dtype: float16
+torch_dtype: float32
 use_lora: false
 quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
-use_flash_attention: false
+use_flash_attention: true
 fsdp: full_shard auto_wrap
 fsdp_transformer_layer_cls_to_wrap: LlamaDecoderLayer
 
@@ -88,21 +88,22 @@ evaluation_strategy: "steps"
 eval_steps: 500
 eval_delay: 0
 predict_with_generate: true
-evaluate_all_checkpoints: false
+evaluate_all_checkpoints: true
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
-per_device_train_batch_size: 2
-per_device_eval_batch_size: 2
-gradient_accumulation_steps: 16
+per_device_train_batch_size: 1
+per_device_eval_batch_size: 1
+gradient_accumulation_steps: 8
 generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch
-learning_rate: 1e-5
+learning_rate: 0.00001
 weight_decay: 0
 num_train_epochs: 3
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
+adam_epsilon: 1e-7
 
 # lora settings
 lora_r: 8
@@ -128,7 +129,7 @@ push_to_hub: false
 resume_from_checkpoint: false
 
 # performance
-bf16: false
-fp16: true
+bf16: true
+fp16: false
 torch_compile: false
 ddp_find_unused_parameters: false

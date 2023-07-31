@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=CoLLIE70B_LLAMA2_lora4
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:2
 #SBATCH --mem=128G
 #SBATCH --output=.slurm/CoLLIE70B_LLAMA2_lora4.out.txt
 #SBATCH --error=.slurm/CoLLIE70B_LLAMA2_lora4.err.txt
@@ -27,4 +27,4 @@ CONFIGS_FOLDER="configs/model_configs"
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE70B.sh
 
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-70B_LLaMA2_lora4.yaml
+torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-70B_LLaMa2_lora4.yaml

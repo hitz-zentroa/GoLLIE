@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple, Union
 
 import torch
 
@@ -18,11 +18,14 @@ from transformers.models.auto.modeling_auto import (
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES,
     MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES,
 )
+from transformers.utils import is_ipex_available
 
 from .model_utils import find_all_linear_names, get_trainable_parameters
 
 
-def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
+def get_device_map(
+    force_auto_device_map: bool, max_memory_MB: int = None, use_better_transformer: bool = False
+) -> (str, Union[int, List[int]]):
     """
     Get the device map to use for loading the model
 
@@ -31,6 +34,8 @@ def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
             Whether to force the use of the auto device map. If set to True, the model will be split across
             GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded
             into each GPU.
+        max_memory_MB (`int`):
+            Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True.
         use_better_transformer (`bool`, optional):
             Whether to transform the model using Better Transformer library:
             https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
@@ -41,23 +46,37 @@ def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
             The device map to use for loading the model
     """
     if force_auto_device_map:
-        word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
-        if word_size > 1:
-            raise ValueError(
-                "Found DDP environment and force_auto_device_map is set to True, this configuration "
-                "is not supported. If you want to use DPP, set force_auto_device_map to False, so "
-                "a copy of the model is loaded in each GPU. If you want the split the model across "
-                "GPUs (force_auto_device_map=True), do not use DDP (launch your script with "
-                "pyton -m src/run.py config.json). If you are not in a DDP environment but you see "
-                "this error, you might have manually set the environment variable 'LOCAL_WORLD_SIZE' to a "
-                "number different than 1, please, remove this environment variable or set it to 1"
-            )
+        if os.environ.get("LOCAL_RANK") is not None:
+            # raise ValueError(
+            #    "Found DDP environment and force_auto_device_map is set to True, this configuration "
+            #    "is not supported. If you want to use DPP, set force_auto_device_map to False, so "
+            #    "a copy of the model is loaded in each GPU. If you want the split the model across "
+            #    "GPUs (force_auto_device_map=True), do not use DDP (launch your script with "
+            #    "pyton -m src/run.py config.json). If you are not in a DDP environment but you see "
+            #    "this error, you might have manually set the environment variable 'LOCAL_WORLD_SIZE' to a "
+            #    "number different than 1, please, remove this environment variable or set it to 1"
+            # )
+            if torch.cuda.is_available():
+                n_gpus = torch.cuda.device_count()
+            elif is_ipex_available() and torch.xpu.is_available():
+                n_gpus = torch.xpu.device_count()
+            else:
+                logging.warning("You are in a DDP environment but no GPU is available, this may cause errors later on")
+                n_gpus = 0
 
-        logging.warning(
-            "Using auto device map, we will split the model across GPUs and CPU to fit the model in memory."
-        )
-        device_map = "auto"
+            max_memory = {i: max_memory_MB for i in range(n_gpus)}
+            local_rank = int(os.environ.get("LOCAL_RANK", "0"))
+            device_map = {"": local_rank}
+            max_memory = {"": max_memory[local_rank]} if max_memory_MB is not None else None
+
+        else:
+            logging.warning(
+                "Using auto device map, we will split the model across GPUs and CPU to fit the model in memory."
+            )
+            device_map = "auto"
+            max_memory = max_memory_MB
     else:
+        max_memory = None
         word_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
         if word_size > 1:
             logging.warning(
@@ -65,6 +84,7 @@ def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
                 "on each GPU."
             )
             device_map = None  # {"": int(os.environ.get("LOCAL_RANK", 0))}
+
         else:
             if not use_better_transformer:
                 device_map = None
@@ -72,9 +92,9 @@ def get_device_map(force_auto_device_map: bool, use_better_transformer) -> str:
                 logging.warning("Setting device map to 'auto' to use Better Transformers library.")
                 device_map = "auto"
 
-    logging.info(f"We will load the model using the following device map: {device_map}")
+    logging.info(f"We will load the model using the following device map: {device_map} and max_memory: {max_memory}")
 
-    return device_map
+    return device_map, max_memory
 
 
 def load_model_for_training(
@@ -93,6 +113,7 @@ def load_model_for_training(
     use_auth_token: bool = False,
     use_flash_attention: bool = False,
     fsdp_training: bool = False,
+    max_memory_MB: Optional[int] = None,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -150,6 +171,8 @@ def load_model_for_training(
             Whether Fully Sharded Data Parallelism is enabled for training. Defaults to False.
             Used to prevent casting layers to fp32 if the model is already in fp16, which causes
             an error: ValueError: Must flatten tensors with uniform dtype but got torch.float16 and torch.float32
+        max_memory_MB (`int`):
+            Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -186,8 +209,10 @@ def load_model_for_training(
         )
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
-    device_map = get_device_map(
-        force_auto_device_map=force_auto_device_map, use_better_transformer=use_better_transformer
+    device_map, max_memory = get_device_map(
+        force_auto_device_map=force_auto_device_map,
+        max_memory_MB=max_memory_MB,
+        use_better_transformer=use_better_transformer,
     )
 
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
@@ -267,6 +292,7 @@ def load_model_for_training(
             pretrained_model_name_or_path=model_weights_name_or_path,
             use_auth_token=use_auth_token,
             device_map=device_map,
+            max_memory=max_memory,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             config=config,
@@ -283,6 +309,7 @@ def load_model_for_training(
             pretrained_model_name_or_path=model_weights_name_or_path,
             use_auth_token=use_auth_token,
             device_map=device_map,
+            max_memory=max_memory,
             quantization_config=bnb_config,
             torch_dtype=torch_dtype,
             config=config,
@@ -420,6 +447,7 @@ def load_model_for_inference(
     use_better_transformer: bool = False,
     use_auth_token: bool = False,
     use_flash_attention: bool = False,
+    max_memory_MB: Optional[int] = None,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for inference.
@@ -453,6 +481,8 @@ def load_model_for_inference(
         use_flash_attention (`bool`, optional):
             Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
             'https://github.com/Dao-AILab/flash-attention' for more details.
+        max_memory_MB (`int`):
+            Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True.
 
     Returns:
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
@@ -469,8 +499,10 @@ def load_model_for_inference(
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
     logging.info(f"Loading model from {weights_path}")
-    device_map = get_device_map(
-        force_auto_device_map=force_auto_device_map, use_better_transformer=use_better_transformer
+    device_map, max_memory = get_device_map(
+        force_auto_device_map=force_auto_device_map,
+        max_memory_MB=max_memory_MB,
+        use_better_transformer=use_better_transformer,
     )
 
     MODEL_FOR_CAUSAL_LM_MAPPING_NAMES.update(
@@ -533,6 +565,7 @@ def load_model_for_inference(
             pretrained_model_name_or_path=weights_path,
             use_auth_token=use_auth_token,
             device_map=device_map,
+            max_memory=max_memory,
             torch_dtype=torch_dtype,
             config=config,
             quantization_config=bnb_config,
@@ -545,6 +578,7 @@ def load_model_for_inference(
             pretrained_model_name_or_path=weights_path,
             use_auth_token=use_auth_token,
             device_map=device_map,
+            max_memory=max_memory,
             torch_dtype=torch_dtype,
             trust_remote_code=True if ("mpt" in weights_path or "falcon" in weights_path) else False,
             config=config,

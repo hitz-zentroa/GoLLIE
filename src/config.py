@@ -122,6 +122,16 @@ class ModelArguments:
         },
     )
 
+    max_memory_MB: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True."
+                "Defaults to None."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:

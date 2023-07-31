@@ -10,6 +10,7 @@ from src.paraphrase.conversation import get_conv_template
 from src.paraphrase.dataset import ParaphraseDataset
 from src.paraphrase.utils import clean_guidelines, format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines
+from src.trainer import get_correct_torch_dtype
 from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
 
 
@@ -31,7 +32,12 @@ def run_paraphrasing(
         weights_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         lora_weights_name_or_path=model_args.lora_weights_name_or_path,
+        force_auto_device_map=model_args.force_auto_device_map,
+        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        use_better_transformer=model_args.use_better_transformer,
         use_auth_token=model_args.use_auth_token,
+        use_flash_attention=model_args.use_flash_attention,
+        max_memory_MB=model_args.max_memory_MB,
     )
 
     trainer = Seq2SeqTrainer(
