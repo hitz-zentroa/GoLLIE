@@ -1,65 +1,21 @@
-from typing import Dict, List, Tuple, Type, Union
+from typing import Tuple, Union
 
-from src.tasks.broadtwitter.guidelines import GUIDELINES
-from src.tasks.broadtwitter.prompts import ENTITY_DEFINITIONS, Location, Organization, Person
-from src.tasks.label_encoding import rewrite_labels
+from src.tasks.conll03.data_loader import load_conll_tsv
+from src.tasks.harveyner.guidelines import GUIDELINES
+from src.tasks.harveyner.prompts import (
+    ENTITY_DEFINITIONS,
+    Area,
+    Point,
+    River,
+    Road,
+)
 
 from ..utils_data import DatasetLoader, Sampler
-from ..utils_typing import Entity
 
 
-def get_broadtwitter_hf(
-    split: str,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
-) -> Tuple[List[List[str]], List[List[Entity]]]:
+class HarveyNerDatasetLoader(DatasetLoader):
     """
-    Get the Broad Twitter Corpus dataset from the huggingface datasets library
-    Args:
-        split (str): The path_or_split to load. Can be one of `train`, `validation` or `test`.
-    Returns:
-        (List[str],List[Entity]): The text and the entities
-    """
-    from datasets import load_dataset
-
-    dataset = load_dataset("strombergnlp/broad_twitter_corpus")
-    dataset["train"].features["ner_tags"].feature.names
-
-    id2label = dict(enumerate(dataset["train"].features["ner_tags"].feature.names))
-
-    dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Entity]] = []
-
-    for example in dataset[split]:
-        words = example["tokens"]
-        # Ensure IOB2 encoding
-        labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
-
-        # Get labeled word spans
-        spans = []
-        for i, label in enumerate(labels):
-            if label == "O":
-                continue
-            elif label.startswith("B-"):
-                spans.append([label[2:], i, i + 1])
-            elif label.startswith("I-"):
-                spans[-1][2] += 1
-            else:
-                raise ValueError(f"Found an unexpected label: {label}")
-
-        # Get entities
-        entities = []
-        for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
-
-        dataset_sentences.append(words)
-        dataset_entities.append(entities)
-
-    return dataset_sentences, dataset_entities
-
-
-class BroadTwitterDatasetLoader(DatasetLoader):
-    """
-    A `DatasetLoader` for the Broad Twitter Corpus dataset.
+    A `DatasetLoader` for the HarveyNER dataset.
 
     Args:
         split (`str`):
@@ -74,15 +30,17 @@ class BroadTwitterDatasetLoader(DatasetLoader):
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.ENTITY_TO_CLASS_MAPPING = {
-            "PER": Person,
-            "LOC": Location,
-            "ORG": Organization,
+            "POINT": Point,
+            "AREA": Area,
+            "RIVER": River,
+            "ROAD": Road,
         }
 
         self.elements = {}
 
-        dataset_words, dataset_entities = get_broadtwitter_hf(
-            split=path_or_split,
+        dataset_words, dataset_entities = load_conll_tsv(
+            path=path_or_split,
+            include_misc=True,
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
         )
 
@@ -96,12 +54,12 @@ class BroadTwitterDatasetLoader(DatasetLoader):
             }
 
 
-class BroadTwitterSampler(Sampler):
+class HarveyNerSampler(Sampler):
     """
-    A data `Sampler` for the Broad Twitter Corpus dataset.
+    A data `Sampler` for the HarveyNER dataset.
 
     Args:
-        dataset_loader (`BroadTwitterDatasetLoader`):
+        dataset_loader (`HarveyNERDatasetLoader`):
             The dataset loader that contains the data information.
         task (`str`, optional):
             The task to sample. It must be one of the following: NER, VER, RE, EE.
@@ -140,7 +98,7 @@ class BroadTwitterSampler(Sampler):
 
     def __init__(
         self,
-        dataset_loader: BroadTwitterDatasetLoader,
+        dataset_loader: HarveyNerDatasetLoader,
         task: str = None,
         split: str = "train",
         parallel_instances: Union[int, Tuple[int, int]] = 1,
@@ -156,7 +114,7 @@ class BroadTwitterSampler(Sampler):
     ) -> None:
         assert task in [
             "NER",
-        ], f"Broad Twitter Corpus only supports NER task. {task} is not supported."
+        ], f"HarveyNER only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
             "NER": (ENTITY_DEFINITIONS, "entities"),

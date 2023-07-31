@@ -47,5 +47,4 @@ ENTITY_DEFINITIONS: List[Entity] = [
 ]
 
 
-
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))
