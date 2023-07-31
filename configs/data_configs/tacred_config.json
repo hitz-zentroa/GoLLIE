@@ -16,7 +16,7 @@
             "parallel_instances": 1,
             "max_guidelines": 1,
             "guideline_dropout": 0.0,
-            "scorer": "src.tasks.ace.scorer.TACREDTemplateScorer",
+            "scorer": "src.tasks.tacred.scorer.TACREDTemplateScorer",
             "sample_only_gold_guidelines": true
         }
     }

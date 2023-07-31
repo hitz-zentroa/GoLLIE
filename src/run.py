@@ -42,11 +42,16 @@ def train_collie(
         model_weights_name_or_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         use_lora=model_args.use_lora,
+        lora_r=model_args.lora_r,
         lora_target_modules=model_args.lora_target_modules,
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
         use_better_transformer=model_args.use_better_transformer,
+        use_auth_token=model_args.use_auth_token,
+        use_flash_attention=model_args.use_flash_attention,
+        fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
+        max_memory_MB=model_args.max_memory_MB,
     )
 
     logging.info("Loading datasets...")
@@ -197,6 +202,9 @@ def inference_collie(
         force_auto_device_map=model_args.force_auto_device_map,
         torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
         use_better_transformer=model_args.use_better_transformer,
+        use_auth_token=model_args.use_auth_token,
+        use_flash_attention=model_args.use_flash_attention,
+        max_memory_MB=model_args.max_memory_MB,
     )
 
     trainer = CollieTrainer(
@@ -283,7 +291,7 @@ if __name__ == "__main__":
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    if data_args.train_tasks is not None:
+    if training_args.do_train and data_args.train_tasks is not None:
         train_collie(
             model_args,
             data_args,
@@ -291,7 +299,7 @@ if __name__ == "__main__":
         )
         clean_cache()
 
-    if data_args.test_tasks is not None:
+    if training_args.do_predict and data_args.test_tasks is not None:
         if not data_args.evaluate_all_checkpoints:
             inference_collie(
                 model_args,
@@ -313,6 +321,9 @@ if __name__ == "__main__":
             checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
             # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
             checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
+
+            # Add also the last checkpoint (stored in the output_dir)
+            checkpoints.append(training_args.output_dir)
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"

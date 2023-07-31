@@ -3,18 +3,18 @@ from typing import Dict, List, Tuple, Type, Union
 from src.tasks.fabner.guidelines import GUIDELINES
 from src.tasks.fabner.prompts import (
     ENTITY_DEFINITIONS,
-    Material,
-    ManufacturingProcess,
-    MachineEquipment,
     Application,
+    Biomedical,
+    ConceptPrinciples,
+    EnablingTechnology,
     EngineeringFeatures,
+    MachineEquipment,
+    ManufacturingProcess,
+    ManufacturingStandards,
+    Material,
     MechanicalProperties,
     ProcessCharacterization,
     ProcessParameters,
-    EnablingTechnology,
-    ConceptPrinciples,
-    ManufacturingStandards,
-    Biomedical,
 )
 from src.tasks.label_encoding import rewrite_labels
 
@@ -99,8 +99,7 @@ class FabNerDatasetLoader(DatasetLoader):
             "ENAT": EnablingTechnology,
             "CONPRI": ConceptPrinciples,
             "MANS": ManufacturingStandards,
-            "BIOP": Biomedical
-
+            "BIOP": Biomedical,
         }
 
         self.elements = {}

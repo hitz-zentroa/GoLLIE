@@ -303,7 +303,8 @@ class Event:
         for attr in attrs.keys():
             self_values = getattr(self, attr)
             for value in self_values:
-                if value.lower() in text:
+                # Avoid calling lower to a list when the model hallucinates
+                if hasattr(value, "lower") and value.lower() in text:
                     attrs[attr].append(value)
 
         pos_args = []
@@ -444,9 +445,14 @@ class Template:
         attrs = self._get_attributes(ignore=True)
         for attr in attrs.keys():
             self_values = getattr(self, attr)
-            for value in self_values:
-                if value.lower() in text:
-                    attrs[attr].append(value)
+            if self_values:
+                if isinstance(self_values, list):
+                    for value in self_values:
+                        if value.lower() in text:
+                            attrs[attr].append(value)
+                else:
+                    if self_values.lower() in text:
+                        attrs[attr] = self_values
 
         pos_args = self._get_pos_attributes()
 

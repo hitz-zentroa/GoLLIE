@@ -188,6 +188,7 @@ def evaluate(
     gold_data_dir = data_args.dataset_dir
     all_scores = {}
 
+    scores_file_name = os.path.join(output_dir, "task_scores.json")
     for task in data_args.test_tasks:
         gold_path = os.path.join(
             gold_data_dir,
@@ -233,10 +234,9 @@ def evaluate(
         # rich.print(list(zip(labels, predictions)))
         task_logger.print_predictions(output_path=os.path.join(predictions_dir, f"{task}.eval_file.json"))
 
-    scores_file_name = os.path.join(output_dir, "task_scores.json")
-    with open(scores_file_name, "wt", encoding="utf8") as f:
-        json.dump(all_scores, f, indent=4, ensure_ascii=False)
-    logging.info(f"Scores saved in: {scores_file_name}")
+        with open(scores_file_name, "wt", encoding="utf8") as f:
+            json.dump(all_scores, f, indent=4, ensure_ascii=False)
+        logging.info(f"Scores saved in: {scores_file_name}")
 
     return all_scores
 

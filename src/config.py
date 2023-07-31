@@ -101,6 +101,37 @@ class ModelArguments:
         },
     )
 
+    use_auth_token: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to use an authentication token when downloading the model from huggingface hub."
+                "Defaults to False."
+            )
+        },
+    )
+
+    use_flash_attention: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to use FlashAttention. If True, the model will be trained with FlashAttention."
+                "Flash attention must be installed, see: https://github.com/Dao-AILab/flash-attention "
+                "for more details."
+            )
+        },
+    )
+
+    max_memory_MB: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True."
+                "Defaults to None."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:
