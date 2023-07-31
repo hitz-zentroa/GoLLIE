@@ -14,7 +14,9 @@ from . import (
     tacred,
     wikievents,
     wnut,
+    broadtwitter,
 )
+
 
 
 TASK_ID_TO_TASKS = {
@@ -39,6 +41,7 @@ TASK_ID_TO_TASKS = {
     "FabNER_NER": "src.tasks.fabner",
     "E3C_NER": "src.tasks.e3c",
     "BC5CDR_NER": "src.tasks.bc5cdr",
+    "BroadTwitter_NER": "src.tasks.broadtwitter",
 }
 
 __all__ = [
@@ -55,6 +58,7 @@ __all__ = [
     "wikievents",
     "fabner",
     "e3c",
+    "broadtwitter",
     "TASK_ID_TO_TASKS",
     "task_id_to_guidelines",
 ]
@@ -120,6 +124,10 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "e3c":
         from src.tasks.e3c.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "broadtwitter":
+        from src.tasks.broadtwitter.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     else:
