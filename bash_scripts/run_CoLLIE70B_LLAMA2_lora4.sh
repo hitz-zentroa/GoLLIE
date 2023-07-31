@@ -18,10 +18,12 @@ export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=CoLLIE
 export WANDB__SERVICE_WAIT=300
+export OMP_NUM_THREADS=16
+
+export PYTHONPATH="$PYTHONPATH:$PWD"
+CONFIGS_FOLDER="configs/model_configs"
 
 echo ${CUDA_VISIBLE_DEVICES}
-
-CONFIGS_FOLDER="configs/model_configs"
 
 
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE70B.sh
