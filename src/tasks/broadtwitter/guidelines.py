@@ -27,5 +27,4 @@ GUIDELINES = {
             "vicarages, courtyards) abstract ``places'' (e.g. {\\it the free world})\n"
         ]
     },
-
 }
