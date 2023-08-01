@@ -237,6 +237,10 @@ def inference_collie(
         logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
 
+        if not trainer.is_world_process_zero():
+            # In distributed training, we only want one process to write predictions to the file.
+            continue
+
         output_dir = training_args.output_dir if checkpoint_path is None else checkpoint_path
         if training_args.predict_with_generate:
             output_name = f"{os.path.join(output_dir,'predictions',test_task)}.predictions.jsonl"
@@ -266,8 +270,12 @@ def inference_collie(
                 logging.info(f"Writing metrics to {metrics_name}")
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
-    if training_args.predict_with_generate:
-        evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
+    if training_args.predict_with_generate and trainer.is_world_process_zero():
+        task_scores = evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
+        # Add test_ prefix to report test scores
+        task_scores = {f"test_{task}": score for task, score in task_scores.items()}
+        # Report
+        trainer.log(task_scores)
 
 
 if __name__ == "__main__":
@@ -320,6 +328,14 @@ if __name__ == "__main__":
             # Sort checkpoints by step number
             checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
             # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
+            no_eval_checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) < 1000]
+            if len(no_eval_checkpoints) > 0:
+                logging.warning(
+                    f"Found {len(no_eval_checkpoints)} checkpoints in {training_args.output_dir} that will not be"
+                    f" evaluated: {no_eval_checkpoints} . We will evaluate only checkpoints trained for 1000 or more"
+                    " steps, underfit models are very slow to evaluate."
+                )
+
             checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
 
             # Add also the last checkpoint (stored in the output_dir)
