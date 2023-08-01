@@ -66,6 +66,7 @@ max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
+adam_epsilon: 1e-7
 
 # checkpoint settings
 output_dir: /ikerlariak/osainz006/models/collie/CoLLIE-7b_lora4

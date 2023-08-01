@@ -104,6 +104,7 @@ lr_scheduler_type: constant
 warmup_ratio: 0.03
 max_grad_norm: 0.3
 group_by_length: true
+adam_epsilon: 1e-7
 
 # lora settings
 lora_r: 64

@@ -97,8 +97,8 @@ generation_num_beams: 1
 group_by_length: true
 
 # optimizer settings
-optim: adamw_torch
-learning_rate: 0.00001
+optim: adamw_torch_fused
+learning_rate: 0.0003
 weight_decay: 0
 num_train_epochs: 3
 lr_scheduler_type: cosine

@@ -101,6 +101,7 @@ weight_decay: 0
 num_train_epochs: 3
 lr_scheduler_type: cosine
 warmup_ratio: 0.03
+adam_epsilon: 1e-7
 
 # lora settings
 lora_r: 16
