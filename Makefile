@@ -1,4 +1,4 @@
-check_dirs := src notebooks
+check_dirs := src
 
 style:
 	black $(check_dirs)

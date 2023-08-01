@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Type
 
 from ..utils_typing import Event, dataclass
 
@@ -40,19 +40,36 @@ Attack:Ransom:Price ->  'price'
 Attack:Ransom:Time ->  'time'
 Attack:Ransom:Tool ->  'tool'
 Attack:Ransom:Victim ->  'victim'
+
+Vulnerability:Discover:CVE -> 'cve'
+Vulnerability:Discover:Capabilities -> 'used_for'
+Vulnerability:Discover:Discoverer -> 'discoverer
+Vulnerability:Discover:Supported_Platform -> 'supported_platform
+Vulnerability:Discover:Time -> 'time'
+Vulnerability:Discover:Vulnerability -> 'vulnerability'
+Vulnerability:Discover:Vulnerable_System -> 'vulnerable_system'
+Vulnerability:Discover:Vulnerable_System_Owner -> 'system_owner'
+Vulnerability:Discover:Vulnerable_System_Version -> 'system_version'
+
+Vulnerability:Patch:CVE -> 'cve'
+Vulnerability:Patch:Issues-Addressed -> 'issues_addressed'
+Vulnerability:Patch:Patch -> 'patch'
+Vulnerability:Patch:Patch-Number -> 'patch_number'
+Vulnerability:Patch:Releaser -> 'releaser'
+Vulnerability:Patch:Supported_Platform -> 'supported_platform'
+Vulnerability:Patch:Time -> 'time'
+Vulnerability:Patch:Vulnerability -> 'vulnerability'
+Vulnerability:Patch:Vulnerable_System -> 'vulnerable_system'
+Vulnerability:Patch:Vulnerable_System_Version -> 'system_version'
 """
 
 
 @dataclass
 class DatabreachAttack(Event):
-    """An DatabreachAttack Event happens when an attacker compromises a system
-    to later remove or expose the data, e.g., to sell, publish or make it accessible.
-    """
+    """{databreach_attack_main}"""
 
     mention: str
-    """The text span that triggers the event, such as:
-        - 'attack', 'expose', 'publish', 'steal', ...
-    """
+    """{databreach_attack_mention}"""
     attacker: List[str]  # The agent (person or organization) of the attack
     attack_pattern: List[str]  # How the attack is done
     victim: List[str]  # The device, organization, person, product or website victim of the attack
@@ -68,16 +85,10 @@ class DatabreachAttack(Event):
 
 @dataclass
 class PhisingAttack(Event):
-    """A PhisingAttack Event happens when an attacker imitates another entity, in
-    an attempt to get a victim to access malicious materials, such as a website or
-    attachments.
-    """
+    """{phising_attack_main}"""
 
     mention: str
-    """The text span that triggers the event, such as:
-        - 'attack', 'purports to be', 'dupe', ...
-        - 'masquerading as', 'pretending to be', 'scam', ...
-    """
+    """{phising_attack_mention} """
     pattern: List[str]  # How was the attack triggered, such as 'opening something' or 'clicking somewhere'
     attacker: str  # The person or organization behind the attack
     victim: List[str]  # The victim of the attack
@@ -91,14 +102,10 @@ class PhisingAttack(Event):
 
 @dataclass
 class RansomAttack(Event):
-    """A RansomAttack Event happens when n attacker breaks into a system and
-    encrypts data, and will only decrypt the data for a ransom payment.
-    """
+    """{ransom_attack_main}"""
 
     mention: str
-    """The text span that triggers the event, such as:
-        - 'attack', ransomware', 'selling', 'ransom', ...
-    """
+    """{ransom_attack_mention}"""
     pattern: List[str]  # What does the attack do until demands are met.
     attacker: List[str]  # Who performed the attack
     victim: List[str]  # The victim of the attack
@@ -108,3 +115,47 @@ class RansomAttack(Event):
     payment_method: List[str]  # How the payment have to be done, such as 'a webpage'
     time: List[str]  # When the attack took place
     place: List[str]  # Where the attack took place
+
+
+@dataclass
+class VulnerabilityDiscover(Event):
+    """{vulnerability_discover_main}"""
+
+    mention: str
+    """{vulnerability_discover_mention}"""
+    cve: List[str]  # The vulnerability identifier: such 'CVE-2018-5003'
+    used_for: List[str]  # What is the vulnerability used for such as 'allow to take control'
+    discoverer: List[str]  # The entity that reported the vulnerability
+    supported_platform: List[str]  # The platforms that support the vulnerability
+    vulnerability: List[str]  # The vulnerabilities, such as 'vulnerability'
+    vulnerable_system: List[str]  # The systems vulnerable to the vulnerability
+    system_owner: List[str]  # The owners of the vulnerable system
+    system_version: List[str]  # The version of the vulnerable system
+    time: List[str]  # When was the vulnerability discovered
+
+
+@dataclass
+class VulnerabilityPatch(Event):
+    """{vulnerability_patch_main}"""
+
+    mention: str
+    """{vulnerability_patch_mention}"""
+    cve: List[str]  # The vulnerability identifier: such 'CVE-2018-5003'
+    issues_addressed: List[str]  # What did the patch fixed
+    supported_platform: List[str]  # The platforms that support the vulnerability
+    vulnerability: List[str]  # The vulnerability, such as 'vulnerability'
+    vulnerable_system: List[str]  # The affected systems, such as 'infraestructures'
+    releaser: List[str]  # The entity releasing the patch
+    patch: List[str]  # What was the patch about
+    patch_number: List[str]  # Nunber or name of the patch
+    system_version: List[str]  # The version of the vulnerable system
+    time: List[str]  # When was the patch implemented, the date
+
+
+EAE_EVENT_DEFINITIONS: List[Type] = [
+    DatabreachAttack,
+    PhisingAttack,
+    RansomAttack,
+    VulnerabilityDiscover,
+    VulnerabilityPatch,
+]

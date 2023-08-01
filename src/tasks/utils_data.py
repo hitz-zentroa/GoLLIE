@@ -233,13 +233,6 @@ class Sampler:
                 _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
                 # Apply guideline dropout
                 if self.split == "train":
-                    # _guidelines = [
-                    #    _def
-                    #    for _def in _guidelines
-                    #    if random.random() > self.guideline_dropout
-                    #    or (_def in positive_guidelines and self.ensure_positives_on_train)
-                    # ]
-
                     _guidelines_dropout = [
                         _def
                         for _def in _guidelines

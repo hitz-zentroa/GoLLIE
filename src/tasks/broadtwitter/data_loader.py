@@ -1,7 +1,7 @@
 from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.broadtwitter.guidelines import GUIDELINES
-from src.tasks.broadtwitter.prompts import ENTITY_DEFINITIONS, Location, Person, Organization
+from src.tasks.broadtwitter.prompts import ENTITY_DEFINITIONS, Location, Organization, Person
 from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler

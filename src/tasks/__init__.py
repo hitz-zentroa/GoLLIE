@@ -3,6 +3,7 @@ from typing import Dict, List
 from . import (
     ace,
     bc5cdr,
+    broadtwitter,
     conll03,
     diann,
     e3c,
@@ -14,9 +15,7 @@ from . import (
     tacred,
     wikievents,
     wnut,
-    broadtwitter,
 )
-
 
 
 TASK_ID_TO_TASKS = {
