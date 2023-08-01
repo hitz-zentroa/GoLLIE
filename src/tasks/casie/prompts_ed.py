@@ -77,7 +77,7 @@ class PhisingAttack(Event):
     """{phising_attack_main}"""
 
     mention: str
-    """{phising_attack_mention} """
+    """{phising_attack_mention}"""
 
 
 @dataclass

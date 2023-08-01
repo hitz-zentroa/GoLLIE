@@ -88,7 +88,7 @@ class PhisingAttack(Event):
     """{phising_attack_main}"""
 
     mention: str
-    """{phising_attack_mention} """
+    """{phising_attack_mention}"""
     pattern: List[str]  # How was the attack triggered, such as 'opening something' or 'clicking somewhere'
     attacker: str  # The person or organization behind the attack
     victim: List[str]  # The victim of the attack

@@ -4,6 +4,7 @@ from . import (
     ace,
     bc5cdr,
     broadtwitter,
+    casie,
     conll03,
     diann,
     e3c,
@@ -28,6 +29,8 @@ TASK_ID_TO_TASKS = {
     "ACE05_EAE": "src.tasks.ace",
     "RAMS_EAE": "src.tasks.rams",
     "CoNLL03_NER": "src.tasks.conll03",
+    "CASIE_EE": "src.tasks.casie",
+    "CASIE_EAE": "src.tasks.casie",
     "Europarl_NER": "src.tasks.conll03",
     "TACRED_SF": "src.tasks.tacred",
     "OntoNotes5_NER": "src.tasks.ontonotes",
@@ -49,6 +52,7 @@ __all__ = [
     "ace",
     "rams",
     "conll03",
+    "casie",
     "tacred",
     "ontonotes",
     "ncbidisease",
@@ -86,6 +90,10 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "conll03":
         from src.tasks.conll03.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "casie":
+        from src.tasks.casie.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     elif task_id.lower() == "tacred":
