@@ -169,8 +169,12 @@ class Sampler:
 
         self._black_mode = black.Mode()
         self.remove_guidelines = remove_guidelines
-        self._remove_guidelines_re = re.compile(r'"""(.+\n?)*"""')
+        # self._remove_guidelines_re = re.compile(r'"""(.+\n?)*"""')
+        self._remove_guidelines_re = re.compile(r'"""[^"]+"""')
+        self._remove_guidelines_fn = lambda x: self._remove_guidelines_re.sub("", x).replace('\n    \n', '\n')
+
         self._remove_comments_re = re.compile(r"#.+?\n")
+        self._remove_comments_fn = lambda x: self._remove_comments_re.sub("\n", x)
 
         self.lang = lang
         self.definitions = definitions
@@ -265,8 +269,8 @@ class Sampler:
 
                 # Remove definitions for baseline
                 if self.remove_guidelines:
-                    _guidelines = [self._remove_guidelines_re.sub("", definition) for definition in _guidelines]
-                    _guidelines = [self._remove_comments_re.sub("\n", definition) for definition in _guidelines]
+                    _guidelines = [self._remove_guidelines_fn(definition) for definition in _guidelines]
+                    _guidelines = [self._remove_comments_fn(definition) for definition in _guidelines]
 
                 text = self.template.render(guidelines=_guidelines, text=_text, annotations=_ann, gold=_gold)
                 # Apply label noise (but keem them if we are removing the guidelines)
