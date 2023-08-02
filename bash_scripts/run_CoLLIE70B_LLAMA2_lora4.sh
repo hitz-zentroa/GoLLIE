@@ -29,4 +29,4 @@ echo ${CUDA_VISIBLE_DEVICES}
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE70B.sh
 
 
-torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-70B_LLaMa2_lora4.yaml
+torchrun --standalone --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE-70B_LLaMA2_lora4.yaml
