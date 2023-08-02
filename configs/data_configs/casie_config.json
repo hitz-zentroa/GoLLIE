@@ -6,8 +6,7 @@
     ],
     "dataloader_cls": "src.tasks.casie.data_loader.CASIEDatasetLoader",
     "sampler_cls": "src.tasks.casie.data_loader.CASIESampler",
-    "train_file": null,
-    "dev_file": "data/casie/data,.dev.jsonl",
+    "dev_file": "data/casie/data.dev.jsonl",
     "test_file": "data/casie/data.test.jsonl",
     "prompt_template": "templates/prompt.txt",
     "seed": 0,
@@ -25,7 +24,8 @@
             "sample_total_guidelines": -1,
             "guideline_dropout": 0.0,
             "scorer": "src.tasks.casie.scorer.CASIEEventArgumentScorer",
-            "ensure_positives_on_train": true
+            "ensure_positives_on_train": true,
+            "sample_only_gold_guidelines": true
         }
     }
 }

@@ -82,9 +82,15 @@ class Entity:
 
     span: str
 
+    def __post_init__(self: Entity) -> None:
+        self._allow_partial_match: bool = False
+
     def __eq__(self: Entity, other: Entity) -> bool:
         self_span = self.span.lower().strip()
         other_span = other.span.lower().strip()
+        if self._allow_partial_match:
+            return type(self) == type(other) and (self.span in other_span or other_span in self.span)
+
         return type(self) == type(other) and self_span == other_span
 
     def __repr__(self) -> str:
@@ -151,7 +157,16 @@ class Relation:
     arg1: str
     arg2: str
 
+    def __post_init__(self: Relation) -> None:
+        self._allow_partial_match: bool = False
+
     def __eq__(self: Value, other: Value) -> bool:
+        if self._allow_partial_match:
+            return (
+                type(self) == type(other)
+                and (self.arg1 in other.arg1 or other.arg1 in self.arg1)
+                and (self.arg2 in other.arg2 or other.arg2 in self.arg2)
+            )
         return type(self) == type(other) and self.arg1 == other.arg1 and self.arg2 == other.arg2
 
     def __repr__(self) -> str:
@@ -217,23 +232,41 @@ class Event:
 
     mention: str
 
+    def __post_init__(self: Event) -> None:
+        self._allow_partial_match: bool = False
+
     def __eq__(self: Event, other: Event) -> bool:
+        if self._allow_partial_match:
+            # On events we consider partial match if just the type is predicted
+            # Some datasets has different guidelines when annotating event triggers
+            return type(self) == type(other)
         return type(self) == type(other) and self.key() == other.key()
 
     def __and__(self: Event, other: Event) -> Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (
+                attr.startswith("__")
+                or attr in ["mention", "subtype", "_allow_partial_match"]
+                or inspect.ismethod(values)
+            )
         }
         if self == other:
             for attr in attrs.keys():
                 self_values = getattr(self, attr)
                 other_values = deepcopy(getattr(other, attr))
                 for value in self_values:
-                    if value in other_values:
-                        attrs[attr].append(value)
-                        other_values.pop(other_values.index(value))
+                    if self._allow_partial_match:
+                        for i, _value in enumerate(other_values):
+                            if value in _value or _value in value:
+                                attrs[attr].append(value)
+                                other_values.pop(i)
+                                break
+                    else:
+                        if value in other_values:
+                            attrs[attr].append(value)
+                            other_values.pop(other_values.index(value))
 
         pos_args = []
         if hasattr(self, "mention"):
@@ -247,7 +280,11 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (
+                attr.startswith("__")
+                or attr in ["mention", "subtype", "_allow_partial_match"]
+                or inspect.ismethod(values)
+            )
         }
         _len = 0
         for values in attrs.values():

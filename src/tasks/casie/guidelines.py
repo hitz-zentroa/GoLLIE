@@ -6,7 +6,7 @@ GUIDELINES = {
         ]
     },
     "databreach_attack_mention": {
-        "en": ["The text span that triggers the event, such as:\n 'attack', 'expose', 'publish', 'steal', ..."]
+        "en": ["The text span that triggers the event, such as:\n   'attack', 'expose', 'publish', 'steal', ..."]
     },
     "phising_attack_main": {
         "en": [
@@ -18,8 +18,8 @@ GUIDELINES = {
     "phising_attack_mention": {
         "en": [
             "The text span that triggers the event, such as:\n"
-            " 'attack', 'purports to be', 'dupe', ...\n"
-            " 'masquerading as', 'pretending to be', 'scam', ..."
+            "    'attack', 'purports to be', 'dupe', ...\n"
+            "    'masquerading as', 'pretending to be', 'scam', ..."
         ]
     },
     "ransom_attack_main": {
@@ -29,7 +29,7 @@ GUIDELINES = {
         ]
     },
     "ransom_attack_mention": {
-        "en": ["The text span that triggers the event, such as:\n 'attack', ransomware', 'selling', 'ransom', ..."]
+        "en": ["The text span that triggers the event, such as:\n    'attack', ransomware', 'selling', 'ransom', ..."]
     },
     "vulnerability_discover_main": {
         "en": [
@@ -38,7 +38,9 @@ GUIDELINES = {
         ]
     },
     "vulnerability_discover_mention": {
-        "en": ["The text span that triggers the event, such as:\n 'attack', 'found', 'exploit', 'vulnerability', ..."]
+        "en": [
+            "The text span that triggers the event, such as:\n    'attack', 'found', 'exploit', 'vulnerability', ..."
+        ]
     },
     "vulnerability_patch_main": {
         "en": [
@@ -49,8 +51,8 @@ GUIDELINES = {
     "vulnerability_patch_mention": {
         "en": [
             "The text span that triggers the event, such as:\n"
-            " 'patch', 'fixed', 'addresses', 'implemented',\n"
-            " 'released', ..."
+            "    'patch', 'fixed', 'addresses', 'implemented',\n"
+            "    'released', ..."
         ]
     },
 }

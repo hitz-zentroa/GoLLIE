@@ -226,3 +226,116 @@ class TestTACREDScorers(unittest.TestCase):
                 "f1-score": 0.5714285714285715,
             },
         )
+
+
+class TestCASIEScorers(unittest.TestCase):
+    def test_event_scorer(self):
+        from src.tasks.casie.prompts_ed import VulnerabilityDiscover
+        from src.tasks.casie.scorer import CASIEEventScorer
+
+        scorer = CASIEEventScorer(allow_partial_match=True)
+
+        reference = [VulnerabilityDiscover(mention="vulnerability found"), VulnerabilityDiscover(mention="reported")]
+
+        # Perfect alingment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=reference)["events"],
+            {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
+        )
+
+        # No alignment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=[])["events"],
+            {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
+        )
+
+        predictions = [VulnerabilityDiscover(mention="vulnerability"), VulnerabilityDiscover(mention="discovered")]
+
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=predictions)["events"],
+            {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+            },
+        )
+
+    def test_event_argument_scorer(self):
+        from src.tasks.casie.prompts_eae import VulnerabilityDiscover
+        from src.tasks.casie.scorer import CASIEEventArgumentScorer
+
+        scorer = CASIEEventArgumentScorer(allow_partial_match=True)
+
+        reference = [
+            VulnerabilityDiscover(
+                mention="says",
+                cve=["CVE-2018-12799", "CVE-2018-12808"],
+                used_for=["lead to arbitrary code execution"],
+                discoverer=["The tech giant"],
+                supported_platform=[],
+                vulnerability=[
+                    "an out of bounds write issue",
+                    "the security flaws",
+                    "an untrusted pointer dereference problem",
+                ],
+                vulnerable_system=[],
+                system_owner=[],
+                system_version=[],
+                time=[],
+            ),
+        ]
+
+        # Perfect alingment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=reference)["arguments"],
+            {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
+        )
+
+        # No alignment
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=[])["arguments"],
+            {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
+        )
+
+        predictions = [
+            VulnerabilityDiscover(
+                mention="says",
+                cve=["CVE-2018-12799"],
+                used_for=["arbitrary code execution"],
+                discoverer=["tech giant"],
+                supported_platform=[],
+                vulnerability=[
+                    "an out of bounds write issue",
+                    "the security flaws",
+                    "an untrusted pointer",
+                ],
+                vulnerable_system=[],
+                system_owner=[],
+                system_version=[],
+                time=[],
+            ),
+        ]
+
+        # Partially aligned
+        # TP = 6
+        #   - cve(""CVE-2018-12799"")
+        #   - used_for("lead to arbitrary code execution")
+        #   - discoverer("The tech giant")
+        #   - vulnerability("an out of bounds write issue")
+        #   - vulnerability("the security flaws")
+        #   - vulnerability("an untrusted pointer dereference problem")
+        # FP = 0
+        # FN = 0
+
+        # precision -> 6 / 6 = 1.0
+        # recall -> 6 / 7 = 0.8571428571428571
+        # F1 -> 2 * (0.8571428571428571 * 1.0) / (0.8571428571428571 + 1.0) = 0.9285714285714286
+
+        self.assertDictEqual(
+            scorer(reference=reference, predictions=predictions)["arguments"],
+            {
+                "precision": 1.0,
+                "recall": 0.8571428571428571,
+                "f1-score": 0.923076923076923,
+            },
+        )
