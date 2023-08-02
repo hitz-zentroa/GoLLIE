@@ -171,7 +171,7 @@ class Sampler:
         self.remove_guidelines = remove_guidelines
         # self._remove_guidelines_re = re.compile(r'"""(.+\n?)*"""')
         self._remove_guidelines_re = re.compile(r'"""[^"]+"""')
-        self._remove_guidelines_fn = lambda x: self._remove_guidelines_re.sub("", x).replace('\n    \n', '\n')
+        self._remove_guidelines_fn = lambda x: self._remove_guidelines_re.sub("", x).replace("\n    \n", "\n")
 
         self._remove_comments_re = re.compile(r"#.+?\n")
         self._remove_comments_fn = lambda x: self._remove_comments_re.sub("\n", x)

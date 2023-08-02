@@ -38,7 +38,9 @@ GUIDELINES = {
         ]
     },
     "vulnerability_discover_mention": {
-        "en": ["The text span that triggers the event, such as:\n    'attack', 'found', 'exploit', 'vulnerability', ..."]
+        "en": [
+            "The text span that triggers the event, such as:\n    'attack', 'found', 'exploit', 'vulnerability', ..."
+        ]
     },
     "vulnerability_patch_main": {
         "en": [

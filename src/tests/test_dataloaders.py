@@ -29,7 +29,11 @@ class TestDataLoaders(unittest.TestCase):
 
         dataloader = CASIEDatasetLoader("data/casie/data.dev.jsonl")
 
-        _ = list(CASIESampler(dataloader, task="EAE", remove_guidelines=True, **config, **config["task_configuration"]["EE"]))
+        _ = list(
+            CASIESampler(
+                dataloader, task="EAE", remove_guidelines=True, **config, **config["task_configuration"]["EE"]
+            )
+        )
 
     @unittest.skipIf(not os.path.exists("data/wikievents/train.sentence.jsonl"), "No WikiEvents data available")
     def test_WikiEvents(self):

@@ -105,7 +105,7 @@ class CASIEDatasetLoader(DatasetLoader):
                     }
 
                 events, arguments = [], []
-                for event in line["events"]:
+                for event in sorted(line["events"], key=lambda x: x["trigger"]["start"]):
                     if event["type"] not in self.EVENT_TO_CLASS_MAPPING:
                         continue
                     info = self.EVENT_TO_CLASS_MAPPING[event["type"]]
