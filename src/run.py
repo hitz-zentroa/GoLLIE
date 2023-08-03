@@ -206,9 +206,10 @@ def inference_collie(
                 " you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you plan to"
                 " release the merged model."
             )
-        if os.path.exists(os.path.join(model_path, "merged_model")):
+        if os.path.exists(os.path.join(training_args.output_dir, "merged_model")):
             logging.info(
-                f"A merged model already exists at {os.path.join(model_path,'merged_model')}. We will use this model."
+                f"A merged model already exists at {os.path.join(training_args.output_dir,'merged_model')}. We will"
+                " use this model."
             )
             delete_merged_model = False
 
@@ -218,11 +219,11 @@ def inference_collie(
                 lora_weights_name_or_path=lora_weights_name_or_path,
                 torch_dtype=model_args.torch_dtype,
                 use_auth_token=model_args.use_auth_token,
-                output_path=os.path.join(model_path, "merged_model"),
+                output_path=os.path.join(training_args.output_dir, "merged_model"),
             )
             delete_merged_model = not model_args.keep_merged_model_after_eval
 
-        model_path = os.path.join(model_path, "merged_model")
+        model_path = os.path.join(training_args.output_dir, "merged_model")
         lora_weights_name_or_path = None
         clean_cache()  # Ensure that nothing remains in the cache, as we will load the mergen model next.
 
