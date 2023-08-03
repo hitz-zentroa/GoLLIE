@@ -97,6 +97,46 @@ def get_device_map(
     return device_map, max_memory
 
 
+def merge_lora_model(
+    weights_path: str,
+    lora_weights_name_or_path: str,
+    output_path: str,
+    torch_dtype: Optional[str] = None,
+    use_auth_token: bool = False,
+):
+    """
+    Given a model path and the path to the LoRA weights, merge the LoRA weights into the model and save the merged model
+    weights_path (`str`):
+            The path to your local model weights and tokenizer. You can also provide a
+            huggingface hub model name.
+    lora_weights_name_or_path (`str`):
+        If the model has been trained with LoRA, path or huggingface hub name to the
+        pretrained weights. Defaults to `None`.
+    output_path (`str`):
+        The path to the output directory where the merged model will be saved.
+    torch_dtype (`Optional[str]`, optional):
+        The torch dtype to use for the model. If set to `"auto"`, the dtype will be
+        automatically derived.
+    use_auth_token (`bool`, optional):
+        Whether to use an authentication token when loading a private model from huggingface.co.
+        Defaults to False.
+    """
+
+    logging.info(f"We will merge the LoRA weights from {lora_weights_name_or_path} into the model {weights_path}")
+    model, tokenizer = load_model_for_inference(
+        weights_path=weights_path,
+        lora_weights_name_or_path=lora_weights_name_or_path,
+        torch_dtype=torch_dtype,
+        use_auth_token=use_auth_token,
+    )
+
+    model.config.save_pretrained(output_path)
+    model.save_pretrained(output_path)
+    tokenizer.save_pretrained(output_path)
+
+    logging.info(f"Model merged and saved in {output_path}")
+
+
 def load_model_for_training(
     model_weights_name_or_path: str,
     quantization: Optional[int] = None,

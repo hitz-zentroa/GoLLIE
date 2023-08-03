@@ -132,6 +132,42 @@ class ModelArguments:
         },
     )
 
+    merge_lora_after_training: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to merge LoRA layers after training. If True, the model will be trained with LoRA and then"
+                " the LoRA layers will be merged into the model. We will save the merged model in"
+                " {output_dir}/merged_model. Defaults to False."
+            )
+        },
+    )
+
+    merge_lora_before_eval: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to merge LoRA layers before eval. If True, the model and LoRA layers will be loaded, merged"
+                " and saved into {model_name_or_path}/merged_model. Then we will load the merged model using the"
+                " provided quantization and torch.dtype values. Note: This flag is only useful is you want to use 4"
+                " bit or 8 bit quantization for inference. bf16, fp16 and fp32 models are automatically merged when"
+                " loaded for inference, there is no need to save the merged model and reload it. Defaults to False."
+            )
+        },
+    )
+
+    keep_merged_model_after_eval: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "If 'merge_lora_before_eval' is set to True, whether to keep the merged model after eval, or delete it"
+                " to save disk space. Merged model will be saved in {model_name_or_path}/merged_model and will use"
+                " the same disk space as the original model. While storing only the LoRA layers only takes a few MBs."
+                " Defaults to False."
+            )
+        },
+    )
+
 
 @dataclass
 class DataTrainingArguments:

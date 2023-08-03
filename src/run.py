@@ -12,7 +12,7 @@ from datasets import DatasetDict
 from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
 from src.evaluate import evaluate
-from src.model.load_model import load_model_for_inference, load_model_for_training
+from src.model.load_model import load_model_for_inference, load_model_for_training, merge_lora_model
 from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
 from transformers import (
     HfArgumentParser,
@@ -195,6 +195,37 @@ def inference_collie(
             f"path as the model weights: {model_path}."
         )
 
+    delete_merged_model: bool = False
+    if model_args.merge_lora_before_eval:
+        logging.info("You have specified to merge the LORA weights before evaluation. We will attempt to do so.")
+        if model_args.quantization is None:
+            logging.warning(
+                "You have specified to create a merged model (merge_lora_before_eval=True), but you have not specified"
+                " a quantization precision. Model loades without quantization are automatically merged when loaded for"
+                " inference, so there is no need to save a merged model and reaload it. This flag is only useful when"
+                " you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you plan to"
+                " release the merged model."
+            )
+        if os.path.exists(os.path.join(model_path, "merged_model")):
+            logging.info(
+                f"A merged model already exists at {os.path.join(model_path,'merged_model')}. We will use this model."
+            )
+            delete_merged_model = False
+
+        else:
+            merge_lora_model(
+                weights_path=model_path,
+                lora_weights_name_or_path=lora_weights_name_or_path,
+                torch_dtype=model_args.torch_dtype,
+                use_auth_token=model_args.use_auth_token,
+                output_path=os.path.join(model_path, "merged_model"),
+            )
+            delete_merged_model = not model_args.keep_merged_model_after_eval
+
+        model_path = os.path.join(model_path, "merged_model")
+        lora_weights_name_or_path = None
+        clean_cache()  # Ensure that nothing remains in the cache, as we will load the mergen model next.
+
     model, tokenizer = load_model_for_inference(
         weights_path=model_path,
         quantization=model_args.quantization,
@@ -277,6 +308,18 @@ def inference_collie(
         # Report
         trainer.log(task_scores)
 
+    if delete_merged_model:
+        logging.info(f"Deleting merged model at {model_path}")
+        import shutil
+
+        try:
+            shutil.rmtree(model_path)
+        except OSError as e:
+            logging.error(
+                f"Unable to delete the merged model {model_path} : {e.strerror}\n"
+                "You may need to delete the merged model manually."
+            )
+
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
@@ -306,6 +349,15 @@ if __name__ == "__main__":
             training_args,
         )
         clean_cache()
+        if model_args.use_lora and model_args.merge_lora_after_training:
+            merge_lora_model(
+                weights_path=model_args.model_name_or_path,
+                lora_weights_name_or_path=training_args.output_dir,
+                torch_dtype=model_args.torch_dtype,
+                output_path=os.path.join(training_args.output_dir, "merged_model"),
+                use_auth_token=model_args.use_auth_token,
+            )
+            clean_cache()
 
     if training_args.do_predict and data_args.test_tasks is not None:
         if not data_args.evaluate_all_checkpoints:

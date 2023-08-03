@@ -246,11 +246,7 @@ class Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (
-                attr.startswith("_")
-                or attr in ["mention", "subtype"]
-                or inspect.ismethod(values)
-            )
+            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         if self == other:
             for attr in attrs.keys():
@@ -280,11 +276,7 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (
-                attr.startswith("_")
-                or attr in ["mention", "subtype"]
-                or inspect.ismethod(values)
-            )
+            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         _len = 0
         for values in attrs.values():
