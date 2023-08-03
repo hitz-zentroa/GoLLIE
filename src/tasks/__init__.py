@@ -10,6 +10,8 @@ from . import (
     e3c,
     fabner,
     harveyner,
+    mitmovie,
+    mitrestaurant,
     multinerd,
     ncbidisease,
     ontonotes,
@@ -17,7 +19,6 @@ from . import (
     tacred,
     wikievents,
     wnut,
-    mitmovie,
 )
 
 
@@ -48,6 +49,7 @@ TASK_ID_TO_TASKS = {
     "BroadTwitter_NER": "src.tasks.broadtwitter",
     "HarveyNER_NER": "src.tasks.harveyner",
     "MITMovie_NER": "src.tasks.mitmovie",
+    "MITRestaurant_NER": "src.tasks.mitrestaurant",
 }
 
 __all__ = [
@@ -68,6 +70,7 @@ __all__ = [
     "broadtwitter",
     "harveyner",
     "mitmovie",
+    "mitrestaurant",
     "TASK_ID_TO_TASKS",
     "task_id_to_guidelines",
 ]
@@ -149,6 +152,10 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "mitmovie":
         from src.tasks.mitmovie.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "mitrestaurant":
+        from src.tasks.mitrestaurant.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     else:

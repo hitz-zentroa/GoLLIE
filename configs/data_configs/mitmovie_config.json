@@ -4,7 +4,7 @@
     "dataloader_cls": "src.tasks.mitmovie.data_loader.MitMovieDatasetLoader",
     "sampler_cls": "src.tasks.mitmovie.data_loader.MitMovieSampler",
     "train_file": "data/MITmovie/engtrain.bio",
-    "dev_file": "data/MITmovie/engtrain.bio",
+    "dev_file": "data/MITmovie/engdev.bio",
     "test_file": "data/MITmovie/engtest.bio",
     "prompt_template": "templates/prompt.txt",
     "seed": [0, 24, 42],

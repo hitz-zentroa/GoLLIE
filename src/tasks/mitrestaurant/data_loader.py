@@ -1,114 +1,25 @@
-from typing import Dict, List, Tuple, Type, Union
+from typing import Tuple, Union
 
-from src.tasks.label_encoding import rewrite_labels
-from src.tasks.mitmovie.guidelines import GUIDELINES
-from src.tasks.mitmovie.prompts import (
+from src.tasks.mitmovie.data_loader import load_mit_tsv
+from src.tasks.mitrestaurant.guidelines import GUIDELINES
+from src.tasks.mitrestaurant.prompts import (
     ENTITY_DEFINITIONS,
-    Actor,
-    Character,
-    Director,
-    Entity,
-    Genre,
-    Plot,
+    Amenity,
+    Cuisine,
+    Dish,
+    Hours,
+    Location,
+    Price,
     Rating,
-    RatingsAverage,
-    Review,
-    Song,
-    Tittle,
-    Trailer,
-    Year,
+    RestaurantName,
 )
 
 from ..utils_data import DatasetLoader, Sampler
 
 
-def read_tsv(filepath) -> Tuple[List[List[str]], List[List[str]]]:
+class MitRestaurantDatasetLoader(DatasetLoader):
     """
-    READ tsv file in MIT format (Label\tWord)
-    Args:
-        filepath: Path to the file
-    Returns: List of words, List of labels
-    """
-
-    dataset_words: List[List[str]] = []
-    dataset_labels: List[List[str]] = []
-    with open(filepath, "r", encoding="utf-8") as f:
-        words = []
-        labels = []
-        for line in f:
-            line = line.strip()
-            if line.startswith("-DOCSTART-") or line == "" or line == "\n":
-                if words:
-                    dataset_words.append(words)
-                    dataset_labels.append(labels)
-                    words = []
-                    labels = []
-            else:
-                try:
-                    label, word = line.split()
-                except ValueError:
-                    raise ValueError(f"Cannot path_or_split line: {line}")
-                if word:
-                    words.append(word)
-                    labels.append(label)
-        if words:
-            dataset_words.append(words)
-            dataset_labels.append(labels)
-
-    print(f"Read {len(dataset_words)} sentences from {filepath}")
-
-    dataset_labels = [rewrite_labels(labels, encoding="iob2") for labels in dataset_labels]
-
-    return dataset_words, dataset_labels
-
-
-def load_mit_tsv(
-    path: str,
-    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
-) -> Tuple[List[List[str]], List[List[Entity]]]:
-    """
-    Load the mit dataset from a tsv file
-    Args:
-        path (str): The path to the tsv file
-        include_misc (bool): Whether to include the MISC entity type. Defaults to `True`.
-    Returns:
-        (List[str],List[Union[Location,Organization,Person,Miscellaneous]]): The text and the entities
-    """
-    dataset_sentences: List[List[str]] = []
-    dataset_entities: List[List[Entity]] = []
-
-    dataset_words, dataset_labels = read_tsv(path)
-
-    for words, labels in zip(dataset_words, dataset_labels):
-        # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
-        # we convert them to IOB2, so we don't have to deal with this later.
-        labels = rewrite_labels(labels=labels, encoding="iob2")
-        # Get labeled word spans
-        spans = []
-        for i, label in enumerate(labels):
-            if label == "O":
-                continue
-            elif label.startswith("B-"):
-                spans.append([label[2:], i, i + 1])
-            elif label.startswith("I-"):
-                spans[-1][2] += 1
-            else:
-                raise ValueError(f"Found an unexpected label: {label}")
-
-        # Get entities
-        entities = []
-        for label, start, end in spans:
-            entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
-
-        dataset_sentences.append(words)
-        dataset_entities.append(entities)
-
-    return dataset_sentences, dataset_entities
-
-
-class MitMovieDatasetLoader(DatasetLoader):
-    """
-    A `DatasetLoader` for the MIT Movie dataset.
+    A `DatasetLoader` for the MIT Restaurant dataset.
 
     Args:
         split (`str`):
@@ -123,18 +34,14 @@ class MitMovieDatasetLoader(DatasetLoader):
 
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.ENTITY_TO_CLASS_MAPPING = {
-            "ACTOR": Actor,
-            "CHARACTER": Character,
-            "DIRECTOR": Director,
-            "GENRE": Genre,
-            "PLOT": Plot,
-            "RATING": Rating,
-            "RATINGS_AVERAGE": RatingsAverage,
-            "REVIEW": Review,
-            "SONG": Song,
-            "TITLE": Tittle,
-            "TRAILER": Trailer,
-            "YEAR": Year,
+            "Rating": Rating,
+            "Amenity": Amenity,
+            "Location": Location,
+            "Restaurant_Name": RestaurantName,
+            "Price": Price,
+            "Hours": Hours,
+            "Dish": Dish,
+            "Cuisine": Cuisine,
         }
 
         self.elements = {}
@@ -154,12 +61,12 @@ class MitMovieDatasetLoader(DatasetLoader):
             }
 
 
-class MitMovieSampler(Sampler):
+class MitRestaurantSampler(Sampler):
     """
-    A data `Sampler` for the MIT Movie dataset.
+    A data `Sampler` for the MIT Restaurant dataset.
 
     Args:
-        dataset_loader (`MitMovieDatasetLoader`):
+        dataset_loader (`MitRestaurantDatasetLoader`):
             The dataset loader that contains the data information.
         task (`str`, optional):
             The task to sample. It must be one of the following: NER, VER, RE, EE.
@@ -198,7 +105,7 @@ class MitMovieSampler(Sampler):
 
     def __init__(
         self,
-        dataset_loader: MitMovieDatasetLoader,
+        dataset_loader: MitRestaurantDatasetLoader,
         task: str = None,
         split: str = "train",
         parallel_instances: Union[int, Tuple[int, int]] = 1,
@@ -214,7 +121,7 @@ class MitMovieSampler(Sampler):
     ) -> None:
         assert task in [
             "NER",
-        ], f"Mit Movie only supports NER task. {task} is not supported."
+        ], f"Mit Restaurant only supports NER task. {task} is not supported."
 
         task_definitions, task_target = {
             "NER": (ENTITY_DEFINITIONS, "entities"),

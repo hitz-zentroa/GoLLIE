@@ -1,0 +1,65 @@
+GUIDELINES = {
+    "mit_rating": {
+        "en": [
+            "Refers to any specific qualitative or quantitative evaluation of a restaurant's quality, performance, or"
+            " popularity. It includes various expressions, such as star ratings (5 start, 2-star), adjectives (e.g.,"
+            " good, excellent), and phrases that describe the restaurant's overall rating or customer experience"
+            " (e.g., busy, top rated). It can also include adjectives that express the sentiments of another entity "
+            "for example in the sentence 'good burger', 'good' is considered a rating for the burger."
+        ]
+    },
+    "mit_amenity": {
+        "en": [
+            "Refers to any specific feature, service, or facility offered by a restaurant to enhance the customer"
+            " experience. It includes various expressions , such as accessibility options (handicapped accesible),"
+            " special events (karaoke night), promotions (happy hour), or reservation requirements (do not require"
+            " reservation), family-friendly services (kid friendly, kids eat free), smoking areas, parking facilities"
+            " (valet parking), offerings (serve alcohol, buffet, takeout, free refills on soda), restaurant type"
+            " (romantic, sports bar,..)  and other special or unique features that distinguish the restaurant."
+        ]
+    },
+    "mit_location": {
+        "en": [
+            "Refers to any specific place, area, city, neighborhood, or geographical location mentioned in the context"
+            " of a restaurant. It includes various location expressions, such as city names (e.g., San Diego,Oakland),"
+            " general areas (e.g., in town), relative positions (e.g., closest to my area), or any other references to"
+            " a place associated with the restaurant."
+        ]
+    },
+    "mit_restaurantname": {
+        "en": [
+            "Refers to the specific names or titles of restaurants mentioned in the text. It includes names of"
+            " individual restaurants (hampton diner), chains, or franchises (mcdonalds) that uniquely identify a food"
+            " establishment."
+        ]
+    },
+    "mit_price": {
+        "en": [
+            "Refers to any specific information or descriptors related to the cost or pricing of the restaurant's menu"
+            " items. It includes various expressions, such as numerical price ranges (e.g., prices no more than"
+            " 15.00), qualitative price indicators (e.g., cheap, moderately priced), and any other price-related"
+            " descriptions (e.g., affordable, expensive)."
+        ]
+    },
+    "mit_hours": {
+        "en": [
+            "Refers to any specific time-related information related to the operating hours or availability of the"
+            " restaurant. It includes expressions denoting specific times (e.g., 8pm), time intervals (e.g., until"
+            " 11pm), and general time descriptions (e.g., late at night, open right now)."
+        ]
+    },
+    "mit_dish": {
+        "en": [
+            "Refers to any specific food item, meal, or culinary creation offered by the restaurant. It includes"
+            " various food dishes, beverages, desserts, condiments, toppings, and other menu items that can be ordered"
+            " and served."
+        ]
+    },
+    "mit_cuisine": {
+        "en": [
+            "Refers to any specific style or type of food associated with a particular culture, region, or culinary"
+            " tradition. It includes various types of cuisines, such as seafood, vegetarian, Indian, Chinese, Italian,"
+            " etc."
+        ]
+    },
+}
