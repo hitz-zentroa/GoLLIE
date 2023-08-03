@@ -247,8 +247,8 @@ class Event:
             attr: []
             for attr, values in inspect.getmembers(self)
             if not (
-                attr.startswith("__")
-                or attr in ["mention", "subtype", "_allow_partial_match"]
+                attr.startswith("_")
+                or attr in ["mention", "subtype"]
                 or inspect.ismethod(values)
             )
         }
@@ -281,8 +281,8 @@ class Event:
             attr: values
             for attr, values in inspect.getmembers(self)
             if not (
-                attr.startswith("__")
-                or attr in ["mention", "subtype", "_allow_partial_match"]
+                attr.startswith("_")
+                or attr in ["mention", "subtype"]
                 or inspect.ismethod(values)
             )
         }
@@ -335,7 +335,7 @@ class Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         for attr in attrs.keys():
             self_values = getattr(self, attr)
@@ -401,7 +401,7 @@ class Template:
         """Returns the non-positional attributes of a Template instance."""
         attrs = {}
         for attr, values in inspect.getmembers(self):
-            if attr.startswith("__") or attr in ["query"] or inspect.ismethod(values):
+            if attr.startswith("_") or attr in ["query"] or inspect.ismethod(values):
                 continue
             if ignore and values:
                 attrs[attr] = type(values)()
