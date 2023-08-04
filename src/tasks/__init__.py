@@ -76,6 +76,28 @@ __all__ = [
 ]
 
 
+def task_id_to_prompts(task_id: str) -> str:
+    """
+    Returns the prompts path for a given task.
+
+    Args:
+        task_id (str): The task id
+
+    Returns:
+        str: The path to the prompts
+    """
+
+    if task_id.upper() == "CASIE_EE":
+        return "src.tasks.casie.prompts_ed"
+
+    elif task_id.upper() == "CASIE_EAE":
+        return "src.tasks.casie.prompts_ead"
+
+    # Default case
+    else:
+        return TASK_ID_TO_TASKS[task_id] + ".prompts"
+
+
 def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
     """
     Return the guidelines for a given task.

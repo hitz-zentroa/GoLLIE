@@ -7,7 +7,7 @@ import sys
 from typing import Any, Dict, List, Type
 
 from src.config import DataTrainingArguments, ModelArguments
-from src.tasks import TASK_ID_TO_TASKS
+from src.tasks import task_id_to_prompts
 from src.tasks.utils_typing import AnnotationList
 from transformers import HfArgumentParser, Seq2SeqTrainingArguments
 
@@ -212,7 +212,7 @@ def evaluate(
                 pred_line = json.loads(pred_line)
 
                 if not task_module:
-                    task_module = TASK_ID_TO_TASKS[gold_line["task_id"]] + ".prompts"
+                    task_module = task_id_to_prompts(gold_line["task_id"])
                     import_prompts(task_module)
 
                 if not scorer:
