@@ -64,6 +64,15 @@ test_tasks:
   - wikievents.ee
   - wikievents.ner
   - wnut17.ner
+  - e3c.ner
+  - broadtwitter.ner
+  - fabner.ner
+  - harveyner.ner
+  - multinerd.ner
+  - casie.eae
+  - casie.ee
+  - mitmovie.ner
+  - mitrestaurant.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
