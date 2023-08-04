@@ -39,7 +39,7 @@ TASK_ID_TO_TASKS = {
     "NcbiDisease_NER": "src.tasks.ncbidisease",
     "DIANN_NER": "src.tasks.diann",
     "WNUT17_NER": "src.tasks.wnut",
-    "MultiNERD": "src.tasks.multinerd",
+    "MultiNERD_NER": "src.tasks.multinerd",
     "WikiEvents_NER": "src.tasks.wikievents",
     "WikiEvents_EE": "src.tasks.wikievents",
     "WikiEvents_EAE": "src.tasks.wikievents",
