@@ -1,5 +1,5 @@
 {
-    "dataset_name": "MITMovie",
+    "dataset_name": "MITRestaurant",
     "tasks": ["NER"],
     "dataloader_cls": "src.tasks.mitrestaurant.data_loader.MitRestaurantDatasetLoader",
     "sampler_cls": "src.tasks.mitrestaurant.data_loader.MitRestaurantSampler",
