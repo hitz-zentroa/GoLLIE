@@ -3,9 +3,10 @@ model_name_or_path: /gaueko1/hizkuntza-ereduak/LLaMA/lm/huggingface/7B/
 lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b_lora4_baseline
 torch_dtype: float16
 use_lora: true
-quantization: 4
+quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
+use_flash_attention: true
 
 # dataset arguments
 dataset_dir:
@@ -66,6 +67,10 @@ test_tasks:
   - fabner.ner
   - harveyner.ner
   - multinerd.ner
+  - casie.eae
+  - casie.ee
+  - mitmovie.ner
+  - mitrestaurant.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_seq_length: 2048

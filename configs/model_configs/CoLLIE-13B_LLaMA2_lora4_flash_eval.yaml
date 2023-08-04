@@ -4,7 +4,7 @@ lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-13b_LLaMA2
 use_auth_token: true
 torch_dtype: float16
 use_lora: true
-quantization: 4
+quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
@@ -68,6 +68,10 @@ test_tasks:
   - fabner.ner
   - harveyner.ner
   - multinerd.ner
+  - casie.eae
+  - casie.ee
+  - mitmovie.ner
+  - mitrestaurant.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
@@ -96,7 +100,7 @@ evaluate_all_checkpoints: true
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
 per_device_train_batch_size: 32
-per_device_eval_batch_size: 8
+per_device_eval_batch_size: 2
 gradient_accumulation_steps: 1
 generation_num_beams: 1
 
