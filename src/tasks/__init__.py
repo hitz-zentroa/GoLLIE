@@ -91,7 +91,7 @@ def task_id_to_prompts(task_id: str) -> str:
         return "src.tasks.casie.prompts_ed"
 
     elif task_id.upper() == "CASIE_EAE":
-        return "src.tasks.casie.prompts_ead"
+        return "src.tasks.casie.prompts_eae"
 
     # Default case
     else:
