@@ -274,6 +274,8 @@ if __name__ == "__main__":
                 if os.path.isdir(c)
             ]
 
+            checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
+
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"
                 f" {checkpoints} . We will evaluate each of them."
