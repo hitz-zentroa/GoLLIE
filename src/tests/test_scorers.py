@@ -300,7 +300,7 @@ class TestCASIEScorers(unittest.TestCase):
         predictions = [
             VulnerabilityDiscover(
                 mention="says",
-                cve=["CVE-2018-12799"],
+                cve="CVE-2018-12799",
                 used_for=["arbitrary code execution"],
                 discoverer=["tech giant"],
                 supported_platform=[],
@@ -315,6 +315,13 @@ class TestCASIEScorers(unittest.TestCase):
                 time=[],
             ),
         ]
+        for pred in predictions:
+            pred.assert_typing_constraints()
+
+        import rich
+
+        rich.print(predictions)
+        rich.print(reference)
 
         # Partially aligned
         # TP = 6

@@ -331,6 +331,11 @@ class Event:
         }
         for attr in attrs.keys():
             self_values = getattr(self, attr)
+            if not isinstance(self_values, list):
+                import rich
+
+                rich.print(self)
+                raise TypeError(f"{attr}:{self_values} is not iterable")
             for value in self_values:
                 # Avoid calling lower to a list when the model hallucinates
                 if hasattr(value, "lower") and value.lower() in text:
@@ -369,6 +374,65 @@ class Event:
 
         pos = text.lower().index(self.mention.lower().strip())
         return (pos, pos + len(self.mention))
+
+    def assert_typing_constraints(self) -> bool:
+        import typing
+
+        def check_types(var: Any, _type: TypeVar) -> Tuple[bool, Any]:
+            if _type is type(None):
+                return (var is None, var)
+            elif isinstance(_type, type):
+                is_correct = isinstance(var, _type)
+                if not is_correct:
+                    if isinstance(var, list):
+                        var = var[0] if len(var) else _type()
+                    var = _type(var)
+                return (is_correct, var)
+            # elif _type is type(None):
+            #     return (var is None, var)
+            elif isinstance(_type, typing._GenericAlias):
+                origin = _type.__origin__
+                if origin is typing.Union:
+                    is_correct = False
+                    _var = None
+                    for _t in _type.__args__:
+                        _is_correct, tmp_var = check_types(var, _t)
+                        if _is_correct:
+                            return (_is_correct, tmp_var)
+                        if _t is not type(None):
+                            _var = tmp_var
+                        is_correct |= _is_correct
+                    # return any(check_types(var, _t) for _t in _type.__args__)
+                    return (is_correct, _var)
+                elif origin is list:
+                    if not isinstance(var, list):
+                        var = [var]
+                    for _t in _type.__args__:
+                        _var = []
+                        is_correct = True
+                        for v in var:
+                            _is_correct, v = check_types(v, _t)
+                            is_correct &= _is_correct
+                            _var.append(v)
+                        if is_correct:
+                            return (is_correct, _var)  # Small difference here to allow empty lists
+
+                    return (is_correct, _var)
+                    # return any(all(check_types(v, _t) for v in var) if isinstance(var, list) else False for _t in _type.__args__)
+                elif any(issubclass(origin, _t) for _t in [str, int, float, bool]):
+                    return check_types(var, origin)
+                else:
+                    raise ValueError(f"Unsupported type: {origin}")
+            else:
+                raise ValueError("Only native types or typing module types are supported.")
+
+        correct = True
+        for field in dataclasses.fields(self):
+            _correct, value = check_types(getattr(self, field.name), field.type)
+            correct &= _correct
+            setattr(self, field.name, value)
+
+        return correct
 
 
 @dataclass
@@ -513,7 +577,7 @@ class Template:
         pos = text.lower().index(self.key().strip())
         return (pos, pos + len(self.key()))
 
-    def assert_typing_constraints(self):
+    def assert_typing_constraints(self) -> bool:
         import typing
 
         def check_types(var: Any, _type: TypeVar) -> Tuple[bool, Any]:
@@ -636,9 +700,19 @@ class AnnotationList(list):
 
         return type(self)(_elems, hallucinated_no=len(self) - len(_elems), parse_error=self.parse_error)
 
+    def assert_typing_constraints(self) -> None:
+        for elem in self:
+            if hasattr(elem, "assert_typing_constraints"):
+                elem.assert_typing_constraints()
+
     @classmethod
     def from_output(
-        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+        cls,
+        ann: str,
+        task_module: str,
+        text: str = None,
+        filter_hallucinations: bool = False,
+        assert_typing_constraints: bool = True,
     ) -> AnnotationList:
         # Import guidelines
         guidelines = cls._load_guidelines(task_module)
@@ -667,11 +741,14 @@ class AnnotationList(list):
                 raise ValueError("To filter the hallucinations the text argument must not be None.")
             self = self.filter_hallucinations(text)
 
+        if assert_typing_constraints:
+            self.assert_typing_constraints()
+
         return self
 
     @classmethod
     def from_gold(
-        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False, assert_typing_constraints: bool = True
     ) -> AnnotationList:
         # Import guidelines
         guidelines = cls._load_guidelines(task_module)
@@ -694,6 +771,9 @@ class AnnotationList(list):
             if text is None:
                 raise ValueError("To filter the hallucinations the text argument must not be None.")
             self = self.filter_hallucinations(text)
+
+        if assert_typing_constraints:
+            self.assert_typing_constraints()
 
         return self
 

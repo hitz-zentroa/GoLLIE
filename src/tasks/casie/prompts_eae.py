@@ -90,7 +90,7 @@ class PhisingAttack(Event):
     mention: str
     """{phising_attack_mention}"""
     pattern: List[str]  # How was the attack triggered, such as 'opening something' or 'clicking somewhere'
-    attacker: str  # The person or organization behind the attack
+    attacker: List[str]  # The person or organization behind the attack
     victim: List[str]  # The victim of the attack
     damage_amount: List[str]  # The amount of damage done to the victim
     tool: List[str]  # The tool used to send the attack, such as 'email', 'website', 'file'
