@@ -14,7 +14,7 @@
             "parallel_instances": 1,
             "max_guidelines": -1,
             "guideline_dropout": 0.15,
-            "scorer": "src.tasks.MITRestaurant.scorer.MitRestaurantEntityScorer",
+            "scorer": "src.tasks.mitrestaurant.scorer.MitRestaurantEntityScorer",
             "paraphrase_train": true,
             "label_noise": 0.5
         }
