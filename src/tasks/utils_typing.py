@@ -748,7 +748,12 @@ class AnnotationList(list):
 
     @classmethod
     def from_gold(
-        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False, assert_typing_constraints: bool = True
+        cls,
+        ann: str,
+        task_module: str,
+        text: str = None,
+        filter_hallucinations: bool = False,
+        assert_typing_constraints: bool = True,
     ) -> AnnotationList:
         # Import guidelines
         guidelines = cls._load_guidelines(task_module)

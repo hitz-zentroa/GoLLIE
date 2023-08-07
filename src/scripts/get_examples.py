@@ -1,6 +1,7 @@
-from src.generate_data import get_class
 import argparse
 import json
+
+from src.generate_data import get_class
 
 
 def get_top_label_per_class(config, top_k: int = 10):
@@ -15,7 +16,7 @@ def get_top_label_per_class(config, top_k: int = 10):
     if config["tasks"] != ["NER"]:
         raise ValueError("This function only supports NER task")
     dataloader_cls = get_class(config["dataloader_cls"])
-    if not "train_file" in config:
+    if "train_file" not in config:
         raise ValueError("train_file is not specified in config")
     dataloader = dataloader_cls(config["train_file"], **config)
     ENTITY_TO_CLASS_MAPPING = dataloader.ENTITY_TO_CLASS_MAPPING
