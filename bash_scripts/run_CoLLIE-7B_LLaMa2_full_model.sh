@@ -29,6 +29,6 @@ accelerate launch --num_processes=4 \
 --fsdp_auto_wrap_policy=TRANSFORMER_BASED_WRAP  \
 --fsdp_transformer_layer_cls_to_wrap="LlamaDecoderLayer" \
 --fsdp_sharding_strategy=1 \
---fsdp_state_dict_type=FULL_STATE_DICT \
+--fsdp_state_dict_type=SHARDED_STATE_DICT \
 --fsdp_use_orig_params false \
 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_FSDP.yaml

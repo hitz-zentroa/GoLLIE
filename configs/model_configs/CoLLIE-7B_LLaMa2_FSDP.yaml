@@ -7,8 +7,6 @@ quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-fsdp: full_shard auto_wrap
-fsdp_transformer_layer_cls_to_wrap: LlamaDecoderLayer
 
 # dataset arguments
 dataset_dir:
