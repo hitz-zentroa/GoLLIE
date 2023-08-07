@@ -192,7 +192,10 @@ class Sampler:
         self.include_examples = include_examples
         self.examples = examples
         if include_examples and not self.examples:
-            raise ValueError("`include_examples` is True but `examples` is None. If you want to include examples, you must provide examples.")
+            raise ValueError(
+                "`include_examples` is True but `examples` is None. If you want to include examples, you must provide"
+                " examples."
+            )
 
         self.label_noise_prob = label_noise_prob
         self._class_label_re = re.compile(r"class (\w+)")
