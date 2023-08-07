@@ -1,8 +1,20 @@
 GUIDELINES = {
-    "e3c_disease": {
+    "e3c_disease": {"en": ["A definite pathologic process with a characteristic set of signs and symptoms."]},
+}
+
+EXAMPLES = {
+    "e3c_disease_examples": {
         "en": [
-            "A definite pathologic process with a characteristic set of signs and symptoms. Examples: tumor, tumour,"
-            " vomiting, swelling, epistaxis, ascites, headache, fever, cyst, diplopia."
+            "tumor",
+            "tumour",
+            "vomiting",
+            "swelling",
+            "epistaxis",
+            "ascites",
+            "headache",
+            "fever",
+            "cyst",
+            "diplopia",
         ]
-    },
+    }
 }

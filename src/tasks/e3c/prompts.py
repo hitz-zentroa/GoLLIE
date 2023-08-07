@@ -15,7 +15,7 @@ https://github.com/hltfbk/E3C-Corpus/blob/main/documentation/CLINICALENTITY_ANNO
 class ClinicalEntity(Entity):
     """{e3c_disease}"""
 
-    span: str
+    span: str  # {e3c_disease_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [ClinicalEntity]

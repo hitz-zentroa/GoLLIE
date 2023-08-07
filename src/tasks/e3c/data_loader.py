@@ -2,6 +2,7 @@ from typing import Tuple, Union
 
 from src.tasks.conll03.data_loader import load_conll_tsv
 from src.tasks.e3c.guidelines import GUIDELINES
+from src.tasks.e3c.guidelines_gold import EXAMPLES
 from src.tasks.e3c.prompts import (
     ENTITY_DEFINITIONS,
     ClinicalEntity,
@@ -130,5 +131,6 @@ class E3CSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

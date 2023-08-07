@@ -91,6 +91,10 @@ class Sampler:
             Language of the guidelines to sample. Defaults to `"en"`.
         definitions (`Dict[str, Any]`, optional):
             Dictionary from where to sample the guideline definitions. Defaults to None.
+        include_examples (bool, optional):
+            Whether or not include examples in the guidelines. Defaults to `False`.
+        examples (`Dict[str, Any]`, optional):
+            Dictionary from where to sample the examples. Defaults to None.
         label_noise_prob (`float`, optional):
             The probability to hide the label names. Defaults to `0.0`.
 
@@ -122,6 +126,8 @@ class Sampler:
         fine_to_coarse: Dict[Type, Type] = None,
         lang: str = "en",
         definitions: Dict[str, Any] = None,
+        include_examples: bool = False,
+        examples: Dict[str, Any] = None,
         label_noise_prob: float = 0.0,
         coarse_dropout: float = 0.0,
         **kwargs,
@@ -176,10 +182,17 @@ class Sampler:
         self._remove_comments_re = re.compile(r"#.+?\n")
         self._remove_comments_fn = lambda x: self._remove_comments_re.sub("\n", x)
 
+        self._remove_empty_comments_re = re.compile(r"#()*\n")
+        self._remove_empty_comments_fn = lambda x: self._remove_empty_comments_re.sub("\n", x)
+
         self.lang = lang
         self.definitions = definitions
         if not self.definitions:
             raise ValueError("You must provide definitions for your guidelines!")
+        self.include_examples = include_examples
+        self.examples = examples
+        if include_examples and not self.examples:
+            raise ValueError("`include_examples` is True but `examples` is None. If you want to include examples, you must provide examples.")
 
         self.label_noise_prob = label_noise_prob
         self._class_label_re = re.compile(r"class (\w+)")
@@ -265,7 +278,21 @@ class Sampler:
                     key: random.choice(value[self.lang]) if self.split == "train" else value[self.lang][0]
                     for key, value in self.definitions.items()
                 }
-                _guidelines = [definition.format(**_definitions) for definition in _guidelines]
+                # Sample few-shot examples if train
+                if self.include_examples:
+                    _examples = {
+                        key: (
+                            f"""Such as: "{'", "'.join(random.sample(value[self.lang], k=5))}" """
+                            if self.split == "train"
+                            else value[self.lang][:5]
+                        )
+                        for key, value in self.examples.items()
+                    }
+                else:
+                    _examples = {key: "" for key in self.examples.keys()}
+                _guidelines = [definition.format(**_definitions, **_examples) for definition in _guidelines]
+                # If no examples are provide, empty comments are created, the following line removes them
+                _guidelines = {self._remove_empty_comments_fn(definition) for definition in _guidelines}
 
                 # Remove definitions for baseline
                 if self.remove_guidelines:
