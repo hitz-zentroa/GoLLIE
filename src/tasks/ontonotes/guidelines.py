@@ -1,173 +1,99 @@
 GUIDELINES = {
     "ontonotes_person": {
         "en": [
-            "People, including fictional",
-            "Individuals, both real and imaginary",
-            "Individuals, both real and imagined,",
-            "Individuals, both real and imagined",
-            "Individuals, both real and imaginary",
+            "People, including fictional. Examples: Bush, Clinton, Barak, Noriega, Putin, Milosevic, Ehud Barak, Chen,"
+            " Reagan, Gore."
         ]
     },
     "ontonotes_norp": {
         "en": [
-            "Nationalities or religious or political groups",
-            "Various ethnicities, faith-based or political organizations",
-            "Various nationalities, religious denominations, and political factions",
-            "Various ethnicities, faith-based or political organizations",
-            "Various groups based on nationality, religion, or politics",
+            "Nationalities or religious or political groups. Examples: Chinese, Japanese, American, Israeli,"
+            " Palestinian, Iraqi, British, Palestinians, Taiwanese, Americans."
         ]
     },
     "ontonotes_facility": {
         "en": [
-            "Buildings, airports, highways, bridges, etc.",
-            "Structures such as buildings, airports, highways, and bridges.",
-            "Structures such as buildings, airports, highways, and bridges.",
-            "Structures such as buildings, airports, highways, and bridges.",
-            "Structures such as skyscrapers, airports, freeways, and bridges.",
+            "Buildings, airports, highways, bridges, etc. Examples: the White House, Pentagon, the Bay Bridge,"
+            " Guantanamo, Mir, the United Nations, rue Saint - Denis, the Fourth Nuclear Power Plant, the Zhengtai"
+            " Railway, Candlestick Park."
         ]
     },
     "ontonotes_organization": {
         "en": [
-            "Companies, agencies, institutions, etc.",
-            "Organizations, such as businesses, government agencies, and educational institutions.",
-            "Various organizations, such as businesses, government agencies, and educational institutions.",
-            'Text paraphrase: "Organizations, such as businesses, government agencies, and educational institutions.',
-            (
-                'Text paraphrase: "Various organizations, such as businesses, government agencies, and educational'
-                " \ninstitutions."
-            ),
+            "Companies, agencies, institutions, etc. Examples: Congress, Senate, Treasury, Xinhua News Agency, House,"
+            " Fed, UN, Pentagon, CNN, IBM."
         ]
     },
     "ontonotes_gpe": {
         "en": [
-            "Countries, cities, states",
-            "Nations, urban centers, regional governments",
-            "Nations, urban centers, regional governments",
-            "Nations, urban centers, regional governments",
-            "Nations, urban centers, regional governments",
+            "Countries, cities, states. Examples: U.S., China, Taiwan, Japan, US, New York, Iraq, Washington, Israel,"
+            " Hong Kong."
         ]
     },
     "ontonotes_location": {
         "en": [
-            "Non-GPE locations, mountain ranges, bodies of water",
-            'Alternative phrasing: "Sites beyond GPE boundaries, mountain chains, and water bodies',
-            "Alternate locations, such as mountain chains and water bodies, can be found outside of GPE regions.",
-            'Alternative text: "Sites beyond GPE boundaries, mountain chains, and water bodies',
-            "Alternate locations, such as mountain chains and water bodies, can be found outside of GPE regions.",
+            "Non-GPE locations, mountain ranges, bodies of water. Examples: Europe, the Middle East, Asia, Africa,"
+            " West, Middle East, Earth, Eastern Europe, Gulf, Mideast."
         ]
     },
     "ontonotes_product": {
         "en": [
-            "Objects, vehicles, foods, etc. (Not services)",
-            "Items, vehicles, foodstuffs, and so forth (excluding services)",
-            "Items, vehicles, edibles, and so forth (excluding services)",
-            "Items, conveyances, nourishments and so on (Not administrations)",
-            "Items, such as tangible goods, automobiles, edibles, and the like (excluding intangible services).",
+            "Objects, vehicles, foods, etc. (Not services). Examples: Cole, Galileo, Kursk, the USS Cole, Discovery,"
+            " Atlantis, Enigma, C3CRM."
         ]
     },
     "ontonotes_event": {
         "en": [
-            "Named hurricanes, battles, wars, sports events, etc.",
-            "Named storms, such as hurricanes, along with battles, wars, and sports events are also significant.",
-            "Named storms, such as hurricanes, along with events like battles, wars, and sports competitions.",
-            "Named storms, such as hurricanes, along with battles, wars, and sports events are also significant.",
-            "Tropical cyclones, military engagements, conflicts, athletic competitions, and so on.",
+            "Named hurricanes, battles, wars, sports events, etc. Examples: New Year, Hurricane Hugo, World War II,"
+            " Hugo, the World Series, Series, the Hundred Regiments Offensive, New Year 's Eve, Watergate, Iran -"
+            " Contra."
         ]
     },
     "ontonotes_work_of_art": {
         "en": [
-            "Titles of books, songs, etc.",
-            "Names of books, songs, and so on.",
-            "Names of books, songs, and so on.",
-            "Lists of book, song, and other creative works' names",
-            "Books, songs, and other such media are referred to as 'titles'.",
+            "Titles of books, songs, etc. Examples: Hardball, Late Edition, Yasukuni Shrine, D.T., Newsnight, Between"
+            " You and Me, Letting Them Go, Batibot, Three Sixty, Headliners."
         ]
     },
     "ontonotes_law": {
         "en": [
-            "Named documents made into laws",
-            "Official records transformed into legal statutes",
-            "Official records transformed into legal statutes",
-            "Official papers transformed into legal statutes",
-            "Official records transformed into legal statutes",
+            "Named documents made into laws. Examples: Chapter 11, RICO, Constitution, Gramm - Rudman, Superfund,"
+            " Section 89, the Voting Rights Act, constitution, the First Amendment, Bankruptcy Code."
         ]
     },
     "ontonotes_language": {
         "en": [
-            "Any named language",
-            "Any specifically identified language",
-            "Any specifically identified language",
-            "Any specifically identified language",
-            'One such language is "Any named language".',
+            "Any named language. Examples: English, Taiwanese, Chinese, Filipino, French, Portuguese, Russian,"
+            " Spanish, Mandarin, Arabic."
         ]
     },
     "ontonotes_date": {
         "en": [
-            "Absolute or relative dates or periods",
-            "Definitive or indefinite timeframes or intervals",
-            "Definitive or indefinite chronological references or intervals",
-            "Exact or comparative chronological references or intervals",
-            "Definitive or comparative chronological references or intervals",
+            "Absolute or relative dates or periods. Examples: today, yesterday, last year, this year, Friday,"
+            " September, annual, Monday, August, 1988."
         ]
     },
     "ontonotes_time": {
         "en": [
-            "Times smaller than a day",
-            'Text paraphrase: "Duration shorter than a day',
-            'Paraphrase: "Duration shorter than a day',
-            'Paraphrase: "Duration shorter than a day',
-            'Paraphrase: "Duration shorter than a day',
+            "Times smaller than a day. Examples: tonight, morning, night, this morning, last night, afternoon,"
+            " evening, Tonight, hours, this afternoon."
         ]
     },
     "ontonotes_percent": {
-        "en": [
-            "Percentage, including \u201d%\u201c",
-            "Percentage, featuring the symbol '%",
-            "Percentage figure, such as ''%",
-            (
-                "Rephrased text: \"The figure, which consists of the percentage symbol '%', is used to represent a"
-                " value based on a \nhundredth part."
-            ),
-            (
-                "Rephrased text: \"The figure, which consists of the percentage symbol '%', represents the percentage"
-                " value."
-            ),
-        ]
+        "en": ["Percentage, including ”%“. Examples: 10 %, 8 %, 50 %, 15 %, 9 %, 5 %, 20 %, 40 %, 60 %, 25 %."]
     },
     "ontonotes_money": {
         "en": [
-            "Monetary values, including unit",
-            "Monetary amounts, such as individual units",
-            "Monetary amounts, such as the individual unit",
-            "Monetary amounts, such as the individual unit",
-            "Monetary amounts, incorporating individual units",
+            "Monetary values, including unit. Examples: $ 1 million, $ 1 billion, 1,000, 10,000, $ 200 million, $ 150"
+            " million, $ 100 million, $ 50 million, $ 2 billion, $ 500 million."
         ]
     },
     "ontonotes_quantity": {
         "en": [
-            "Measurements, as of weight or distance",
-            "Assessments, such as determining weight or distance",
-            "Assessments, such as determining weight or distance",
-            "Assessments, such as weight or distance determinations",
-            "Assessments, such as determining mass or length",
+            "Measurements, as of weight or distance. Examples: two, three, four, ten, one, six, gallon, 1 degree below"
+            " zero, two miles, five."
         ]
     },
-    "ontonotes_ordinal": {
-        "en": [
-            "\u201cfirst\u201d, \u201csecond\u201d, etc.",
-            'first", "second", and so on',
-            "1. 'first', 'second', and so on.",
-            "\u201cfirst,\u201d \u201csecond,\u201d and so on.",
-            "\u201cFirst\u201d, \u201csecond\u201d, and so on.",
-        ]
-    },
-    "ontonotes_cardinal": {
-        "en": [
-            "Numerals that do not fall under another type",
-            'Alternative expression: "Numbers not classified under any other category',
-            'Alternative description: "Numbers not classified into any other specific category',
-            'Alternative expression: "Numbers not classified under any other category',
-            'Alternative: "Numbers not classified under any other category',
-        ]
-    },
+    "ontonotes_ordinal": {"en": ["first, second, third, First, fourth, fifth, Second, seventh, eighth, sixth."]},
+    "ontonotes_cardinal": {"en": ["two, one, three, One, four, five, six, seven, Two, half."]},
 }
