@@ -22,13 +22,18 @@ export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs"
 
 #torchrun --standalone --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_FSDP.yaml
-
 accelerate launch --num_processes=4 \
---use_fsdp \
 --mixed_precision=bf16 \
---fsdp_auto_wrap_policy=TRANSFORMER_BASED_WRAP  \
---fsdp_transformer_layer_cls_to_wrap="LlamaDecoderLayer" \
---fsdp_sharding_strategy=1 \
---fsdp_state_dict_type=SHARDED_STATE_DICT \
---fsdp_use_orig_params false \
-src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_FSDP.yaml
+--use_deepspeed \
+--deepspeed_config_file configs/deepspeed_configs/deepspeed_zero3.json \
+src/run.py src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_full_model.yaml
+
+#accelerate launch --num_processes=4 \
+#--use_fsdp \
+#--mixed_precision=bf16 \
+#--fsdp_auto_wrap_policy=TRANSFORMER_BASED_WRAP  \
+#--fsdp_transformer_layer_cls_to_wrap="LlamaDecoderLayer" \
+#--fsdp_sharding_strategy=1 \
+#--fsdp_state_dict_type=SHARDED_STATE_DICT \
+#--fsdp_use_orig_params false \
+#src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_full_model.yaml

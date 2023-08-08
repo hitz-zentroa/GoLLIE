@@ -1,13 +1,12 @@
 #Training args
 model_name_or_path: meta-llama/Llama-2-7b-hf
 use_auth_token: true
-torch_dtype: bfloat16
+torch_dtype: float32
 use_lora: false
 quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
@@ -106,7 +105,7 @@ generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch
-learning_rate: 1e-5
+learning_rate: 0.00001
 weight_decay: 0
 num_train_epochs: 3
 lr_scheduler_type: cosine
