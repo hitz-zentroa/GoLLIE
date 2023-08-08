@@ -14,14 +14,14 @@ http://nlp.uned.es/diann/#data
 class Disability(Entity):
     """{diann_disability}"""
 
-    span: str
+    span: str  # {diann_disability_examples}
 
 
 @dataclass
 class Negation(Entity):
     """{diann_negation}"""
 
-    span: str
+    span: str  # {diann_negation_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [Disability, Negation]

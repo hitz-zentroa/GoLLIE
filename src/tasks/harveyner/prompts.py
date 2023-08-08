@@ -15,25 +15,25 @@ https://aclanthology.org/2022.naacl-main.243.pdf
 class Point(Entity):
     """{harveyner_point}"""
 
-    span: str
+    span: str  # {harveyner_point_examples}
 
 
 class Area(Entity):
     """{harveyner_area}"""
 
-    span: str
+    span: str  # {harveyner_area_examples}
 
 
 class Road(Entity):
     """{harveyner_road}"""
 
-    span: str
+    span: str  # {harveyner_road_examples}
 
 
 class River(Entity):
     """{harveyner_river}"""
 
-    span: str
+    span: str  # {harveyner_river_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [

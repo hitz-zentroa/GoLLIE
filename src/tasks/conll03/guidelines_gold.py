@@ -38,3 +38,29 @@ GUIDELINES = {
         ]
     },
 }
+
+EXAMPLES = {
+    "ner_location_examples": {
+        "en": ["U.S.", "Germany", "Britain", "Australia", "England", "France", "Spain", "Italy", "LONDON", "China"]
+    },
+    "ner_organization_examples": {
+        "en": ["Reuters", "U.N.", "NEW YORK", "CHICAGO", "PUK", "OSCE", "EU", "NATO", "European Union", "Honda"]
+    },
+    "ner_person_examples": {
+        "en": [
+            "Clinton",
+            "Dole",
+            "Arafat",
+            "Yeltsin",
+            "Lebed",
+            "Dutroux",
+            "Wasim Akram",
+            "Waqar Younis",
+            "Mushtaq Ahmed",
+            "Mother Teresa",
+        ]
+    },
+    "ner_miscellaneous_examples": {
+        "en": ["Russian", "German", "British", "French", "Dutch", "GMT", "Israeli", "English", "Iraqi", "European"]
+    },
+}

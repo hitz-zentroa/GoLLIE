@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.fabner.guidelines import GUIDELINES
+from src.tasks.fabner.guidelines_gold import EXAMPLES
 from src.tasks.fabner.prompts import (
     ENTITY_DEFINITIONS,
     Application,
@@ -201,5 +202,6 @@ class FabNerSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

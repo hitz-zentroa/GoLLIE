@@ -15,56 +15,56 @@ Dataset available at: https://groups.csail.mit.edu/sls/downloads/restaurant/
 class Rating(Entity):
     """{mit_rating}"""
 
-    span: str
+    span: str  # {mit_rating_examples}
 
 
 @dataclass
 class Amenity(Entity):
     """{mit_amenity}"""
 
-    span: str
+    span: str  # {mit_amenity_examples}
 
 
 @dataclass
 class Location(Entity):
     """{mit_location}"""
 
-    span: str
+    span: str  # {mit_location_examples}
 
 
 @dataclass
 class RestaurantName(Entity):
     """{mit_restaurantname}"""
 
-    span: str
+    span: str  # {mit_restaurantname_examples}
 
 
 @dataclass
 class Price(Entity):
     """{mit_price}"""
 
-    span: str
+    span: str  # {mit_price_examples}
 
 
 @dataclass
 class Hours(Entity):
     """{mit_hours}"""
 
-    span: str
+    span: str  # {mit_hours_examples}
 
 
 @dataclass
 class Dish(Entity):
     """{mit_dish}"""
 
-    span: str
+    span: str  # {mit_dish_examples}
 
 
 @dataclass
 class Cuisine(Entity):
     """{mit_cuisine}"""
 
-    span: str
+    span: str  # {mit_cuisine_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [Rating, Amenity, Location, RestaurantName, Price, Hours, Dish, Cuisine]

@@ -28,3 +28,36 @@ GUIDELINES = {
         ]
     },
 }
+EXAMPLES = {
+    "ner_person_examples": {
+        "en": [
+            "Obama",
+            "President Obama",
+            "@ SimoLove",
+            "Kate Middleton",
+            "Putin",
+            "Prince William",
+            "Cameron",
+            "Harper",
+            "@ RossMarowits",
+            "James Foley",
+        ]
+    },
+    "ner_location_examples": {
+        "en": ["UK", "Ukraine", "US", "U . S .", "Iraq", "Canada", "London", "Russia", "Australia", "Ontario"]
+    },
+    "ner_organization_examples": {
+        "en": [
+            "@ Independent",
+            "Irish News",
+            "Malaysia Airlines",
+            "Twitter",
+            "BBC",
+            "Apple",
+            "Getty",
+            "Isis",
+            "@ BBCBreaking",
+            "Liverpool",
+        ]
+    },
+}

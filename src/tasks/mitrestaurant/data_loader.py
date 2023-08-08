@@ -2,6 +2,7 @@ from typing import Tuple, Union
 
 from src.tasks.mitmovie.data_loader import load_mit_tsv
 from src.tasks.mitrestaurant.guidelines import GUIDELINES
+from src.tasks.mitrestaurant.guidelines_gold import EXAMPLES
 from src.tasks.mitrestaurant.prompts import (
     ENTITY_DEFINITIONS,
     Amenity,
@@ -143,5 +144,6 @@ class MitRestaurantSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.label_encoding import rewrite_labels
 from src.tasks.multinerd.guidelines import GUIDELINES
+from src.tasks.multinerd.guidelines_gold import EXAMPLES
 from src.tasks.multinerd.prompts import (
     ENTITY_DEFINITIONS,
     Animal,
@@ -247,5 +248,6 @@ class MultinerdSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

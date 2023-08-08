@@ -28,3 +28,34 @@ GUIDELINES = {
         ]
     },
 }
+
+EXAMPLES = {
+    "bc5cdr_disease_examples": {
+        "en": [
+            "toxicity",
+            "pain",
+            "hypotension",
+            "proteinuria",
+            "seizures",
+            "hypertension",
+            "seizure",
+            "myocardial infarction",
+            "hepatitis",
+            "bradycardia",
+        ]
+    },
+    "bc5cdr_chemical_examples": {
+        "en": [
+            "cocaine",
+            "dopamine",
+            "morphine",
+            "nicotine",
+            "lithium",
+            "haloperidol",
+            "clonidine",
+            "creatinine",
+            "cisplatin",
+            "lidocaine",
+        ]
+    },
+}

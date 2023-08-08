@@ -191,7 +191,7 @@ class Sampler:
             raise ValueError("You must provide definitions for your guidelines!")
         self.include_examples_prob = include_examples_prob
         # Make 1.0 prob on example sampling in evaluation for reproducibility
-        if self.include_examples_prob > 0 and self.split != 'train':
+        if self.include_examples_prob > 0 and self.split != "train":
             self.include_examples_prob = 1.0
         self.examples = examples
         if include_examples_prob > 0 and not self.examples:

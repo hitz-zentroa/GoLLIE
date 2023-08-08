@@ -13,119 +13,119 @@ https://arxiv.org/pdf/2012.04373.pdf
 class Scientist(Entity):
     """{crossner_naturalscience_scientist}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_scientist_examples}
 
 
 @dataclass
 class Person(Entity):
     """{crossner_naturalscience_person}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_person_examples}
 
 
 @dataclass
 class University(Entity):
     """{crossner_naturalscience_university}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_university_examples}
 
 
 @dataclass
 class Organization(Entity):
     """{crossner_naturalscience_organization}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_organization_examples}
 
 
 @dataclass
 class Country(Entity):
     """{crossner_naturalscience_country}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_country_examples}
 
 
 @dataclass
 class Location(Entity):
     """{crossner_naturalscience_location}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_location_examples}
 
 
 @dataclass
 class Discipline(Entity):
     """{crossner_naturalscience_discipline}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_discipline_examples}
 
 
 @dataclass
 class Enzyme(Entity):
     """{crossner_naturalscience_enzyme}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_enzyme_examples}
 
 
 @dataclass
 class Protein(Entity):
     """{crossner_naturalscience_protein}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_protein_examples}
 
 
 @dataclass
 class ChemicalElement(Entity):
     """{crossner_naturalscience_chemicalelement}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_chemicalelement_examples}
 
 
 @dataclass
 class ChemicalCompound(Entity):
     """{crossner_naturalscience_chemicalcompound}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_chemicalcompound_examples}
 
 
 @dataclass
 class AstronomicalObject(Entity):
     """{crossner_naturalscience_astronomicalobject}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_astronomicalobject_examples}
 
 
 @dataclass
 class AcademicJournal(Entity):
     """{crossner_naturalscience_academicjournal}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_academicjournal_examples}
 
 
 @dataclass
 class Event(Entity):
     """{crossner_naturalscience_event}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_event_examples}
 
 
 @dataclass
 class Theory(Entity):
     """{crossner_naturalscience_theory}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_theory_examples}
 
 
 @dataclass
 class Award(Entity):
     """{crossner_naturalscience_award}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_award_examples}
 
 
 @dataclass
 class Miscellaneous(Entity):
     """{crossner_naturalscience_miscellaneous}"""
 
-    span: str
+    span: str  # {crossner_naturalscience_miscellaneous_examples}
 
 
 ENTITY_DEFINITIONS_NATURAL_SCIENCE = [

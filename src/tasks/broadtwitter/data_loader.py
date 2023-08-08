@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.broadtwitter.guidelines import GUIDELINES
+from src.tasks.broadtwitter.guidelines_gold import EXAMPLES
 from src.tasks.broadtwitter.prompts import ENTITY_DEFINITIONS, Location, Organization, Person
 from src.tasks.label_encoding import rewrite_labels
 
@@ -33,6 +34,16 @@ def get_broadtwitter_hf(
         words = example["tokens"]
         # Ensure IOB2 encoding
         labels = rewrite_labels(labels=[id2label[label] for label in example["ner_tags"]], encoding="iob2")
+        # FIX @ labels https://github.com/GateNLP/broad_twitter_corpus/issues/15
+        for i, word in enumerate(words):
+            if word.strip() == "@":
+                if i + 1 < len(labels):
+                    if labels[i + 1].startswith("B") and labels[i].startswith("B"):
+                        p, l = labels[i + 1].split("-")
+                        labels[i + 1] = f"I-{l}"
+
+        # Ensure IOB2 encoding again, just in case
+        labels = rewrite_labels(labels=labels, encoding="iob2")
 
         # Get labeled word spans
         spans = []
@@ -178,5 +189,6 @@ class BroadTwitterSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

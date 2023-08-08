@@ -16,3 +16,21 @@ GUIDELINES = {
         "en": ["Negation triggers are annotated when it affects one or more disabilities."],
     },
 }
+
+EXAMPLES = {
+    "diann_disability_examples": {
+        "en": [
+            "cognitive impairment",
+            "hearing loss",
+            "dementia",
+            "mental disorders",
+            "mental retardation",
+            "sensorineural hearing loss",
+            "mild cognitive impairment",
+            "functional impairment",
+            "mental disorder",
+            "dysarthria",
+        ]
+    },
+    "diann_negation_examples": {"en": []},
+}

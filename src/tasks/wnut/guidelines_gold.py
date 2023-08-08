@@ -39,3 +39,79 @@ GUIDELINES = {
         ]
     },
 }
+
+EXAMPLES = {
+    "wnut_corporation_examples": {
+        "en": [
+            "Twitter",
+            "twitter",
+            "YouTube",
+            "facebook",
+            "Facebook",
+            "Ustream",
+            "Playboy",
+            "Pepsi",
+            "Yahoo",
+            "iTunes",
+        ]
+    },
+    "wnut_creativework_examples": {
+        "en": [
+            "The Town",
+            "TheDeAndreWay",
+            "The DeAndre Way",
+            "Winter 's Bone",
+            "Friday Night Lights",
+            "Gigli",
+            "True Blood",
+            "Private Practice",
+            "Danger Days : The True Lives Of The Fabulous Killjoys",
+            "Indiesent Exposure",
+        ]
+    },
+    "wnut_group_examples": {
+        "en": [
+            "Eagles",
+            "FDA",
+            "Raw Illest",
+            "Storm",
+            "Cowboys",
+            "Ohio State",
+            "Eyeopener",
+            "JV soccer",
+            "sharks",
+            "30stm",
+        ]
+    },
+    "wnut_location_examples": {
+        "en": ["Chicago", "GA", "NYC", "UK", "London", "DC", "NY", "MD", "Hawaii", "VISIONS LOUNGE"]
+    },
+    "wnut_person_examples": {
+        "en": [
+            "Justin Bieber",
+            "God",
+            "Lindsay Lohan",
+            "Pope",
+            "Justin",
+            "Scooter Braun",
+            "JFK",
+            "Soulja Boy",
+            "Allah",
+            "justin bieber",
+        ]
+    },
+    "wnut_product_examples": {
+        "en": [
+            "iPad",
+            "iPhone",
+            "HTC Desire Z",
+            "Coke",
+            "Xbox 360",
+            "Pumpkin Moonshine",
+            "Club Penguin",
+            "Flip MinoHD",
+            "vodka",
+            "ipod",
+        ]
+    },
+}

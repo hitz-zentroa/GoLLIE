@@ -6,31 +6,26 @@ GUIDELINES = {
             " it is accompanied with a precise location, for example, HEB at Kirkwood Drive. However, non-franchised"
             " small businesses with only one unique location are considered as a point. Ignore any locations in the"
             " Twitter username, unless @ does not refer to a Twitter account name. For example, I am @ XXX High"
-            " School. Examples: Examples: GRB, GEORGE R. BROWN, Lakewood Church, Bayou Oaks, Northgate Subdivision S"
-            " of toll road, TerryHS, GRB Convention Center, @GRBCC, Addicks, TERRY HIGH SCHOOL."
+            " School."
         ]
     },
     "harveyner_area": {
         "en": [
             "Refers to all the named entities of cities, neighborhoods, super neighborhoods, geographic divisions etc."
             " The following locations, Lake Houston, Barker Reservoir, and Addick’s Reservoir, are annotated as areas"
-            " due to their significant size while all other lakes/reservoirs are not considered as areas. Examples:"
-            " Sienna Plantation, Galveston, Addicks, Barker, Fort Bend, Chambers, Fort Bend County, Pecan Grove,"
-            " Brazoria, Dickinson."
+            " due to their significant size while all other lakes/reservoirs are not considered as areas."
         ]
     },
     "harveyner_road": {
         "en": [
             "Refers to a road/avenue/street or a section of a road/avenue/street when the tweet does not provide an"
-            " exact location on that road. Examples: Barker Cypress, I-10, US 290 WB, SH-71, I-45, 105, 59, Fry, US-59"
-            " South, Summer St."
+            " exact location on that road."
         ]
     },
     "harveyner_river": {
         "en": [
             "Refers to a river or a section of a river when the tweet does not imply there is an intersection between"
-            " the river and other places. Examples: Barker Cypress, I-10, US 290 WB, SH-71, I-45, 105, 59, Fry, US-59"
-            " South, Summer St."
+            " the river and other places."
         ]
     },
 }

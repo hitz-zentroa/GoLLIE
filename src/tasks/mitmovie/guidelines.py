@@ -3,9 +3,7 @@ GUIDELINES = {
         "en": [
             "Refers to an individual who plays a role in a movie, including main cast members, supporting actors, and"
             " cameo appearances. If an individual is known for their work in television, theater, or other media but"
-            " also appears in movies, they can be considered an Actor in this context. For example: johnny depp, brad"
-            " pitt, tom hanks, tom cruise, clint eastwood, leonardo dicaprio, will smith, harrison ford, bruce willis,"
-            " julia roberts."
+            " also appears in movies, they can be considered an Actor in this context."
         ]
     },
     "mit_character": {
@@ -13,8 +11,7 @@ GUIDELINES = {
             "Refers to a fictional or real individual portrayed in a movie's narrative or storyline. It includes main"
             " characters, supporting characters, antagonists, and any other roles that contribute to the plot or"
             " development of the movie. Characters can be human or non-human, and they represent the individuals with"
-            " specific roles and identities within the movie's fictional universe. i.e james bond, indiana jones,"
-            " jason bourne, harry potter, batman, shrek, buzz lightyear, donkey, jason, jack sparrow."
+            " specific roles and identities within the movie's fictional universe."
         ]
     },
     "mit_director": {
@@ -22,17 +19,14 @@ GUIDELINES = {
             "Refers to an individual who is responsible for overseeing and guiding the artistic vision and creative"
             " elements of a movie. The director plays a pivotal role in shaping the film's narrative, performances,"
             " and overall execution. The Director entity includes the names of both film directors and television"
-            " directors, as long as they are relevant to the movie context. e.g. steven spielberg, james cameron,"
-            " directed, clint eastwood, alfred hitchcock, orson welles, tim burton, stanley kubrick, george lucas,"
-            " michael bay."
+            " directors, as long as they are relevant to the movie context."
         ]
     },
     "mit_genre": {
         "en": [
             "Refers to a category or classification that characterizes the style, theme, or tone of a movie. Genres"
             " are used to identify and categorize movies based on their common characteristics and storytelling"
-            " elements. Genres can be broad categories (e.g., Action, Comedy, Drama) or more specific sub-genres"
-            " (e.g., action, comedy, horror, fantasy, science fiction, drama, thriller, adventure, documentary, war)."
+            " elements. Genres can be broad categories (e.g., Action, Comedy, Drama) or more specific sub-genres."
         ]
     },
     "mit_plot": {
@@ -40,9 +34,7 @@ GUIDELINES = {
             "Refers to specific elements, events, or themes that are relevant to the central storyline or narrative of"
             " a movie. It includes distinctive features, occurrences, or characteristics that contribute to the"
             " development and progression of the movie's plot. The Plot entity encompasses various elements such as"
-            " character types, themes, settings, or notable occurrences within the movie's narrative. Examples of Plot"
-            " entities are: murder, vampires, ghosts, levitation, love at first sight, robot, vampire, war, police,"
-            " wilderness and so on."
+            " character types, themes, settings, or notable occurrences within the movie's narrative."
         ]
     },
     "mit_rating": {
@@ -51,7 +43,7 @@ GUIDELINES = {
             " organization. Ratings provide guidance to audiences and parents about the movie's suitability based on"
             " its content, themes, and age-appropriateness. Ratings can include various classifications such as MPAA"
             " (Motion Picture Association) ratings like R-Rated, PG-13, PG, or other regional and international rating"
-            " systems. Examples: r, pg 13, pg, g, nc 17, unrated, r rated, g rated, rated r, rated."
+            " systems."
         ]
     },
     "mit_ratings_average": {
@@ -59,8 +51,7 @@ GUIDELINES = {
             "Refers to the collective or average assessment of a movie's quality, popularity, or critical acclaim"
             " based on reviews, ratings, or awards from various sources. This entity includes general descriptions of"
             " the overall reception of the movie, such as 3-star rating, award-winning, critically heralded, box"
-            " office hit, or similar expressions that provide an indication of the movie's reception. Examples:"
-            " average, ok, mediocre, highly rated, critically acclaimed, very good, really good, must see, four, good."
+            " office hit, or similar expressions that provide an indication of the movie's reception."
         ]
     },
     "mit_review": {
@@ -69,8 +60,7 @@ GUIDELINES = {
             " expressions or phrases that indicate personal opinions, critiques, or judgments about a movie's overall"
             " merit, such as greatest, excellent, disappointing, and similar evaluative terms. It also includes"
             " expressions such as five stars rated, lowest rated or recommended, which provide an indication of the"
-            " reviewer's assessment of the movie. For example: good, best, must see, classic, funniest, popular,"
-            " oscar, most popular, top rated, funny."
+            " reviewer's assessment of the movie."
         ]
     },
     "mit_song": {
@@ -78,9 +68,7 @@ GUIDELINES = {
             "Refers to a musical composition or piece of music that is associated with a movie. This includes"
             " individual songs featured in the movie's soundtrack, as well as musical groups and singers who perform"
             " those songs. The Song entity class encompasses both original songs created specifically for the movie"
-            " and pre-existing songs used in the movie's soundtrack. For example: soundtrack, my heart will go on,"
-            " theme song, i will always love you, john williams, somewhere out there, soundtracks, score, my favorite"
-            " things, linkin park."
+            " and pre-existing songs used in the movie's soundtrack."
         ]
     },
     "mit_title": {
@@ -88,23 +76,21 @@ GUIDELINES = {
             "Refers to the name or label that uniquely identifies a specific movie or film production. It includes the"
             " official title of the movie, which is used for identification, promotion, and reference purposes. The"
             " Title entity class encompasses the full names of movies, as well as any abbreviations or alternative"
-            " titles that are commonly associated with the movie. I.e inception, the shining, wall e, star wars,"
-            " titanic, harry potter, shrek, pretty woman, lord of the rings, pirates of the caribbean."
+            " titles that are commonly associated with the movie."
         ]
     },
     "mit_trailer": {
         "en": [
             "Refers to a short promotional video or preview of a movie that is designed to generate interest and"
             " excitement among the audience before the movie's release. This entity also includes mentions to"
-            " trailers, such as 'trailer','preview', 'teaser' or 'highlights'. Examples: trailer, preview, trailers,"
-            " shortest trailer, star wars, theme song, review, previews, clips, shogun movie trailer."
+            " trailers, such as 'trailer','preview', 'teaser' or 'highlights'."
         ]
     },
     "mit_year": {
         "en": [
             "Refers to a numerical representation of the calendar year in which a specific movie was released or"
             " produced. The Year entity class encompasses four-digit numerical values that indicate the specific year"
-            " of a movie's release or production. i.e 1980 s, 1976, 2013, 50 s, 2006."
+            " of a movie's release or production."
         ]
     },
 }

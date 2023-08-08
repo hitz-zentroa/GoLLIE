@@ -16,28 +16,28 @@ Based on: Nancy Chinchor, Erica Brown, Lisa Ferro, Patty Robinson,
 class Person(Entity):
     """{ner_person}"""
 
-    span: str
+    span: str  # {ner_person_examples}
 
 
 @dataclass
 class Organization(Entity):
     """{ner_organization}"""
 
-    span: str
+    span: str  # {ner_organization_examples}
 
 
 @dataclass
 class Location(Entity):
     """{ner_location}"""
 
-    span: str
+    span: str  # {ner_location_examples}
 
 
 @dataclass
 class Miscellaneous(Entity):
     """{ner_miscellaneous}"""
 
-    span: str
+    span: str  # {ner_miscellaneous_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [

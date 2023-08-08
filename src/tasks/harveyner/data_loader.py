@@ -2,6 +2,7 @@ from typing import Tuple, Union
 
 from src.tasks.conll03.data_loader import load_conll_tsv
 from src.tasks.harveyner.guidelines import GUIDELINES
+from src.tasks.harveyner.guidelines_gold import EXAMPLES
 from src.tasks.harveyner.prompts import (
     ENTITY_DEFINITIONS,
     Area,
@@ -136,5 +137,6 @@ class HarveyNerSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

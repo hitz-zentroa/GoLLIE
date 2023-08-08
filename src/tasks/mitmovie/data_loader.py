@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.label_encoding import rewrite_labels
 from src.tasks.mitmovie.guidelines import GUIDELINES
+from src.tasks.mitmovie.guidelines_gold import EXAMPLES
 from src.tasks.mitmovie.prompts import (
     ENTITY_DEFINITIONS,
     Actor,
@@ -236,5 +237,5 @@ class MitMovieSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
-            **kwargs,
+            examples=EXAMPLES**kwargs,
         )

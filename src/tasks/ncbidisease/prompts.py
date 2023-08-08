@@ -20,7 +20,7 @@ Disease definition from: https://en.wikipedia.org/wiki/Disease which is based on
 class Disease(Entity):
     """{ncbi_disease}"""
 
-    span: str
+    span: str  # {ncbi_disease_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [Disease]

@@ -2,6 +2,7 @@ from typing import Tuple, Union
 
 from src.tasks.conll03.data_loader import load_conll_tsv
 from src.tasks.diann.guidelines import GUIDELINES
+from src.tasks.diann.guidelines_gold import EXAMPLES
 from src.tasks.diann.prompts import ENTITY_DEFINITIONS, Disability, Negation
 
 from ..utils_data import DatasetLoader, Sampler
@@ -128,5 +129,6 @@ class DiannSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )
