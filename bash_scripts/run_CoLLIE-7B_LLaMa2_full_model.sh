@@ -21,12 +21,8 @@ export OMP_NUM_THREADS=16
 export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs"
 
-#torchrun --standalone --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_FSDP.yaml
-accelerate launch --num_processes=4 \
---mixed_precision=bf16 \
---use_deepspeed \
---deepspeed_config_file configs/deepspeed_configs/deepspeed_zero3.json \
-src/run.py src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_full_model.yaml
+#torchrun --standalone --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed.yaml
+deepspeed --num_gpus=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed.yaml
 
 #accelerate launch --num_processes=4 \
 #--use_fsdp \
