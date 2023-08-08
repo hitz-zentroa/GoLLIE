@@ -91,8 +91,8 @@ class Sampler:
             Language of the guidelines to sample. Defaults to `"en"`.
         definitions (`Dict[str, Any]`, optional):
             Dictionary from where to sample the guideline definitions. Defaults to None.
-        include_examples (bool, optional):
-            Whether or not include examples in the guidelines. Defaults to `False`.
+        include_examples_prob (float, optional):
+            Whether or not include examples in the guidelines. Defaults to `0.0`.
         examples (`Dict[str, Any]`, optional):
             Dictionary from where to sample the examples. Defaults to None.
         label_noise_prob (`float`, optional):
@@ -126,7 +126,7 @@ class Sampler:
         fine_to_coarse: Dict[Type, Type] = None,
         lang: str = "en",
         definitions: Dict[str, Any] = None,
-        include_examples: bool = False,
+        include_examples_prob: float = 0.0,
         examples: Dict[str, Any] = None,
         label_noise_prob: float = 0.0,
         coarse_dropout: float = 0.0,
@@ -189,12 +189,15 @@ class Sampler:
         self.definitions = definitions
         if not self.definitions:
             raise ValueError("You must provide definitions for your guidelines!")
-        self.include_examples = include_examples
+        self.include_examples_prob = include_examples_prob
+        # Make 1.0 prob on example sampling in evaluation for reproducibility
+        if self.include_examples_prob > 0 and self.split != 'train':
+            self.include_examples_prob = 1.0
         self.examples = examples
-        if include_examples and not self.examples:
+        if include_examples_prob > 0 and not self.examples:
             raise ValueError(
-                "`include_examples` is True but `examples` is None. If you want to include examples, you must provide"
-                " examples."
+                "`include_examples_prob` is > 0 but `examples` is None. If you want to include examples, you must"
+                " provide examples."
             )
 
         self.label_noise_prob = label_noise_prob
@@ -281,8 +284,8 @@ class Sampler:
                     key: random.choice(value[self.lang]) if self.split == "train" else value[self.lang][0]
                     for key, value in self.definitions.items()
                 }
-                # Sample few-shot examples if train
-                if self.include_examples:
+                # Sample few-shot examples if train (add epsilon for not sampling a 0.0)
+                if min(random.random() + 1e-6, 1.0) <= self.include_examples_prob:
                     _examples = {
                         key: (
                             f"""Such as: "{'", "'.join(random.sample(value[self.lang], k=5))}" """

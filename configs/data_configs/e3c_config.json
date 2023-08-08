@@ -16,6 +16,7 @@
             "guideline_dropout": 0.0,
             "scorer": "src.tasks.e3c.scorer.E3CEntityScorer",
             "paraphrase_train": true,
+            "include_examples_prob": 1.0,
             "label_noise": 0.5
         }
     }

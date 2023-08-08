@@ -51,6 +51,7 @@
             "parallel_instances": 1,
             "max_guidelines": -1,
             "guideline_dropout": 0.15,
+            "include_examples_prob": 0.9,
             "scorer": "src.tasks.ace.scorer.ACEEventScorer"
         },
         "EAE": {

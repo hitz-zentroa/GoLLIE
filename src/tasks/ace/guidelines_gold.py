@@ -476,3 +476,86 @@ GUIDELINES = {
         ]
     },
 }
+
+EXAMPLES = {
+    "ace_lifeevent_examples": {
+        "en": [
+            "wounded",
+            "divorce",
+            "birth",
+            "born",
+            "marriage",
+            "married",
+            "suicide",
+            "killing",
+            "injured",
+            "died",
+            "killed",
+        ]
+    },
+    "ace_movementevent_examples": {
+        "en": ["travel", "arrived", "going", "moving", "take", "went", "get", "trip", "come", "go"]
+    },
+    "ace_transactionevent_examples": {
+        "en": [
+            "donate",
+            "received",
+            "paying",
+            "seize",
+            "contributions",
+            "donations",
+            "captured",
+            "bought",
+            "paid",
+            "pay",
+        ]
+    },
+    "ace_businessevent_examples": {
+        "en": [
+            "started",
+            "open",
+            "create",
+            "closing",
+            "merged",
+            "merging",
+            "set up",
+            "founded",
+            "merger",
+            "bankruptcy",
+        ]
+    },
+    "ace_conflictevent_examples": {
+        "en": ["terrorism", "combat", "hit", "fight", "bombing", "fire", "attacks", "fighting", "attack", "war"]
+    },
+    "ace_contactevent_examples": {
+        "en": ["meetings", "conference", "talked", "met", "letters", "summit", "call", "meet", "talks", "meeting"]
+    },
+    "ace_personnelevent_examples": {
+        "en": [
+            "won",
+            "appoint",
+            "retired",
+            "fired",
+            "appointed",
+            "resigned",
+            "elected",
+            "former",
+            "elections",
+            "election",
+        ]
+    },
+    "ace_justiceevent_examples": {
+        "en": [
+            "parole",
+            "sued",
+            "sentenced",
+            "appeal",
+            "charged",
+            "sentence",
+            "arrested",
+            "convicted",
+            "charges",
+            "trial",
+        ]
+    },
+}

@@ -369,6 +369,9 @@ class LifeEvent(Event):
     """{ace_lifeevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_lifeevent_examples}
+    """
 
 
 @dataclass
@@ -376,6 +379,9 @@ class MovementEvent(Event):
     """{ace_movementevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_movementevent_examples}
+    """
 
 
 @dataclass
@@ -383,6 +389,9 @@ class TransactionEvent(Event):
     """{ace_transactionevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_transactionevent_examples}
+    """
 
 
 @dataclass
@@ -390,6 +399,9 @@ class BusinessEvent(Event):
     """{ace_businessevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_businessevent_examples}
+    """
 
 
 @dataclass
@@ -397,6 +409,9 @@ class ConflictEvent(Event):
     """{ace_conflictevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_conflictevent_examples}
+    """
 
 
 @dataclass
@@ -404,6 +419,9 @@ class ContactEvent(Event):
     """{ace_contactevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_contactevent_examples}
+    """
 
 
 @dataclass
@@ -411,6 +429,9 @@ class PersonnelEvent(Event):
     """{ace_personnelevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_personnelevent_examples}
+    """
 
 
 @dataclass
@@ -418,6 +439,9 @@ class JusticeEvent(Event):
     """{ace_justiceevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event, such as:
+        {ace_justiceevent_examples}
+    """
 
 
 COARSE_EVENT_DEFINITIONS: List[Type] = [
