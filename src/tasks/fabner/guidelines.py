@@ -7,9 +7,7 @@ GUIDELINES = {
         ]
     },
     "fabner_manufacturingprocess": {
-        "en": [
-            "Refers to a specific technique, method, or procedure used in the production of goods."
-        ]
+        "en": ["Refers to a specific technique, method, or procedure used in the production of goods."]
     },
     "fabner_machineequipment": {
         "en": [
@@ -22,7 +20,6 @@ GUIDELINES = {
         "en": [
             "Refers to the specific field or industry in which a manufacturing process is utilized or intended to be"
             " utilized. It signifies the purpose, domain, or sector where the manufacturing process finds its use."
-
         ]
     },
     "fabner_engineeringfeatures": {
@@ -36,7 +33,6 @@ GUIDELINES = {
             "Refers to specific attributes or characteristics of materials that describe their behavior under"
             " mechanical forces and conditions. These properties play a crucial role in manufacturing processes and"
             " are often used to evaluate the suitability and performance of materials for different applications."
-
         ]
     },
     "fabner_processcharacterization": {
@@ -58,9 +54,7 @@ GUIDELINES = {
         ]
     },
     "fabner_conceptprinciples": {
-        "en": [
-            "Refers to key concepts, principles, and elements related to manufacturing processes."
-        ]
+        "en": ["Refers to key concepts, principles, and elements related to manufacturing processes."]
     },
     "fabner_manufacturingstandards": {
         "en": [
@@ -68,9 +62,5 @@ GUIDELINES = {
             " industry to ensure uniformity, quality, and compatibility of products, processes, and systems."
         ]
     },
-    "fabner_biomedical": {
-        "en": [
-            "Refers to any biomedical entity involved in the manufacturing process."
-        ]
-    },
+    "fabner_biomedical": {"en": ["Refers to any biomedical entity involved in the manufacturing process."]},
 }
