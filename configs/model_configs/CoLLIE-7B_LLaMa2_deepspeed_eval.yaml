@@ -7,7 +7,7 @@ quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
+#deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
@@ -59,7 +59,7 @@ evaluate_all_checkpoints: true
 
 # batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
 
-per_device_eval_batch_size: 1
+per_device_eval_batch_size: 8
 generation_num_beams: 1
 
 # optimizer settings
