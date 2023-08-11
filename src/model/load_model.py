@@ -225,7 +225,7 @@ def load_model_for_training(
     if use_better_transformer and use_flash_attention:
         raise ValueError("You cannot use both Better Transformer and Flash Attention at the same time.")
 
-    if type(quantization) == str:
+    if isinstance(quantization, str):
         quantization = int(quantization)
     assert (quantization is None) or (
         quantization in [4, 8]
@@ -532,7 +532,7 @@ def load_model_for_inference(
     if use_better_transformer and use_flash_attention:
         raise ValueError("You cannot use both Better Transformer and Flash Attention at the same time.")
 
-    if type(quantization) == str:
+    if isinstance(quantization, str):
         quantization = int(quantization)
     assert (quantization is None) or (
         quantization in [4, 8]
