@@ -559,7 +559,7 @@ EXAMPLES = {
         ]
     },
     "ace_person_examples": {
-        "en" [
+        "en": [
             "I",
             "you",
             "they",
