@@ -558,4 +558,102 @@ EXAMPLES = {
             "trial",
         ]
     },
+    "ace_person_examples": {
+        "en" [
+            "I",
+            "you",
+            "they",
+            "troops",
+            "forces",
+            "people",
+            "who",
+            "officials",
+            "we",
+            "them"
+        ]
+    },
+    "ace_organization_examples": {
+        "en": [
+            "they",
+            "military",
+            "company",
+            "CNN",
+            "U.N.",
+            "companies",
+            "police",
+            "administration",
+            "court",
+            "government"
+        ]
+    },
+    "ace_gpe_examples": {
+        "en": [
+            "Iraq",
+            "U.S.",
+            "they",
+            "country",
+            "Baghdad",
+            "city",
+            "US",
+            "coalition",
+            "Israel",
+            "British"
+        ]
+    },
+    "ace_location_examples": {
+        "en": [
+            "world",
+            "area",
+            "there",
+            "where",
+            "here",
+            "mars",
+            "areas",
+            "border",
+            "planet",
+            "region"
+        ]
+    },
+    "ace_facility_examples": {
+        "en": [
+            "home",
+            "airport",
+            "base",
+            "there",
+            "hospital",
+            "house",
+            "prison",
+            "room",
+            "bridge",
+            "road"
+        ]
+    },
+    "ace_weapon_examples": {
+        "en": [
+            "weapons",
+            "gun",
+            "missiles",
+            "nuclear",
+            "artillery",
+            "bomb",
+            "arms",
+            "granades",
+            "explosive",
+            "knife"
+        ]
+    },
+    "ace_vehicle_examples": {
+        "en": [
+            "ship",
+            "car",
+            "aircraft",
+            "tank",
+            "plane",
+            "bus",
+            "vehicle",
+            "boat",
+            "helicopter",
+            "truck"
+        ]
+    }
 }
