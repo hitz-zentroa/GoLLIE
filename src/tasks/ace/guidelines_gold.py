@@ -559,18 +559,7 @@ EXAMPLES = {
         ]
     },
     "ace_person_examples": {
-        "en": [
-            "I",
-            "you",
-            "they",
-            "troops",
-            "forces",
-            "people",
-            "who",
-            "officials",
-            "we",
-            "them"
-        ]
+        "en": ["I", "you", "they", "troops", "forces", "people", "who", "officials", "we", "them"]
     },
     "ace_organization_examples": {
         "en": [
@@ -583,77 +572,104 @@ EXAMPLES = {
             "police",
             "administration",
             "court",
-            "government"
+            "government",
         ]
     },
     "ace_gpe_examples": {
-        "en": [
-            "Iraq",
-            "U.S.",
-            "they",
-            "country",
-            "Baghdad",
-            "city",
-            "US",
-            "coalition",
-            "Israel",
-            "British"
-        ]
+        "en": ["Iraq", "U.S.", "they", "country", "Baghdad", "city", "US", "coalition", "Israel", "British"]
     },
     "ace_location_examples": {
-        "en": [
-            "world",
-            "area",
-            "there",
-            "where",
-            "here",
-            "mars",
-            "areas",
-            "border",
-            "planet",
-            "region"
-        ]
+        "en": ["world", "area", "there", "where", "here", "mars", "areas", "border", "planet", "region"]
     },
     "ace_facility_examples": {
-        "en": [
-            "home",
-            "airport",
-            "base",
-            "there",
-            "hospital",
-            "house",
-            "prison",
-            "room",
-            "bridge",
-            "road"
-        ]
+        "en": ["home", "airport", "base", "there", "hospital", "house", "prison", "room", "bridge", "road"]
     },
     "ace_weapon_examples": {
-        "en": [
-            "weapons",
-            "gun",
-            "missiles",
-            "nuclear",
-            "artillery",
-            "bomb",
-            "arms",
-            "granades",
-            "explosive",
-            "knife"
-        ]
+        "en": ["weapons", "gun", "missiles", "nuclear", "artillery", "bomb", "arms", "granades", "explosive", "knife"]
     },
     "ace_vehicle_examples": {
+        "en": ["ship", "car", "aircraft", "tank", "plane", "bus", "vehicle", "boat", "helicopter", "truck"]
+    },
+    "ace_time_examples": {
         "en": [
-            "ship",
-            "car",
-            "aircraft",
-            "tank",
-            "plane",
-            "bus",
-            "vehicle",
-            "boat",
-            "helicopter",
-            "truck"
+            "Tuesday",
+            "Monday",
+            "tonight",
+            "new",
+            "this morning",
+            "yesterday",
+            "right now",
+            "former",
+            "today",
+            "now",
         ]
-    }
+    },
+    "ace_numeric_examples": {
+        "en": [
+            "$800 million",
+            "$30 million",
+            "60 percent",
+            "$2 million",
+            "$500 billion",
+            "billions of dollars",
+            "40%",
+            "$90 million",
+            "100%",
+            "$250,000",
+        ]
+    },
+    "ace_jobtitle_examples": {
+        "en": [
+            "a pastor",
+            "a counselor",
+            "Presidential",
+            "Vice President",
+            "Governor of uh New Jersey",
+            "head of Homeland Security",
+            "president",
+            "governor",
+            "the Shah of Iran",
+            "the CEO",
+        ]
+    },
+    "ace_crime_examples": {
+        "en": [
+            "corruption",
+            "theft",
+            "receiving bribes",
+            "killing",
+            "insider trading",
+            "attempted murder",
+            "treason",
+            "obstruction of justice",
+            "sodomy",
+            "murder",
+        ]
+    },
+    "ace_sentence_examples": {
+        "en": [
+            "prison for life",
+            "the maximum sentence",
+            "a death penalty",
+            "more than seven years in prison",
+            "death",
+            "five years probation",
+            "100 lashes",
+            "life",
+            "life in prison",
+            "the death penalty",
+        ]
+    },
+    "ace_contactinfo_examples": {
+        "en": [
+            "911",
+            "www.werkheiserfordelegate.com",
+            "770-239-X X X X",
+            "DKo...@hotmail.com",
+            "a...@yahoo.com",
+            "cnn.com/wolf",
+            "www.vitac.com",
+            "am@cnn.com",
+        ]
+    },
 }

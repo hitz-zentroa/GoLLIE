@@ -14,49 +14,49 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-entities-guideli
 class Person(Entity):
     """{ace_person}"""
 
-    span: str # {ace_person_examples}
+    span: str  # {ace_person_examples}
 
 
 @dataclass
 class Organization(Entity):
     """{ace_organization}"""
 
-    span: str # {ace_organization_examples}
+    span: str  # {ace_organization_examples}
 
 
 @dataclass
 class GPE(Entity):
     """{ace_gpe}"""
 
-    span: str # {ace_gpe_examples}
+    span: str  # {ace_gpe_examples}
 
 
 @dataclass
 class Location(Entity):
     """{ace_location}"""
 
-    span: str # {ace_location_examples}
+    span: str  # {ace_location_examples}
 
 
 @dataclass
 class Facility(Entity):
     """{ace_facility}"""
 
-    span: str # {ace_facility_examples}
+    span: str  # {ace_facility_examples}
 
 
 @dataclass
 class Weapon(Entity):
     """{ace_weapon}"""
 
-    span: str # {ace_weapon_examples}
+    span: str  # {ace_weapon_examples}
 
 
 @dataclass
 class Vehicle(Entity):
     """{ace_vehicle}"""
 
-    span: str # {ace_vehicle_examples}
+    span: str  # {ace_vehicle_examples}
 
 
 ENTITY_DEFINITIONS: List[Type] = [
@@ -81,42 +81,42 @@ annotated as time expressions or value/numeric data.
 class Time(Entity):
     """{ace_time}"""
 
-    span: str # {ace_time_examples}
+    span: str  # {ace_time_examples}
 
 
 @dataclass
 class Numeric(Entity):
     """{ace_numeric}"""
 
-    span: str # {ace_numeric_examples}
+    span: str  # {ace_numeric_examples}
 
 
 @dataclass
 class JobTitle(Entity):
     """{ace_jobtitle}"""
 
-    span: str # {ace_jobtitle_examples}
+    span: str  # {ace_jobtitle_examples}
 
 
 @dataclass
 class Crime(Entity):
     """{ace_crime}"""
 
-    span: str # {ace_crime_examples}
+    span: str  # {ace_crime_examples}
 
 
 @dataclass
 class Sentence(Entity):
     """{ace_sentence}"""
 
-    span: str # {ace_sentence_examples}
+    span: str  # {ace_sentence_examples}
 
 
 @dataclass
 class ContactInfo(Entity):
     """{ace_contactinfo}"""
 
-    span: str # {ace_contactinfo_examples}
+    span: str  # {ace_contactinfo_examples}
 
 
 VALUE_DEFINITIONS: List[Type] = [
