@@ -27,6 +27,10 @@ torchrun --standalone --master_port 37225 --nproc_per_node=4 src/run.py ${CONFIG
 
 torchrun --standalone --master_port 37229 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed_eval_2.yaml
 
+torchrun --standalone --master_port 37225 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-13B_LLaMa2_deepspeed.yaml
+
+torchrun --standalone --master_port 37229 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-13B_LLaMa2_deepspeed_eval.yaml
+
 
 #accelerate launch --num_processes=4 \
 #--use_fsdp \
