@@ -21,9 +21,12 @@ export OMP_NUM_THREADS=16
 export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs"
 
-#torchrun --standalone --master_port 37229 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed.yaml
-
 torchrun --standalone --master_port 37229 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed_eval.yaml
+
+torchrun --standalone --master_port 37225 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed.yaml
+
+torchrun --standalone --master_port 37229 --nproc_per_node=4 src/run.py ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMa2_deepspeed_eval_2.yaml
+
 
 #accelerate launch --num_processes=4 \
 #--use_fsdp \
