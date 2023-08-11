@@ -73,7 +73,11 @@ class ResultLogger:
                 },
                 "hallucinated_predictions": {
                     "total": self.hallucinated_predictions,
-                    "percentage%": round((self.hallucinated_predictions / self.total_predictions) * 100, 4),
+                    "percentage%": (
+                        0.0
+                        if self.total_predictions == 0
+                        else round((self.hallucinated_predictions / self.total_predictions) * 100, 4)
+                    ),
                 },
                 "total": {"predictions": self.valid_predictions, "gold": self.gold_predictions},
             },
