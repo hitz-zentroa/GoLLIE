@@ -33,7 +33,7 @@ class Location(Entity):
 
 
 @dataclass
-class Politican(Entity):
+class Politician(Entity):
     """{crossner_politics_politician}"""
 
     span: str  # {crossner_politics_politician_examples}
@@ -78,7 +78,7 @@ ENTITY_DEFINITIONS_POLITICS: List[Entity] = [
     Person,
     Organization,
     Location,
-    Politican,
+    Politician,
     PoliticalParty,
     Election,
     Event,

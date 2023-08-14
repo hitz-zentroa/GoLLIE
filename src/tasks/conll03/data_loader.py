@@ -146,7 +146,7 @@ def load_conll_tsv(
         # Get entities
         entities = []
         for label, start, end in spans:
-            if include_misc or label != "MISC":
+            if include_misc or label.lower() != "misc":
                 entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
 
         dataset_sentences.append(words)

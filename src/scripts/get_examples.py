@@ -13,8 +13,8 @@ def get_top_label_per_class(config, top_k: int = 10):
     Returns:
         (dict): A dictionary with the top k labels per class
     """
-    if config["tasks"] != ["NER"]:
-        raise ValueError("This function only supports NER task")
+    if config["tasks"] != ["NER"] and "ner" not in config["tasks"][0].lower():
+        raise ValueError(f"This function only supports NER task. Got {config['tasks']}")
     dataloader_cls = get_class(config["dataloader_cls"])
     if "train_file" not in config:
         raise ValueError("train_file is not specified in config")
@@ -61,6 +61,18 @@ def add_examples(config, top_k, lang="en"):
     prompt_template += ["prompts.py"]
 
     prompt_template = "/".join(prompt_template)
+
+    if config["tasks"] == ["CrossNER_POLITICS"]:
+        prompt_template = prompt_template.replace("prompts.py", "prompts_politics.py")
+    elif config["tasks"] == ["CrossNER_MUSIC"]:
+        prompt_template = prompt_template.replace("prompts.py", "prompts_music.py")
+    elif config["tasks"] == ["CrossNER_AI"]:
+        prompt_template = prompt_template.replace("prompts.py", "prompts_ai.py")
+    elif config["tasks"] == ["CrossNER_NATURAL_SCIENCE"]:
+        prompt_template = prompt_template.replace("prompts.py", "prompts_natural_science.py")
+    elif config["tasks"] == ["CrossNER_LITERATURE"]:
+        prompt_template = prompt_template.replace("prompts.py", "prompts_literature.py")
+
     guilines_gold = "/".join(guilines_gold)
 
     with open(prompt_template, "r", encoding="utf8") as f:

@@ -6,6 +6,7 @@ from . import (
     broadtwitter,
     casie,
     conll03,
+    crossner,
     diann,
     e3c,
     fabner,
@@ -50,6 +51,11 @@ TASK_ID_TO_TASKS = {
     "HarveyNER_NER": "src.tasks.harveyner",
     "MITMovie_NER": "src.tasks.mitmovie",
     "MITRestaurant_NER": "src.tasks.mitrestaurant",
+    "CrossNER_AI": "src.tasks.crossner",
+    "CrossNER_POLITICS": "src.tasks.crossner",
+    "CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
+    "CrossNER_LITERATURE": "src.tasks.crossner",
+    "CrossNER_MUSIC": "src.tasks.crossner",
 }
 
 __all__ = [
@@ -71,6 +77,7 @@ __all__ = [
     "harveyner",
     "mitmovie",
     "mitrestaurant",
+    "crossner",
     "TASK_ID_TO_TASKS",
     "task_id_to_guidelines",
 ]
@@ -92,6 +99,17 @@ def task_id_to_prompts(task_id: str) -> str:
 
     elif task_id.upper() == "CASIE_EAE":
         return "src.tasks.casie.prompts_eae"
+
+    elif task_id.upper() == "CROSSNER_POLITICS":
+        return "src.tasks.crossner.prompts_politics"
+    elif task_id.upper() == "CROSSNER_AI":
+        return "src.tasks.crossner.prompts_ai"
+    elif task_id.upper() == "CROSSNER_NATURAL_SCIENCES":
+        return "src.tasks.crossner.prompts_natural_science"
+    elif task_id.upper() == "CROSSNER_LITERATURE":
+        return "src.tasks.crossner.prompts_literature"
+    elif task_id.upper() == "CROSSNER_MUSIC":
+        return "src.tasks.crossner.prompts_music"
 
     # Default case
     else:
@@ -178,6 +196,10 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "mitrestaurant":
         from src.tasks.mitrestaurant.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "crossner":
+        from src.tasks.crossner.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     else:

@@ -288,9 +288,9 @@ class Sampler:
                 if min(random.random() + 1e-6, 1.0) <= self.include_examples_prob:
                     _examples = {
                         key: (
-                            f"""Such as: "{'", "'.join(random.sample(value[self.lang], k=5))}" """
+                            f"""Such as: "{'", "'.join(random.sample(value[self.lang], k=min(5,len(value[self.lang]))))}" """
                             if self.split == "train"
-                            else value[self.lang][:5]
+                            else f"""Such as: "{'", "'.join(value[self.lang][:5])}" """
                         )
                         for key, value in self.examples.items()
                     }
