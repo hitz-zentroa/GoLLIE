@@ -7,6 +7,7 @@ import torch
 
 from transformers import (
     AutoConfig,
+    AutoModelForCausalLM,
     AutoModelForSeq2SeqLM,
     AutoTokenizer,
     BitsAndBytesConfig,
@@ -349,11 +350,14 @@ def load_model_for_training(
             from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
 
             logging.warning("Using Flash Attention for LLaMA model.")
-            AutoModelForCausalLM = LlamaForCausalLMFlash
+            load_fn = LlamaForCausalLMFlash
 
             use_flash_attention = False  # Do not path the model twice
 
-        model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
+        else:
+            load_fn = AutoModelForCausalLM
+
+        model: PreTrainedModel = load_fn.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
             use_auth_token=use_auth_token,
             device_map=device_map,
@@ -627,11 +631,14 @@ def load_model_for_inference(
             from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
 
             logging.warning("Using Flash Attention for LLaMA model.")
-            AutoModelForCausalLM = LlamaForCausalLMFlash
+            load_fn = LlamaForCausalLMFlash
 
             use_flash_attention = False  # Do not path the model twice
 
-        model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
+        else:
+            load_fn = AutoModelForCausalLM
+
+        model: PreTrainedModel = load_fn.from_pretrained(
             pretrained_model_name_or_path=weights_path,
             use_auth_token=use_auth_token,
             device_map=device_map,
