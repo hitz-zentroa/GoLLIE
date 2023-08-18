@@ -26,4 +26,4 @@ CONFIGS_FOLDER="configs/model_configs"
 # Call this script from root directory as: sbatch bash_scripts/run_CoLLIE7B.sh
 
 
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMA2_lora4_flash_oasst_together.yalm
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_LLaMA2_lora4_flash_together.yalm
