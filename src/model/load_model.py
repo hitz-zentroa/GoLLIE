@@ -7,7 +7,6 @@ import torch
 
 from transformers import (
     AutoConfig,
-    AutoModelForCausalLM,
     AutoModelForSeq2SeqLM,
     AutoTokenizer,
     BitsAndBytesConfig,
@@ -345,6 +344,15 @@ def load_model_for_training(
         logging.warning(
             f"Model {model_weights_name_or_path} is an decoder-only model. We will load it as a CausalLM model."
         )
+
+        if config.model_type == "llama" and use_flash_attention:
+            from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
+
+            logging.warning("Using Flash Attention for LLaMA model.")
+            AutoModelForCausalLM = LlamaForCausalLMFlash
+
+            use_flash_attention = False  # Do not path the model twice
+
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=model_weights_name_or_path,
             use_auth_token=use_auth_token,
@@ -614,6 +622,15 @@ def load_model_for_inference(
 
     elif config.model_type in MODEL_FOR_CAUSAL_LM_MAPPING_NAMES:
         logging.warning(f"Model {weights_path} is an decoder-only model. We will load it as a CausalLM model.")
+
+        if config.model_type == "llama" and use_flash_attention:
+            from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
+
+            logging.warning("Using Flash Attention for LLaMA model.")
+            AutoModelForCausalLM = LlamaForCausalLMFlash
+
+            use_flash_attention = False  # Do not path the model twice
+
         model: PreTrainedModel = AutoModelForCausalLM.from_pretrained(
             pretrained_model_name_or_path=weights_path,
             use_auth_token=use_auth_token,
