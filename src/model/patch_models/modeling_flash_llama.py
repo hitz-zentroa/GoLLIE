@@ -415,7 +415,7 @@ class LlamaAttention(nn.Module):
             )
 
             attn_output = attn_outputs[0] if output_attentions else attn_outputs
-            attn_output = pad_input(attn_output, indices_q, bsz, max_seqlen_q).reshape(bsz, q_len, h_size)
+            attn_output = pad_input(attn_output, indices_q, bsz, q_len).reshape(bsz, q_len, h_size)
             attn_weights = attn_outputs[2] if output_attentions else None
 
         else:
