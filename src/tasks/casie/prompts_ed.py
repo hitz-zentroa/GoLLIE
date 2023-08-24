@@ -69,7 +69,9 @@ class DatabreachAttack(Event):
     """{databreach_attack_main}"""
 
     mention: str
-    """{databreach_attack_mention}"""
+    """The text span that triggers the event.
+    {databreach_attack_examples}
+    """
 
 
 @dataclass
@@ -77,7 +79,9 @@ class PhisingAttack(Event):
     """{phising_attack_main}"""
 
     mention: str
-    """{phising_attack_mention}"""
+    """The text span that triggers the event.
+    {phising_attack_examples}
+    """
 
 
 @dataclass
@@ -85,7 +89,9 @@ class RansomAttack(Event):
     """{ransom_attack_main}"""
 
     mention: str
-    """{ransom_attack_mention}"""
+    """The text span that triggers the event.
+    {ransom_attack_examples}
+    """
 
 
 @dataclass
@@ -93,7 +99,9 @@ class VulnerabilityDiscover(Event):
     """{vulnerability_discover_main}"""
 
     mention: str
-    """{vulnerability_discover_mention}"""
+    """The text span that triggers the event.
+    {vulnerability_discover_examples}
+    """
 
 
 @dataclass
@@ -101,7 +109,9 @@ class VulnerabilityPatch(Event):
     """{vulnerability_patch_main}"""
 
     mention: str
-    """{vulnerability_patch_mention}"""
+    """The text span that triggers the event.
+    {vulnerability_patch_examples}
+    """
 
 
 ED_EVENT_DEFINITIONS: List[Type] = [

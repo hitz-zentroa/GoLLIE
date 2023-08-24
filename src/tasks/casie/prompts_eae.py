@@ -69,7 +69,9 @@ class DatabreachAttack(Event):
     """{databreach_attack_main}"""
 
     mention: str
-    """{databreach_attack_mention}"""
+    """The text span that triggers the event.
+    {databreach_attack_examples}
+    """
     attacker: List[str]  # The agent (person or organization) of the attack
     attack_pattern: List[str]  # How the attack is done
     victim: List[str]  # The device, organization, person, product or website victim of the attack
@@ -88,7 +90,9 @@ class PhisingAttack(Event):
     """{phising_attack_main}"""
 
     mention: str
-    """{phising_attack_mention}"""
+    """The text span that triggers the event.
+    {phising_attack_examples}
+    """
     pattern: List[str]  # How was the attack triggered, such as 'opening something' or 'clicking somewhere'
     attacker: List[str]  # The person or organization behind the attack
     victim: List[str]  # The victim of the attack
@@ -105,7 +109,9 @@ class RansomAttack(Event):
     """{ransom_attack_main}"""
 
     mention: str
-    """{ransom_attack_mention}"""
+    """The text span that triggers the event.
+    {ransom_attack_examples}
+    """
     pattern: List[str]  # What does the attack do until demands are met.
     attacker: List[str]  # Who performed the attack
     victim: List[str]  # The victim of the attack
@@ -122,7 +128,9 @@ class VulnerabilityDiscover(Event):
     """{vulnerability_discover_main}"""
 
     mention: str
-    """{vulnerability_discover_mention}"""
+    """The text span that triggers the event.
+    {vulnerability_discover_examples}
+    """
     cve: List[str]  # The vulnerability identifier: such 'CVE-2018-5003'
     used_for: List[str]  # What is the vulnerability used for such as 'allow to take control'
     discoverer: List[str]  # The entity that reported the vulnerability
@@ -139,7 +147,9 @@ class VulnerabilityPatch(Event):
     """{vulnerability_patch_main}"""
 
     mention: str
-    """{vulnerability_patch_mention}"""
+    """The text span that triggers the event.
+    {vulnerability_patch_examples}
+    """
     cve: List[str]  # The vulnerability identifier: such 'CVE-2018-5003'
     issues_addressed: List[str]  # What did the patch fixed
     supported_platform: List[str]  # The platforms that support the vulnerability

@@ -3,6 +3,7 @@ import json
 from typing import Tuple, Union
 
 from src.tasks.casie.guidelines import GUIDELINES
+from src.tasks.casie.guidelines_gold import EXAMPLES
 from src.tasks.casie.prompts_eae import (
     EAE_EVENT_DEFINITIONS,
 )
@@ -220,5 +221,6 @@ class CASIESampler(Sampler):
             coarse_to_fine=None,
             fine_to_coarse=None,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )
