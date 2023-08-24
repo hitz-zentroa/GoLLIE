@@ -58,47 +58,11 @@ GUIDELINES = {
 }
 
 EXAMPLES = {
-    "databreach_attack_examples": {
-        "en": [
-            "attack",
-            "stole",
-            "publish",
-            "steal"
-        ]
-    },
+    "databreach_attack_examples": {"en": ["attack", "stole", "publish", "steal"]},
     "phising_attack_examples": {
-        "en": [
-            "attack",
-            "purports to be",
-            "dupe",
-            "masquerading as",
-            "pretending to be",
-            "scam"
-        ]
+        "en": ["attack", "purports to be", "dupe", "masquerading as", "pretending to be", "scam"]
     },
-    "ransom_attack_examples": {
-        "en": [
-            "attack",
-            "ransomware",
-            "selling",
-            "ransom"
-        ]
-    },
-    "vulnerability_discover_examples": {
-        "en": [
-            "attack",
-            "found",
-            "exploit",
-            "vulnerability"
-        ]
-    },
-    "vulnerability_patch_examples": {
-        "en": [
-            "patch",
-            "fixed",
-            "addresses",
-            "implemented",
-            "released"
-        ]
-    },
+    "ransom_attack_examples": {"en": ["attack", "ransomware", "selling", "ransom"]},
+    "vulnerability_discover_examples": {"en": ["attack", "found", "exploit", "vulnerability"]},
+    "vulnerability_patch_examples": {"en": ["patch", "fixed", "addresses", "implemented", "released"]},
 }

@@ -380,3 +380,390 @@ GUIDELINES = {
         ]
     },
 }
+
+EXAMPLES = {
+    "wikievents_ner_abstract_examples": {
+        "en": [
+            "documents",
+            "technology",
+            "Proposals",
+            "report",
+            "research",
+            "evidence",
+            "data",
+            "databases",
+            "Twitter",
+            "death penalty",
+        ]
+    },
+    "wikievents_ner_bodypart_examples": {
+        "en": [
+            "tatoo",
+            "limbs",
+            "the bodies",
+            "neck",
+            "ear",
+            "face",
+            "leg",
+            "shoulder",
+            "thumb",
+            "body",
+        ]
+    },
+    "wikievents_ner_commercialproduct_examples": {
+        "en": [
+            "Arduino",
+            "ID",
+            "food",
+            "bottle cap",
+            "backpack",
+            "package",
+            "Servo",
+            "medicine",
+            "components",
+            "windows",
+        ]
+    },
+    "wikievents_ner_facility_examples": {
+        "en": [
+            "where",
+            "prison",
+            "station",
+            "home",
+            "hospital",
+            "building",
+            "pub",
+            "house",
+            "apartment",
+            "school",
+        ]
+    },
+    "wikievents_ner_gpe_examples": {
+        "en": [
+            "Boston",
+            "U.S",
+            "U.S.",
+            "Venezuela",
+            "country",
+            "Pakistan",
+            "United States",
+            "city",
+            "US",
+            "Venezuelan",
+        ]
+    },
+    "wikievents_ner_information_examples": {
+        "en": [
+            "conference",
+            "images",
+            "report",
+            "statement",
+            "name",
+            "article",
+            "said",
+            "defense",
+            "forensic analysis",
+            "Photos",
+        ]
+    },
+    "wikievents_ner_location_examples": {
+        "en": [
+            "area",
+            "line",
+            "world",
+            "areas",
+            "where",
+            "scene",
+            "site",
+            "region",
+            "neighborhood",
+            "ground",
+        ]
+    },
+    "wikievents_ner_medicalhealthissue_examples": {
+        "en": [
+            "disease",
+            "fever",
+            "autism spectrum disorder",
+            "weak",
+            "coronavirus",
+            "hiccup",
+            "broken ribs",
+            "broken scapula",
+            "severe dengue",
+            "coma",
+        ]
+    },
+    "wikievents_ner_money_examples": {
+        "en": [
+            "cash",
+            "$925",
+            "$2,775",
+            "$5.2 million",
+            "$400",
+            "$97",
+            "$20.99",
+            "$41.28",
+            "$44",
+            "¥500,000",
+        ]
+    },
+    "wikievents_ner_organization_examples": {
+        "en": [
+            "police",
+            "government",
+            "FBI",
+            "IRA",
+            "military",
+            "group",
+            "court",
+            "Taliban",
+            "it",
+            "its",
+        ]
+    },
+    "wikievents_ner_person_examples": {
+        "en": [
+            "he",
+            "his",
+            "who",
+            "people",
+            "they",
+            "He",
+            "I",
+            "their",
+            "Tsarnaev",
+            "him",
+        ]
+    },
+    "wikievents_ner_side_of_conflict_examples": {"en": ["church", "officers", "supporters", "radical Islam"]},
+    "wikievents_ner_job_title_examples": {
+        "en": [
+            "President",
+            "president",
+            "Attorney General",
+            "opposition activist",
+            "Prime Minister",
+            "consultant",
+            "law enforcement",
+            "psychiatrist",
+            "spokesman",
+            "organizer",
+        ]
+    },
+    "wikievents_ner_numeric_examples": {
+        "en": [
+            "two",
+            "three",
+            "2",
+            "five",
+            "Tuesday",
+            "1",
+            "15",
+            "2011",
+            "48",
+            "3",
+        ]
+    },
+    "wikievents_ner_vehicle_examples": {
+        "en": [
+            "car",
+            "drone",
+            "drones",
+            "vehicle",
+            "boat",
+            "aircraft",
+            "it",
+            "train",
+            "truck",
+            "vehicles",
+        ]
+    },
+    "wikievents_ner_weapon_examples": {
+        "en": [
+            "bomb",
+            "bombs",
+            "drone",
+            "explosives",
+            "device",
+            "drones",
+            "devices",
+            "it",
+            "explosive",
+            "that",
+        ]
+    },
+    "wikievents_ee_artifact_existance_examples": {
+        "en": [
+            "damage",
+            "damaged",
+            "destroyed",
+            "make",
+            "wrecked",
+            "made",
+            "DESTRUCTION",
+            "build",
+            "burn",
+            "destruction",
+        ]
+    },
+    "wikievents_ee_cognitive_examples": {
+        "en": [
+            "identified",
+            "found",
+            "discovered",
+            "investigation",
+            "searched",
+            "investigate",
+            "inspections",
+            "researching",
+            "saw",
+            "identifying",
+        ]
+    },
+    "wikievents_ee_conflict_examples": {
+        "en": [
+            "attack",
+            "bombing",
+            "attacks",
+            "explosion",
+            "bombings",
+            "exploded",
+            "detonated",
+            "blast",
+            "went off",
+            "shot",
+        ]
+    },
+    "wikievents_ee_contact_examples": {
+        "en": [
+            "said",
+            "told",
+            "reported",
+            "wrote",
+            "say",
+            "called",
+            "met",
+            "says",
+            "released",
+            "reports",
+        ]
+    },
+    "wikievents_ee_control_examples": {
+        "en": [
+            "embargo",
+            "intercepted",
+            "banned",
+            "disrupted",
+            "combat",
+            "stop",
+            "blocks",
+            "curfew",
+            "stopping",
+        ]
+    },
+    "wikievents_ee_disaster_examples": {
+        "en": [
+            "crashed",
+            "crash",
+            "Chikungunya",
+            "crashing",
+            "outbreak",
+            "disease",
+            "virus",
+        ]
+    },
+    "wikievents_ee_generic_crime_examples": {
+        "en": [
+            "crime",
+            "assassination",
+            "kidnappings",
+            "AWOL",
+            "criminal",
+            "robbery",
+            "crimes",
+            "murder",
+            "possession",
+            "pornography",
+        ]
+    },
+    "wikievents_ee_justice_examples": {
+        "en": [
+            "arrested",
+            "investigation",
+            "charged",
+            "convicted",
+            "sentenced",
+            "arrest",
+            "charges",
+            "accused",
+            "trial",
+            "custody",
+        ]
+    },
+    "wikievents_ee_life_examples": {
+        "en": [
+            "killed",
+            "injured",
+            "wounded",
+            "killing",
+            "died",
+            "dead",
+            "injuring",
+            "deaths",
+            "injuries",
+            "kill",
+        ]
+    },
+    "wikievents_ee_medical_examples": {
+        "en": [
+            "treated",
+            "treatment",
+            "surgery",
+            "hospitalized",
+            "helped",
+            "amputations",
+            "medication",
+            "rushed",
+        ]
+    },
+    "wikievents_ee_transport_examples": {
+        "en": [
+            "moved",
+            "evacuated",
+            "travel",
+            "fenced off",
+            "driven",
+            "fled",
+            "traveled",
+            "carrying",
+            "returned",
+            "brought",
+        ]
+    },
+    "wikievents_ee_personnel_examples": {
+        "en": [
+            "discharged",
+            "discharge",
+            "relinquished",
+            "becoming",
+            "inauguration",
+            "fire",
+            "is",
+        ]
+    },
+    "wikievents_ee_transaction_examples": {
+        "en": [
+            "bought",
+            "buy",
+            "purchase",
+            "purchased",
+            "sold",
+            "selling",
+            "buys",
+            "purchases",
+            "sells",
+            "purchasing",
+        ]
+    },
+}
