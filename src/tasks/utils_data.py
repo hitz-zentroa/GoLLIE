@@ -1,7 +1,9 @@
 import inspect
+import logging
 import math
 import random
 import re
+from string import Formatter
 from typing import Any, Dict, List, Set, Tuple, Type, Union
 
 import black
@@ -184,6 +186,7 @@ class Sampler:
 
         self._remove_empty_comments_re = re.compile(r"#()*\n")
         self._remove_empty_comments_fn = lambda x: self._remove_empty_comments_re.sub("\n", x)
+        self._formatter = Formatter()
 
         self.lang = lang
         self.definitions = definitions
@@ -195,10 +198,11 @@ class Sampler:
             self.include_examples_prob = 1.0
         self.examples = examples
         if include_examples_prob > 0 and not self.examples:
-            raise ValueError(
+            logging.warn(
                 "`include_examples_prob` is > 0 but `examples` is None. If you want to include examples, you must"
-                " provide examples."
+                " provide examples. `include_examples_prob` has been changed to 0.0"
             )
+            self.include_examples_prob = 0
 
         self.label_noise_prob = label_noise_prob
         self._class_label_re = re.compile(r"class (\w+)")
@@ -295,8 +299,15 @@ class Sampler:
                         for key, value in self.examples.items()
                     }
                 else:
-                    _examples = {key: "" for key in self.examples.keys()}
-                _guidelines = [definition.format(**_definitions, **_examples) for definition in _guidelines]
+                    # _examples = {key: "" for key in self.examples.keys()}
+                    _examples = {
+                        key[1]: ""
+                        for definition in _guidelines
+                        for key in self._formatter.parse(definition)
+                        if key[1] is not None and "example" in key[1]
+                    }
+                _repl = {**_examples, **_definitions}
+                _guidelines = [definition.format(**_repl) for definition in _guidelines]
                 # If no examples are provide, empty comments are created, the following line removes them
                 _guidelines = {self._remove_empty_comments_fn(definition) for definition in _guidelines}
 

@@ -602,5 +602,6 @@ class WikiEventsSampler(Sampler):
             coarse_to_fine=COARSE_TO_FINE,
             fine_to_coarse=FINE_TO_COARSE,
             definitions=GUIDELINES,
-            examples=EXAMPLES**kwargs,
+            examples=EXAMPLES,
+            **kwargs,
         )
