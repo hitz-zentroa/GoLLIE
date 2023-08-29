@@ -199,6 +199,10 @@ class CollieTrainer(Seq2SeqTrainer):
 
         self.first_train_batch = True
 
+        # HuggingFace mad TrainingArguments inmutable and therefore the next function crashes
+        # We made TrainingArguments mutable again
+        TrainingArguments.__setattr__ = object.__setattr__
+
         # Ensure that the values are floats
         args.set_optimizer(
             name=args.optim,
