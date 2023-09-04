@@ -4,7 +4,7 @@ import unittest
 import psutil
 
 from src.dataset.dataset import DataCollatorForCoLLIE
-from src.model.load_model import load_model_for_training
+from src.model.load_model import load_model
 from transformers.testing_utils import require_bitsandbytes, require_torch_gpu
 
 
@@ -35,7 +35,8 @@ class TestCollieTrainer(unittest.TestCase):
                 output_dir=tmpdirname,
             )
 
-            model, _ = load_model_for_training(
+            model, _ = load_model(
+                inference=False,
                 model_weights_name_or_path=model_args.model_name_or_path,
                 quantization=model_args.quantization,
                 use_lora=model_args.use_lora,
@@ -68,7 +69,8 @@ class TestCollieTrainer(unittest.TestCase):
                 output_dir=tmpdirname,
             )
 
-            model, _ = load_model_for_training(
+            model, _ = load_model(
+                inference=False,
                 model_weights_name_or_path=model_args.model_name_or_path,
                 quantization=model_args.quantization,
                 use_lora=model_args.use_lora,
@@ -94,7 +96,7 @@ class TestCollieTrainer(unittest.TestCase):
 
         from torch.utils.data import DataLoader
 
-        from src.model.load_model import load_model_for_training
+        from src.model.load_model import load_model
         from src.tests.test_dataset import get_dataset
         from src.trainer import CollieTrainer
         from transformers import Seq2SeqTrainingArguments, Trainer
@@ -104,7 +106,8 @@ class TestCollieTrainer(unittest.TestCase):
                 output_dir=tmpdirname,
             )
 
-            model, tokenizer = load_model_for_training(
+            model, tokenizer = load_model(
+                inference=False,
                 model_weights_name_or_path="EleutherAI/gpt-neo-125m",
                 quantization=None,
                 use_lora=False,
@@ -156,7 +159,7 @@ class TestCollieTrainer(unittest.TestCase):
 
         from torch.utils.data import DataLoader
 
-        from src.model.load_model import load_model_for_training
+        from src.model.load_model import load_model
         from src.tests.test_dataset import get_dataset
         from src.trainer import CollieTrainer
         from transformers import Seq2SeqTrainingArguments, Trainer
@@ -166,7 +169,8 @@ class TestCollieTrainer(unittest.TestCase):
                 output_dir=tmpdirname,
             )
 
-            model, tokenizer = load_model_for_training(
+            model, tokenizer = load_model(
+                inference=False,
                 model_weights_name_or_path="EleutherAI/gpt-neo-125m",
                 quantization=None,
                 use_lora=True,
