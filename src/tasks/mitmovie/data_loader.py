@@ -237,5 +237,6 @@ class MitMovieSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
-            examples=EXAMPLES**kwargs,
+            examples=EXAMPLES,
+            **kwargs,
         )

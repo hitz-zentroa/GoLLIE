@@ -125,6 +125,11 @@ class Entity:
             `bool`:
                 Whether the annotation exists on the input text or not.
         """
+
+        # Check if the span is not None
+        if not isinstance(self.span, str):
+            return False
+
         return self.span.lower().strip() in text.lower()
 
     def index(self, text: str) -> int:
@@ -201,6 +206,9 @@ class Relation:
             `bool`:
                 Whether the annotation exists on the input text or not.
         """
+        if not isinstance(self.arg1, str) or not isinstance(self.arg2, str):
+            return False
+
         return self.arg1.lower() in text.lower() and self.arg2.lower() in text.lower()
 
     def index(self, text: str) -> Tuple[int, int]:

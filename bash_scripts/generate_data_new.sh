@@ -57,10 +57,7 @@ OUTPUT_DIR="data/processed_w_examples"
 
  python -m src.generate_data \
      --configs \
-        ${CONFIG_DIR}/ace_config.json \
-        ${CONFIG_DIR}/e3c_config.json \
-        ${CONFIG_DIR}/rams_config.json \
-        ${CONFIG_DIR}/tacred_config.json \
+        ${CONFIG_DIR}/mitmovie_config.json \
      --output ${OUTPUT_DIR} \
      --overwrite_output_dir \
      --include_examples

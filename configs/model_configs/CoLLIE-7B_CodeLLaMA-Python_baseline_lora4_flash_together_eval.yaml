@@ -2,7 +2,7 @@
 model_name_or_path: /gaueko1/hizkuntza-ereduak/Code-LLaMA/huggingface/7b-python
 lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b_CodeLLaMA-Python_baseline_lora4_flash_together
 use_auth_token: true
-torch_dtype: bfloat16
+torch_dtype: float16
 use_lora: true
 quantization: null
 gradient_checkpointing: true
@@ -137,7 +137,7 @@ push_to_hub: false
 resume_from_checkpoint: false
 
 # performance
-bf16: true
-fp16: false
+bf16: false
+fp16: true
 torch_compile: false
 ddp_find_unused_parameters: false
