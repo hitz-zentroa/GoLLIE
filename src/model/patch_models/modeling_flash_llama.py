@@ -383,6 +383,10 @@ class LlamaAttention(nn.Module):
         kv = torch.stack([k, v], 2)
         kv = repeat_kv(kv, self.num_key_value_groups)
 
+        # Make sure both are same dtype
+        if q.dtype != kv.dtype:
+            kv = kv.to(q.dtype)
+
         # Cache QKV values
         if has_layer_past:
             new_len = past_len + q.size(1)
@@ -404,6 +408,11 @@ class LlamaAttention(nn.Module):
 
             unpadded_kv, indices_k, cu_seqlens_k, max_seqlen_k = unpad_input(kv, attention_mask)
             unpadded_q, indices_q, cu_seqlens_q, max_seqlen_q = unpad_input(q, attention_mask[:, -q.size(1) :])
+
+            # Make sure both are same dtype
+            if unpadded_q.dtype != unpadded_kv.dtype:
+                unpadded_kv = unpadded_kv.to(unpadded_q.dtype)
+
             attn_outputs = flash_attn_varlen_kvpacked_func(
                 unpadded_q,
                 unpadded_kv,
@@ -423,7 +432,6 @@ class LlamaAttention(nn.Module):
 
         else:
             # no padding tokens, more efficient
-
             attn_outputs = flash_attn_kvpacked_func(
                 q,
                 kv,

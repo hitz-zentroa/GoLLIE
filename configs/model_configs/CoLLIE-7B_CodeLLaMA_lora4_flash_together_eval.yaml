@@ -7,7 +7,7 @@ use_lora: true
 quantization: null
 gradient_checkpointing: true
 force_auto_device_map: false
-use_flash_attention: false
+use_flash_attention: true
 
 # dataset arguments
 dataset_dir:
