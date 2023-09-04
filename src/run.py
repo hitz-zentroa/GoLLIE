@@ -12,7 +12,7 @@ from datasets import DatasetDict
 from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
 from src.evaluate import evaluate
-from src.model.load_model import load_model_for_inference, load_model_for_training, merge_lora_model
+from src.model.load_model import load_model, merge_lora_model
 from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
 from transformers import (
     HfArgumentParser,
@@ -38,17 +38,20 @@ def train_collie(
 ):
     logging.info(f"Loading {model_args.model_name_or_path} model...")
 
-    model, tokenizer = load_model_for_training(
+    model, tokenizer = load_model(
+        inference=False,
         model_weights_name_or_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         use_lora=model_args.use_lora,
         lora_r=model_args.lora_r,
         lora_target_modules=model_args.lora_target_modules,
-        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        torch_dtype=get_correct_torch_dtype(
+            quantization=model_args.quantization, model_args=model_args, training_args=training_args
+        ),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
         use_better_transformer=model_args.use_better_transformer,
-        use_auth_token=model_args.use_auth_token,
+        trust_remote_code=model_args.trust_remote_code,
         use_flash_attention=model_args.use_flash_attention,
         fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
         max_memory_MB=model_args.max_memory_MB,
@@ -218,7 +221,6 @@ def inference_collie(
                 weights_path=model_path,
                 lora_weights_name_or_path=lora_weights_name_or_path,
                 torch_dtype=model_args.torch_dtype,
-                use_auth_token=model_args.use_auth_token,
                 output_path=os.path.join(training_args.output_dir, "merged_model"),
             )
             delete_merged_model = not model_args.keep_merged_model_after_eval
@@ -227,14 +229,18 @@ def inference_collie(
         lora_weights_name_or_path = None
         clean_cache()  # Ensure that nothing remains in the cache, as we will load the mergen model next.
 
-    model, tokenizer = load_model_for_inference(
-        weights_path=model_path,
-        quantization=model_args.quantization,
+    model, tokenizer = load_model(
+        inference=True,
+        model_weights_name_or_path=model_path,
+        quantization=model_args.quantization_inference,
+        use_lora=model_args.lora_weights_name_or_path is not None,
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
-        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        torch_dtype=get_correct_torch_dtype(
+            quantization=model_args.quantization_inference, model_args=model_args, training_args=training_args
+        ),
         use_better_transformer=model_args.use_better_transformer,
-        use_auth_token=model_args.use_auth_token,
+        trust_remote_code=model_args.trust_remote_code,
         use_flash_attention=model_args.use_flash_attention,
         max_memory_MB=model_args.max_memory_MB,
     )
@@ -356,7 +362,6 @@ if __name__ == "__main__":
                 lora_weights_name_or_path=training_args.output_dir,
                 torch_dtype=model_args.torch_dtype,
                 output_path=os.path.join(training_args.output_dir, "merged_model"),
-                use_auth_token=model_args.use_auth_token,
             )
             clean_cache()
 
@@ -392,7 +397,7 @@ if __name__ == "__main__":
             checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
 
             # Add also the last checkpoint (stored in the output_dir)
-            checkpoints.append(training_args.output_dir)
+            # checkpoints.append(training_args.output_dir)
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"

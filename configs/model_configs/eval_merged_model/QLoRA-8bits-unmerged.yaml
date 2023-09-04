@@ -1,7 +1,6 @@
 #Training args
 model_name_or_path: meta-llama/Llama-2-7b-hf
 lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b_LLaMA2_QLoRA
-use_auth_token: true
 torch_dtype: bfloat16
 use_lora: true
 quantization: 8

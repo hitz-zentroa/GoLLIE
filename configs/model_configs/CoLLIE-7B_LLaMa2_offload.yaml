@@ -1,6 +1,5 @@
 #Training args
 model_name_or_path: meta-llama/Llama-2-7b-hf
-use_auth_token: true
 torch_dtype: float16
 use_lora: false
 quantization: null

@@ -39,10 +39,21 @@ class ModelArguments:
         metadata={
             "help": (
                 "Whether to use '4' or '8' bit quantization. Requires bitsandbytes library:"
-                " https://github.com/TimDettmers/bitsandbytes"
+                " https://github.com/TimDettmers/bitsandbytes. This parameter is only used for training."
             )
         },
     )
+
+    quantization_inference: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Whether to use '4' or '8' bit quantization. Requires bitsandbytes library:"
+                " https://github.com/TimDettmers/bitsandbytes. This parameter is only used for inference."
+            )
+        },
+    )
+
     lora_weights_name_or_path: Optional[str] = field(
         default=None,
         metadata={
@@ -101,14 +112,9 @@ class ModelArguments:
         },
     )
 
-    use_auth_token: bool = field(
+    trust_remote_code: bool = field(
         default=False,
-        metadata={
-            "help": (
-                "Whether to use an authentication token when downloading the model from huggingface hub."
-                "Defaults to False."
-            )
-        },
+        metadata={"help": "Trust the remote code from HuggingFace model hub. Defaults to False Defaults to False."},
     )
 
     use_flash_attention: bool = field(

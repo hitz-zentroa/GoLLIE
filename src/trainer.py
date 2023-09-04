@@ -423,6 +423,7 @@ class RotateDatasetCallback(TrainerCallback):
 
 
 def get_correct_torch_dtype(
+    quantization: int,
     model_args: ModelArguments,
     training_args: Seq2SeqTrainingArguments,
 ) -> "str":
@@ -430,6 +431,8 @@ def get_correct_torch_dtype(
     Returns the correct torch dtype based on the model and training arguments (if quantization is enabled).
 
     Args:
+        quantization (`int`, optional):
+            '4' or '8' for 4 bits or 8 bits quantization or None for 16/32bits training. Defaults to `None`.
         model_args (:class:`~transformers.ModelArguments`):
             The model arguments.
         training_args (:class:`~transformers.Seq2SeqTrainingArguments`):
@@ -438,7 +441,11 @@ def get_correct_torch_dtype(
     Returns:
         :obj:`str`: The correct torch dtype.
     """
-    if model_args.quantization in [4, 8]:
+
+    if isinstance(quantization, str):
+        quantization = int(quantization)
+
+    if quantization in [4, 8]:
         if training_args.fp16:
             if model_args.torch_dtype in ["auto", None]:
                 logging.warning(

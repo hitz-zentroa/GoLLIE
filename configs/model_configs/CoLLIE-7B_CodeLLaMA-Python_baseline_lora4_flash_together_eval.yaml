@@ -1,10 +1,10 @@
 #Training args
 model_name_or_path: /gaueko1/hizkuntza-ereduak/Code-LLaMA/huggingface/7b-python
 lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE-7b_CodeLLaMA-Python_baseline_lora4_flash_together
-use_auth_token: true
 torch_dtype: bfloat16
 use_lora: true
 quantization: null
+quantization_inference: null
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true

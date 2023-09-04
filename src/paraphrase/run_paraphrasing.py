@@ -4,7 +4,7 @@ import os
 import sys
 
 from src.config import ModelArguments
-from src.model.load_model import load_model_for_inference
+from src.model.load_model import load_model
 from src.paraphrase.config import DataInferenceArguments
 from src.paraphrase.conversation import get_conv_template
 from src.paraphrase.dataset import ParaphraseDataset
@@ -28,14 +28,18 @@ def run_paraphrasing(
         f"   - lora_weights_name_or_path: {model_args.lora_weights_name_or_path}\n"
     )
 
-    model, tokenizer = load_model_for_inference(
-        weights_path=model_args.model_name_or_path,
+    model, tokenizer = load_model(
+        inference=True,
+        model_weights_name_or_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
+        use_lora=model_args.lora_weights_name_or_path is not None,
         lora_weights_name_or_path=model_args.lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
-        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        torch_dtype=get_correct_torch_dtype(
+            quantization=model_args.quantization_inference, model_args=model_args, training_args=training_args
+        ),
         use_better_transformer=model_args.use_better_transformer,
-        use_auth_token=model_args.use_auth_token,
+        trust_remote_code=model_args.trust_remote_code,
         use_flash_attention=model_args.use_flash_attention,
         max_memory_MB=model_args.max_memory_MB,
     )
