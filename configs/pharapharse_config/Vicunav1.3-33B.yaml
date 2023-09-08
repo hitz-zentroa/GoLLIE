@@ -3,7 +3,7 @@ model_name_or_path: lmsys/vicuna-33b-v1.3
 config_template: vicuna_v1.1
 torch_dtype: "auto"
 use_lora: false
-quantization: 8
+quantization: 4
 predict_with_generate: true
 do_predict: true
 per_device_eval_batch_size: 4
@@ -17,6 +17,7 @@ datasets:
   - ace05
   - rams
   - conll03
+  - casie
   - tacred
   - ontonotes5
   - ncbidisease
@@ -25,6 +26,13 @@ datasets:
   - wnut17
   - multinerd
   - wikievents
+  - fabner
+  - e3c
+  - broadtwitter
+  - harveyner
+  - mitmovie
+  - mitrestaurant
+  - crossner
 
 language: en
 

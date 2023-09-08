@@ -38,7 +38,7 @@ def prepare_data(
 
     prompt = (
         "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase."
-        f' Output only a single paraphrase. Text: "{example}"'
+        f' If possible rearrange the word order. Output only a single paraphrase. Text: "{example}"'
     )
 
     if conv_template is not None:
