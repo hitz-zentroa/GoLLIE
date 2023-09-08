@@ -478,7 +478,7 @@ def load_model(
                         module = module.to(torch.bfloat16)
 
     if inference:
-        if quantization is None:
+        if quantization is None and use_lora:
             # If we are not using quantization, we merge the LoRA layers into the model for faster inference.
             # This is not possible if we are using 4/8 bit quantization.
             logging.info("Merging LoRA layers into the model for faster inference.")
