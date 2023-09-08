@@ -431,6 +431,10 @@ class LlamaAttention(nn.Module):
             attn_weights = attn_outputs[2] if output_attentions else None
 
         else:
+            # Make sure both are same dtype
+            if q.dtype != kv.dtype:
+                kv = kv.to(q.dtype)
+
             # no padding tokens, more efficient
             attn_outputs = flash_attn_kvpacked_func(
                 q,
