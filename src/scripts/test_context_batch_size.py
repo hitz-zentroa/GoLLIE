@@ -7,11 +7,11 @@ import bitsandbytes as bnb
 import torch
 from accelerate import Accelerator
 from fairseq.optim.adafactor import Adafactor
-from model.load_model import load_model_for_training
 from tabulate import tabulate
 from torch.optim import AdamW
 from torch.utils.data import DataLoader, Dataset
 
+from src.model.load_model import load_model
 from transformers import (
     BatchEncoding,
     DataCollatorForSeq2Seq,
@@ -126,7 +126,7 @@ def run_training_test(
     seq_len: int,
     batch_size: int,
     use_lora: bool,
-    int8_quantization: bool,
+    quantization: bool,
     optimizer_name: str,
     learning_rate: float,
 ):
@@ -146,8 +146,8 @@ def run_training_test(
             The length of the batch.
         use_lora (`bool`):
             Whether to use LoRA or not.
-        int8_quantization (`bool`):
-            Whether to use Int8 quantization or not.
+        quantization (`int`):
+            Whether to use 4 bits / 8 bits quantization or not.
         optimizer_name (`str`):
             The optimizer to use on the test.
         learning_rate (`float`):
@@ -155,7 +155,7 @@ def run_training_test(
 
     Raises:
         `ValueError`:
-            raised when `optimizer_name!="adamW"` and `int8_quantization=True`.
+            raised when `optimizer_name!="adamW"` and `quantization!=None`.
     """
     assert optimizer_name in [
         "adamW",
@@ -166,9 +166,9 @@ def run_training_test(
 
     dataloader = get_dataloader(tokenizer=tokenizer, batch_size=batch_size, seq_len=seq_len)
 
-    if int8_quantization:
+    if quantization:
         if optimizer_name != "adamW":
-            raise ValueError("Int8 quantization is only supported with adamW optimizer.")
+            raise ValueError("Quantization is only supported with adamW optimizer.")
         optimizer = bnb.optim.AdamW8bit(
             model.parameters(),
             lr=learning_rate,
@@ -242,9 +242,10 @@ def get_params():
         help="Use LORA",
     )
     parser.add_argument(
-        "--int8_quantization",
-        action="store_true",
-        help="Use int8 quantization",
+        "--quantization",
+        type=int,
+        default=None,
+        help="Use 4 bits / 8 bits quantization or not",
     )
     parser.add_argument(
         "--optimizer_name",
@@ -274,15 +275,18 @@ def main():
     logging.info(f"Sequence lengths: {seq_lens}")
     logging.info(f"Batch sizes: {batch_sizes}")
     logging.info(f"Use LORA: {args.use_lora}")
-    logging.info(f"Use int8 quantization: {args.int8_quantization}")
+    logging.info(f"Use quantization: {args.quantization}")
     logging.info(f"Optimizer: {args.optimizer_name}")
     logging.info(f"Learning rate: {args.learning_rate}")
     logging.info("*********************************")
     logging.info(f"Loading model {args.model_name_or_path}...")
-    model, tokenizer = load_model_for_training(
+    model, tokenizer = load_model(
+        inference=False,
         model_weights_name_or_path=args.model_name_or_path,
         use_lora=args.use_lora,
-        int8_quantization=args.int8_quantization,
+        quantization=args.quantization,
+        use_gradient_checkpointing=True,
+        use_flash_attention=True,
     )
     logging.info("Model loaded.")
 
@@ -300,7 +304,7 @@ def main():
                     seq_len=seq_len,
                     batch_size=batch_size,
                     use_lora=args.use_lora,
-                    int8_quantization=args.int8_quantization,
+                    quantization=args.quantization,
                     optimizer_name=args.optimizer_name,
                     learning_rate=args.learning_rate,
                 )
