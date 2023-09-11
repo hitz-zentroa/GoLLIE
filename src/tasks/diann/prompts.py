@@ -17,13 +17,14 @@ class Disability(Entity):
     span: str  # {diann_disability_examples}
 
 
+"""
 @dataclass
 class Negation(Entity):
-    """{diann_negation}"""
+    \"""{diann_negation}\"""
 
     span: str  # {diann_negation_examples}
+"""
 
-
-ENTITY_DEFINITIONS: List[Entity] = [Disability, Negation]
+ENTITY_DEFINITIONS: List[Entity] = [Disability]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))
