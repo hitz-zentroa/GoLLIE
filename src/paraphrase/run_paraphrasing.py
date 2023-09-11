@@ -46,6 +46,7 @@ def run_paraphrasing(
     )
 
     trainer = Seq2SeqTrainer(
+        tokenizer=tokenizer,
         model=model,
         args=training_args,
         data_collator=DataCollatorForSeq2Seq(
