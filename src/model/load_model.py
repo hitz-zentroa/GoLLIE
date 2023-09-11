@@ -230,7 +230,7 @@ def load_model(
         quantization in [4, 8]
     ), f"Quantization must be 4 or 8, or None for FP32/FP16 training. You passed: {quantization}"
 
-    if quantization is not None and not use_lora:
+    if not inference and quantization is not None and not use_lora:
         raise ValueError(
             "'Quantization' == 4/8 is only supported with LoRA. If you want "
             "to train a 4/8bits quantified model, you must set `use_lora=True`. If you want to "
