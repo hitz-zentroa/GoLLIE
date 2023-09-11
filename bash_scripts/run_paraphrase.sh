@@ -6,7 +6,7 @@
 #SBATCH --output=.slurm/paraphrase.out.txt
 #SBATCH --error=.slurm/paraphrase.err.txt
 
-source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
+source /ikerlariak/osainz006/venvs/collie/bin/activate
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
