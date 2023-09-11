@@ -6,7 +6,7 @@ import sys
 from src.config import ModelArguments
 from src.model.load_model import load_model
 from src.paraphrase.config import DataInferenceArguments
-from src.paraphrase.conversation import get_conv_template
+from fastchat.conversation import get_conv_template
 from src.paraphrase.dataset import ParaphraseDataset
 from src.paraphrase.utils import clean_guidelines, format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines

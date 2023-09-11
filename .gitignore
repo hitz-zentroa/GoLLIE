@@ -138,4 +138,6 @@ dmypy.json
 .idea/
 
 pretrained_models/
+collie/
 configs/model_configs/debug.yaml
+
