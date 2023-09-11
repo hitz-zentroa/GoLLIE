@@ -1,10 +1,10 @@
 import logging
 from typing import List
 
+from fastchat.conversation import get_conv_template
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
-from src.paraphrase.conversation import get_conv_template
 from src.paraphrase.utils import clean_guidelines
 from src.tasks import task_id_to_guidelines
 from transformers import BatchEncoding, PreTrainedTokenizerBase

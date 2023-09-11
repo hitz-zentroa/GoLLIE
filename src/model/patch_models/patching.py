@@ -84,12 +84,10 @@ def patch_model(
         try:
             from flash_attn.modules.mha import FlashSelfAttention  # pyright: reportMissingImports=false
         except ModuleNotFoundError:
-            warnings.warn(
-                """\nmodule flash_attn not found - either install:
+            warnings.warn("""\nmodule flash_attn not found - either install:
   pip3 install flash_attn
 or run with:
-  --use_flash_attention=false """
-            )
+  --use_flash_attention=false """)
             exit(1)
     if (resid_pdrop is None or resid_pdrop == 0.0) and not flash_attention:
         print("Continuing without patching")
