@@ -122,6 +122,8 @@ def run_paraphrasing(
                     language=data_args.language,
                 )
 
+                f.flush()
+
         with open(output_path, "w", encoding="utf8") as f:
             print(format_guidelines_as_py(guidelines), file=f)
             logging.info(f"Saved guidelines to {output_path}")
