@@ -87,33 +87,40 @@ def run_paraphrasing(
         )
 
         output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines.py")
+        output_path_orig_outputs = os.path.join(training_args.output_dir, dataset_name, "original_outputs.txt")
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         # Trainer.predict does not support multiple return sequences, so we have to do it manually
 
-        for i in range(num_return_sequences):
-            predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
-            predictions[predictions == -100] = tokenizer.pad_token_id
+        with open(output_path_orig_outputs, "w", encoding="utf8") as f:
+            for i in range(num_return_sequences):
+                predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
+                predictions[predictions == -100] = tokenizer.pad_token_id
 
-            try:
-                predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-            except OverflowError:
-                raise OverflowError(f"Unable to decode predictions: {predictions}")
+                try:
+                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+                except OverflowError:
+                    raise OverflowError(f"Unable to decode predictions: {predictions}")
 
-            if data_args.config_template is not None:
-                conv = get_conv_template(data_args.config_template)
-                predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
-            # rich.print(predictions)
+                for prediction in predictions:
+                    print(prediction, file=f)
+                    print("\n====================\n", file=f)
 
-            predictions = [prediction.split("\n")[-1].strip() for prediction in predictions]
-            predictions = [":".join(prediction.split(":")[1:]) for prediction in predictions]
+                if data_args.config_template is not None:
+                    conv = get_conv_template(data_args.config_template)
+                    predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
+                # rich.print(predictions)
 
-            guidelines = update_guidelines(
-                paraphrases=predictions,
-                guidelines=guidelines,
-                language=data_args.language,
-            )
+                predictions = [prediction.strip().strip("\n") for prediction in predictions]
+                predictions = [prediction.split("\n")[-1].strip() for prediction in predictions]
+                predictions = [":".join(prediction.split(":")[1:]) for prediction in predictions]
+
+                guidelines = update_guidelines(
+                    paraphrases=predictions,
+                    guidelines=guidelines,
+                    language=data_args.language,
+                )
 
         with open(output_path, "w", encoding="utf8") as f:
             print(format_guidelines_as_py(guidelines), file=f)
