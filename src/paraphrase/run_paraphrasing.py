@@ -106,10 +106,8 @@ def run_paraphrasing(
                 predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
             # rich.print(predictions)
 
-            predictions = [prediction.split("\n\n")[-1].strip() for prediction in predictions]
-            predictions = [
-                prediction[1:].strip() if prediction.startswith(":") else prediction for prediction in predictions
-            ]
+            predictions = [prediction.split("\n")[-1].strip() for prediction in predictions]
+            predictions = [":".join(prediction.split(":")[1:]) for prediction in predictions]
 
             guidelines = update_guidelines(
                 paraphrases=predictions,

@@ -37,8 +37,10 @@ def prepare_data(
     """
 
     prompt = (
-        "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase."
-        f' If possible rearrange the word order. Output only a single paraphrase. Text: "{example}"'
+        "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase. If"
+        " possible rearrange the word order. Write a short explanation of how are you paraphrasing the text.\n"
+        'Use the following format: "Explanation: <your explanation>". \n "Paraphrase: <your paraphrase>". \n'
+        f'Text: "{example}"'
     )
 
     if conv_template is not None:
