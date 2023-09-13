@@ -139,5 +139,5 @@ dmypy.json
 
 pretrained_models/
 collie/
-configs/model_configs/debug.yaml
+configs/model_configs/legacy/debug.yaml
 
