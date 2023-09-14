@@ -6,8 +6,10 @@ import os
 import sys
 from typing import Any, Dict, List, Type
 
+from tqdm import tqdm
+
 from src.config import DataTrainingArguments, ModelArguments
-from src.tasks import TASK_ID_TO_TASKS
+from src.tasks import task_id_to_prompts
 from src.tasks.utils_typing import AnnotationList
 from transformers import HfArgumentParser, Seq2SeqTrainingArguments
 
@@ -73,7 +75,11 @@ class ResultLogger:
                 },
                 "hallucinated_predictions": {
                     "total": self.hallucinated_predictions,
-                    "percentage%": round((self.hallucinated_predictions / self.total_predictions) * 100, 4),
+                    "percentage%": (
+                        0.0
+                        if self.total_predictions == 0
+                        else round((self.hallucinated_predictions / self.total_predictions) * 100, 4)
+                    ),
                 },
                 "total": {"predictions": self.valid_predictions, "gold": self.gold_predictions},
             },
@@ -188,55 +194,70 @@ def evaluate(
     gold_data_dir = data_args.dataset_dir
     all_scores = {}
 
-    for task in data_args.test_tasks:
-        gold_path = os.path.join(
-            gold_data_dir,
-            f"{task}.{'test' if not data_args.use_dev_inference else 'dev'}.jsonl",
-        )
-        pred_path = os.path.join(predictions_dir, task) + ".predictions.jsonl"
-
-        if not os.path.exists(gold_path):
-            raise FileNotFoundError(f"File not found: '{gold_path}'")
-
-        if not os.path.exists(pred_path):
-            raise FileNotFoundError(f"File not found: '{pred_path}'")
-
-        task_logger = ResultLogger(task)
-        task_module = None
-        scorer = None
-
-        with open(gold_path, "rt", encoding="utf8") as gold_f, open(pred_path, "rt", encoding="utf8") as pred_f:
-            for gold_line, pred_line in zip(gold_f, pred_f):
-                gold_line = json.loads(gold_line)
-                pred_line = json.loads(pred_line)
-
-                if not task_module:
-                    task_module = TASK_ID_TO_TASKS[gold_line["task_id"]] + ".prompts"
-                    import_prompts(task_module)
-
-                if not scorer:
-                    scorer = get_class(gold_line["scorer_cls"])()
-
-                gold_labels: AnnotationList = AnnotationList.from_output(
-                    str(gold_line["labels"]), task_module=task_module
-                )
-
-                pred_labels = pred_line["model_prediction"].strip().split("result = ")[-1]
-                pred_labels: AnnotationList = AnnotationList.from_output(str(pred_labels), task_module=task_module)
-
-                task_logger.add_sentence(
-                    sentence=gold_line["unlabelled_sentence"], gold_labels=gold_labels, pred_labels=pred_labels
-                )
-
-        task_metrics = task_logger.compute_metrics(scorer)
-        all_scores[task] = task_metrics
-        # rich.print(list(zip(labels, predictions)))
-        task_logger.print_predictions(output_path=os.path.join(predictions_dir, f"{task}.eval_file.json"))
-
     scores_file_name = os.path.join(output_dir, "task_scores.json")
+    scores_file_name_summary = os.path.join(output_dir, "task_scores_summary.json")
+    with tqdm(total=len(data_args.test_tasks), desc="Evaluating") as pbar:
+        for task in data_args.test_tasks:
+            pbar.set_description(f"Evaluating {task}")
+            gold_path = os.path.join(
+                gold_data_dir,
+                f"{task}.{'test' if not data_args.use_dev_inference else 'dev'}.jsonl",
+            )
+            pred_path = os.path.join(predictions_dir, task) + ".predictions.jsonl"
+
+            if not os.path.exists(gold_path):
+                raise FileNotFoundError(f"File not found: '{gold_path}'")
+
+            if not os.path.exists(pred_path):
+                raise FileNotFoundError(f"File not found: '{pred_path}'")
+
+            task_logger = ResultLogger(task)
+            task_module = None
+            scorer = None
+
+            with open(gold_path, "rt", encoding="utf8") as gold_f, open(pred_path, "rt", encoding="utf8") as pred_f:
+                for gold_line, pred_line in zip(gold_f, pred_f):
+                    gold_line = json.loads(gold_line)
+                    pred_line = json.loads(pred_line)
+
+                    if not task_module:
+                        task_module = task_id_to_prompts(gold_line["task_id"])
+                        import_prompts(task_module)
+
+                    if not scorer:
+                        scorer = get_class(gold_line["scorer_cls"])()
+
+                    gold_labels: AnnotationList = AnnotationList.from_output(
+                        str(gold_line["labels"]), task_module=task_module
+                    )
+
+                    pred_labels = pred_line["model_prediction"].strip().split("result = ")[-1]
+                    pred_labels: AnnotationList = AnnotationList.from_output(str(pred_labels), task_module=task_module)
+
+                    task_logger.add_sentence(
+                        sentence=gold_line["unlabelled_sentence"], gold_labels=gold_labels, pred_labels=pred_labels
+                    )
+
+            task_metrics = task_logger.compute_metrics(scorer)
+            all_scores[task] = task_metrics
+            # rich.print(f"{task} scores: {task_metrics}")
+            task_logger.print_predictions(output_path=os.path.join(predictions_dir, f"{task}.eval_file.json"))
+            pbar.update(1)
+
     with open(scores_file_name, "wt", encoding="utf8") as f:
         json.dump(all_scores, f, indent=4, ensure_ascii=False)
-    logging.info(f"Scores saved in: {scores_file_name}")
+
+    for task, score in all_scores.items():
+        for metric, value in score.items():
+            if "class_scores" in value:
+                value.pop("class_scores")
+
+    with open(scores_file_name_summary, "wt", encoding="utf8") as f:
+        json.dump(all_scores, f, indent=4, ensure_ascii=False)
+
+    logging.info(
+        f"Scores saved in: {scores_file_name}. A summary without class scores saved in: {scores_file_name_summary}"
+    )
 
     return all_scores
 
@@ -273,6 +294,8 @@ if __name__ == "__main__":
                 )
                 if os.path.isdir(c)
             ]
+
+            checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"

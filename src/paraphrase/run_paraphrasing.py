@@ -3,13 +3,15 @@ import logging
 import os
 import sys
 
+from fastchat.conversation import get_conv_template
+
 from src.config import ModelArguments
-from src.model.load_model import load_model_for_inference
+from src.model.load_model import load_model
 from src.paraphrase.config import DataInferenceArguments
-from src.paraphrase.conversation import get_conv_template
 from src.paraphrase.dataset import ParaphraseDataset
 from src.paraphrase.utils import clean_guidelines, format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines
+from src.trainer import get_correct_torch_dtype
 from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
 
 
@@ -23,17 +25,28 @@ def run_paraphrasing(
 
     logging.info(
         f"Loading model from {model_args.model_name_or_path}.\n"
-        f"   - int8_quantization: {model_args.int8_quantization}\n"
+        f"   - quantization: {model_args.quantization}\n"
         f"   - lora_weights_name_or_path: {model_args.lora_weights_name_or_path}\n"
     )
 
-    model, tokenizer = load_model_for_inference(
-        weights_path=model_args.model_name_or_path,
-        int8_quantization=model_args.int8_quantization,
+    model, tokenizer = load_model(
+        inference=True,
+        model_weights_name_or_path=model_args.model_name_or_path,
+        quantization=model_args.quantization,
+        use_lora=model_args.lora_weights_name_or_path is not None,
         lora_weights_name_or_path=model_args.lora_weights_name_or_path,
+        force_auto_device_map=model_args.force_auto_device_map,
+        torch_dtype=get_correct_torch_dtype(
+            quantization=model_args.quantization_inference, model_args=model_args, training_args=training_args
+        ),
+        use_better_transformer=model_args.use_better_transformer,
+        trust_remote_code=model_args.trust_remote_code,
+        use_flash_attention=model_args.use_flash_attention,
+        max_memory_MB=model_args.max_memory_MB,
     )
 
     trainer = Seq2SeqTrainer(
+        tokenizer=tokenizer,
         model=model,
         args=training_args,
         data_collator=DataCollatorForSeq2Seq(
@@ -74,35 +87,42 @@ def run_paraphrasing(
         )
 
         output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines.py")
+        output_path_orig_outputs = os.path.join(training_args.output_dir, dataset_name, "original_outputs.txt")
 
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
         # Trainer.predict does not support multiple return sequences, so we have to do it manually
 
-        for i in range(num_return_sequences):
-            predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
-            predictions[predictions == -100] = tokenizer.pad_token_id
+        with open(output_path_orig_outputs, "w", encoding="utf8") as f:
+            for i in range(num_return_sequences):
+                predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
+                predictions[predictions == -100] = tokenizer.pad_token_id
 
-            try:
-                predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-            except OverflowError:
-                raise OverflowError(f"Unable to decode predictions: {predictions}")
+                try:
+                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
+                except OverflowError:
+                    raise OverflowError(f"Unable to decode predictions: {predictions}")
 
-            if data_args.config_template is not None:
-                conv = get_conv_template(data_args.config_template)
-                predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
-            # rich.print(predictions)
+                for prediction in predictions:
+                    print(prediction, file=f)
+                    print("\n====================\n", file=f)
 
-            predictions = [prediction.split("\n\n")[-1].strip() for prediction in predictions]
-            predictions = [
-                prediction[1:].strip() if prediction.startswith(":") else prediction for prediction in predictions
-            ]
+                if data_args.config_template is not None:
+                    conv = get_conv_template(data_args.config_template)
+                    predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
+                # rich.print(predictions)
 
-            guidelines = update_guidelines(
-                paraphrases=predictions,
-                guidelines=guidelines,
-                language=data_args.language,
-            )
+                predictions = [prediction.strip().strip("\n") for prediction in predictions]
+                predictions = [prediction.split("\n")[-1].strip() for prediction in predictions]
+                predictions = [":".join(prediction.split(":")[1:]) for prediction in predictions]
+
+                guidelines = update_guidelines(
+                    paraphrases=predictions,
+                    guidelines=guidelines,
+                    language=data_args.language,
+                )
+
+                f.flush()
 
         with open(output_path, "w", encoding="utf8") as f:
             print(format_guidelines_as_py(guidelines), file=f)

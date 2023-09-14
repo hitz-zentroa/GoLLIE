@@ -199,6 +199,21 @@ class CollieTrainer(Seq2SeqTrainer):
 
         self.first_train_batch = True
 
+        # HuggingFace mad TrainingArguments inmutable and therefore the next function crashes
+        # We made TrainingArguments mutable again
+        TrainingArguments.__setattr__ = object.__setattr__
+
+        # Ensure that the values are floats
+        args.set_optimizer(
+            name=args.optim,
+            learning_rate=float(args.learning_rate),
+            weight_decay=float(args.weight_decay),
+            beta1=float(args.adam_beta1),
+            beta2=float(args.adam_beta2),
+            epsilon=float(args.adam_epsilon),
+            args=args.optim_args,
+        )
+
         super().__init__(
             model=model,
             args=args,
@@ -266,7 +281,7 @@ class CollieTrainer(Seq2SeqTrainer):
             print(print_loss_weight_mask.tolist())
             print()
 
-        outputs = model(**inputs)
+        outputs = model(**inputs, use_cache=False)
 
         logits = outputs["logits"] if isinstance(outputs, dict) else outputs[0]
 
@@ -408,6 +423,7 @@ class RotateDatasetCallback(TrainerCallback):
 
 
 def get_correct_torch_dtype(
+    quantization: int,
     model_args: ModelArguments,
     training_args: Seq2SeqTrainingArguments,
 ) -> "str":
@@ -415,6 +431,8 @@ def get_correct_torch_dtype(
     Returns the correct torch dtype based on the model and training arguments (if quantization is enabled).
 
     Args:
+        quantization (`int`, optional):
+            '4' or '8' for 4 bits or 8 bits quantization or None for 16/32bits training. Defaults to `None`.
         model_args (:class:`~transformers.ModelArguments`):
             The model arguments.
         training_args (:class:`~transformers.Seq2SeqTrainingArguments`):
@@ -423,7 +441,11 @@ def get_correct_torch_dtype(
     Returns:
         :obj:`str`: The correct torch dtype.
     """
-    if model_args.quantization in [4, 8]:
+
+    if isinstance(quantization, str):
+        quantization = int(quantization)
+
+    if quantization in [4, 8]:
         if training_args.fp16:
             if model_args.torch_dtype in ["auto", None]:
                 logging.warning(

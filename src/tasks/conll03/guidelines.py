@@ -2,13 +2,24 @@ GUIDELINES = {
     "ner_person": {
         "en": [
             "first, middle and last names of people, animals and fictional characters aliases.",
-            "Aliases for first, middle, and last names of individuals, animals, and fictional characters.",
-            "Nicknames, pseudonyms, and alter egos of individuals, creatures, and fictional personas.",
             (
-                "First, middle, and last names are also referred to as aliases of people, animals, and fictional"
-                " characters."
+                'Paraphrase: "The initial, middle, and last names of individuals, creatures, and imaginary'
+                " personalities, along \nwith their pseudonyms."
             ),
-            "Aliases for the first, middle, and last names of people, animals, and fictional characters.",
+            (
+                'Paraphrase: "Initially, focus on the full names of individuals, animals, and imaginary personalities,'
+                " as well as \ntheir pseudonyms."
+            ),
+            (
+                'Paraphrase: "Initially, the study focused on the names of individuals, including their first, middle,'
+                " and last \nnames, as well as the names of animals and imaginary characters, along with any aliases"
+                " they might have."
+            ),
+            (
+                'Original text: "first, middle and last names of people, animals and fictional characters aliases."'
+                ' Paraphrased \ntext: "Initially, individuals consider the full names of humans, animals, and'
+                " imaginary personalities, along with \ntheir nicknames or pseudonyms."
+            ),
         ]
     },
     "ner_organization": {
@@ -23,37 +34,44 @@ GUIDELINES = {
                 " organisations."
             ),
             (
-                "There are various types of organizations, such as press agencies, studios, banks, stock markets,"
-                " manufacturers, \ncooperatives, and government bodies, that have subdivisions or brands, and some of"
-                " these organizations have political movements \nor publications. There are also musical companies,"
-                " public organizations such as schools and universities, and other \ncollections of people such as"
-                " sports clubs, religious orders, and youth organizations."
+                "Organizations such as news agencies, film studios, banks, stock exchanges, manufacturers,"
+                " cooperatives, as well \nas their subdivisions like newsrooms, and various entities like political"
+                " movements (political parties, terrorist \ngroups), government bodies (ministries, councils, courts),"
+                " political unions of countries (e.g., the United Nations), \npublications (magazines, newspapers,"
+                " journals), musical companies (bands, choirs, opera companies, orchestras), public \norganizations"
+                " (schools, universities, charities), and other assortments of people (sports clubs, sports teams,"
+                " associations, \ntheaters, companies, religious orders, youth organizations) are examples of groups"
+                " that can be analyzed using network \nanalysis."
             ),
             (
-                "Various organizations such as press agencies, studios, banks, stock markets, manufacturers,"
-                " cooperatives, \nnewsrooms, political parties, terrorist organizations, government bodies,"
-                " ministries, councils, courts, political \nunions of countries (e.g. the UN), magazines, newspapers,"
-                " journals, bands, choirs, opera companies, orchestras, public \norganizations (schools, universities,"
-                " charities), other collections of people (sports clubs, sports teams, associations, \ntheaters,"
-                " religious orders, youth organizations are mentioned in the text."
+                "Organizations such as news agencies, film studios, banks, stock exchanges, manufacturers, and"
+                " cooperatives, as \nwell as subdivisions of companies like newsrooms, and distinct brands encompass"
+                " political movements like political \nparties and terrorist groups, government entities including"
+                " ministries, councils, courts, and political unions of \ncountries like the United Nations, various"
+                " publications like magazines, newspapers, and journals, musical companies like \nbands, choirs, opera"
+                " companies, and orchestras, public organizations like schools, universities, and charities, and"
+                " \nother assortments of people such as sports clubs, sports teams, associations, theaters, and"
+                " religious orders, as well as \nyouth organizations."
             ),
             (
-                "There are various types of organizations that can be considered as actors in the media ecosystem,"
-                " including \ncompanies like press agencies, studios, banks, stock markets, manufacturers,"
-                " cooperatives, as well as their subdivisions \nsuch as newsrooms, brands, political movements,"
-                " government bodies, publications, musical companies, public \norganizations, and other collections of"
-                " people like sports clubs, sports teams, associations, theaters, religious orders, and \nyouth"
-                " organizations."
+                "Organizations such as news agencies, film studios, banks, stock exchanges, manufacturers, and"
+                " cooperatives, as \nwell as subdivisions of these companies like newsrooms, and brands associated"
+                " with political movements like political \nparties and terrorist groups, government entities"
+                " including ministries, councils, courts, and political unions of \ncountries like the United Nations,"
+                " various publications like magazines, newspapers, and journals, musical companies \nencompassing"
+                " bands, choirs, opera companies, and orchestras, public organizations such as schools, universities,"
+                " and \ncharities, and finally other assortments of people like sports clubs, sports teams,"
+                " associations, theaters, companies, \nreligious orders, and youth organizations."
             ),
             (
-                "There are various types of organizations that can be considered as sources of news, including press"
-                " agencies, \nstudios, banks, stock markets, manufacturers, cooperatives, subdivisions of companies"
-                " such as newsrooms, brands, \npolitical movements like political parties and terrorist organizations,"
-                " government bodies like ministries, councils, \ncourts, and political unions of countries,"
-                " publications like magazines, newspapers, and journals, musical companies \nlike bands, choirs, opera"
-                " companies, and orchestras, public organizations such as schools, universities, charities, \nand"
-                " other collections of people like sports clubs, sports teams, associations, theaters, companies,"
-                " religious \norders, and youth organizations."
+                "Organizations such as news agencies, film studios, banks, stock exchanges, manufacturers,"
+                " cooperatives, as well \nas subdivisions of companies like newsrooms, brands, political movements"
+                " like political parties and terrorist \norganizations, government entities like ministries, councils,"
+                " courts, and political unions of countries like the United \nNations, various publications like"
+                " magazines, newspapers, and journals, musical companies like bands, choirs, opera \ncompanies, and"
+                " orchestras, public organizations like schools, universities, and charities, and other groups of"
+                " people like \nsports clubs, sports teams, associations, theaters, companies, religious orders, and"
+                " youth organizations."
             ),
         ]
     },
@@ -72,32 +90,62 @@ GUIDELINES = {
                 " towers, halls, rooms, vicarages, courtyards) abstract \n``places'' (e.g. {\\it the free world})"
             ),
             (
-                'The term "places" encompasses a wide range of physical locations, including roads and motorways,'
-                " regions such as \nvillages, towns, and countries, structures like bridges and ports, natural"
-                " locations like rivers and forests, public places \nlike squares and parks, and commercial places"
-                " like pubs and hotels. Additionally, there are assorted buildings like \nhouses, monasteries, and"
-                ' factories, and abstract concepts like "the free world.'
+                "Roads (including streets and motorways) connect various regions (such as villages, towns, cities,"
+                " provinces, \ncountries, continents, dioceses, and parishes). They also provide access to structures"
+                " (like bridges, ports, and dams) and \nnatural locations (like mountains, mountain ranges, woods,"
+                " rivers, wells, fields, valleys, gardens, nature reserves, \nallotments, beaches, and national"
+                " parks). These roads lead to public places (like squares, opera houses, museums, schools, \nmarkets,"
+                " airports, stations, swimming pools, hospitals, sports facilities, youth centers, parks, town halls,"
+                " theaters, \ncinemas, galleries, camping grounds, NASA launch pads, club houses, universities,"
+                " libraries, churches, medical centers, \nand parking lots) and commercial places (such as chemists,"
+                " pubs, restaurants, depots, hostels, hotels, industrial \nparks, nightclubs, and music venues)."
+                " Additionally, they pass by various types of buildings (including houses, \nmonasteries, creches,"
+                " mills, army barracks, castles, retirement homes, towers, halls, rooms, vicarages, and courtyards),"
+                ' as \nwell as more abstract "places" (e.g., "the free world").'
             ),
             (
-                "The following list includes various types of locations: roads and streets, regions such as villages,"
-                " towns, and \ncountries, structures like bridges and ports, natural locations like mountains and"
-                " rivers, public places like squares and \nparks, and commercial places like pubs and industrial"
-                " parks. Additionally, there are assorted buildings like houses and \nmonasteries, and abstract places"
-                ' like "the free world.'
+                "Roads (including streets, motorways) lead to various regions (such as villages, towns, cities,"
+                " provinces, \ncountries, continents, dioceses, parishes) and are connected to different structures"
+                " (like bridges, ports, dams). They also \ntraverse natural locations (like mountains, mountain"
+                " ranges, woods, rivers, wells, fields, valleys, gardens, nature \nreserves, allotments, beaches, and"
+                " national parks) as well as public places (encompassing squares, opera houses, museums, \nschools,"
+                " markets, airports, stations, swimming pools, hospitals, sports facilities, youth centers, parks,"
+                " town halls, \ntheaters, cinemas, galleries, camping grounds, NASA launch pads, club houses,"
+                " universities, libraries, churches, medical \ncenters, parking lots, playgrounds, and cemeteries)."
+                " Furthermore, they pass by commercial places (such as chemists, pubs, \nrestaurants, depots, hostels,"
+                " hotels, industrial parks, nightclubs, and music venues) and various buildings (like houses,"
+                " \nmonasteries, creches, mills, army barracks, castles, retirement homes, towers, halls, rooms,"
+                ' vicarages, and courtyards). \nLastly, they can also encompass abstract "places" (e.g., "the free'
+                ' world").'
             ),
             (
-                "The following list includes various types of locations: roads and streets, regions such as villages,"
-                " towns, and \ncountries, structures like bridges and ports, natural locations like mountains and"
-                " rivers, public places like squares and \nhospitals, commercial places like pubs and hotels, and"
-                " assorted buildings like houses and army barracks. Additionally, there \nare abstract places like"
-                ' "the free world.'
+                "Roads (including streets, motorways) lead to various regions (encompassing villages, towns, cities,"
+                " provinces, \ncountries, continents, dioceses, parishes), and they connect different structural"
+                " elements (such as bridges, ports, dams). \nThey also traverse natural locations (like mountains,"
+                " mountain ranges, woods, rivers, wells, fields, valleys, \ngardens, nature reserves, allotments,"
+                " beaches, and national parks). Furthermore, they provide access to public places \n(like squares,"
+                " opera houses, museums, schools, markets, airports, stations, swimming pools, hospitals, sports"
+                " \nfacilities, youth centers, parks, town halls, theaters, cinemas, galleries, camping grounds, NASA"
+                " launch pads, club houses, \nuniversities, libraries, churches, medical centers, and parking lots)"
+                " and commercial establishments (like chemists, pubs, \nrestaurants, depots, hostels, hotels,"
+                " industrial parks, nightclubs, and music venues). Additionally, they serve a variety of \nspecific"
+                " buildings (including houses, monasteries, creches, mills, army barracks, castles, retirement homes,"
+                ' towers, \nhalls, rooms, vicarages, and courtyards), as well as more abstract "places" (e.g., "the'
+                ' free world").'
             ),
             (
-                "The following are various types of places: roads and streets, regions including villages, towns, and"
-                " countries, \nstructures such as bridges and ports, natural locations like mountains, rivers, and"
-                " forests, public places like squares, \nmuseums, and parks, commercial places like pubs and hotels,"
-                " and assorted buildings like houses and monasteries. \nAdditionally, there are abstract places like"
-                ' "the free world.'
+                "Roads (including streets, motorways) lead to various regions (encompassing villages, towns, cities,"
+                " provinces, \ncountries, continents, dioceses, parishes), and they connect diverse structures (such"
+                " as bridges, ports, dams). They also \ntraverse natural locations (like mountains, mountain ranges,"
+                " woods, rivers, wells, fields, valleys, gardens, nature \nreserves, allotments, beaches, and national"
+                " parks). Furthermore, they access public places (like squares, opera houses, \nmuseums, schools,"
+                " markets, airports, stations, swimming pools, hospitals, sports facilities, youth centers, parks,"
+                " town \nhalls, theaters, cinemas, galleries, camping grounds, NASA launch pads, club houses,"
+                " universities, libraries, \nchurches, medical centers, and parking lots), as well as commercial"
+                " places (chemists, pubs, restaurants, depots, hostels, \nhotels, industrial parks, nightclubs, music"
+                " venues). Additionally, they pass by a variety of buildings (such as houses, \nmonasteries, creches,"
+                " mills, army barracks, castles, retirement homes, towers, halls, rooms, vicarages, and courtyards),"
+                ' and \nthey even touch abstract "places" (e.g., "the free world").'
             ),
         ]
     },
@@ -112,40 +160,35 @@ GUIDELINES = {
                 " (not brands) of objects (car types, planes, motorbikes)"
             ),
             (
-                "This text describes a list of nouns that can be used to describe various things, including location,"
-                " organizations, \nmiscellaneous items, and people. These nouns can be used to modify other words,"
-                " such as adjectives derived from words that describe \nlocation, organizations, miscellaneous items,"
-                " or people. Additionally, the text mentions specific types of events, such as \nconferences,"
-                " festivals, sports competitions, forums, parties, concerts, and wars. It also mentions specific types"
-                " of names, \nsuch as those related to sports leagues, cups, titles, and eras in time."
+                "Phrases that include a location, organization, or person descriptor, along with terms derived from"
+                " words \npertaining to religions, political ideologies, nationalities, languages, events, programs,"
+                " wars, sports-related names, \ntitles, slogans, and types of objects, such as cars, planes, and"
+                " motorbikes."
             ),
             (
-                "The text describes a list of nouns that can be used in a sentence, including adjectives that describe"
-                " places, \norganizations, miscellaneous things, and people, as well as nouns that refer to various"
-                " types of religions, political ideologies, \nnationalities, languages, programs, events, and wars."
-                " The list also includes nouns that refer to sports-related things, such as \nleagues, cups, and"
-                " titles related to books, songs, films, stories, albums, musicals, and TV programs. Additionally, the"
-                " \ntext includes nouns that describe different types of objects, such as car types, planes, and"
-                " motorbikes, as well as nouns \nthat refer to different eras in time and types of objects."
+                "Phrases that include a term denoting a location, organization, abstract concept, or person, as well"
+                " as words \nderived from these categories, such as religions, political ideologies, nationalities,"
+                " languages, various types of \nevents (like conferences, festivals, sports competitions, forums,"
+                " parties, concerts), wars, sports-related \ndesignations (league tables, leagues, cups, titles of"
+                " books, songs, films, stories, albums, musicals, TV programs), slogans, \nand eras in time associated"
+                " with specific types of objects (like car types, planes, motorbikes)."
             ),
             (
-                "The text describes a list of nouns that can be used to describe various entities, including location,"
-                " \norganizations, miscellaneous items, and people. These nouns can be derived from other words that"
-                " refer to similar entities, such as \nreligions, political ideologies, nationalities, languages,"
-                " programs, events, wars, sports-related names, and eras in \ntime. Examples of these nouns include"
-                " adjectives, titles, slogans, and types of objects."
+                'Text: "Terms consisting of a component indicating a place, institution, abstract concept, or person,'
+                " as well as \nderived words from such terms that encompass religious beliefs, political doctrines,"
+                " nationalities, languages, events \n(such as conferences, festivals, sports competitions, forums,"
+                " parties, concerts), wars, sports-related \nappellations (like league tables, leagues, cups, and"
+                " titles of books, songs, films, stories, albums, musicals, TV programs), \nslogans, and epochs in"
+                " time, as well as types (not brands) of objects (like car types, planes, motorbikes)."
             ),
             (
-                "The text describes a set of nouns that can be classified into various categories, including location"
-                " and \norganization adjectives, religion and ideology nouns, nationality nouns, language nouns,"
-                " program and event nouns, war nouns, \nsport-related nouns, and time period nouns. Examples of these"
-                ' nouns include "location adjectives" like "New York City" or \n"organization adjectives" like "United'
-                ' Nations," as well as "religion nouns" like "Christianity" and "political ideology \nnouns" like'
-                ' "communism." Other examples include "nationality nouns" like "American" or "language nouns" like'
-                ' \n"Spanish," as well as "program and event nouns" like "conference" or "festival," "war nouns" like'
-                ' "World War II," \n"sport-related nouns" like "NBA," and "time period nouns" like "Renaissance."'
-                ' Additionally, the text includes various slogans, \nlike "Make America Great Again," and eras in'
-                ' time, like "21st century.'
+                "Terms consisting of a component that indicates a place, institution, abstract notion, or individual,"
+                " as well as \nwords derived from a word that signifies a location, organization, abstract concept, or"
+                " nationality, encompassing \nvarious religions, political ideologies, languages, events (including"
+                " conferences, festivals, sports competitions, \nforums, parties, and concerts), wars, sports-related"
+                " appellations (such as league tables, leagues, and cup titles in \nbooks, songs, films, stories,"
+                " albums, musicals, and TV programs), slogans, and epochs in time, while also covering types \n(as"
+                " opposed to specific brands) of objects (like car models, planes, and motorbikes)."
             ),
         ]
     },

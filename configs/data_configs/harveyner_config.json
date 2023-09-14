@@ -1,0 +1,22 @@
+{
+    "dataset_name": "HarveyNER",
+    "tasks": ["NER"],
+    "dataloader_cls": "src.tasks.harveyner.data_loader.HarveyNerDatasetLoader",
+    "sampler_cls": "src.tasks.harveyner.data_loader.HarveyNerSampler",
+    "train_file": "data/HarveyNER/tweets.train.bio",
+    "dev_file": "data/HarveyNER/tweets.dev.bio",
+    "test_file": "data/HarveyNER/tweets.test.bio",
+    "prompt_template": "templates/prompt.txt",
+    "seed": [0, 24, 42],
+    "label_noise_prob": [0.15, 0.50, 0.75],
+    "task_configuration": {
+        "NER": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.15,
+            "scorer": "src.tasks.harveyner.scorer.HarveyNEREntityScorer",
+            "paraphrase_train": true,
+            "label_noise": 0.5
+        }
+    }
+}

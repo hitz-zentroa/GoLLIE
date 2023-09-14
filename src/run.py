@@ -12,7 +12,7 @@ from datasets import DatasetDict
 from src.config import DataTrainingArguments, ModelArguments
 from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
 from src.evaluate import evaluate
-from src.model.load_model import load_model_for_inference, load_model_for_training
+from src.model.load_model import load_model, merge_lora_model
 from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
 from transformers import (
     HfArgumentParser,
@@ -38,14 +38,23 @@ def train_collie(
 ):
     logging.info(f"Loading {model_args.model_name_or_path} model...")
 
-    model, tokenizer = load_model_for_training(
+    model, tokenizer = load_model(
+        inference=False,
         model_weights_name_or_path=model_args.model_name_or_path,
         quantization=model_args.quantization,
         use_lora=model_args.use_lora,
+        lora_r=model_args.lora_r,
         lora_target_modules=model_args.lora_target_modules,
-        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        torch_dtype=get_correct_torch_dtype(
+            quantization=model_args.quantization, model_args=model_args, training_args=training_args
+        ),
         force_auto_device_map=model_args.force_auto_device_map,
         use_gradient_checkpointing=training_args.gradient_checkpointing,
+        use_better_transformer=model_args.use_better_transformer,
+        trust_remote_code=model_args.trust_remote_code,
+        use_flash_attention=model_args.use_flash_attention,
+        fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
+        max_memory_MB=model_args.max_memory_MB,
     )
 
     logging.info("Loading datasets...")
@@ -80,6 +89,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=data_args.prompt_loss_weight,
+            max_examples=data_args.max_examples_per_task_train,
         )
         training_datasets.append(train_dataset)
 
@@ -95,6 +105,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=0.0,
+            max_examples=data_args.max_examples_per_task_val,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
 
@@ -187,12 +198,51 @@ def inference_collie(
             f"path as the model weights: {model_path}."
         )
 
-    model, tokenizer = load_model_for_inference(
-        weights_path=model_path,
-        quantization=model_args.quantization,
+    delete_merged_model: bool = False
+    if model_args.merge_lora_before_eval:
+        logging.info("You have specified to merge the LORA weights before evaluation. We will attempt to do so.")
+        if model_args.quantization is None:
+            logging.warning(
+                "You have specified to create a merged model (merge_lora_before_eval=True), but you have not specified"
+                " a quantization precision. Model loades without quantization are automatically merged when loaded for"
+                " inference, so there is no need to save a merged model and reaload it. This flag is only useful when"
+                " you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you plan to"
+                " release the merged model."
+            )
+        if os.path.exists(os.path.join(training_args.output_dir, "merged_model")):
+            logging.info(
+                f"A merged model already exists at {os.path.join(training_args.output_dir,'merged_model')}. We will"
+                " use this model."
+            )
+            delete_merged_model = False
+
+        else:
+            merge_lora_model(
+                weights_path=model_path,
+                lora_weights_name_or_path=lora_weights_name_or_path,
+                torch_dtype=model_args.torch_dtype,
+                output_path=os.path.join(training_args.output_dir, "merged_model"),
+            )
+            delete_merged_model = not model_args.keep_merged_model_after_eval
+
+        model_path = os.path.join(training_args.output_dir, "merged_model")
+        lora_weights_name_or_path = None
+        clean_cache()  # Ensure that nothing remains in the cache, as we will load the mergen model next.
+
+    model, tokenizer = load_model(
+        inference=True,
+        model_weights_name_or_path=model_path,
+        quantization=model_args.quantization_inference,
+        use_lora=model_args.lora_weights_name_or_path is not None,
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
-        torch_dtype=get_correct_torch_dtype(model_args=model_args, training_args=training_args),
+        torch_dtype=get_correct_torch_dtype(
+            quantization=model_args.quantization_inference, model_args=model_args, training_args=training_args
+        ),
+        use_better_transformer=model_args.use_better_transformer,
+        trust_remote_code=model_args.trust_remote_code,
+        use_flash_attention=model_args.use_flash_attention,
+        max_memory_MB=model_args.max_memory_MB,
     )
 
     trainer = CollieTrainer(
@@ -219,10 +269,15 @@ def inference_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
             prompt_loss_weight=0.0,
+            max_examples=data_args.max_examples_per_task_test,
         )
 
         logging.info(f"Running inference on {test_task}...")
         predictions = trainer.predict(test_dataset)
+
+        if not trainer.is_world_process_zero():
+            # In distributed training, we only want one process to write predictions to the file.
+            continue
 
         output_dir = training_args.output_dir if checkpoint_path is None else checkpoint_path
         if training_args.predict_with_generate:
@@ -253,8 +308,24 @@ def inference_collie(
                 logging.info(f"Writing metrics to {metrics_name}")
                 json.dump(predictions.metrics, fp=f, ensure_ascii=False, indent=4)
 
-    if training_args.predict_with_generate:
-        evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
+    if training_args.predict_with_generate and trainer.is_world_process_zero():
+        task_scores = evaluate(model_args, data_args, training_args, checkpoint_path=checkpoint_path)
+        # Add test_ prefix to report test scores
+        task_scores = {f"test_{task}": score for task, score in task_scores.items()}
+        # Report
+        trainer.log(task_scores)
+
+    if delete_merged_model:
+        logging.info(f"Deleting merged model at {model_path}")
+        import shutil
+
+        try:
+            shutil.rmtree(model_path)
+        except OSError as e:
+            logging.error(
+                f"Unable to delete the merged model {model_path} : {e.strerror}\n"
+                "You may need to delete the merged model manually."
+            )
 
 
 if __name__ == "__main__":
@@ -278,15 +349,23 @@ if __name__ == "__main__":
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    if data_args.train_tasks is not None:
+    if training_args.do_train and data_args.train_tasks is not None:
         train_collie(
             model_args,
             data_args,
             training_args,
         )
         clean_cache()
+        if model_args.use_lora and model_args.merge_lora_after_training:
+            merge_lora_model(
+                weights_path=model_args.model_name_or_path,
+                lora_weights_name_or_path=training_args.output_dir,
+                torch_dtype=model_args.torch_dtype,
+                output_path=os.path.join(training_args.output_dir, "merged_model"),
+            )
+            clean_cache()
 
-    if data_args.test_tasks is not None:
+    if training_args.do_predict and data_args.test_tasks is not None:
         if not data_args.evaluate_all_checkpoints:
             inference_collie(
                 model_args,
@@ -307,7 +386,18 @@ if __name__ == "__main__":
             # Sort checkpoints by step number
             checkpoints = sorted(checkpoints, key=lambda x: int(x.split("-")[-1]))
             # Evaluate only checkpoints trained for 1000 or more steps, underfit models are very slow to evaluate
+            no_eval_checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) < 1000]
+            if len(no_eval_checkpoints) > 0:
+                logging.warning(
+                    f"Found {len(no_eval_checkpoints)} checkpoints in {training_args.output_dir} that will not be"
+                    f" evaluated: {no_eval_checkpoints} . We will evaluate only checkpoints trained for 1000 or more"
+                    " steps, underfit models are very slow to evaluate."
+                )
+
             checkpoints = [c for c in checkpoints if int(c.split("-")[-1]) >= 1000]
+
+            # Add also the last checkpoint (stored in the output_dir)
+            # checkpoints.append(training_args.output_dir)
 
             logging.info(
                 f"Found {len(checkpoints)} checkpoints in {training_args.output_dir}:"

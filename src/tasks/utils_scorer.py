@@ -64,9 +64,15 @@ class SpanScorer(Scorer):
         ), f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount must be equal."
 
         tp = total_pos = total_pre = 0
+
+        class_scores = {}
+
         for ref, pre in zip(reference, predictions):
             ref = self._filter_valid_types(ref)
             pre = self._filter_valid_types(pre)
+
+            ref2 = ref.copy()
+            pre2 = pre.copy()
 
             total_pos += len(ref)
             total_pre += len(pre)
@@ -75,11 +81,49 @@ class SpanScorer(Scorer):
                     tp += 1
                     ref.pop(ref.index(entity))
 
+            # Calculate class scores
+            for entity in ref2:
+                label = type(entity).__name__
+                if label not in class_scores:
+                    class_scores[label] = {"tp": 0, "total_pos": 0, "total_pre": 0}
+                class_scores[label]["total_pos"] += 1
+
+            for entity in pre2:
+                label = type(entity).__name__
+                if label not in class_scores:
+                    class_scores[label] = {"tp": 0, "total_pos": 0, "total_pre": 0}
+                class_scores[label]["total_pre"] += 1
+                if entity in ref2:
+                    class_scores[label]["tp"] += 1
+                    ref2.pop(ref2.index(entity))
+
         precision = tp / total_pre if total_pre > 0.0 else 0.0
         recall = tp / total_pos if total_pos > 0.0 else 0.0
         f1_score = 2 * precision * recall / (precision + recall) if (precision + recall) > 0.0 else 0.0
+        # Calculate class scores
+        for label in class_scores:
+            class_scores[label]["precision"] = (
+                class_scores[label]["tp"] / class_scores[label]["total_pre"]
+                if class_scores[label]["total_pre"] > 0.0
+                else 0.0
+            )
+            class_scores[label]["recall"] = (
+                class_scores[label]["tp"] / class_scores[label]["total_pos"]
+                if class_scores[label]["total_pos"] > 0.0
+                else 0.0
+            )
+            class_scores[label]["f1-score"] = (
+                2
+                * class_scores[label]["precision"]
+                * class_scores[label]["recall"]
+                / (class_scores[label]["precision"] + class_scores[label]["recall"])
+                if (class_scores[label]["precision"] + class_scores[label]["recall"]) > 0.0
+                else 0.0
+            )
 
-        return {"spans": {"precision": precision, "recall": recall, "f1-score": f1_score}}
+        return {
+            "spans": {"precision": precision, "recall": recall, "f1-score": f1_score, "class_scores": class_scores},
+        }
 
 
 class RelationScorer(SpanScorer):
@@ -112,9 +156,14 @@ class EventScorer(Scorer):
         ), f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount must be equal."
         e_tp = e_total_pos = e_total_pre = 0
         a_tp = a_total_pos = a_total_pre = 0
+
+        event_scores = {}
+
         for ref, pre in zip(reference, predictions):
             ref = self._filter_valid_types(ref)
             pre = self._filter_valid_types(pre)
+            ref2 = ref.copy()
+            pre2 = pre.copy()
 
             e_total_pos += len(ref)
             for event in ref:
@@ -128,6 +177,22 @@ class EventScorer(Scorer):
                     e_tp += 1
                     a_tp += len(ref_event & pre_event)
 
+            # Calculate argument scores
+            for event in ref2:
+                label = type(event).__name__
+                if label not in event_scores:
+                    event_scores[label] = {"tp": 0, "total_pos": 0, "total_pre": 0}
+                event_scores[label]["total_pos"] += 1
+
+            for event in pre2:
+                label = type(event).__name__
+                if label not in event_scores:
+                    event_scores[label] = {"tp": 0, "total_pos": 0, "total_pre": 0}
+                event_scores[label]["total_pre"] += 1
+                if event in ref2:
+                    event_scores[label]["tp"] += 1
+                    ref2.pop(ref2.index(event))
+
         e_precision = e_tp / e_total_pre if e_total_pre > 0.0 else 0.0
         a_precision = a_tp / a_total_pre if a_total_pre > 0.0 else 0.0
         e_recall = e_tp / e_total_pos if e_total_pos > 0.0 else 0.0
@@ -135,11 +200,33 @@ class EventScorer(Scorer):
         e_f1_score = 2 * e_precision * e_recall / (e_precision + e_recall) if (e_precision + e_recall) > 0.0 else 0.0
         a_f1_score = 2 * a_precision * a_recall / (a_precision + a_recall) if (a_precision + a_recall) > 0.0 else 0.0
 
+        # Calculate event scores
+        for label in event_scores:
+            event_scores[label]["precision"] = (
+                event_scores[label]["tp"] / event_scores[label]["total_pre"]
+                if event_scores[label]["total_pre"] > 0.0
+                else 0.0
+            )
+            event_scores[label]["recall"] = (
+                event_scores[label]["tp"] / event_scores[label]["total_pos"]
+                if event_scores[label]["total_pos"] > 0.0
+                else 0.0
+            )
+            event_scores[label]["f1-score"] = (
+                2
+                * event_scores[label]["precision"]
+                * event_scores[label]["recall"]
+                / (event_scores[label]["precision"] + event_scores[label]["recall"])
+                if (event_scores[label]["precision"] + event_scores[label]["recall"]) > 0.0
+                else 0.0
+            )
+
         return {
             "events": {
                 "precision": e_precision,
                 "recall": e_recall,
                 "f1-score": e_f1_score,
+                "class_scores": event_scores,
             },
             "arguments": {
                 "precision": a_precision,
@@ -166,9 +253,14 @@ class TemplateScorer(Scorer):
         ), f"Reference ({len(reference)}) and prediction ({len(predictions)}) amount must be equal."
         t_tp = t_total_pos = t_total_pre = 0
         s_tp = s_total_pos = s_total_pre = 0
+
+        template_scores = {}
+
         for ref, pre in zip(reference, predictions):
             ref = self._filter_valid_types(ref)
             pre = self._filter_valid_types(pre)
+            ref2 = ref.copy()
+            pre2 = pre.copy()
 
             t_total_pos += len(ref)
             for template in ref:
@@ -182,6 +274,22 @@ class TemplateScorer(Scorer):
                     t_tp += 1
                     s_tp += len(ref_temp & pre_temp)
 
+            # Calculate slot scores
+            for template in ref2:
+                label = type(template).__name__
+                if label not in template_scores:
+                    template_scores[label] = {"tp": 0, "total_pos": 0, "total_pre": 0}
+                template_scores[label]["total_pos"] += 1
+
+            for template in pre2:
+                label = type(template).__name__
+                if label not in template_scores:
+                    template_scores[label] = {"tp": 0, "total_pos": 0, "total_pre": 0}
+                template_scores[label]["total_pre"] += 1
+                if template in ref2:
+                    template_scores[label]["tp"] += 1
+                    ref2.pop(ref2.index(template))
+
         t_precision = t_tp / t_total_pre if t_total_pre > 0.0 else 0.0
         s_precision = s_tp / s_total_pre if s_total_pre > 0.0 else 0.0
         t_recall = t_tp / t_total_pos if t_total_pos > 0.0 else 0.0
@@ -189,11 +297,33 @@ class TemplateScorer(Scorer):
         t_f1_score = 2 * t_precision * t_recall / (t_precision + t_recall) if (t_precision + t_recall) > 0.0 else 0.0
         s_f1_score = 2 * s_precision * s_recall / (s_precision + s_recall) if (s_precision + s_recall) > 0.0 else 0.0
 
+        # Calculate template scores
+        for label in template_scores:
+            template_scores[label]["precision"] = (
+                template_scores[label]["tp"] / template_scores[label]["total_pre"]
+                if template_scores[label]["total_pre"] > 0.0
+                else 0.0
+            )
+            template_scores[label]["recall"] = (
+                template_scores[label]["tp"] / template_scores[label]["total_pos"]
+                if template_scores[label]["total_pos"] > 0.0
+                else 0.0
+            )
+            template_scores[label]["f1-score"] = (
+                2
+                * template_scores[label]["precision"]
+                * template_scores[label]["recall"]
+                / (template_scores[label]["precision"] + template_scores[label]["recall"])
+                if (template_scores[label]["precision"] + template_scores[label]["recall"]) > 0.0
+                else 0.0
+            )
+
         return {
             "templates": {
                 "precision": t_precision,
                 "recall": t_recall,
                 "f1-score": t_f1_score,
+                "class_scores": template_scores,
             },
             "slots": {
                 "precision": s_precision,

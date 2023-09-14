@@ -1,0 +1,55 @@
+#Training args
+model_name_or_path: meta-llama/Llama-2-70b-chat-hf
+config_template: llama-2
+torch_dtype: bfloat16
+use_lora: false
+quantization: 4
+predict_with_generate: true
+do_predict: true
+per_device_eval_batch_size: 1
+use_flash_attention: true
+
+generation_args_json: /ikerlariak/igarcia945/CoLLIE/configs/pharapharse_config/generation_config.json
+output_dir: /ikerlariak/igarcia945/CoLLIE/paraphrase/Llama-2-70b-chat-hf
+
+
+# dataset arguments
+datasets:
+  - ace05
+  - rams
+  - conll03
+  - casie
+  - tacred
+  - ontonotes5
+  - ncbidisease
+  - bc5cdr
+  - diann
+  - wnut17
+  - multinerd
+  - wikievents
+  - fabner
+  - e3c
+  - broadtwitter
+  - harveyner
+  - mitmovie
+  - mitrestaurant
+  - crossner
+
+language: en
+
+# reporting
+logging_strategy: steps
+logging_first_step: true
+logging_steps: 25
+report_to: none
+
+
+# hub settings
+push_to_hub: false
+resume_from_checkpoint: false
+
+# performance
+bf16: false
+fp16: false
+torch_compile: false
+ddp_find_unused_parameters: false

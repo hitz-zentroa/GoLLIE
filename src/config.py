@@ -39,10 +39,21 @@ class ModelArguments:
         metadata={
             "help": (
                 "Whether to use '4' or '8' bit quantization. Requires bitsandbytes library:"
-                " https://github.com/TimDettmers/bitsandbytes"
+                " https://github.com/TimDettmers/bitsandbytes. This parameter is only used for training."
             )
         },
     )
+
+    quantization_inference: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Whether to use '4' or '8' bit quantization. Requires bitsandbytes library:"
+                " https://github.com/TimDettmers/bitsandbytes. This parameter is only used for inference."
+            )
+        },
+    )
+
     lora_weights_name_or_path: Optional[str] = field(
         default=None,
         metadata={
@@ -84,6 +95,81 @@ class ModelArguments:
                 "Whether to force the use of the auto device map. If set to True, the model will be split across "
                 "GPUs and CPU to fit the model in memory. If set to False, a full copy of the model will be loaded "
                 "into each GPU. Defaults to False."
+            )
+        },
+    )
+
+    use_better_transformer: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to transform the model using Better Transformer library:"
+                "https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum"
+                "'https://huggingface.co/docs/optimum/installation'. Defaults to False. This flag is "
+                "only supported for inference, we will override it for training as BetterTransformer does not"
+                "support custom attention masks during training."
+            )
+        },
+    )
+
+    trust_remote_code: bool = field(
+        default=False,
+        metadata={"help": "Trust the remote code from HuggingFace model hub. Defaults to False Defaults to False."},
+    )
+
+    use_flash_attention: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to use FlashAttention. If True, the model will be trained with FlashAttention."
+                "Flash attention must be installed, see: https://github.com/Dao-AILab/flash-attention "
+                "for more details."
+            )
+        },
+    )
+
+    max_memory_MB: Optional[int] = field(
+        default=None,
+        metadata={
+            "help": (
+                "Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True."
+                "Defaults to None."
+            )
+        },
+    )
+
+    merge_lora_after_training: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to merge LoRA layers after training. If True, the model will be trained with LoRA and then"
+                " the LoRA layers will be merged into the model. We will save the merged model in"
+                " {output_dir}/merged_model. Defaults to False."
+            )
+        },
+    )
+
+    merge_lora_before_eval: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "Whether to merge LoRA layers before eval. If True, the model and LoRA layers will be loaded, merged"
+                " and saved into {model_name_or_path}/merged_model. Then we will load the merged model using the"
+                " provided quantization and torch.dtype values. Note: This flag is only useful is you want to use 4"
+                " bit or 8 bit quantization for inference. bf16, fp16 and fp32 models are automatically merged when"
+                " loaded for inference, there is no need to save the merged model and reload it. Defaults to False."
+            )
+        },
+    )
+
+    keep_merged_model_after_eval: bool = field(
+        default=False,
+        metadata={
+            "help": (
+                "If 'merge_lora_before_eval' is set to True, whether to keep the merged model after eval, or delete it"
+                " to save disk space. Merged model will be saved in {model_name_or_path}/merged_model and will use"
+                " the same disk space as the original model. While storing only the LoRA layers only takes a few MBs."
+                " Defaults to False."
             )
         },
     )
@@ -149,6 +235,37 @@ class DataTrainingArguments:
                 "The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total"
                 " weight of 5% in the loss while the result tokens will have a total weight of 95%. Only used for"
                 " computing the loss in the training data. Defaults to `0.05`."
+            )
+        },
+    )
+
+    max_examples_per_task_train: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for training. "
+                "If set to None, all examples will be"
+                " used."
+            )
+        },
+    )
+
+    max_examples_per_task_val: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for development. "
+                "If set to None, all examples will be used."
+            )
+        },
+    )
+
+    max_examples_per_task_test: int = field(
+        default=None,
+        metadata={
+            "help": (
+                "The maximum number of examples to use per task for inference. "
+                "If set to None, all examples will be used."
             )
         },
     )

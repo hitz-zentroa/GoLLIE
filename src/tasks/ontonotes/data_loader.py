@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.label_encoding import rewrite_labels
 from src.tasks.ontonotes.guidelines import GUIDELINES
+from src.tasks.ontonotes.guidelines_gold import EXAMPLES
 from src.tasks.ontonotes.prompts import (
     ENTITY_DEFINITIONS,
     GPE,
@@ -211,5 +212,6 @@ class OntoNotesSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

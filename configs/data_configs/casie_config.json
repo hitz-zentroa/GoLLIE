@@ -1,0 +1,31 @@
+{
+    "dataset_name": "CASIE",
+    "tasks": [
+        "EE",
+        "EAE"
+    ],
+    "dataloader_cls": "src.tasks.casie.data_loader.CASIEDatasetLoader",
+    "sampler_cls": "src.tasks.casie.data_loader.CASIESampler",
+    "dev_file": "data/casie/data.dev.jsonl",
+    "test_file": "data/casie/data.test.jsonl",
+    "prompt_template": "templates/prompt.txt",
+    "seed": 0,
+    "label_noise_prob": 0.0,
+    "task_configuration": {
+        "EE": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.0,
+            "scorer": "src.tasks.casie.scorer.CASIEEventScorer"
+        },
+        "EAE": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "sample_total_guidelines": -1,
+            "guideline_dropout": 0.0,
+            "scorer": "src.tasks.casie.scorer.CASIEEventArgumentScorer",
+            "ensure_positives_on_train": true,
+            "sample_only_gold_guidelines": true
+        }
+    }
+}

@@ -33,8 +33,12 @@ class TestACEScorers(unittest.TestCase):
         # precision -> 2 / 4 = 0.5
         # recall -> 2 / 5 = 0.4
         # F1 -> 2 * 0.5 * 0.4 / (0.5 + 0.4) = 0.5
+
+        scorer_result = scorer(reference=reference, predictions=predictions)["entities"]
+        scorer_result.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions)["entities"],
+            scorer_result,
             {"precision": 0.5, "recall": 0.4, "f1-score": 0.4444444444444445},
         )
 
@@ -70,8 +74,13 @@ class TestACEScorers(unittest.TestCase):
         # precision -> 1 / 2 = 0.5
         # recall -> 1 / 2 = 0.5
         # F1 -> 2* 0.5 * 0.5 / (0.5 + 0.5) = 0.5
+
+        scorer_results = scorer(reference=reference, predictions=predictions)["events"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions)["events"],
+            scorer_results,
             {"precision": 0.5, "recall": 0.5, "f1-score": 0.5},
         )
         # Arguments
@@ -82,8 +91,13 @@ class TestACEScorers(unittest.TestCase):
         # precision -> 2 / 3 = 0.6666666666666666
         # recall -> 2 / 5 = 0.4
         # F1 -> 2 * (0.6666666666666666 * 0.4) / (0.6666666666666666 + 0.4) = 0.5
+
+        scorer_results = scorer(reference=reference, predictions=predictions)["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions)["arguments"],
+            scorer_results,
             {"precision": 0.6666666666666666, "recall": 0.4, "f1-score": 0.5},
         )
 
@@ -118,14 +132,22 @@ class TestRAMSScorers(unittest.TestCase):
         ]
 
         # Perfect alingment
+        scorer_results = scorer(reference=reference, predictions=reference)["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=reference)["arguments"],
+            scorer_results,
             {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
         )
 
         # No alignment
+        scorer_results = scorer(reference=reference, predictions=[])["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=[])["arguments"],
+            scorer_results,
             {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
         )
 
@@ -161,8 +183,13 @@ class TestRAMSScorers(unittest.TestCase):
         # F1 -> 2 * (0.6666666666666666 * 0.6666666666666666) / (0.6666666666666666 + 0.6666666666666666) = 0.6666666666666666
 
         # No alignment
+
+        scorer_results = scorer(reference=reference, predictions=predictions)["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions)["arguments"],
+            scorer_results,
             {
                 "precision": 0.6666666666666666,
                 "recall": 0.6666666666666666,
@@ -193,14 +220,22 @@ class TestTACREDScorers(unittest.TestCase):
             template.assert_typing_constraints()
 
         # Perfect alingment
+        scorer_results = scorer(reference=reference, predictions=reference)["slots"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=reference)["slots"],
+            scorer_results,
             {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
         )
 
         # No alignment
+        scorer_results = scorer(reference=reference, predictions=[])["slots"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=[])["slots"],
+            scorer_results,
             {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
         )
 
@@ -218,11 +253,157 @@ class TestTACREDScorers(unittest.TestCase):
         # F1 -> 2 * (0.6666666666666666 * 0.5) / (0.6666666666666666 + 0.5) = 0.5714285714285715
 
         # No alignment
+        scorer_results = scorer(reference=reference, predictions=predictions)["slots"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
         self.assertDictEqual(
-            scorer(reference=reference, predictions=predictions)["slots"],
+            scorer_results,
             {
                 "precision": 0.6666666666666666,
                 "recall": 0.5,
                 "f1-score": 0.5714285714285715,
+            },
+        )
+
+
+class TestCASIEScorers(unittest.TestCase):
+    def test_event_scorer(self):
+        from src.tasks.casie.prompts_ed import VulnerabilityDiscover
+        from src.tasks.casie.scorer import CASIEEventScorer
+
+        scorer = CASIEEventScorer(allow_partial_match=True)
+
+        reference = [VulnerabilityDiscover(mention="vulnerability found"), VulnerabilityDiscover(mention="reported")]
+
+        # Perfect alingment
+        scorer_results = scorer(reference=reference, predictions=reference)["events"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
+        self.assertDictEqual(
+            scorer_results,
+            {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
+        )
+
+        # No alignment
+
+        scorer_results = scorer(reference=reference, predictions=[])["events"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+        self.assertDictEqual(
+            scorer_results,
+            {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
+        )
+
+        predictions = [VulnerabilityDiscover(mention="vulnerability"), VulnerabilityDiscover(mention="discovered")]
+
+        scorer_results = scorer(reference=reference, predictions=predictions)["events"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
+        self.assertDictEqual(
+            scorer_results,
+            {
+                "precision": 1.0,
+                "recall": 1.0,
+                "f1-score": 1.0,
+            },
+        )
+
+    def test_event_argument_scorer(self):
+        from src.tasks.casie.prompts_eae import VulnerabilityDiscover
+        from src.tasks.casie.scorer import CASIEEventArgumentScorer
+
+        scorer = CASIEEventArgumentScorer(allow_partial_match=True)
+
+        reference = [
+            VulnerabilityDiscover(
+                mention="says",
+                cve=["CVE-2018-12799", "CVE-2018-12808"],
+                used_for=["lead to arbitrary code execution"],
+                discoverer=["The tech giant"],
+                supported_platform=[],
+                vulnerability=[
+                    "an out of bounds write issue",
+                    "the security flaws",
+                    "an untrusted pointer dereference problem",
+                ],
+                vulnerable_system=[],
+                system_owner=[],
+                system_version=[],
+                time=[],
+            ),
+        ]
+
+        # Perfect alingment
+        scorer_results = scorer(reference=reference, predictions=reference)["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
+        self.assertDictEqual(
+            scorer_results,
+            {"precision": 1.0, "recall": 1.0, "f1-score": 1.0},
+        )
+
+        # No alignment
+        scorer_results = scorer(reference=reference, predictions=[])["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+
+        self.assertDictEqual(
+            scorer_results,
+            {"precision": 0.0, "recall": 0.0, "f1-score": 0.0},
+        )
+
+        predictions = [
+            VulnerabilityDiscover(
+                mention="says",
+                cve="CVE-2018-12799",
+                used_for=["arbitrary code execution"],
+                discoverer=["tech giant"],
+                supported_platform=[],
+                vulnerability=[
+                    "an out of bounds write issue",
+                    "the security flaws",
+                    "an untrusted pointer",
+                ],
+                vulnerable_system=[],
+                system_owner=[],
+                system_version=[],
+                time=[],
+            ),
+        ]
+        for pred in predictions:
+            pred.assert_typing_constraints()
+
+        import rich
+
+        rich.print(predictions)
+        rich.print(reference)
+
+        # Partially aligned
+        # TP = 6
+        #   - cve(""CVE-2018-12799"")
+        #   - used_for("lead to arbitrary code execution")
+        #   - discoverer("The tech giant")
+        #   - vulnerability("an out of bounds write issue")
+        #   - vulnerability("the security flaws")
+        #   - vulnerability("an untrusted pointer dereference problem")
+        # FP = 0
+        # FN = 0
+
+        # precision -> 6 / 6 = 1.0
+        # recall -> 6 / 7 = 0.8571428571428571
+        # F1 -> 2 * (0.8571428571428571 * 1.0) / (0.8571428571428571 + 1.0) = 0.9285714285714286
+        scorer_results = scorer(reference=reference, predictions=predictions)["arguments"]
+        if "class_scores" in scorer_results:
+            scorer_results.pop("class_scores")
+        self.assertDictEqual(
+            scorer_results,
+            {
+                "precision": 1.0,
+                "recall": 0.8571428571428571,
+                "f1-score": 0.923076923076923,
             },
         )

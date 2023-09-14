@@ -1,7 +1,26 @@
-import logging
 from typing import Dict, List
 
-from . import ace, bc5cdr, conll03, diann, multinerd, ncbidisease, ontonotes, rams, tacred, wikievents, wnut
+from . import (
+    ace,
+    bc5cdr,
+    broadtwitter,
+    casie,
+    conll03,
+    crossner,
+    diann,
+    e3c,
+    fabner,
+    harveyner,
+    mitmovie,
+    mitrestaurant,
+    multinerd,
+    ncbidisease,
+    ontonotes,
+    rams,
+    tacred,
+    wikievents,
+    wnut,
+)
 
 
 TASK_ID_TO_TASKS = {
@@ -13,22 +32,37 @@ TASK_ID_TO_TASKS = {
     "ACE05_EAE": "src.tasks.ace",
     "RAMS_EAE": "src.tasks.rams",
     "CoNLL03_NER": "src.tasks.conll03",
+    "CASIE_EE": "src.tasks.casie",
+    "CASIE_EAE": "src.tasks.casie",
     "Europarl_NER": "src.tasks.conll03",
     "TACRED_SF": "src.tasks.tacred",
     "OntoNotes5_NER": "src.tasks.ontonotes",
     "NcbiDisease_NER": "src.tasks.ncbidisease",
-    "DIANN": "src.tasks.diann",
-    "WNUT17": "src.tasks.wnut",
-    "MultiNERD": "src.tasks.multinerd",
+    "DIANN_NER": "src.tasks.diann",
+    "WNUT17_NER": "src.tasks.wnut",
+    "MultiNERD_NER": "src.tasks.multinerd",
     "WikiEvents_NER": "src.tasks.wikievents",
     "WikiEvents_EE": "src.tasks.wikievents",
     "WikiEvents_EAE": "src.tasks.wikievents",
+    "FabNER_NER": "src.tasks.fabner",
+    "E3C_NER": "src.tasks.e3c",
+    "BC5CDR_NER": "src.tasks.bc5cdr",
+    "BroadTwitter_NER": "src.tasks.broadtwitter",
+    "HarveyNER_NER": "src.tasks.harveyner",
+    "MITMovie_NER": "src.tasks.mitmovie",
+    "MITRestaurant_NER": "src.tasks.mitrestaurant",
+    "CrossNER_AI": "src.tasks.crossner",
+    "CrossNER_POLITICS": "src.tasks.crossner",
+    "CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
+    "CrossNER_LITERATURE": "src.tasks.crossner",
+    "CrossNER_MUSIC": "src.tasks.crossner",
 }
 
 __all__ = [
     "ace",
     "rams",
     "conll03",
+    "casie",
     "tacred",
     "ontonotes",
     "ncbidisease",
@@ -37,9 +71,49 @@ __all__ = [
     "wnut",
     "multinerd",
     "wikievents",
+    "fabner",
+    "e3c",
+    "broadtwitter",
+    "harveyner",
+    "mitmovie",
+    "mitrestaurant",
+    "crossner",
     "TASK_ID_TO_TASKS",
     "task_id_to_guidelines",
 ]
+
+
+def task_id_to_prompts(task_id: str) -> str:
+    """
+    Returns the prompts path for a given task.
+
+    Args:
+        task_id (str): The task id
+
+    Returns:
+        str: The path to the prompts
+    """
+
+    if task_id.upper() == "CASIE_EE":
+        return "src.tasks.casie.prompts_ed"
+
+    elif task_id.upper() == "CASIE_EAE":
+        return "src.tasks.casie.prompts_eae"
+
+    elif task_id.upper() == "CROSSNER_POLITICS":
+        return "src.tasks.crossner.prompts_politics"
+    elif task_id.upper() == "CROSSNER_AI":
+        return "src.tasks.crossner.prompts_ai"
+    elif task_id.upper() == "CROSSNER_NATURAL_SCIENCES":
+        return "src.tasks.crossner.prompts_natural_science"
+    elif task_id.upper() == "CROSSNER_LITERATURE":
+        return "src.tasks.crossner.prompts_literature"
+    elif task_id.upper() == "CROSSNER_MUSIC":
+        return "src.tasks.crossner.prompts_music"
+
+    # Default case
+    else:
+        return TASK_ID_TO_TASKS[task_id] + ".prompts"
 
 
 def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
@@ -62,6 +136,10 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
         return GUIDELINES
     elif task_id.lower() == "conll03":
         from src.tasks.conll03.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "casie":
+        from src.tasks.casie.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     elif task_id.lower() == "tacred":
@@ -93,8 +171,35 @@ def task_id_to_guidelines(task_id: str) -> Dict[str, Dict[str, List[str]]]:
 
         return GUIDELINES
     elif task_id.lower() == "wikievents":
-        logging.info("No gold guidelines defined for WikiEvents!")
-        from src.tasks.wikievents.guidelines import GUIDELINES
+        from src.tasks.wikievents.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "fabner":
+        from src.tasks.fabner.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "e3c":
+        from src.tasks.e3c.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "broadtwitter":
+        from src.tasks.broadtwitter.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "harveyner":
+        from src.tasks.harveyner.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "mitmovie":
+        from src.tasks.mitmovie.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "mitrestaurant":
+        from src.tasks.mitrestaurant.guidelines_gold import GUIDELINES
+
+        return GUIDELINES
+    elif task_id.lower() == "crossner":
+        from src.tasks.crossner.guidelines_gold import GUIDELINES
 
         return GUIDELINES
     else:

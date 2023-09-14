@@ -37,12 +37,13 @@ def multicpu_generator(args, tqdm_position, config):
             for seed, noise_prob in zip(seeds, label_noise):
                 config["seed"] = seed
                 config["label_noise_prob"] = noise_prob
+                # Avoid multiple values for keyword argument
+                _kwargs = {**config, **config["task_configuration"][ie_task]}
                 sampler = sampler_cls(
                     dataloader,
                     task=ie_task,
                     split="train",
-                    **config,
-                    **config["task_configuration"][ie_task],
+                    **_kwargs,
                 )
 
                 output_name = f"{config['dataset_name'].lower()}.{ie_task.lower()}.train.{seed}.jsonl"
@@ -69,12 +70,12 @@ def multicpu_generator(args, tqdm_position, config):
         config["seed"] = 0
         dataloader = dataloader_cls(config["dev_file"], **config)
         for task in config["tasks"]:
+            _kwargs = {**config, **config["task_configuration"][task]}
             sampler = sampler_cls(
                 dataloader,
                 task=task,
                 split="dev",
-                **config,
-                **config["task_configuration"][task],
+                **_kwargs,
             )
 
             output_name = f"{config['dataset_name'].lower()}.{task.lower()}.dev.jsonl"
@@ -101,12 +102,12 @@ def multicpu_generator(args, tqdm_position, config):
         config["seed"] = 0
         dataloader = dataloader_cls(config["test_file"], **config)
         for task in config["tasks"]:
+            _kwargs = {**config, **config["task_configuration"][task]}
             sampler = sampler_cls(
                 dataloader,
                 task=task,
                 split="test",
-                **config,
-                **config["task_configuration"][task],
+                **_kwargs,
             )
 
             output_name = f"{config['dataset_name'].lower()}.{task.lower()}.test.jsonl"
@@ -144,6 +145,13 @@ def main(args):
 
         # Remove guidelines if baseline
         config["remove_guidelines"] = args.baseline
+        config["include_examples_prob"] = float(args.include_examples)
+        if args.remove_masking:
+            config["label_noise_prob"] = 0.0
+
+        if args.remove_dropout:
+            for task in config["tasks"]:
+                config["task_configuration"][task]["guideline_dropout"] = 0.0
 
         # We generate a new config for each train split and task
         tasks = config["tasks"]
@@ -214,6 +222,24 @@ if __name__ == "__main__":
         action="store_true",
         default=False,
         help="Whether to generate baseline data.",
+    )
+    parser.add_argument(
+        "--include_examples",
+        action="store_true",
+        default=False,
+        help="Whether to include examples in the data.",
+    )
+    parser.add_argument(
+        "--remove_dropout",
+        action="store_true",
+        default=False,
+        help="Remove guideline dropout for the ablation analysis.",
+    )
+    parser.add_argument(
+        "--remove_masking",
+        action="store_true",
+        default=False,
+        help="Remove guideline masking for the ablation analysis.",
     )
 
     args = parser.parse_args()

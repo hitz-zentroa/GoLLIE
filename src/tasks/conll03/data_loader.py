@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.conll03.guidelines import GUIDELINES
+from src.tasks.conll03.guidelines_gold import EXAMPLES
 from src.tasks.conll03.prompts import (
     ENTITY_DEFINITIONS,
     ENTITY_DEFINITIONS_woMISC,
@@ -145,7 +146,7 @@ def load_conll_tsv(
         # Get entities
         entities = []
         for label, start, end in spans:
-            if include_misc or label != "MISC":
+            if include_misc or label.lower() != "misc":
                 entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
 
         dataset_sentences.append(words)
@@ -295,5 +296,6 @@ class CoNLL03Sampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

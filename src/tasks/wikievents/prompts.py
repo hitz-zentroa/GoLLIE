@@ -13,112 +13,112 @@ The entity defitions are extracted from the KAIROS project guidelines.
 class Abstract(Entity):
     """{wikievents_ner_abstract}"""
 
-    span: str
+    span: str  # {wikievents_ner_abstract_examples}
 
 
 @dataclass
 class BodyPart(Entity):
     """{wikievents_ner_bodypart}"""
 
-    span: str
+    span: str  # {wikievents_ner_bodypart_examples}
 
 
 @dataclass
 class CommercialProduct(Entity):
     """{wikievents_ner_commercialproduct}"""
 
-    span: str
+    span: str  # {wikievents_ner_commercialproduct_examples}
 
 
 @dataclass
 class Facility(Entity):
     """{wikievents_ner_facility}"""
 
-    span: str
+    span: str  # {wikievents_ner_facility_examples}
 
 
 @dataclass
 class GPE(Entity):
     """{wikievents_ner_gpe}"""
 
-    span: str
+    span: str  # {wikievents_ner_gpe_examples}
 
 
 @dataclass
 class Information(Entity):
     """{wikievents_ner_information}"""
 
-    span: str
+    span: str  # {wikievents_ner_information_examples}
 
 
 @dataclass
 class Location(Entity):
     """{wikievents_ner_location}"""
 
-    span: str
+    span: str  # {wikievents_ner_location_examples}
 
 
 @dataclass
 class MedicalHealthIssue(Entity):
     """{wikievents_ner_medicalhealthissue}"""
 
-    span: str
+    span: str  # {wikievents_ner_medicalhealthissue_examples}
 
 
 @dataclass
 class Money(Entity):
     """{wikievents_ner_money}"""
 
-    span: str
+    span: str  # {wikievents_ner_money_examples}
 
 
 @dataclass
 class Organization(Entity):
     """{wikievents_ner_organization}"""
 
-    span: str
+    span: str  # {wikievents_ner_organization_examples}
 
 
 @dataclass
 class Person(Entity):
     """{wikievents_ner_person}"""
 
-    span: str
+    span: str  # {wikievents_ner_person_examples}
 
 
 @dataclass
 class SideOfConflict(Entity):
     """{wikievents_ner_side_of_conflict}"""
 
-    span: str
+    span: str  # {wikievents_ner_side_of_conflict_examples}
 
 
 @dataclass
 class JobTitle(Entity):
     """{wikievents_ner_job_title}"""
 
-    span: str
+    span: str  # {wikievents_ner_job_title_examples}
 
 
 @dataclass
 class Numeric(Entity):
     """{wikievents_ner_numeric}"""
 
-    span: str
+    span: str  # {wikievents_ner_numeric_examples}
 
 
 @dataclass
 class Vehicle(Entity):
     """{wikievents_ner_vehicle}"""
 
-    span: str
+    span: str  # {wikievents_ner_vehicle_examples}
 
 
 @dataclass
 class Weapon(Entity):
     """{wikievents_ner_weapon}"""
 
-    span: str
+    span: str  # {wikievents_ner_weapon_examples}
 
 
 ENTITY_DEFINITIONS: List[Type] = [
@@ -146,6 +146,9 @@ class ArtifactExistanceEvent(Event):
     """{wikievents_ee_artifact_existance}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_artifact_existance_examples}
+    """
 
 
 @dataclass
@@ -153,6 +156,9 @@ class CognitiveEvent(Event):
     """{wikievents_ee_cognitive}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_cognitive_examples}
+    """
 
 
 @dataclass
@@ -160,6 +166,9 @@ class ConflictEvent(Event):
     """{wikievents_ee_conflict}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_conflict_examples}
+    """
 
 
 @dataclass
@@ -167,6 +176,9 @@ class ContactEvent(Event):
     """{wikievents_ee_contact}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_contact_examples}
+    """
 
 
 @dataclass
@@ -174,6 +186,9 @@ class ControlEvent(Event):
     """{wikievents_ee_control}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_control_examples}
+    """
 
 
 @dataclass
@@ -181,6 +196,9 @@ class DisasterEvent(Event):
     """{wikievents_ee_disaster}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_disaster_examples}
+    """
 
 
 @dataclass
@@ -188,6 +206,9 @@ class GenericCrimeEvent(Event):
     """{wikievents_ee_generic_crime}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_generic_crime_examples}
+    """
 
 
 @dataclass
@@ -195,6 +216,9 @@ class JusticeEvent(Event):
     """{wikievents_ee_justice}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_justice_examples}
+    """
 
 
 @dataclass
@@ -202,6 +226,9 @@ class LifeEvent(Event):
     """{wikievents_ee_life}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_life_examples}
+    """
 
 
 @dataclass
@@ -209,6 +236,9 @@ class MedicalEvent(Event):
     """{wikievents_ee_medical}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_medical_examples}
+    """
 
 
 @dataclass
@@ -216,6 +246,9 @@ class MovementTransportEvent(Event):
     """{wikievents_ee_movement_transport}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_transport_examples}
+    """
 
 
 @dataclass
@@ -223,6 +256,9 @@ class PersonnelEvent(Event):
     """{wikievents_ee_personnel}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_personnel_examples}
+    """
 
 
 @dataclass
@@ -230,6 +266,9 @@ class TransactionEvent(Event):
     """{wikievents_ee_transaction}"""
 
     mention: str
+    """The text span that triggers the event.
+    {wikievents_ee_transaction_examples}
+    """
 
 
 COARSE_EVENT_DEFINITIONS: List[Type] = [

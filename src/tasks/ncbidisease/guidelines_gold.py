@@ -9,3 +9,9 @@ GUIDELINES = {
         ]
     },
 }
+
+EXAMPLES = {
+    "ncbi_disease_examples": {
+        "en": ["DM", "DMD", "APC", "ALD", "PWS", "WAS", "myotonic dystrophy", "G6PD deficiency", "HD", "PKU"]
+    }
+}

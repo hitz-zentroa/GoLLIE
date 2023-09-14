@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.label_encoding import rewrite_labels
 from src.tasks.wnut.guidelines import GUIDELINES
+from src.tasks.wnut.guidelines_gold import EXAMPLES
 from src.tasks.wnut.prompts import ENTITY_DEFINITIONS, Corporation, CreativeWork, Group, Location, Person, Product
 
 from ..utils_data import DatasetLoader, Sampler
@@ -185,5 +186,6 @@ class WnutSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

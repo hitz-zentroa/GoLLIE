@@ -16,13 +16,14 @@ https://biocreative.bioinformatics.udel.edu/media/store/files/2015/bc5_CDR_data_
 class Disease(Entity):
     """{bc5cdr_disease}"""
 
-    span: str
+    span: str  # {bc5cdr_disease_examples}
 
 
+@dataclass
 class Chemical(Entity):
     """{bc5cdr_chemical}"""
 
-    span: str
+    span: str  # {bc5cdr_chemical_examples}
 
 
 ENTITY_DEFINITIONS: List[Entity] = [Disease, Chemical]

@@ -1,6 +1,7 @@
 from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.bc5cdr.guidelines import GUIDELINES
+from src.tasks.bc5cdr.guidelines_gold import EXAMPLES
 from src.tasks.bc5cdr.prompts import ENTITY_DEFINITIONS, Chemical, Disease
 from src.tasks.label_encoding import rewrite_labels
 
@@ -177,5 +178,6 @@ class Bc5cdrSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

@@ -1,10 +1,68 @@
-from typing import Tuple, Union
+from typing import Dict, List, Tuple, Type, Union
 
-from src.tasks.conll03.data_loader import load_conll_tsv
+from src.tasks.conll03.data_loader import read_tsv
 from src.tasks.diann.guidelines import GUIDELINES
-from src.tasks.diann.prompts import ENTITY_DEFINITIONS, Disability, Negation
+from src.tasks.diann.guidelines_gold import EXAMPLES
+from src.tasks.diann.prompts import ENTITY_DEFINITIONS, Disability  # , Negation
+from src.tasks.label_encoding import rewrite_labels
 
 from ..utils_data import DatasetLoader, Sampler
+from ..utils_typing import Entity
+
+
+def load_diann_tsv(
+    path: str,
+    include_misc: bool,
+    ENTITY_TO_CLASS_MAPPING: Dict[str, Type[Entity]],
+) -> Tuple[List[List[str]], List[List[Entity]]]:
+    """
+    Load the conll dataset from a tsv file
+    REMOVE THE NEGATION LABELS
+    Args:
+        path (str): The path to the tsv file
+        include_misc (bool): Whether to include the MISC entity type. Defaults to `True`.
+    Returns:
+        (List[str],List[Union[Location,Organization,Person,Miscellaneous]]): The text and the entities
+    """
+    dataset_sentences: List[List[str]] = []
+    dataset_entities: List[List[Entity]] = []
+
+    dataset_words, dataset_labels = read_tsv(path)
+
+    for words, labels in zip(dataset_words, dataset_labels):
+        # Some of the CoNLL02-03 datasets are in IOB1 format instead of IOB2,
+        # we convert them to IOB2, so we don't have to deal with this later.
+        labels = rewrite_labels(labels=labels, encoding="iob2")
+        # Remove Negation labels
+        for i in range(len(labels)):
+            if labels[i].endswith("Neg"):
+                labels[i] = "O"
+
+        # Rewrite just in case
+        labels = rewrite_labels(labels=labels, encoding="iob2")
+
+        # Get labeled word spans
+        spans = []
+        for i, label in enumerate(labels):
+            if label == "O":
+                continue
+            elif label.startswith("B-"):
+                spans.append([label[2:], i, i + 1])
+            elif label.startswith("I-"):
+                spans[-1][2] += 1
+            else:
+                raise ValueError(f"Found an unexpected label: {label}")
+
+        # Get entities
+        entities = []
+        for label, start, end in spans:
+            if include_misc or label.lower() != "misc":
+                entities.append(ENTITY_TO_CLASS_MAPPING[label](span=" ".join(words[start:end])))
+
+        dataset_sentences.append(words)
+        dataset_entities.append(entities)
+
+    return dataset_sentences, dataset_entities
 
 
 class DiannDatasetLoader(DatasetLoader):
@@ -25,12 +83,12 @@ class DiannDatasetLoader(DatasetLoader):
     def __init__(self, path_or_split: str, **kwargs) -> None:
         self.ENTITY_TO_CLASS_MAPPING = {
             "Dis": Disability,
-            "Neg": Negation,
+            # "Neg": Negation,
         }
 
         self.elements = {}
 
-        dataset_words, dataset_entities = load_conll_tsv(
+        dataset_words, dataset_entities = load_diann_tsv(
             path=path_or_split,
             include_misc=True,
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
@@ -128,5 +186,6 @@ class DiannSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

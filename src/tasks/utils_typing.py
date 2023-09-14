@@ -82,9 +82,15 @@ class Entity:
 
     span: str
 
+    def __post_init__(self: Entity) -> None:
+        self._allow_partial_match: bool = False
+
     def __eq__(self: Entity, other: Entity) -> bool:
         self_span = self.span.lower().strip()
         other_span = other.span.lower().strip()
+        if self._allow_partial_match:
+            return type(self) == type(other) and (self.span in other_span or other_span in self.span)
+
         return type(self) == type(other) and self_span == other_span
 
     def __repr__(self) -> str:
@@ -119,6 +125,11 @@ class Entity:
             `bool`:
                 Whether the annotation exists on the input text or not.
         """
+
+        # Check if the span is not None
+        if not isinstance(self.span, str):
+            return False
+
         return self.span.lower().strip() in text.lower()
 
     def index(self, text: str) -> int:
@@ -151,7 +162,16 @@ class Relation:
     arg1: str
     arg2: str
 
+    def __post_init__(self: Relation) -> None:
+        self._allow_partial_match: bool = False
+
     def __eq__(self: Value, other: Value) -> bool:
+        if self._allow_partial_match:
+            return (
+                type(self) == type(other)
+                and (self.arg1 in other.arg1 or other.arg1 in self.arg1)
+                and (self.arg2 in other.arg2 or other.arg2 in self.arg2)
+            )
         return type(self) == type(other) and self.arg1 == other.arg1 and self.arg2 == other.arg2
 
     def __repr__(self) -> str:
@@ -186,6 +206,9 @@ class Relation:
             `bool`:
                 Whether the annotation exists on the input text or not.
         """
+        if not isinstance(self.arg1, str) or not isinstance(self.arg2, str):
+            return False
+
         return self.arg1.lower() in text.lower() and self.arg2.lower() in text.lower()
 
     def index(self, text: str) -> Tuple[int, int]:
@@ -217,23 +240,37 @@ class Event:
 
     mention: str
 
+    def __post_init__(self: Event) -> None:
+        self._allow_partial_match: bool = False
+
     def __eq__(self: Event, other: Event) -> bool:
+        if self._allow_partial_match:
+            # On events we consider partial match if just the type is predicted
+            # Some datasets has different guidelines when annotating event triggers
+            return type(self) == type(other)
         return type(self) == type(other) and self.key() == other.key()
 
     def __and__(self: Event, other: Event) -> Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         if self == other:
             for attr in attrs.keys():
                 self_values = getattr(self, attr)
                 other_values = deepcopy(getattr(other, attr))
                 for value in self_values:
-                    if value in other_values:
-                        attrs[attr].append(value)
-                        other_values.pop(other_values.index(value))
+                    if self._allow_partial_match:
+                        for i, _value in enumerate(other_values):
+                            if value in _value or _value in value:
+                                attrs[attr].append(value)
+                                other_values.pop(i)
+                                break
+                    else:
+                        if value in other_values:
+                            attrs[attr].append(value)
+                            other_values.pop(other_values.index(value))
 
         pos_args = []
         if hasattr(self, "mention"):
@@ -247,7 +284,7 @@ class Event:
         attrs = {
             attr: values
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         _len = 0
         for values in attrs.values():
@@ -298,12 +335,18 @@ class Event:
         attrs = {
             attr: []
             for attr, values in inspect.getmembers(self)
-            if not (attr.startswith("__") or attr in ["mention", "subtype"] or inspect.ismethod(values))
+            if not (attr.startswith("_") or attr in ["mention", "subtype"] or inspect.ismethod(values))
         }
         for attr in attrs.keys():
             self_values = getattr(self, attr)
+            if not isinstance(self_values, list):
+                import rich
+
+                rich.print(self)
+                raise TypeError(f"{attr}:{self_values} is not iterable")
             for value in self_values:
-                if value.lower() in text:
+                # Avoid calling lower to a list when the model hallucinates
+                if hasattr(value, "lower") and value.lower() in text:
                     attrs[attr].append(value)
 
         pos_args = []
@@ -340,6 +383,65 @@ class Event:
         pos = text.lower().index(self.mention.lower().strip())
         return (pos, pos + len(self.mention))
 
+    def assert_typing_constraints(self) -> bool:
+        import typing
+
+        def check_types(var: Any, _type: TypeVar) -> Tuple[bool, Any]:
+            if _type is type(None):
+                return (var is None, var)
+            elif isinstance(_type, type):
+                is_correct = isinstance(var, _type)
+                if not is_correct:
+                    if isinstance(var, list):
+                        var = var[0] if len(var) else _type()
+                    var = _type(var)
+                return (is_correct, var)
+            # elif _type is type(None):
+            #     return (var is None, var)
+            elif isinstance(_type, typing._GenericAlias):
+                origin = _type.__origin__
+                if origin is typing.Union:
+                    is_correct = False
+                    _var = None
+                    for _t in _type.__args__:
+                        _is_correct, tmp_var = check_types(var, _t)
+                        if _is_correct:
+                            return (_is_correct, tmp_var)
+                        if _t is not type(None):
+                            _var = tmp_var
+                        is_correct |= _is_correct
+                    # return any(check_types(var, _t) for _t in _type.__args__)
+                    return (is_correct, _var)
+                elif origin is list:
+                    if not isinstance(var, list):
+                        var = [var]
+                    for _t in _type.__args__:
+                        _var = []
+                        is_correct = True
+                        for v in var:
+                            _is_correct, v = check_types(v, _t)
+                            is_correct &= _is_correct
+                            _var.append(v)
+                        if is_correct:
+                            return (is_correct, _var)  # Small difference here to allow empty lists
+
+                    return (is_correct, _var)
+                    # return any(all(check_types(v, _t) for v in var) if isinstance(var, list) else False for _t in _type.__args__)
+                elif any(issubclass(origin, _t) for _t in [str, int, float, bool]):
+                    return check_types(var, origin)
+                else:
+                    raise ValueError(f"Unsupported type: {origin}")
+            else:
+                raise ValueError("Only native types or typing module types are supported.")
+
+        correct = True
+        for field in dataclasses.fields(self):
+            _correct, value = check_types(getattr(self, field.name), field.type)
+            correct &= _correct
+            setattr(self, field.name, value)
+
+        return correct
+
 
 @dataclass
 class Template:
@@ -363,7 +465,7 @@ class Template:
         """Returns the non-positional attributes of a Template instance."""
         attrs = {}
         for attr, values in inspect.getmembers(self):
-            if attr.startswith("__") or attr in ["query"] or inspect.ismethod(values):
+            if attr.startswith("_") or attr in ["query"] or inspect.ismethod(values):
                 continue
             if ignore and values:
                 attrs[attr] = type(values)()
@@ -444,9 +546,14 @@ class Template:
         attrs = self._get_attributes(ignore=True)
         for attr in attrs.keys():
             self_values = getattr(self, attr)
-            for value in self_values:
-                if value.lower() in text:
-                    attrs[attr].append(value)
+            if self_values:
+                if isinstance(self_values, list):
+                    for value in self_values:
+                        if value.lower() in text:
+                            attrs[attr].append(value)
+                else:
+                    if self_values.lower() in text:
+                        attrs[attr] = self_values
 
         pos_args = self._get_pos_attributes()
 
@@ -478,7 +585,7 @@ class Template:
         pos = text.lower().index(self.key().strip())
         return (pos, pos + len(self.key()))
 
-    def assert_typing_constraints(self):
+    def assert_typing_constraints(self) -> bool:
         import typing
 
         def check_types(var: Any, _type: TypeVar) -> Tuple[bool, Any]:
@@ -601,9 +708,19 @@ class AnnotationList(list):
 
         return type(self)(_elems, hallucinated_no=len(self) - len(_elems), parse_error=self.parse_error)
 
+    def assert_typing_constraints(self) -> None:
+        for elem in self:
+            if hasattr(elem, "assert_typing_constraints"):
+                elem.assert_typing_constraints()
+
     @classmethod
     def from_output(
-        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+        cls,
+        ann: str,
+        task_module: str,
+        text: str = None,
+        filter_hallucinations: bool = False,
+        assert_typing_constraints: bool = True,
     ) -> AnnotationList:
         # Import guidelines
         guidelines = cls._load_guidelines(task_module)
@@ -632,11 +749,19 @@ class AnnotationList(list):
                 raise ValueError("To filter the hallucinations the text argument must not be None.")
             self = self.filter_hallucinations(text)
 
+        if assert_typing_constraints:
+            self.assert_typing_constraints()
+
         return self
 
     @classmethod
     def from_gold(
-        cls, ann: str, task_module: str, text: str = None, filter_hallucinations: bool = False
+        cls,
+        ann: str,
+        task_module: str,
+        text: str = None,
+        filter_hallucinations: bool = False,
+        assert_typing_constraints: bool = True,
     ) -> AnnotationList:
         # Import guidelines
         guidelines = cls._load_guidelines(task_module)
@@ -659,6 +784,9 @@ class AnnotationList(list):
             if text is None:
                 raise ValueError("To filter the hallucinations the text argument must not be None.")
             self = self.filter_hallucinations(text)
+
+        if assert_typing_constraints:
+            self.assert_typing_constraints()
 
         return self
 

@@ -3,6 +3,7 @@ import json
 from typing import Tuple, Union
 
 from src.tasks.wikievents.guidelines import GUIDELINES
+from src.tasks.wikievents.guidelines_gold import EXAMPLES
 from src.tasks.wikievents.prompts import (
     COARSE_EVENT_DEFINITIONS,
     COARSE_TO_FINE_EVENTS,
@@ -601,5 +602,6 @@ class WikiEventsSampler(Sampler):
             coarse_to_fine=COARSE_TO_FINE,
             fine_to_coarse=FINE_TO_COARSE,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

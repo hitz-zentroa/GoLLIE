@@ -2,6 +2,7 @@ from typing import Dict, List, Tuple, Type, Union
 
 from src.tasks.label_encoding import rewrite_labels
 from src.tasks.ncbidisease.guidelines import GUIDELINES
+from src.tasks.ncbidisease.guidelines_gold import EXAMPLES
 from src.tasks.ncbidisease.prompts import (
     ENTITY_DEFINITIONS,
     Disease,
@@ -176,5 +177,6 @@ class NcbiDiseaseSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             definitions=GUIDELINES,
+            examples=EXAMPLES,
             **kwargs,
         )

@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import torch
 
@@ -87,3 +87,28 @@ def prepare_model_for_kbit_training(
         setattr(model, output_embedding_layer_name, CastOutputToFloat(output_embedding_layer))
 
     return model
+
+
+def find_all_linear_names(model, quantization: Optional[int] = None):
+    if quantization is None:
+        cls = torch.nn.Linear
+    elif quantization == 4:
+        from bitsandbytes.nn import Linear4bit
+
+        cls = Linear4bit
+    elif quantization == 8:
+        from bitsandbytes.nn import Linear8bitLt
+
+        cls = Linear8bitLt
+    else:
+        raise ValueError(f"Unknown quantization type: {quantization}")
+
+    lora_module_names = set()
+    for name, module in model.named_modules():
+        if isinstance(module, cls):
+            names = name.split(".")
+            lora_module_names.add(names[0] if len(names) == 1 else names[-1])
+
+    if "lm_head" in lora_module_names:  # needed for 16-bit
+        lora_module_names.remove("lm_head")
+    return list(lora_module_names)

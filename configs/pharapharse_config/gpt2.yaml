@@ -3,7 +3,7 @@ model_name_or_path: EleutherAI/gpt-neo-125m
 config_template: vicuna_v1.1
 torch_dtype: "auto"
 use_lora: false
-int8_quantization: true
+quantization: null
 predict_with_generate: true
 do_predict: true
 per_device_eval_batch_size: 4
@@ -14,10 +14,25 @@ output_dir: /home/ikergarcia/Documents/CoLLIE/paraphrase/vicuna-13b
 
 # dataset arguments
 datasets:
-  #- ace05
+  - ace05
+  - rams
   - conll03
-  #- rams
-  #- tacred
+  - casie
+  - tacred
+  - ontonotes5
+  - ncbidisease
+  - bc5cdr
+  - diann
+  - wnut17
+  - multinerd
+  - wikievents
+  - fabner
+  - e3c
+  - broadtwitter
+  - harveyner
+  - mitmovie
+  - mitrestaurant
+  - crossner
 language: en
 
 

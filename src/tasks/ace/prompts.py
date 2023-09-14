@@ -14,49 +14,49 @@ https://www.ldc.upenn.edu/sites/www.ldc.upenn.edu/files/english-entities-guideli
 class Person(Entity):
     """{ace_person}"""
 
-    span: str
+    span: str  # {ace_person_examples}
 
 
 @dataclass
 class Organization(Entity):
     """{ace_organization}"""
 
-    span: str
+    span: str  # {ace_organization_examples}
 
 
 @dataclass
 class GPE(Entity):
     """{ace_gpe}"""
 
-    span: str
+    span: str  # {ace_gpe_examples}
 
 
 @dataclass
 class Location(Entity):
     """{ace_location}"""
 
-    span: str
+    span: str  # {ace_location_examples}
 
 
 @dataclass
 class Facility(Entity):
     """{ace_facility}"""
 
-    span: str
+    span: str  # {ace_facility_examples}
 
 
 @dataclass
 class Weapon(Entity):
     """{ace_weapon}"""
 
-    span: str
+    span: str  # {ace_weapon_examples}
 
 
 @dataclass
 class Vehicle(Entity):
     """{ace_vehicle}"""
 
-    span: str
+    span: str  # {ace_vehicle_examples}
 
 
 ENTITY_DEFINITIONS: List[Type] = [
@@ -81,42 +81,42 @@ annotated as time expressions or value/numeric data.
 class Time(Entity):
     """{ace_time}"""
 
-    span: str
+    span: str  # {ace_time_examples}
 
 
 @dataclass
 class Numeric(Entity):
     """{ace_numeric}"""
 
-    span: str
+    span: str  # {ace_numeric_examples}
 
 
 @dataclass
 class JobTitle(Entity):
     """{ace_jobtitle}"""
 
-    span: str
+    span: str  # {ace_jobtitle_examples}
 
 
 @dataclass
 class Crime(Entity):
     """{ace_crime}"""
 
-    span: str
+    span: str  # {ace_crime_examples}
 
 
 @dataclass
 class Sentence(Entity):
     """{ace_sentence}"""
 
-    span: str
+    span: str  # {ace_sentence_examples}
 
 
 @dataclass
 class ContactInfo(Entity):
     """{ace_contactinfo}"""
 
-    span: str
+    span: str  # {ace_contactinfo_examples}
 
 
 VALUE_DEFINITIONS: List[Type] = [
@@ -369,6 +369,9 @@ class LifeEvent(Event):
     """{ace_lifeevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_lifeevent_examples}
+    """
 
 
 @dataclass
@@ -376,6 +379,9 @@ class MovementEvent(Event):
     """{ace_movementevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_movementevent_examples}
+    """
 
 
 @dataclass
@@ -383,6 +389,9 @@ class TransactionEvent(Event):
     """{ace_transactionevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_transactionevent_examples}
+    """
 
 
 @dataclass
@@ -390,6 +399,9 @@ class BusinessEvent(Event):
     """{ace_businessevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_businessevent_examples}
+    """
 
 
 @dataclass
@@ -397,6 +409,9 @@ class ConflictEvent(Event):
     """{ace_conflictevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_conflictevent_examples}
+    """
 
 
 @dataclass
@@ -404,6 +419,9 @@ class ContactEvent(Event):
     """{ace_contactevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_contactevent_examples}
+    """
 
 
 @dataclass
@@ -411,6 +429,9 @@ class PersonnelEvent(Event):
     """{ace_personnelevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_personnelevent_examples}
+    """
 
 
 @dataclass
@@ -418,6 +439,9 @@ class JusticeEvent(Event):
     """{ace_justiceevent}"""
 
     mention: str
+    """The text span that most clearly expresses the event.
+        {ace_justiceevent_examples}
+    """
 
 
 COARSE_EVENT_DEFINITIONS: List[Type] = [
