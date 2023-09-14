@@ -2,7 +2,7 @@
 # From https://huggingface.co/togethercomputer/LLaMA-2-7B-32K/blob/main/modeling_flash_llama.py
 # With seqlen fix from Alex Birch: https://huggingface.co/togethercomputer/LLaMA-2-7B-32K/discussions/17
 # With dtype Fix by Oscar Sainz
-# With Beam Search Fix by Iker Garcia-Ferrero
+# With Beam Search Fix by Iker García-Ferrero
 
 # Copyright 2022 EleutherAI and the HuggingFace Inc. team. All rights reserved.
 #
