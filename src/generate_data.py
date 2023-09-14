@@ -146,6 +146,12 @@ def main(args):
         # Remove guidelines if baseline
         config["remove_guidelines"] = args.baseline
         config["include_examples_prob"] = float(args.include_examples)
+        if args.remove_masking:
+            config["label_noise_prob"] = 0.0
+
+        if args.remove_dropout:
+            for task in config["tasks"]:
+                config["task_configuration"][task]["guideline_dropout"] = 0.0
 
         # We generate a new config for each train split and task
         tasks = config["tasks"]
@@ -222,6 +228,18 @@ if __name__ == "__main__":
         action="store_true",
         default=False,
         help="Whether to include examples in the data.",
+    )
+    parser.add_argument(
+        "--remove_dropout",
+        action="store_true",
+        default=False,
+        help="Remove guideline dropout for the ablation analysis.",
+    )
+    parser.add_argument(
+        "--remove_masking",
+        action="store_true",
+        default=False,
+        help="Remove guideline masking for the ablation analysis.",
     )
 
     args = parser.parse_args()
