@@ -1,6 +1,8 @@
 # coding=utf-8
 # From https://huggingface.co/togethercomputer/LLaMA-2-7B-32K/blob/main/modeling_flash_llama.py
-# With fix from Alex Birch: https://huggingface.co/togethercomputer/LLaMA-2-7B-32K/discussions/17
+# With seqlen fix from Alex Birch: https://huggingface.co/togethercomputer/LLaMA-2-7B-32K/discussions/17
+# With dtype Fix by Oscar Sainz
+# With Beam Search Fix by Iker Garcia-Ferrero
 
 # Copyright 2022 EleutherAI and the HuggingFace Inc. team. All rights reserved.
 #
@@ -922,7 +924,15 @@ class LlamaForCausalLM(LlamaPreTrainedModel):
         reordered_past = ()
         for layer_past in past_key_values:
             reordered_past += (
-                tuple(past_state.index_select(0, beam_idx.to(past_state.device)) for past_state in layer_past),
+                tuple(
+                    (
+                        past_state.index_select(0, beam_idx.to(past_state.device))
+                        if type(past_state) == torch.Tensor
+                        else past_state  # There is an int in the last layer, it is not supposed to be there,
+                        # but this hack works to deal with it.
+                    )
+                    for past_state in layer_past
+                ),
             )
         return reordered_past
 
