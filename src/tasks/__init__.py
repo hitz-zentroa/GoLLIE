@@ -51,11 +51,11 @@ TASK_ID_TO_TASKS = {
     "HarveyNER_NER": "src.tasks.harveyner",
     "MITMovie_NER": "src.tasks.mitmovie",
     "MITRestaurant_NER": "src.tasks.mitrestaurant",
-    "CrossNER_AI": "src.tasks.crossner",
-    "CrossNER_POLITICS": "src.tasks.crossner",
-    "CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
-    "CrossNER_LITERATURE": "src.tasks.crossner",
-    "CrossNER_MUSIC": "src.tasks.crossner",
+    "CrossNER_CrossNER_AI": "src.tasks.crossner",
+    "CrossNER_CrossNER_POLITICS": "src.tasks.crossner",
+    "CrossNER_CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
+    "CrossNER_CrossNER_LITERATURE": "src.tasks.crossner",
+    "CrossNER_CrossNER_MUSIC": "src.tasks.crossner",
 }
 
 __all__ = [
