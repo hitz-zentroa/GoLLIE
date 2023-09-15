@@ -20,7 +20,7 @@ export WANDB_PROJECT=CoLLIEv1.0
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
-CONFIGS_FOLDER="configs/model_configs"
+CONFIGS_FOLDER="configs/model_configs/eval"
 
 
 # Call this script from root directory as: sbatch bash_scripts/Baseline-7B_CodeLLaMA.sh
