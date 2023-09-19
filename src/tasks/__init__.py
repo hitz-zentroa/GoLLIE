@@ -56,6 +56,11 @@ TASK_ID_TO_TASKS = {
     "CrossNER_CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
     "CrossNER_CrossNER_LITERATURE": "src.tasks.crossner",
     "CrossNER_CrossNER_MUSIC": "src.tasks.crossner",
+    "CrossNER_woMISC_CrossNER_AI": "src.tasks.crossner",
+    "CrossNER_woMISC_CrossNER_POLITICS": "src.tasks.crossner",
+    "CrossNER_woMISC_CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
+    "CrossNER_woMISC_CrossNER_LITERATURE": "src.tasks.crossner",
+    "CrossNER_woMISC_CrossNER_MUSIC": "src.tasks.crossner",
 }
 
 __all__ = [
@@ -109,6 +114,16 @@ def task_id_to_prompts(task_id: str) -> str:
     elif task_id.upper() == "CrossNER_CrossNER_LITERATURE".upper():
         return "src.tasks.crossner.prompts_literature"
     elif task_id.upper() == "CrossNER_CrossNER_MUSIC".upper():
+        return "src.tasks.crossner.prompts_music"
+    elif task_id.upper() == "CrossNER_woMISC_CrossNER_POLITICS".upper():
+        return "src.tasks.crossner.prompts_politics"
+    elif task_id.upper() == "CrossNER_woMISC_CrossNER_AI".upper():
+        return "src.tasks.crossner.prompts_ai"
+    elif task_id.upper() == "CrossNER_woMISC_CrossNER_NATURAL_SCIENCE".upper():
+        return "src.tasks.crossner.prompts_natural_science"
+    elif task_id.upper() == "CrossNER_woMISC_CrossNER_LITERATURE".upper():
+        return "src.tasks.crossner.prompts_literature"
+    elif task_id.upper() == "CrossNER_woMISC_CrossNER_MUSIC".upper():
         return "src.tasks.crossner.prompts_music"
 
     # Default case
