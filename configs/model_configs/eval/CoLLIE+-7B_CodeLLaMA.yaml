@@ -81,7 +81,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA/new_guidelines
+output_dir: /ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
