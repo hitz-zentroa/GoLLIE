@@ -110,4 +110,18 @@ ENTITY_DEFINITIONS_LITERATURE: List[Entity] = [
     Other,
 ]
 
+ENTITY_DEFINITIONS_LITERATURE_woMISC: List[Entity] = [
+    Book,
+    Writer,
+    Award,
+    Poem,
+    Event,
+    Magazine,
+    LiteraryGenre,
+    Person,
+    Location,
+    Organization,
+    Country,
+]
+
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

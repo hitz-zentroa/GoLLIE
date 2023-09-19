@@ -3,11 +3,14 @@ from typing import Tuple, Union
 from src.tasks.conll03.data_loader import load_conll_tsv
 from src.tasks.crossner.guidelines import GUIDELINES
 from src.tasks.crossner.guidelines_gold import EXAMPLES
-from src.tasks.crossner.prompts_ai import ENTITY_DEFINITIONS_AI
-from src.tasks.crossner.prompts_literature import ENTITY_DEFINITIONS_LITERATURE
-from src.tasks.crossner.prompts_music import ENTITY_DEFINITIONS_MUSIC
-from src.tasks.crossner.prompts_natural_science import ENTITY_DEFINITIONS_NATURAL_SCIENCE
-from src.tasks.crossner.prompts_politics import ENTITY_DEFINITIONS_POLITICS
+from src.tasks.crossner.prompts_ai import ENTITY_DEFINITIONS_AI, ENTITY_DEFINITIONS_AI_woMISC
+from src.tasks.crossner.prompts_literature import ENTITY_DEFINITIONS_LITERATURE, ENTITY_DEFINITIONS_LITERATURE_woMISC
+from src.tasks.crossner.prompts_music import ENTITY_DEFINITIONS_MUSIC, ENTITY_DEFINITIONS_MUSIC_woMISC
+from src.tasks.crossner.prompts_natural_science import (
+    ENTITY_DEFINITIONS_NATURAL_SCIENCE,
+    ENTITY_DEFINITIONS_NATURAL_SCIENCE_woMISC,
+)
+from src.tasks.crossner.prompts_politics import ENTITY_DEFINITIONS_POLITICS, ENTITY_DEFINITIONS_POLITICS_woMISC
 
 from ..utils_data import DatasetLoader, Sampler
 
@@ -29,7 +32,7 @@ class CrossNERDatasetLoader(DatasetLoader):
 
     ENTITY_TO_CLASS_MAPPING = None
 
-    def __init__(self, path_or_split: str, tasks: str, **kwargs) -> None:
+    def __init__(self, path_or_split: str, tasks: str, include_misc: bool = True, **kwargs) -> None:
         if len(tasks) > 1:
             raise ValueError(
                 "CrossNER only supports one task at a time. Please specify only one task in the config file. You"
@@ -205,11 +208,15 @@ class CrossNERDatasetLoader(DatasetLoader):
                 f"Task {task} not defined. Please choose one of the following: politics, music, literature, ai or"
                 " natural_science"
             )
+
+        if not include_misc:
+            self.ENTITY_TO_CLASS_MAPPING.pop("misc")
+
         self.elements = {}
 
         dataset_words, dataset_entities = load_conll_tsv(
             path=path_or_split,
-            include_misc=True,
+            include_misc=include_misc,
             ENTITY_TO_CLASS_MAPPING=self.ENTITY_TO_CLASS_MAPPING,
         )
 
@@ -292,12 +299,26 @@ class CrossNERSampler(Sampler):
             f" {task} is not supported."
         )
 
+        include_misc = kwargs["include_misc"]
+
         task_definitions, task_target = {
-            "CrossNER_POLITICS": (ENTITY_DEFINITIONS_POLITICS, "entities"),
-            "CrossNER_AI": (ENTITY_DEFINITIONS_AI, "entities"),
-            "CrossNER_NATURAL_SCIENCE": (ENTITY_DEFINITIONS_NATURAL_SCIENCE, "entities"),
-            "CrossNER_LITERATURE": (ENTITY_DEFINITIONS_LITERATURE, "entities"),
-            "CrossNER_MUSIC": (ENTITY_DEFINITIONS_MUSIC, "entities"),
+            "CrossNER_POLITICS": (
+                ENTITY_DEFINITIONS_POLITICS if include_misc else ENTITY_DEFINITIONS_POLITICS_woMISC,
+                "entities",
+            ),
+            "CrossNER_AI": (ENTITY_DEFINITIONS_AI if include_misc else ENTITY_DEFINITIONS_AI_woMISC, "entities"),
+            "CrossNER_NATURAL_SCIENCE": (
+                ENTITY_DEFINITIONS_NATURAL_SCIENCE if include_misc else ENTITY_DEFINITIONS_NATURAL_SCIENCE_woMISC,
+                "entities",
+            ),
+            "CrossNER_LITERATURE": (
+                ENTITY_DEFINITIONS_LITERATURE if include_misc else ENTITY_DEFINITIONS_LITERATURE_woMISC,
+                "entities",
+            ),
+            "CrossNER_MUSIC": (
+                ENTITY_DEFINITIONS_MUSIC if include_misc else ENTITY_DEFINITIONS_MUSIC_woMISC,
+                "entities",
+            ),
         }[task]
 
         super().__init__(

@@ -118,4 +118,19 @@ ENTITY_DEFINITIONS_MUSIC: List[Entity] = [
     Other,
 ]
 
+ENTITY_DEFINITIONS_MUSIC_woMISC: List[Entity] = [
+    MusicGenre,
+    Song,
+    Band,
+    Album,
+    MusicalArtist,
+    MusicalInstrument,
+    Award,
+    Event,
+    Country,
+    Location,
+    Organization,
+    Person,
+]
+
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

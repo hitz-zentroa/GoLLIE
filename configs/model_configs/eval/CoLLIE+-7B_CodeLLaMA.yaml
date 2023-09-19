@@ -65,6 +65,13 @@ test_tasks:
   - crossner.crossner_politics
   - crossner.crossner_literature
   - crossner.crossner_natural_science
+  - crossner_womisc.crossner_ai
+  - crossner_womisc.crossner_music
+  - crossner_womisc.crossner_politics
+  - crossner_womisc.crossner_literature
+  - crossner_womisc.crossner_natural_science
+  - mitmovie.ner
+  - mitrestaurant.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
@@ -74,7 +81,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA
+output_dir: /ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA/new_guidelines
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -93,7 +100,7 @@ evaluate_all_checkpoints: false
 
 # batch size
 per_device_train_batch_size: 32
-per_device_eval_batch_size: 8
+per_device_eval_batch_size: 32
 gradient_accumulation_steps: 1
 generation_num_beams: 1
 

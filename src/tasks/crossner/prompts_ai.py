@@ -126,4 +126,21 @@ ENTITY_DEFINITIONS_AI: List[Entity] = [
     Other,
 ]
 
+ENTITY_DEFINITIONS_AI_woMISC: List[Entity] = [
+    Field,
+    Task,
+    Product,
+    Algorithm,
+    Researcher,
+    Metric,
+    University,
+    Country,
+    Person,
+    Organization,
+    Location,
+    ProgrammingLanguage,
+    Conference,
+]
+
+
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

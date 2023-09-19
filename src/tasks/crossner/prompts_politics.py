@@ -86,4 +86,15 @@ ENTITY_DEFINITIONS_POLITICS: List[Entity] = [
     Other,
 ]
 
+ENTITY_DEFINITIONS_POLITICS_woMISC: List[Entity] = [
+    Person,
+    Organization,
+    Location,
+    Politician,
+    PoliticalParty,
+    Election,
+    Event,
+    Country,
+]
+
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))
