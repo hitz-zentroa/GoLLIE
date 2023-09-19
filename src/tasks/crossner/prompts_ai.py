@@ -103,7 +103,7 @@ class Conference(Entity):
 
 
 @dataclass
-class Miscellaneous(Entity):
+class Other(Entity):
     """{crossner_ai_miscellaneous}"""
 
     span: str  # {crossner_ai_miscellaneous_examples}
@@ -123,7 +123,7 @@ ENTITY_DEFINITIONS_AI: List[Entity] = [
     Location,
     ProgrammingLanguage,
     Conference,
-    Miscellaneous,
+    Other,
 ]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

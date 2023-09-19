@@ -96,7 +96,7 @@ class Person(Entity):
 
 
 @dataclass
-class Miscellaneous(Entity):
+class Other(Entity):
     """{crossner_music_miscellaneous}"""
 
     span: str  # {crossner_music_miscellaneous_examples}
@@ -115,7 +115,7 @@ ENTITY_DEFINITIONS_MUSIC: List[Entity] = [
     Location,
     Organization,
     Person,
-    Miscellaneous,
+    Other,
 ]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

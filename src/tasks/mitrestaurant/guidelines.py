@@ -2,10 +2,8 @@ GUIDELINES = {
     "mit_rating": {
         "en": [
             "Refers to any specific qualitative or quantitative evaluation of a restaurant's quality, performance, or"
-            " popularity. It includes various expressions, such as star ratings (5 start, 2-star), adjectives (e.g.,"
-            " good, excellent), and phrases that describe the restaurant's overall rating or customer experience"
-            " (e.g., busy, top rated). It can also include adjectives that express the sentiments of another entity"
-            " for example in the sentence 'good burger', 'good' is considered a rating for the burger."
+            " popularity, such as star ratings (5 start, 2-star), adjectives (e.g., good, excellent, best), and"
+            " phrases that describe the restaurant's overall rating or customer experience (e.g., busy, top rated)."
         ]
     },
     "mit_amenity": {
@@ -22,8 +20,8 @@ GUIDELINES = {
         "en": [
             "Refers to any specific place, area, city, neighborhood, or geographical location mentioned in the context"
             " of a restaurant. It includes various location expressions, such as city names (e.g., San Diego,Oakland),"
-            " general areas (e.g., in town), relative positions (e.g., closest to my area), or any other references to"
-            " a place associated with the restaurant."
+            " general areas (e.g., in town, in the area), relative positions (e.g., closest to my area, near me), or"
+            " any other references to a place associated with the restaurant."
         ]
     },
     "mit_restaurantname": {

@@ -43,8 +43,8 @@ class CrossNERDatasetLoader(DatasetLoader):
                 Election,
                 Event,
                 Location,
-                Miscellaneous,
                 Organization,
+                Other,
                 Person,
                 PoliticalParty,
                 Politician,
@@ -59,7 +59,7 @@ class CrossNERDatasetLoader(DatasetLoader):
                 "election": Election,
                 "event": Event,
                 "country": Country,
-                "misc": Miscellaneous,
+                "misc": Other,
             }
 
         elif task == "music":
@@ -70,11 +70,11 @@ class CrossNERDatasetLoader(DatasetLoader):
                 Country,
                 Event,
                 Location,
-                Miscellaneous,
                 MusicalArtist,
                 MusicalInstrument,
                 MusicGenre,
                 Organization,
+                Other,
                 Person,
                 Song,
             )
@@ -92,7 +92,7 @@ class CrossNERDatasetLoader(DatasetLoader):
                 "location": Location,
                 "organisation": Organization,
                 "person": Person,
-                "misc": Miscellaneous,
+                "misc": Other,
             }
 
         elif task == "literature":
@@ -104,8 +104,8 @@ class CrossNERDatasetLoader(DatasetLoader):
                 LiteraryGenre,
                 Location,
                 Magazine,
-                Miscellaneous,
                 Organization,
+                Other,
                 Person,
                 Poem,
                 Writer,
@@ -123,7 +123,7 @@ class CrossNERDatasetLoader(DatasetLoader):
                 "location": Location,
                 "organisation": Organization,
                 "country": Country,
-                "misc": Miscellaneous,
+                "misc": Other,
             }
 
         elif task == "ai":
@@ -134,8 +134,8 @@ class CrossNERDatasetLoader(DatasetLoader):
                 Field,
                 Location,
                 Metric,
-                Miscellaneous,
                 Organization,
+                Other,
                 Person,
                 Product,
                 ProgrammingLanguage,
@@ -158,7 +158,7 @@ class CrossNERDatasetLoader(DatasetLoader):
                 "location": Location,
                 "programlang": ProgrammingLanguage,
                 "conference": Conference,
-                "misc": Miscellaneous,
+                "misc": Other,
             }
         elif task == "natural_science":
             from src.tasks.crossner.prompts_natural_science import (
@@ -172,8 +172,8 @@ class CrossNERDatasetLoader(DatasetLoader):
                 Enzyme,
                 Event,
                 Location,
-                Miscellaneous,
                 Organization,
+                Other,
                 Person,
                 Protein,
                 Scientist,
@@ -198,7 +198,7 @@ class CrossNERDatasetLoader(DatasetLoader):
                 "event": Event,
                 "theory": Theory,
                 "award": Award,
-                "misc": Miscellaneous,
+                "misc": Other,
             }
         else:
             raise ValueError(

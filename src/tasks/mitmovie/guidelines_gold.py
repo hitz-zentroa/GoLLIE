@@ -31,10 +31,10 @@ GUIDELINES = {
     },
     "mit_plot": {
         "en": [
-            "Refers to specific elements, events, or themes that are relevant to the central storyline or narrative of"
-            " a movie. It includes distinctive features, occurrences, or characteristics that contribute to the"
-            " development and progression of the movie's plot. The Plot entity encompasses various elements such as"
-            " character types, themes, settings, or notable occurrences within the movie's narrative."
+            "A plot element or theme is a recurring concept, event, or motif that plays a significant role in the"
+            " development of a story, narrative, or work of fiction. For example what happens in a movie (murder, love"
+            " at first sight, cars that fly, horse racing), the type of characters in the movie (vampires, zombies,"
+            " fugitives, cats), where the movie was recorded (British, American), among others."
         ]
     },
     "mit_rating": {

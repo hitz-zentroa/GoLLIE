@@ -68,7 +68,7 @@ class Country(Entity):
 
 
 @dataclass
-class Miscellaneous(Entity):
+class Other(Entity):
     """{crossner_politics_miscellaneous}"""
 
     span: str  # {crossner_politics_miscellaneous_examples}
@@ -83,7 +83,7 @@ ENTITY_DEFINITIONS_POLITICS: List[Entity] = [
     Election,
     Event,
     Country,
-    Miscellaneous,
+    Other,
 ]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))
