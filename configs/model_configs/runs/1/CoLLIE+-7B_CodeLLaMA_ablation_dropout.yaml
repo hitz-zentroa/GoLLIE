@@ -61,6 +61,11 @@ test_tasks:
   - crossner.crossner_politics
   - crossner.crossner_literature
   - crossner.crossner_natural_science
+  - crossner_womisc.crossner_ai
+  - crossner_womisc.crossner_music
+  - crossner_womisc.crossner_politics
+  - crossner_womisc.crossner_literature
+  - crossner_womisc.crossner_natural_science
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
