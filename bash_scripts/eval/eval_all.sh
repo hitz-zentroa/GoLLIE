@@ -28,7 +28,7 @@ export PYTHONPATH="$PYTHONPATH:$PWD"
 
 python3 -m src.run ${CONFIGS_FOLDER}/Baseline-7B_CodeLLaMA.yaml
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE-7B_CodeLLaMA.yaml
-python3 -m src.run ${CONFIGS_FOLDER}/eval/CoLLIE+-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA_ablation_dropout.yaml
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA_ablation_masking.yaml
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-13B_CodeLLaMA.yaml
