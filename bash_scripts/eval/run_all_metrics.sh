@@ -21,16 +21,14 @@ export WANDB_PROJECT=CoLLIEv1.0
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 CONFIGS_FOLDER="configs/model_configs/eval"
-export PYTHONPATH="$PYTHONPATH:$PWD"
 
 # Call this script from root directory as: sbatch bash_scripts/eval_all.sh
 
-
 python3 -m src.evaluate ${CONFIGS_FOLDER}/Baseline-7B_CodeLLaMA.yaml
-python3 -m src.evaluate ${CONFIGS_FOLDER}/eval/CoLLIE+-7B_CodeLLaMA.yaml
+python3 -m src.evaluate ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
 python3 -m src.evaluate ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA_ablation_dropout.yaml
 python3 -m src.evaluate ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA_ablation_masking.yaml
 python3 -m src.evaluate ${CONFIGS_FOLDER}/CoLLIE+-13B_CodeLLaMA.yaml
-torchrun --standalone --master_port 37228 --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/CoLLIE+-34B_CodeLLaMA.yaml
+python3 -m src.evaluate src/run.py ${CONFIGS_FOLDER}/CoLLIE+-34B_CodeLLaMA.yaml
 
 
