@@ -25,5 +25,5 @@ echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 for i in 2 3
 do
 CONFIGS_FOLDER="configs/model_configs/runs/$i"
-python3 -m src.run ${CONFIGS_FOLDER}/eval/CoLLIE+-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
 done
