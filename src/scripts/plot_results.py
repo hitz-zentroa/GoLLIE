@@ -1,4 +1,3 @@
-import json
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -7,135 +6,93 @@ import seaborn as sns
 
 sns.set_theme(style="whitegrid")
 
-MODELS_DIR = "/ikerlariak/osainz006/models/collie"
-BASELINE_PATH = (
-    f"{MODELS_DIR}/CoLLIE-7b_CodeLLaMA_baseline_lora4_flash_together/checkpoint-15486/task_scores_summary.json"
-)
-CoLLIE_PATH = f"{MODELS_DIR}/CoLLIE-7b_CodeLLaMA_lora4_flash_together/checkpoint-15486/task_scores_summary.json"
-CoLLIEp_PATH = f"{MODELS_DIR}/CoLLIE-7b_CodeLLaMA_examples_lora4_flash_together_lora_r_8_all_3e-4/checkpoint-15486/task_scores_summary.json"
+# PromptNER https://arxiv.org/pdf/2305.15444.pdf
+GPT3_5 = [
+    00.00,  # Movie
+    00.00,  # Restaurant
+    20.30,  # Politics
+    31.30,  # Literature
+    24.50,  # Music
+    40.70,  # AI
+    40.60,  # Science
+]
 
-ZERO_SHOT_DATASETS = [
-    ("broadtwitter.ner", "entities"),
-    ("casie.ee", "events"),
-    ("casie.eae", "arguments"),
-    ("e3c.ner", "entities"),
-    ("fabner.ner", "entities"),
-    ("harveyner.ner", "entities"),
-    ("mitmovie.ner", "entities"),
-    ("mitrestaurant.ner", "entities"),
-    ("multinerd.ner", "entities"),
-    ("wikievents.ner", "entities"),
-    ("wikievents.ee", "events"),
-    ("wikievents.eae", "arguments"),
+# Instruct UIE https://arxiv.org/pdf/2304.08085.pdf
+InstructUIE = [
+    63.00,  # Movie
+    20.99,  # Restaurant
+    49.00,  # Politics
+    47.21,  # Literature
+    53.16,  # Music
+    48.15,  # AI
+    49.30,  # Science
+]
+
+CoLLIE = [
+    61.29,  # Movie
+    40.94,  # Restaurant
+    55.94,  # Politics
+    66.26,  # Literature
+    55.52,  # Music
+    61.55,  # AI
+    52.76,  # Science
 ]
 
 
 def main():
-    with open(BASELINE_PATH) as f:
-        baseline_results = json.load(f)
+    fig, ax = plt.subplots(1, 7, figsize=(12, 4), sharey=True, layout="constrained")
 
-    baseline_ner_results = [
-        baseline_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "entities"
-    ]
-    baseline_ee_results = [
-        baseline_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "events"
-    ]
-    baseline_eae_results = [
-        baseline_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "arguments"
-    ]
+    TASK_NAMES = ["Movie", "Restaurant", "Politics", "Literature", "Music", "AI", "Music"]
 
-    with open(CoLLIE_PATH) as f:
-        collie_results = json.load(f)
+    for i, (gpt, iuie, collie, name) in enumerate(zip(GPT3_5, InstructUIE, CoLLIE, TASK_NAMES)):
+        rect = ax[i].bar(
+            [1],
+            [np.round(gpt)],
+            width=1.0,
+            label="GPT-3",
+            # color="#a40e26",
+            color=sns.color_palette("crest", 3)[0],
+            hatch="//",
+        )
+        if gpt:
+            ax[i].bar_label(rect, padding=3, fontsize=12)
 
-    collie_ner_results = [
-        collie_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "entities"
-    ]
-    collie_ee_results = [
-        collie_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "events"
-    ]
-    collie_eae_results = [
-        collie_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "arguments"
-    ]
+        rect = ax[i].bar(
+            [2],
+            [np.round(iuie)],
+            width=1.0,
+            label="Instruct-UIE",
+            # color="#6639ba",
+            color=sns.color_palette("crest", 3)[1],
+            hatch="/",
+        )
+        ax[i].bar_label(rect, padding=3, fontsize=12)
 
-    with open(CoLLIEp_PATH) as f:
-        colliep_results = json.load(f)
+        rect = ax[i].bar(
+            [3],
+            [np.round(collie)],
+            width=1.0,
+            label="CoLLIE",
+            # color="#0a3069"
+            color=sns.color_palette("crest", 3)[2],
+        )
+        ax[i].bar_label(rect, padding=3, fontsize=12)
 
-    colliep_ner_results = [
-        colliep_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "entities"
-    ]
-    colliep_ee_results = [
-        colliep_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "events"
-    ]
-    colliep_eae_results = [
-        colliep_results.get(dataset[0])[dataset[1]]["f1-score"]
-        for dataset in ZERO_SHOT_DATASETS
-        if dataset[1] == "arguments"
-    ]
+        ax[i].set_xticks([1, 2, 3])
+        ax[i].set_yticklabels([])
+        ax[i].set_xticklabels(["", name, ""], fontsize=14)
+        # ax[i].set_title(name)
+        ax[i].grid(False)
+        ax[i].spines["top"].set_visible(False)
+        ax[i].spines["right"].set_visible(False)
+        ax[i].spines["bottom"].set_visible(False)
+        ax[i].spines["left"].set_visible(False)
 
-    fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+    fig.legend(["GPT-3.5", "Instruct-UIE", "CoLLIE"], loc="outside upper center", ncol=3, fontsize=14, frameon=False)
+    # ax[3].legend(["GPT-3", "Instruct-UIE", "CoLLIE"], fontsize=12, ncol=3, bbox_to_anchor=(1.00, 1.15), loc="lower center")
 
-    ax[0].set_title("NER")
-    ax[0].bar(
-        x=[0.5, 1.0, 1.5],
-        height=[
-            np.mean(baseline_ner_results) - 0.3,
-            np.mean(collie_ner_results) - 0.3,
-            np.mean(colliep_ner_results) - 0.3,
-        ],
-        align="edge",
-        width=0.5,
-        bottom=0.3,
-    )
-    ax[0].set_xticks(np.arange(0, 3.0, 0.5), [])
-    ax[0].set_yticks(np.arange(0.3, 0.7, 0.1))
-
-    ax[1].set_title("EE")
-    ax[1].bar(
-        x=[0.5, 1.0, 1.5],
-        height=[
-            np.mean(baseline_ee_results) - 0.3,
-            np.mean(collie_ee_results) - 0.3,
-            np.mean(colliep_ee_results) - 0.3,
-        ],
-        align="edge",
-        width=0.5,
-        bottom=0.3,
-    )
-    ax[1].set_xticks(np.arange(0, 3.0, 0.5), [])
-    ax[1].set_yticks(np.arange(0.3, 0.7, 0.1))
-
-    ax[2].set_title("EAE")
-    ax[2].bar(
-        x=[0.5, 1.0, 1.5],
-        height=[
-            np.mean(baseline_eae_results) - 0.3,
-            np.mean(collie_eae_results) - 0.3,
-            np.mean(colliep_eae_results) - 0.3,
-        ],
-        align="edge",
-        width=0.5,
-        bottom=0.3,
-    )
-    ax[2].set_xticks(np.arange(0, 3.0, 0.5), [])
-    ax[2].set_yticks(np.arange(0.3, 0.7, 0.1))
-
-    plt.savefig("assets/plots/zero_shot_results.png", dpi=300)
+    # plt.tight_layout()
+    plt.savefig("assets/plots/zero_shot_results.pdf", dpi=300)
 
 
 if __name__ == "__main__":
