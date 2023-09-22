@@ -29,13 +29,13 @@ InstructUIE = [
 ]
 
 CoLLIE = [
-    61.29,  # Movie
-    40.94,  # Restaurant
-    55.94,  # Politics
-    66.26,  # Literature
-    55.52,  # Music
-    61.55,  # AI
-    52.76,  # Science
+    63.30,  # Movie
+    41.52,  # Restaurant
+    56.44,  # Politics
+    61.00,  # Literature
+    67.65,  # Music
+    58.47,  # AI
+    54.66,  # Science
 ]
 
 
@@ -88,7 +88,7 @@ def main():
         ax[i].spines["bottom"].set_visible(False)
         ax[i].spines["left"].set_visible(False)
 
-    fig.legend(["GPT-3.5", "Instruct-UIE", "CoLLIE"], loc="outside upper center", ncol=3, fontsize=14, frameon=False)
+    fig.legend(["GPT-3.5", "Instruct-UIE", "GoLLIE"], loc="outside upper center", ncol=3, fontsize=14, frameon=False)
     # ax[3].legend(["GPT-3", "Instruct-UIE", "CoLLIE"], fontsize=12, ncol=3, bbox_to_anchor=(1.00, 1.15), loc="lower center")
 
     # plt.tight_layout()
