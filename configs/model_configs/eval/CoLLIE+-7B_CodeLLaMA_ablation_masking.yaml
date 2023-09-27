@@ -31,18 +31,37 @@ validation_tasks:
   - ace05.ee
   - conll03.ner
 test_tasks:
+  - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
+  - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
+  - rams.eae
+  - tacred.sf
+  - wikievents.eae
+  - wikievents.ee
+  - wikievents.ner
+  - wnut17.ner
+  - e3c.ner
+  - broadtwitter.ner
+  - fabner.ner
+  - harveyner.ner
+  - multinerd.ner
+  - casie.eae
+  - casie.ee
+  - mitmovie.ner
+  - mitrestaurant.ner
   - crossner.crossner_ai
   - crossner.crossner_music
   - crossner.crossner_politics
   - crossner.crossner_literature
   - crossner.crossner_natural_science
-  - crossner_womisc.crossner_ai
-  - crossner_womisc.crossner_music
-  - crossner_womisc.crossner_politics
-  - crossner_womisc.crossner_literature
-  - crossner_womisc.crossner_natural_science
-  - mitmovie.ner
-  - mitrestaurant.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
