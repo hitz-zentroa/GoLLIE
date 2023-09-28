@@ -46,6 +46,7 @@ PATHS = {
     "w/o Masking": "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}_abl_masking/task_scores_summary.json",
     "w/o Dropout": "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}_abl_dropout/task_scores_summary.json",
     "13B": "/ikerlariak/osainz006/models/collie/CoLLIE+-13b_CodeLLaMA{seed}/task_scores_summary.json",
+    "34B": "/ikerlariak/osainz006/models/collie/CoLLIE+-34b_CodeLLaMA{seed}/task_scores_summary.json",
 }
 
 SEEDS = ["", "_2", "_3"]
@@ -56,6 +57,7 @@ for name, path in PATHS.items():
     print()
     print(name)
     sup_results, zero_results = [], []
+    i = 0
     for seed in SEEDS:
         print(seed)
         if name == "Baseline" and seed:
@@ -65,6 +67,7 @@ for name, path in PATHS.items():
                 results = json.load(f)
         except FileNotFoundError:
             continue
+        i += 1
         _sup_results = []
         for dataset, task in SUP_DATASETS:
             _sup_results.append(results[dataset][task]["f1-score"] * 100)
@@ -82,13 +85,15 @@ for name, path in PATHS.items():
     zero_results.append(np.array(zero_results).mean(0))
     zero_results.append(np.array(zero_results).std(0))
 
+    columns = list(map(str, range(i))) + ["Average", "Std"]
+
     sup_results = pd.DataFrame(sup_results, columns=[dataset[0] for dataset in SUP_DATASETS] + ['Average']).T
-    sup_results.columns = ["0", "1", "2", "Average", "Std"]
-    print(tabulate(sup_results, headers=["0", "1", "2", "Average", "Std"], floatfmt=".1f"))
+    sup_results.columns = columns
+    print(tabulate(sup_results, headers=columns, floatfmt=".1f"))
 
     zero_results = pd.DataFrame(zero_results, columns=[dataset[0] for dataset in ZERO_DATASETS] + ['Zero Average', 'Average']).T
-    zero_results.columns = ["0", "1", "2", "Average", "Std"]
-    print(tabulate(zero_results, headers=["0", "1", "2", "Average", "Std"], floatfmt=".1f"))
+    zero_results.columns = columns
+    print(tabulate(zero_results, headers=columns, floatfmt=".1f"))
 
     # print(tabulate(sup_results, floatfmt=".1f", headers=[dataset[0] for dataset in SUP_DATASETS]))
     # print(tabulate(zero_results, floatfmt=".1f", headers=[dataset[0] for dataset in ZERO_DATASETS]))
