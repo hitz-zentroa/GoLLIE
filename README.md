@@ -1,4 +1,4 @@
-<h1 align="center">CoLLIE</h1>
+<h1 align="center">GoLLIE</h1>
 <p align="center">
     <br>
     <img src="assets/CoLLIE_blue.png" style="height: 250px;">
