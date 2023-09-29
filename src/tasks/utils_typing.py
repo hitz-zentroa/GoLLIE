@@ -645,6 +645,183 @@ class Template:
         return correct
 
 
+@dataclass
+class Generic:
+    """A general class to represent Generics."""
+
+    def __eq__(self, other) -> bool:
+        return type(self) == type(other)
+
+    def __repr__(self) -> str:
+        """Returns a string containing only the non-default field values."""
+        s = ", ".join(
+            f"{field.name}={getattr(self, field.name)!r}"
+            for field in dataclasses.fields(self)
+            if getattr(self, field.name) != field.default
+        )
+        return f"{type(self).__name__}({s})"
+
+    def _get_attributes(self, ignore: bool = False) -> Dict[str, Any]:
+        """Returns the non-positional attributes of a Generic instance."""
+        attrs = {}
+        for attr, values in inspect.getmembers(self):
+            if attr.startswith("_") or attr in ["query"] or inspect.ismethod(values):
+                continue
+            if ignore and values:
+                attrs[attr] = type(values)()
+            else:
+                attrs[attr] = values
+        return attrs
+
+    def _get_pos_attributes(self) -> List[Any]:
+        """Return the positional attributes of a Generic instance."""
+        return []
+
+    def __and__(self, other):
+        attrs = self._get_attributes(ignore=True)
+        if self == other:
+            for attr in attrs.keys():
+                self_values = getattr(self, attr)
+                other_values = deepcopy(getattr(other, attr))
+                if self_values is None:
+                    continue
+                if isinstance(self_values, list):
+                    if not isinstance(other_values, list):
+                        other_values = [other_values]
+                    for value in self_values:
+                        if value in other_values:
+                            attrs[attr].append(value)
+                            other_values.pop(other_values.index(value))
+                else:
+                    if isinstance(other_values, list):
+                        attrs[attr] = self_values if self_values in other_values else None
+                    else:
+                        attrs[attr] = self_values if self_values == other_values else None
+
+        pos_args = self._get_pos_attributes()
+
+        return type(self)(*pos_args, **attrs)
+
+    def __len__(self) -> int:
+        attrs = self._get_attributes()
+        _len = 0
+        for values in attrs.values():
+            if not values:
+                continue
+            _len += len(values) if isinstance(values, list) else 1
+
+        return _len
+
+    def exists_in(self, text: str):
+        """
+        Checks whether the annotation exists on a given text. This function is used to
+        identify model alucinations.
+
+        Args:
+            text (`str`):
+                The text used to check whether the annotation is an alucionation or not.
+
+        Returns:
+            `bool`:
+                Whether the annotation exists on the input text or not.
+        """
+        text = text.lower()
+
+        attrs = self._get_attributes(ignore=True)
+        for attr in attrs.keys():
+            self_values = getattr(self, attr)
+            if self_values:
+                if isinstance(self_values, list):
+                    for value in self_values:
+                        if value.lower() in text:
+                            attrs[attr].append(value)
+                else:
+                    if self_values.lower() in text:
+                        attrs[attr] = self_values
+
+        pos_args = self._get_pos_attributes()
+
+        return type(self)(*pos_args, **attrs)
+
+    def index(self, text: str) -> int:
+        """
+        Returns the first position of the span given the text.
+
+        Args:
+            text (`str`):
+                The text to search the span on.
+
+        Raises:
+            IndexError:
+                Raised when the span does not exist in the text
+
+        Returns:
+            `int`:
+                The position of the span in the text.
+        """
+
+        raise IndexError("Generic template does not support this function yet")
+
+    def assert_typing_constraints(self) -> bool:
+        import typing
+
+        def check_types(var: Any, _type: TypeVar) -> Tuple[bool, Any]:
+            if _type is type(None):
+                return (var is None, var)
+            elif isinstance(_type, type):
+                is_correct = isinstance(var, _type)
+                if not is_correct:
+                    if isinstance(var, list):
+                        var = var[0] if len(var) else _type()
+                    var = _type(var)
+                return (is_correct, var)
+            # elif _type is type(None):
+            #     return (var is None, var)
+            elif isinstance(_type, typing._GenericAlias):
+                origin = _type.__origin__
+                if origin is typing.Union:
+                    is_correct = False
+                    _var = None
+                    for _t in _type.__args__:
+                        _is_correct, tmp_var = check_types(var, _t)
+                        if _is_correct:
+                            return (_is_correct, tmp_var)
+                        if _t is not type(None):
+                            _var = tmp_var
+                        is_correct |= _is_correct
+                    # return any(check_types(var, _t) for _t in _type.__args__)
+                    return (is_correct, _var)
+                elif origin is list:
+                    if not isinstance(var, list):
+                        var = [var]
+                    for _t in _type.__args__:
+                        _var = []
+                        is_correct = True
+                        for v in var:
+                            _is_correct, v = check_types(v, _t)
+                            is_correct &= _is_correct
+                            _var.append(v)
+                        if is_correct:
+                            return (is_correct, _var if len(_var) else None)
+
+                    return (is_correct, _var)
+                    # return any(all(check_types(v, _t) for v in var) if isinstance(var, list) else False for _t in _type.__args__)
+                elif any(issubclass(origin, _t) for _t in [str, int, float, bool]):
+                    return check_types(var, origin)
+                else:
+                    raise ValueError(f"Unsupported type: {origin}")
+            else:
+                raise ValueError("Only native types or typing module types are supported.")
+
+        correct = True
+        for field in dataclasses.fields(self):
+            _correct, value = check_types(getattr(self, field.name), field.type)
+            correct &= _correct
+            setattr(self, field.name, value)
+
+        return correct
+
+
 class AnnotationList(list):
     """
     A class that handles the list of system outputs.

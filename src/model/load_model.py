@@ -144,11 +144,11 @@ def load_model(
     lora_r: Optional[int] = 8,
     lora_alpha: Optional[int] = 16,
     lora_dropout: Optional[float] = 0.05,
-    torch_dtype: Optional[str] = None,
+    torch_dtype: Optional[str] = "bfloat16",
     force_auto_device_map: bool = False,
     use_gradient_checkpointing: bool = False,
     trust_remote_code: bool = False,
-    use_flash_attention: bool = False,
+    use_flash_attention: bool = True,
     use_better_transformer: bool = False,
     fsdp_training: bool = False,
     max_memory_MB: Optional[int] = None,
@@ -200,8 +200,10 @@ def load_model(
         trust_remote_code (`bool`, optional):
             Trust the remote code from HuggingFace model hub. Defaults to False.
         use_flash_attention (`bool`, optional):
-            Whether to use Flash Attention. Defaults to False. Flash attention must be installed, see:
+            Whether to use Flash Attention. Defaults to True. Flash attention must be installed, see:
             'https://github.com/Dao-AILab/flash-attention' for more details.
+            GoLLIE models have been trained with Flash Attention, setting this flag to False can cause
+            the model to perform worse due to numerical differences in the attention weights.
         use_better_transformer (`bool`, optional):
             Whether to transform the model using Better Transformer library:
             https://huggingface.co/docs/optimum/bettertransformer/overview. Requires optimum
@@ -221,6 +223,16 @@ def load_model(
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
+
+    if not use_flash_attention and inference:
+        logging.warning(
+            "\n\n==========================================================\n\n"
+            "You are not using Flash Attention. The released\n"
+            "GoLLIE models have been trained with Flash Attention,\n"
+            "setting this flag to False can cause the model to perform\n"
+            "worse due to numerical differences in the attention weights."
+            "=====================================================\n\n"
+        )
 
     # Sanity checks
 

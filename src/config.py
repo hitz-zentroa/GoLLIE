@@ -118,7 +118,7 @@ class ModelArguments:
     )
 
     use_flash_attention: bool = field(
-        default=False,
+        default=True,
         metadata={
             "help": (
                 "Whether to use FlashAttention. If True, the model will be trained with FlashAttention."
