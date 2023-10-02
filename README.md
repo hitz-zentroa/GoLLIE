@@ -3,7 +3,7 @@
     <br>
     <img src="assets/GoLLIE.png" style="height: 250px;">
     <br>
-    <h2 align="center"><b>G</b>uidelines based <b>L</b>arge <b>L</b>anguage-model for <b>I</b>nformation-<b>E</b>xtraction</h2>
+    <h2 align="center"><b>G</b>uideline f<b>o</b>llowing <b>L</b>arge <b>L</b>anguage Model for <b>I</b>nformation <b>E</b>xtraction</h2>
     <br>
 </p>
 <p align="center">
