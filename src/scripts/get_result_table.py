@@ -1,8 +1,8 @@
 import json
-from tabulate import tabulate
-import pandas as pd
 
 import numpy as np
+import pandas as pd
+from tabulate import tabulate
 
 
 SUP_DATASETS = [
@@ -17,7 +17,7 @@ SUP_DATASETS = [
     ("ontonotes5.ner", "entities"),
     ("rams.eae", "arguments"),
     ("tacred.sf", "slots"),
-    ("wnut17.ner", "entities")
+    ("wnut17.ner", "entities"),
 ]
 
 ZERO_DATASETS = [
@@ -37,14 +37,18 @@ ZERO_DATASETS = [
     ("multinerd.ner", "entities"),
     ("wikievents.ner", "entities"),
     ("wikievents.ee", "events"),
-    ("wikievents.eae", "arguments")
+    ("wikievents.eae", "arguments"),
 ]
 
 PATHS = {
     "Baseline": "/ikerlariak/osainz006/models/collie/Baseline-7b_CodeLLaMA{seed}/task_scores_summary.json",
     "GoLLIE": "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}/task_scores_summary.json",
-    "w/o Masking": "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}_abl_masking/task_scores_summary.json",
-    "w/o Dropout": "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}_abl_dropout/task_scores_summary.json",
+    "w/o Masking": (
+        "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}_abl_masking/task_scores_summary.json"
+    ),
+    "w/o Dropout": (
+        "/ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA{seed}_abl_dropout/task_scores_summary.json"
+    ),
     "13B": "/ikerlariak/osainz006/models/collie/CoLLIE+-13b_CodeLLaMA{seed}/task_scores_summary.json",
     "34B": "/ikerlariak/osainz006/models/collie/CoLLIE+-34b_CodeLLaMA{seed}/task_scores_summary.json",
 }
@@ -87,14 +91,15 @@ for name, path in PATHS.items():
 
     columns = list(map(str, range(i))) + ["Average", "Std"]
 
-    sup_results = pd.DataFrame(sup_results, columns=[dataset[0] for dataset in SUP_DATASETS] + ['Average']).T
+    sup_results = pd.DataFrame(sup_results, columns=[dataset[0] for dataset in SUP_DATASETS] + ["Average"]).T
     sup_results.columns = columns
     print(tabulate(sup_results, headers=columns, floatfmt=".1f"))
 
-    zero_results = pd.DataFrame(zero_results, columns=[dataset[0] for dataset in ZERO_DATASETS] + ['Zero Average', 'Average']).T
+    zero_results = pd.DataFrame(
+        zero_results, columns=[dataset[0] for dataset in ZERO_DATASETS] + ["Zero Average", "Average"]
+    ).T
     zero_results.columns = columns
     print(tabulate(zero_results, headers=columns, floatfmt=".1f"))
 
     # print(tabulate(sup_results, floatfmt=".1f", headers=[dataset[0] for dataset in SUP_DATASETS]))
-    # print(tabulate(zero_results, floatfmt=".1f", headers=[dataset[0] for dataset in ZERO_DATASETS]))
-
+    # print(tabulate(zero_results, floatfmt=".1f", headers=[dataset[0] for dataset in ZERO_DATASETS]))
