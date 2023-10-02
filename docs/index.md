@@ -1,6 +1,3 @@
-<a href="https://hitz.ehu.eus/"><img src="https://hitz-zentroa.github.io/lm-contamination/blog/imgs/hitz_logo.png" width="300"></a>
-
-
 <h1><img src="../assets/GoLLIE_blue.png" width="25"> GoLLIE: Guideline-following Large Language Model for Information Extraction</h1>
 
 **Authors:** [Oscar Sainz](https://osainz59.github.io/), [Iker García-Ferrero](https://ikergarcia1996.github.io/Iker-Garcia-Ferrero/), Rodrigo Agerri, Oier Lopez de Lacalle, German Rigau and [Eneko Agirre](https://eagirre.github.io/)
