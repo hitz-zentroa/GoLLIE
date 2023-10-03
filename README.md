@@ -37,7 +37,7 @@ We present  <img src="assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Mo
 
 ## Schema definition and inference example
 
-We  labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. The model start generating after the `result = [` line.
+The labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. The model start generating after the `result = [` line.
 ```Python
 # Entity definitions
 @dataclass
