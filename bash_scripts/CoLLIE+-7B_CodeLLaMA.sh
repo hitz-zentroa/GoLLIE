@@ -28,4 +28,4 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
 
-python3 -m src.run ${CONFIGS_FOLDER}/eval/CoLLIE+-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml

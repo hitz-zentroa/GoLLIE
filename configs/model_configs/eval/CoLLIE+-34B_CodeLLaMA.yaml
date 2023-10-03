@@ -1,8 +1,7 @@
 #Training args
-model_name_or_path: codellama/CodeLlama-34b-hf
-lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/CoLLIE+-34b_CodeLLaMA
+model_name_or_path: HiTZ/GoLLIE-34B
 torch_dtype: bfloat16
-use_lora: true
+use_lora: false
 quantization: 4
 quantization_inference: 4
 gradient_checkpointing: true

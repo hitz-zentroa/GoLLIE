@@ -22,7 +22,7 @@ echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 # Call this script from root directory as: sbatch bash_scripts/runs/CoLLIE+-7B_CodeLLaMA_abl_dropout.sh
 
-for i in 2 3
+for i in 1 2 3
 do
 CONFIGS_FOLDER="configs/model_configs/runs/$i"
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA_ablation_dropout.yaml

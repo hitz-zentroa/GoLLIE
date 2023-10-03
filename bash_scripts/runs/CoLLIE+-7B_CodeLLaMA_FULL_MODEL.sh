@@ -24,7 +24,7 @@ export PYTHONPATH="$PYTHONPATH:$PWD"
 
 # Call this script from root directory as: sbatch bash_scripts/runs/CoLLIE+-7B_CodeLLaMA_FULL_MODEL.sh
 
-for i in 2 3
+for i in 1 2 3
 do
 CONFIGS_FOLDER="configs/model_configs/runs/$i"
 torchrun --standalone --master_port 37223 --nproc_per_node=4 src/run.py  ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA_eval.yaml
