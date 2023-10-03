@@ -1,9 +1,9 @@
 <h1 align="center">GoLLIE</h1>
 <p align="center">
     <br>
-    <img src="assets/CoLLIE_blue.png" style="height: 250px;">
+    <img src="assets/GoLLIE.png" style="height: 250px;">
     <br>
-    <h2 align="center"><b>C</b>ode based <b>L</b>arge <b>L</b>anguage-model for <b>I</b>nformation-<b>E</b>xtraction</h2>
+    <h2 align="center"><b>G</b>uideline f<b>o</b>llowing <b>L</b>arge <b>L</b>anguage Model for <b>I</b>nformation <b>E</b>xtraction</h2>
     <br>
 </p>
 <p align="center">
