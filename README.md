@@ -4,8 +4,6 @@
     <img src="assets/GoLLIE.png" style="height: 250px;">
     <br>
     <h2 align="center"><b>G</b>uideline f<b>o</b>llowing <b>L</b>arge <b>L</b>anguage Model for <b>I</b>nformation <b>E</b>xtraction</h2>
-    <br>
-</p>
 
 
 <p align="center">
@@ -19,17 +17,17 @@
     <a href="http://www.ixa.eus/?language=en"><img src="https://img.shields.io/badge/IXA-%20NLP%20Group-ff3333"></a>
     <br>
      <br>
-
+</p>
 
 <p align="justify">
 We present  <img src="assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. Code and models are publicly available.
-
 
 - 📒 Blog Post: [GoLLIE: Guideline-following Large Language Model for Information Extraction](docs/index.md)
 - 📖 Paper: [GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction]()
 - <img src="assets/GoLLIE.png" width="20">GoLLIE in the 🤗HuggingFace Hub: [HiTZ/gollie](https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f)
 - 🚀 Example Jupyter Notebooks: [GoLLIE Notebooks](notebooks/)
 </p>
+
 <p align="center">
 <img src="assets/zero_shot_results.png">
 </p>

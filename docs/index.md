@@ -11,7 +11,7 @@ Information Extraction (IE) is a challenging task, often requiring to follow str
 </p>
 
 <p align="justify">
-Despite the recent advances, the models still struggle with guidelines details. We hypothesize that the main reason why that occurs is because models have a strong representation of what the labels mean, and, when more details are needed, the models just ignore them. For instance, this is an example of ChatGPT annotating person entities:
+Despite the recent advances, the models still struggle to follow annotation guidelines details. We hypothesize that the main reason why that occurs is because models have a strong preconception of the labels meaning, and, when more details are needed, the models just ignore them. For instance, this is an example of ChatGPT annotating person entities:
 </p>
 
 <table border="0">
@@ -43,9 +43,9 @@ Despite the recent advances, the models still struggle with guidelines details. 
 </table>
 <p align="center">You can find the original chat <a href="https://chat.openai.com/share/e44e9b0e-3f6b-49a0-b84d-48386e0b5118">here</a></p>
 
-<p align="justify">Although the given sentence is quite easy to annotate, the example above shows that even when prompted with the instructions to annotate <b>pronouns</b> as person entities, ChatGPT ignores the instruction and forgets to annotate "I" as person. This imposes a problem when detailed instructions are needed to perform the task, something common on the field of IE where the task guidelines have lots of details and exceptions.</p>
+<p align="justify">Although the given sentence is quite easy to annotate, the example above shows that, even when prompted with the instructions to annotate <b>pronouns</b> as person entities, ChatGPT ignores the instruction and forgets to annotate "I" as person. This imposes a problem when detailed instructions are needed to perform the task, something common on the field of IE where the task guidelines have lots of details and exceptions.</p>
 
-<p align="justify">To address these issues, we present <img src="../assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. Code and models are publicly available. In the following sections we will introduce in more detail how the model works, and show some interesting insights. However, we recommend the reader to read the <a href="">paper</a> for more details.</p>
+<p align="justify">To address these issues, we present <img src="../assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. GoLLIE is based on Code-Llama. Our code and models are publicly available. In the following sections we will introduce in more detail how the model works, and show some interesting insights. We recommend the reader to read the <a href="">paper</a> for more details.</p>
 
 
 ## Schema definition and inference
@@ -88,7 +88,7 @@ class Mission(Template):
 
 <p align="justify">Here, the labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. For some tasks, we would also like to have some additional information about our mentions, like, for example, the <code>space_company</code> or the <code>crew</code> of the launcher. We can add that additional information as attributes of the task, with their corresponding guideline as comments.</p>
 
-<p align="justify">Once we defined our new labels, it is time to provide the model with some texts to annotate. We can do that by simply creating a Python variable with the name <code>text</code> and assign our desired text to it. We can also add a comment to help the model understand what we want. In addition, we recommend to use code formatters like <a href="">Black</a> to standarize the input.</p>
+<p align="justify">Once we defined our new labels, it is time to provide the model with a text to annotate. We can do that by simply creating a Python variable with the name <code>text</code> and assign our desired text to it. We can also add a comment to help the model understand what we want. In addition, we use  <a href="">Black</a> code formatter to standarize the input.</p>
 
 ```python
 # This is the text to analyze
@@ -120,15 +120,19 @@ Please, have a look to our <a href="">Notebooks</a> to get started with the mode
 
 ## Conclusions
 
-We present the first model that properly leverages annotation guidelines to improve zero-shot Information Extraction. Our model, released on 7B, 13B and, 34B variants achieve a new state-of-the-art outperforming previous approaches. For this first release, we focused on probing that teaching LLMs to follow guidelines is be beneficial on low-resource scenarios. For the future, we aim to train the model with many more datasets (similar to other approaches) in order to scale the capabilities of the model. 
+We present the first model that effectively leverages annotation guidelines to enhance zero-shot Information Extraction. Our model, available in 7B, 13B, and 34B variants, establishes a new state-of-the-art, surpassing previous approaches.
 
-<table border="0">
+In our initial iteration, we focused on demonstrating that instructing LLMs to adhere to guidelines is both possible and advantageous. Our next step is to train models on many more tasks and datasets to expand the model's capabilities. Ultimately, our goal is to develop a model that can tackle any information extraction task as proficiently as a human without the necessity of manually annotating data.
+
+<table border="0" align="center">
  <tr>
    <td><a href=""><img src="https://img.shields.io/badge/Paper-20B2AA?style=for-the-badge"></a></td>
    <td><a href=""><img src="https://img.shields.io/badge/Code-20B2AA?style=for-the-badge"></a></td>
    <td><a href=""><img src="https://img.shields.io/badge/Models-20B2AA?style=for-the-badge"></a></td>
+   <td><a href=""><img src="https://img.shields.io/badge/Example Notebooks-20B2AA?style=for-the-badge"></a></td>
  </tr>
 </table>
+
 
 ## References
 
