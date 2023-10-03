@@ -14,10 +14,9 @@ Information Extraction (IE) is a challenging task, often requiring to follow str
 Despite the recent advances, the models still struggle with guidelines details. We hypothesize that the main reason why that occurs is because models have a strong representation of what the labels mean, and, when more details are needed, the models just ignore them. For instance, this is an example of ChatGPT annotating person entities:
 </p>
 
-
 <table border="0">
  <tr>
-   <td><img src="https://www.svgrepo.com/show/532363/user-alt-1.svg" width="80em"></td>
+   <td><img src="assets/user.svg" width="80em"></td>
    <td>Can you annotate person entities if I give you a sentence? The "person" entity is defined as follows: "Each distinct person, or set of people, mentioned in a document refers to an entity of type Person. For example, people may be specified by name ("John Smith"), occupation ("the butcher"), family relation ("mum"), pronoun ("they"), etc., or by some combination of these."</td>
  </tr>
 </table>
@@ -25,13 +24,13 @@ Despite the recent advances, the models still struggle with guidelines details. 
 <table border="0">
  <tr>
    <td>Certainly, I can help you annotate person entities in a sentence based on the definition you provided. Please provide the sentence you'd like me to annotate for person entities, and I'll do my best to identify and annotate them for you.</td>
-   <td><img src="https://www.svgrepo.com/show/306500/openai.svg" width="50px"></td>
+   <td><img src="assets/openai.svg" width="50px"></td>
  </tr>
 </table>
 
 <table border="0">
  <tr>
-   <td><img src="https://www.svgrepo.com/show/532363/user-alt-1.svg" width="25em"></td>
+   <td><img src="assets/user.svg" width="25em"></td>
    <td>Sentence: "I go from Lasarte to Donosti to work at the University of the Basque Country every day."</td>
  </tr>
 </table>
@@ -39,7 +38,7 @@ Despite the recent advances, the models still struggle with guidelines details. 
 <table border="0">
  <tr>
    <td>In the sentence you provided, there are <b>no explicit mentions of distinct persons or people</b> by name, occupation, family relation, <b>pronoun</b>, or any combination of these. Therefore, there are no person entities to annotate in this sentence. If you have any other sentences or text where you'd like person entities annotated, please feel free to provide them, and I'll assist you accordingly.</td>
-   <td><img src="https://www.svgrepo.com/show/306500/openai.svg" width="90px"></td>
+   <td><img src="assets/openai.svg" width="90px"></td>
  </tr>
 </table>
 <p align="center">You can find the original chat <a href="https://chat.openai.com/share/e44e9b0e-3f6b-49a0-b84d-48386e0b5118">here</a></p>
