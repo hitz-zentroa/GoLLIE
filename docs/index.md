@@ -108,11 +108,27 @@ result = [
 
 <p align="justify">As you can see, the generated output can be directly evaluated as it is Python working code. This allows the user to directly parse and interpret the output. The model's output also satisfy the type constraints defined in the guidelines, for instance, we defined every attribute as strings, except for the crew, which is a list. Another constraints can also be applied, such as <code>Optional</code> attributes or more detailed types like <code>Name</code>, <code>Value</code> or <code>String</code> types.</p>
 
+Please, have a look to our <a href="">Notebooks</a> to get started with the model.
+
 ## Evaluation
 
+<p align="justify">We have evaluated GoLLIE on a set of diverse tasks across different datasets. Our primary goal is the zero-shot evaluation, although we also report the results obtained on the supervised datasets in the <a href="">paper</a>. The following figure shows a great summary of what our model is capable of:</p> 
 
+![Zero-Shot NER Results.](../assets/zero_shot_results.png)
+
+<p align="justify">We compared our model with GPT-3.5[<a href="#references">2</a>] and Instruct-UIE[<a href="#references">33</a>] (SOTA) on MIT Movie[<a href="#references">4</a>], MIT Restaurant[<a href="#references">5</a>] and CrossNER[<a href="#references">6</a>] Named Entity Recognition (NER)datasets. Our model outperforms previous approaches on almost all the datasets, and performs similar to the SOTA on the rest. In addition to those results showed in the figure, we also evaluated the model on Event Extraction (EE) and Event Argument Extraction (EAE) datasets. Please, check the <a href="">paper</a> or run the <a href="">models</a> yourself for more detailed results.</p>
 
 ## Conclusions
+
+We present the first model that properly leverages annotation guidelines to improve zero-shot Information Extraction. Our model, released on 7B, 13B and, 34B variants achieve a new state-of-the-art outperforming previous approaches. For this first release, we focused on probing that teaching LLMs to follow guidelines is be beneficial on low-resource scenarios. For the future, we aim to train the model with many more datasets (similar to other approaches) in order to scale the capabilities of the model. 
+
+<table border="0">
+ <tr>
+   <td><a href=""><img src="https://img.shields.io/badge/Paper-20B2AA?style=for-the-badge"></a></td>
+   <td><a href=""><img src="https://img.shields.io/badge/Code-20B2AA?style=for-the-badge"></a></td>
+   <td><a href=""><img src="https://img.shields.io/badge/Models-20B2AA?style=for-the-badge"></a></td>
+ </tr>
+</table>
 
 ## References
 
