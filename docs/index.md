@@ -11,7 +11,7 @@ Information Extraction (IE) is a challenging task, often requiring to follow str
 </p>
 
 <p align="justify">
-Despite the recent advances, the models still struggle with guidelines details. The main reason why that occurs is because models have a strong representation of what the labels mean, and, when more details are needed, the models just ignore them. For instance, this is an example of ChatGPT annotating person entities:
+Despite the recent advances, the models still struggle with guidelines details. We hypothesize that the main reason why that occurs is because models have a strong representation of what the labels mean, and, when more details are needed, the models just ignore them. For instance, this is an example of ChatGPT annotating person entities:
 </p>
 
 
@@ -44,15 +44,74 @@ Despite the recent advances, the models still struggle with guidelines details. 
 </table>
 <p align="center">You can find the original chat <a href="https://chat.openai.com/share/e44e9b0e-3f6b-49a0-b84d-48386e0b5118">here</a></p>
 
-Although the given sentence is quite easy to annotate, the example above shows that even when prompted with the instructions to annotate <b>pronouns</b> as person entities, ChatGPT ignores the instruction and forgets to annotate "I" as person. This imposes a problem when detailed instructions are needed to perform the task, something common on the field of IE where the task guidelines have lots of details and exceptions.
+<p align="justify">Although the given sentence is quite easy to annotate, the example above shows that even when prompted with the instructions to annotate <b>pronouns</b> as person entities, ChatGPT ignores the instruction and forgets to annotate "I" as person. This imposes a problem when detailed instructions are needed to perform the task, something common on the field of IE where the task guidelines have lots of details and exceptions.</p>
 
-To address this issues, we present <img src="../assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines.
-
+<p align="justify">To address these issues, we present <img src="../assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. Code and models are publicly available. In the following sections we will introduce in more detail how the model works, and show some interesting insights. However, we recommend the reader to read the <a href="">paper</a> for more details.</p>
 
 
 ## Schema definition and inference
 
-## Results
+<p align="justify">Our model allows the user to define custom schemas using Python code! Python classes allows to write human-readable code that is also familiar with current LLMs. Imagine that we want to extract information about space missions, the following Python code will define the guidelines for two <b>new types</b> of entities: <code>Launcher</code> and <code>Mission</code>.</p>
+
+```python
+@dataclass
+class Launcher(Template):
+    """Refers to a vehicle designed primarily to transport payloads from the Earth's 
+    surface to space. Launchers can carry various payloads, including satellites, 
+    crewed spacecraft, and cargo, into various orbits or even beyond Earth's orbit. 
+    They are usually multi-stage vehicles that use rocket engines for propulsion."""
+
+    mention: str  
+    """
+    The name of the launcher vehicle. 
+    Such as: "Sturn V", "Atlas V", "Soyuz", "Ariane 5"
+    """
+    space_company: str # The company that operates the launcher. Such as: "Blue origin", "ESA", "Boeing", "ISRO", "Northrop Grumman", "Arianespace"
+    crew: List[str] # Names of the crew members boarding the Launcher. Such as: "Neil Armstrong", "Michael Collins", "Buzz Aldrin"
+    
+
+@dataclass
+class Mission(Template):
+    """Any planned or accomplished journey beyond Earth's atmosphere with specific objectives, 
+    either crewed or uncrewed. It includes missions to satellites, the International 
+    Space Station (ISS), other celestial bodies, and deep space."""
+    
+    mention: str
+    """
+    The name of the mission. 
+    Such as: "Apollo 11", "Artemis", "Mercury"
+    """
+    date: str # The start date of the mission
+    departure: str # The place from which the vehicle will be launched. Such as: "Florida", "Houston", "French Guiana"
+    destination: str # The place or planet to which the launcher will be sent. Such as "Moon", "low-orbit", "Saturn"
+
+```
+
+<p align="justify">Here, the labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. For some tasks, we would also like to have some additional information about our mentions, like, for example, the <code>space_company</code> or the <code>crew</code> of the launcher. We can add that additional information as attributes of the task, with their corresponding guideline as comments.</p>
+
+<p align="justify">Once we defined our new labels, it is time to provide the model with some texts to annotate. We can do that by simply creating a Python variable with the name <code>text</code> and assign our desired text to it. We can also add a comment to help the model understand what we want. In addition, we recommend to use code formatters like <a href="">Black</a> to standarize the input.</p>
+
+```python
+# This is the text to analyze
+text = (
+    "The Ares 3 mission to Mars is scheduled for 2032. The Starship rocket build by SpaceX will take off from Boca Chica,"
+    "carrying the astronauts Max Rutherford, Elena Soto, and Jake Martinez."
+)
+```
+
+After this, we just need to run the model to generate our annotations!
+```python
+result = [
+    Mission(mention='Ares 3', date='2032', departure='Boca Chica', destination='Mars'),
+    Launcher(mention='Starship', space_company='SpaceX', crew=['Max Rutherford', 'Elena Soto', 'Jake Martinez'])
+]
+```
+
+<p align="justify">As you can see, the generated output can be directly evaluated as it is Python working code. This allows the user to directly parse and interpret the output. The model's output also satisfy the type constraints defined in the guidelines, for instance, we defined every attribute as strings, except for the crew, which is a list. Another constraints can also be applied, such as <code>Optional</code> attributes or more detailed types like <code>Name</code>, <code>Value</code> or <code>String</code> types.</p>
+
+## Evaluation
+
+
 
 ## Conclusions
 
