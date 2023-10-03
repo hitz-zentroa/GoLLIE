@@ -197,7 +197,7 @@ First, you need to generate the GoLLIE dataset. See the previous section for mor
 
 Second, you must create a configuration file. Please, see the [configs/model_configs/eval](configs/model_configs/eval) folder for examples. 
 
-Finally, you can train your own GoLLIE by running the following command (See [bash_scripts/eval](bash_scripts/eval) folder for more examples): 
+Finally, you can evaluate your own GoLLIE by running the following command (See [bash_scripts/eval](bash_scripts/eval) folder for more examples): 
 ```bash
 CONFIGS_FOLDER="configs/model_configs/eval"
 python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
