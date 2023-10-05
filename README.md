@@ -36,7 +36,7 @@ We present  <img src="assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Mo
 ## Schema definition and inference example
 
 The labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. The model start generating after the `result = [` line.
-
+<!---
 ```Python
 # Entity definitions
 @dataclass
@@ -82,11 +82,11 @@ result = [
     Launcher(mention='Starship', space_company='SpaceX', crew=['Max Rutherford', 'Elena Soto', 'Jake Martinez'])
 ]
 ```
-<!---
+-->
 <p align="center">
 <img src="assets/snippets/space_transparent.png">
 </p>
--->
+
 ## Installation
 
 You will need to install the following dependencies to run the GoLLIE codebase:
