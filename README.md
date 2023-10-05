@@ -92,7 +92,7 @@ result = [
 You will need to install the following dependencies to run the GoLLIE codebase:
 ```bash
 Pytorch >= 2.0.0 | https://pytorch.org/get-started
-We recommed installing the 2.1.0 (Nightly) version or newer, as it includes important bug fixes.
+We recommed that you install the 2.1.0 version or newer, as it includes important bug fixes.
 
 transformers >= 4.33.1
 pip install --upgrade transformers
