@@ -1,4 +1,4 @@
-<h1><img src="../assets/GoLLIE.png" width="25"> GoLLIE: Guideline-following Large Language Model for Information Extraction</h1>
+<h1><img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/GoLLIE.png?raw=true" width="25"> GoLLIE: Guideline-following Large Language Model for Information Extraction</h1>
 
 **Authors:** [Oscar Sainz](https://osainz59.github.io/), [Iker García-Ferrero](https://ikergarcia1996.github.io/Iker-Garcia-Ferrero/), [Rodrigo Agerri](https://ragerri.github.io/), [Oier Lopez de Lacalle](https://oierldl.github.io/), [German Rigau](https://adimen.si.ehu.es/~rigau/) and [Eneko Agirre](https://eagirre.github.io/)
 
@@ -90,7 +90,7 @@ class Mission(Template):
 -->
 
 <p align="center">
-<img src="../assets/snippets/space_guidelines.png">
+<img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_guidelines.png?raw=true">
 </p>
 
 <p align="justify">Here, the labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. For some tasks, we would also like to have some additional information about our mentions, like, for example, the <code>space_company</code> or the <code>crew</code> of the launcher. We can add that additional information as attributes of the task, with their corresponding guideline as comments.</p>
@@ -106,7 +106,7 @@ text = (
 ```
 -->
 <p align="center">
-<img src="../assets/snippets/space_text.png">
+<img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_text.png?raw=true">
 </p>
 After this, we just need to run the model to generate our annotations!
 <!---
@@ -118,7 +118,7 @@ result = [
 ```
 -->
 <p align="center">
-<img src="../assets/snippets/space_result.png">
+<img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_result.png?raw=true">
 </p>
 <p align="justify">As you can see, the generated output can be directly evaluated as it is Python working code. This allows the user to directly parse and interpret the output. The model's output also satisfy the type constraints defined in the guidelines, for instance, we defined every attribute as strings, except for the crew, which is a list. Another constraints can also be applied, such as <code>Optional</code> attributes or more detailed types like <code>Name</code>, <code>Value</code> or <code>String</code> types.</p>
 
@@ -128,7 +128,7 @@ Please, have a look to our <a href="">Notebooks</a> to get started with the mode
 
 <p align="justify">We have evaluated GoLLIE on a set of diverse tasks across different datasets. Our primary goal is the zero-shot evaluation, although we also report the results obtained on the supervised datasets in the <a href="">paper</a>. The following figure shows a great summary of what our model is capable of:</p> 
 
-![Zero-Shot NER Results.](../assets/zero_shot_results.png)
+![Zero-Shot NER Results.](https://github.com/hitz-zentroa/GoLLIE/raw/main/assets/zero_shot_results.png)
 
 <p align="justify">We compared our model with GPT-3.5[<a href="#references">2</a>] and Instruct-UIE[<a href="#references">3</a>] (SOTA) on MIT Movie[<a href="#references">4</a>], MIT Restaurant[<a href="#references">4</a>] and CrossNER[<a href="#references">5</a>] Named Entity Recognition (NER)datasets. Our model outperforms previous approaches on almost all the datasets, and performs similar to the SOTA on the rest. In addition to those results showed in the figure, we also evaluated the model on Event Extraction (EE) and Event Argument Extraction (EAE) datasets. Please, check the <a href="">paper</a> or run the <a href="">models</a> yourself for more detailed results.</p>
 
