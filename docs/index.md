@@ -130,7 +130,7 @@ Please, have a look to our <a href="">Notebooks</a> to get started with the mode
 
 ![Zero-Shot NER Results.](../assets/zero_shot_results.png)
 
-<p align="justify">We compared our model with GPT-3.5[<a href="#references">2</a>] and Instruct-UIE[<a href="#references">33</a>] (SOTA) on MIT Movie[<a href="#references">4</a>], MIT Restaurant[<a href="#references">5</a>] and CrossNER[<a href="#references">6</a>] Named Entity Recognition (NER)datasets. Our model outperforms previous approaches on almost all the datasets, and performs similar to the SOTA on the rest. In addition to those results showed in the figure, we also evaluated the model on Event Extraction (EE) and Event Argument Extraction (EAE) datasets. Please, check the <a href="">paper</a> or run the <a href="">models</a> yourself for more detailed results.</p>
+<p align="justify">We compared our model with GPT-3.5[<a href="#references">2</a>] and Instruct-UIE[<a href="#references">3</a>] (SOTA) on MIT Movie[<a href="#references">4</a>], MIT Restaurant[<a href="#references">4</a>] and CrossNER[<a href="#references">5</a>] Named Entity Recognition (NER)datasets. Our model outperforms previous approaches on almost all the datasets, and performs similar to the SOTA on the rest. In addition to those results showed in the figure, we also evaluated the model on Event Extraction (EE) and Event Argument Extraction (EAE) datasets. Please, check the <a href="">paper</a> or run the <a href="">models</a> yourself for more detailed results.</p>
 
 ## Conclusions
 
@@ -151,3 +151,7 @@ In our initial iteration, we focused on demonstrating that instructing LLMs to a
 ## References
 
 1. Mike Mintz, Steven Bills, Rion Snow, and Daniel Jurafsky. 2009. Distant supervision for relation extraction without labeled data. In Proceedings of the Joint Conference of the 47th Annual Meeting of the ACL and the 4th International Joint Conference on Natural Language Processing of the AFNLP, pages 1003–1011, Suntec, Singapore. Association for Computational Linguistics.
+2. Ashok, D., & Lipton, Z. C. 2023. PromptNER: Prompting For Named Entity Recognition. arXiv preprint: 2305.15444.
+3. Xiao Wang, Weikang Zhou, Can Zu, Han Xia, Tianze Chen, Yuansen Zhang, Rui Zheng, Junjie Ye, Qi Zhang, Tao Gui, Jihua Kang, Jingsheng Yang, Siyuan Li, and Chunsai Du. 2023. Instructuie: Multi-task instruction tuning for unified information extraction. arXiv preprint: 2304.08085
+4. Jingjing Liu, Panupong Pasupat, Scott Cyphers, and James R. Glas. 2013. Asgard: A portable architecture for multilingual dialogue systems. In 2013 IEEE International Conference on Acoustics, Speech and Signal Processing (pp. 8386-8390). IEEE.
+5. Zihan Liu, Yan Xu, Tiezheng Yu, Wenliang Dai, Ziwei Ji, Samuel Cahyawijaya, Andrea Madotto, and Pascale Fung. 2021. Crossner: Evaluating cross-domain named entity recognition. In Thirty-Fifth AAAI Conference on Artificial Intelligence.
