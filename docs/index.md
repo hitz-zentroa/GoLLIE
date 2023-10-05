@@ -52,6 +52,8 @@ Despite the recent advances, the models still struggle to follow annotation guid
 
 <p align="justify">Our model allows the user to define custom schemas using Python code! Python classes allows to write human-readable code that is also familiar with current LLMs. Imagine that we want to extract information about space missions, the following Python code will define the guidelines for two <b>new types</b> of entities: <code>Launcher</code> and <code>Mission</code>.</p>
 
+<!---
+
 ```python
 @dataclass
 class Launcher(Template):
@@ -85,11 +87,16 @@ class Mission(Template):
     destination: str # The place or planet to which the launcher will be sent. Such as "Moon", "low-orbit", "Saturn"
 
 ```
+-->
+
+<p align="center">
+<img src="../assets/snippets/space_guidelines.png">
+</p>
 
 <p align="justify">Here, the labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. For some tasks, we would also like to have some additional information about our mentions, like, for example, the <code>space_company</code> or the <code>crew</code> of the launcher. We can add that additional information as attributes of the task, with their corresponding guideline as comments.</p>
 
 <p align="justify">Once we defined our new labels, it is time to provide the model with a text to annotate. We can do that by simply creating a Python variable with the name <code>text</code> and assign our desired text to it. We can also add a comment to help the model understand what we want. In addition, we use  <a href="">Black</a> code formatter to standarize the input.</p>
-
+<!---
 ```python
 # This is the text to analyze
 text = (
@@ -97,15 +104,22 @@ text = (
     "carrying the astronauts Max Rutherford, Elena Soto, and Jake Martinez."
 )
 ```
-
+-->
+<p align="center">
+<img src="../assets/snippets/space_text.png">
+</p>
 After this, we just need to run the model to generate our annotations!
+<!---
 ```python
 result = [
     Mission(mention='Ares 3', date='2032', departure='Boca Chica', destination='Mars'),
     Launcher(mention='Starship', space_company='SpaceX', crew=['Max Rutherford', 'Elena Soto', 'Jake Martinez'])
 ]
 ```
-
+-->
+<p align="center">
+<img src="../assets/snippets/space_result.png">
+</p>
 <p align="justify">As you can see, the generated output can be directly evaluated as it is Python working code. This allows the user to directly parse and interpret the output. The model's output also satisfy the type constraints defined in the guidelines, for instance, we defined every attribute as strings, except for the crew, which is a list. Another constraints can also be applied, such as <code>Optional</code> attributes or more detailed types like <code>Name</code>, <code>Value</code> or <code>String</code> types.</p>
 
 Please, have a look to our <a href="">Notebooks</a> to get started with the model.
