@@ -96,6 +96,7 @@ class Mission(Template):
 <p align="justify">Here, the labels are represented as Python classes, and the guidelines or instructions are introduced as docstrings. For some tasks, we would also like to have some additional information about our mentions, like, for example, the <code>space_company</code> or the <code>crew</code> of the launcher. We can add that additional information as attributes of the task, with their corresponding guideline as comments.</p>
 
 <p align="justify">Once we defined our new labels, it is time to provide the model with a text to annotate. We can do that by simply creating a Python variable with the name <code>text</code> and assign our desired text to it. We can also add a comment to help the model understand what we want. In addition, we use  <a href="https://black.readthedocs.io/en/stable/">Black</a> code formatter to standarize the input.</p>
+
 <!---
 ```python
 # This is the text to analyze
@@ -105,10 +106,12 @@ text = (
 )
 ```
 -->
+
 <p align="center">
 <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_text.png?raw=true">
 </p>
 After this, we just need to run the model to generate our annotations!
+
 <!---
 ```python
 result = [
@@ -117,6 +120,7 @@ result = [
 ]
 ```
 -->
+
 <p align="center">
 <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_result.png?raw=true">
 </p>
