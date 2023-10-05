@@ -89,7 +89,7 @@ class Country(Entity):
 
 
 @dataclass
-class Miscellaneous(Entity):
+class Other(Entity):
     """{crossner_literature_miscellaneous}"""
 
     span: str  # {crossner_literature_miscellaneous_examples}
@@ -107,7 +107,21 @@ ENTITY_DEFINITIONS_LITERATURE: List[Entity] = [
     Location,
     Organization,
     Country,
-    Miscellaneous,
+    Other,
+]
+
+ENTITY_DEFINITIONS_LITERATURE_woMISC: List[Entity] = [
+    Book,
+    Writer,
+    Award,
+    Poem,
+    Event,
+    Magazine,
+    LiteraryGenre,
+    Person,
+    Location,
+    Organization,
+    Country,
 ]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

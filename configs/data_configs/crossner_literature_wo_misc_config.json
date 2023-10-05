@@ -1,0 +1,23 @@
+{
+    "dataset_name": "CrossNER_woMISC",
+    "tasks": ["CrossNER_LITERATURE"],
+    "dataloader_cls": "src.tasks.crossner.data_loader.CrossNERDatasetLoader",
+    "sampler_cls": "src.tasks.crossner.data_loader.CrossNERSampler",
+    "train_file": "data/CrossNer/literature/train.txt",
+    "dev_file": "data/CrossNer/literature/dev.txt",
+    "test_file": "data/CrossNer/literature/test.txt",
+    "prompt_template": "templates/prompt.txt",
+    "seed": [0, 24, 42],
+    "label_noise_prob": [0.15, 0.50, 0.75],
+    "include_misc": false,
+    "task_configuration": {
+        "CrossNER_LITERATURE": {
+            "parallel_instances": 1,
+            "max_guidelines": -1,
+            "guideline_dropout": 0.0,
+            "scorer": "src.tasks.crossner.scorer.CrossNERLiteratureEntityScorer_woMISC",
+            "paraphrase_train": true,
+            "label_noise": 0.5
+        }
+    }
+}

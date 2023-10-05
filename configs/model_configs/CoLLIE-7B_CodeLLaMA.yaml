@@ -27,37 +27,8 @@ train_tasks:
   - tacred.sf
   - wnut17.ner
 validation_tasks:
-  - ace05.eae
   - ace05.ee
-  - ace05.ner
-  - ace05.rc
-  - ace05.re
-  - ace05.ver
-  - bc5cdr.ner
   - conll03.ner
-  - diann.ner
-  - ncbidisease.ner
-  - ontonotes5.ner
-  - rams.eae
-  - tacred.sf
-  - wikievents.eae
-  - wikievents.ee
-  - wikievents.ner
-  - wnut17.ner
-  - e3c.ner
-  - broadtwitter.ner
-  - fabner.ner
-  - harveyner.ner
-  - multinerd.ner
-  - casie.eae
-  - casie.ee
-  - mitmovie.ner
-  - mitrestaurant.ner
-  - crossner.crossner_ai
-  - crossner.crossner_music
-  - crossner.crossner_politics
-  - crossner.crossner_literature
-  - crossner.crossner_natural_science
 test_tasks:
   - ace05.eae
   - ace05.ee
@@ -110,7 +81,7 @@ save_total_limit: 999
 do_train: true
 do_eval: true
 do_predict: true
-evaluation_strategy: "steps"
+evaluation_strategy: "epoch"
 eval_steps: 500
 eval_delay: 0
 predict_with_generate: true
@@ -120,7 +91,7 @@ evaluate_all_checkpoints: false
 per_device_train_batch_size: 32
 per_device_eval_batch_size: 8
 gradient_accumulation_steps: 1
-generation_num_beams: 4
+generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch_fused

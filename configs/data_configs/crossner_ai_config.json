@@ -9,6 +9,7 @@
     "prompt_template": "templates/prompt.txt",
     "seed": [0, 24, 42],
     "label_noise_prob": [0.15, 0.50, 0.75],
+    "include_misc": true,
     "task_configuration": {
         "CrossNER_AI": {
             "parallel_instances": 1,

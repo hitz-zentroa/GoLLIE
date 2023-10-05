@@ -1,3 +1,5 @@
+from typing import List
+
 from ..utils_typing import Entity, dataclass
 
 
@@ -122,13 +124,13 @@ class Award(Entity):
 
 
 @dataclass
-class Miscellaneous(Entity):
+class Other(Entity):
     """{crossner_naturalscience_miscellaneous}"""
 
     span: str  # {crossner_naturalscience_miscellaneous_examples}
 
 
-ENTITY_DEFINITIONS_NATURAL_SCIENCE = [
+ENTITY_DEFINITIONS_NATURAL_SCIENCE: List[Entity] = [
     Scientist,
     Person,
     University,
@@ -145,7 +147,26 @@ ENTITY_DEFINITIONS_NATURAL_SCIENCE = [
     Event,
     Theory,
     Award,
-    Miscellaneous,
+    Other,
+]
+
+ENTITY_DEFINITIONS_NATURAL_SCIENCE_woMISC: List[Entity] = [
+    Scientist,
+    Person,
+    University,
+    Organization,
+    Country,
+    Location,
+    Discipline,
+    Enzyme,
+    Protein,
+    ChemicalElement,
+    ChemicalCompound,
+    AstronomicalObject,
+    AcademicJournal,
+    Event,
+    Theory,
+    Award,
 ]
 
 # __all__ = list(map(str, [*ENTITY_DEFINITIONS]))

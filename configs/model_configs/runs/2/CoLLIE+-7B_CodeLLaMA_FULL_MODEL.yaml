@@ -1,0 +1,135 @@
+#Training args
+seed: 2
+model_name_or_path: codellama/CodeLlama-7b-hf
+torch_dtype: bfloat16
+use_lora: false
+quantization: null
+quantization_inference: null
+gradient_checkpointing: true
+force_auto_device_map: false
+use_flash_attention: true
+deepspeed: /ikerlariak/igarcia945/CoLLIE/configs/deepspeed_configs/deepspeed_zero3.json
+
+# dataset arguments
+dataset_dir:
+  /ikerlariak/osainz006/CoLLIE/data/processed_w_examples
+train_tasks:
+  - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
+  - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
+  - rams.eae
+  - tacred.sf
+  - wnut17.ner
+validation_tasks:
+  - ace05.ee
+  - conll03.ner
+test_tasks:
+  - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
+  - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
+  - rams.eae
+  - tacred.sf
+  - wikievents.eae
+  - wikievents.ee
+  - wikievents.ner
+  - wnut17.ner
+  - e3c.ner
+  - broadtwitter.ner
+  - fabner.ner
+  - harveyner.ner
+  - multinerd.ner
+  - casie.eae
+  - casie.ee
+  - mitmovie.ner
+  - mitrestaurant.ner
+  - crossner.crossner_ai
+  - crossner.crossner_music
+  - crossner.crossner_politics
+  - crossner.crossner_literature
+  - crossner.crossner_natural_science
+  - crossner_womisc.crossner_ai
+  - crossner_womisc.crossner_music
+  - crossner_womisc.crossner_politics
+  - crossner_womisc.crossner_literature
+  - crossner_womisc.crossner_natural_science
+max_examples_per_task_train: 30000
+max_examples_per_task_val: 5000
+max_examples_per_task_test: null
+max_seq_length: 2048
+generation_max_length: 2048
+ignore_pad_token_for_loss: true
+prompt_loss_weight: 0.0
+
+# checkpoint settings
+output_dir: /ikerlariak/osainz006/models/collie/CoLLIE+-7b_CodeLLaMA_2_FULL_MODEL
+overwrite_output_dir: true
+load_best_model_at_end: false
+save_strategy: "epoch"
+save_steps: 1000
+save_total_limit: 999
+
+# evaluation
+do_train: true
+do_eval: true
+do_predict: true
+evaluation_strategy: "epoch"
+eval_steps: 500
+eval_delay: 0
+predict_with_generate: true
+evaluate_all_checkpoints: false
+
+# batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
+per_device_train_batch_size: 32
+per_device_eval_batch_size: 8
+gradient_accumulation_steps: 1
+generation_num_beams: 1
+
+# optimizer settings
+optim: adamw_torch
+learning_rate: 0.0001
+weight_decay: 0.0
+num_train_epochs: 3
+lr_scheduler_type: cosine
+warmup_ratio: 0.03
+adam_epsilon: 1e-7
+
+# lora settings
+lora_r: 8
+lora_alpha: 16
+lora_dropout: 0.05
+lora_target_modules:
+  - all
+
+# reporting
+logging_strategy: steps
+logging_first_step: true
+logging_steps: 25
+report_to: wandb
+run_name: "CoLLIE+-7b_CodeLLaMA_2_FULL_MODEL"
+disable_tqdm: false
+
+# hub settings
+push_to_hub: false
+resume_from_checkpoint: false
+
+# performance
+bf16: true
+fp16: false
+torch_compile: false
+ddp_find_unused_parameters: false

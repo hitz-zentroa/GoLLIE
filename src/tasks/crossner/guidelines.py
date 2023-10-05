@@ -1,16 +1,7 @@
 GUIDELINES = {
-    "crossner_politics_person": {
-        "en": [
-            "Refers to an individual's name. Annotate any instance of a person's full name, including"
-            " given names and surnames, as a person entity."
-        ]
-    },
+    "crossner_politics_person": {"en": ["Refers to an individual's name that is not a politician."]},
     "crossner_politics_organization": {
-        "en": [
-            "Refers to a structured group, institution, company, or association. This category covers a"
-            " diverse range of organizations, including businesses, non-profits, educational institutions, and"
-            " government agencies."
-        ]
+        "en": ["Refers to a structured group, institution, company, or association that is not a political party."]
     },
     "crossner_politics_location": {
         "en": [
@@ -20,15 +11,15 @@ GUIDELINES = {
     },
     "crossner_politics_politician": {
         "en": [
-            "Refers to a person who is actively engaged in politics, holding a public office, or involved in political"
-            " activities. If a person entity is identified as a politician, annotate that person's name as a"
-            " politician entity."
+            "Refers to a person who is actively engaged in politics, holding a public office, involved in political"
+            " activities or part of a political party. "
+            "If a person entity is identified as a politician, annotate that person's name as a politician entity."
         ]
     },
     "crossner_politics_politicalparty": {
         "en": [
-            "Refers to a group of individuals with shared political goals, ideologies, and affiliations."
-            " If an organization mentioned in the text is a political party, annotate it as a political party entity."
+            "A political party is an organization that coordinates candidates to compete in a particular country's"
+            " elections. Also annotate acronyms of political parties."
         ]
     },
     "crossner_politics_election": {
@@ -44,23 +35,15 @@ GUIDELINES = {
     },
     "crossner_politics_country": {"en": ["Refers to a sovereign nation."]},
     "crossner_politics_miscellaneous": {
-        "en": [
-            "Refers to named entities that does not fit into the person, organization, location, politician, political"
-            " party, election, event, or country categories."
-        ]
+        "en": ["Refers to named entities that are not included in any other category."]
     },
     "crossner_naturalscience_scientist": {
         "en": [
-            "Refers to a recognition or distinction presented to individuals or organizations for significant"
-            " contributions within the natural science domain. "
+            "Refers to a person who is studying or has expert knowledge of one or more of the natural or physical"
+            " sciences."
         ]
     },
-    "crossner_naturalscience_person": {
-        "en": [
-            "Refers to an individual's name. Annotate any instance of a person's full name, including"
-            " given names and surnames, as a person entity."
-        ]
-    },
+    "crossner_naturalscience_person": {"en": ["Refers to an individual's name that is not a scientist."]},
     "crossner_naturalscience_university": {
         "en": [
             "Refers to an educational institution of higher learning. Label organizations that are universities as"
@@ -83,8 +66,9 @@ GUIDELINES = {
     },
     "crossner_naturalscience_discipline": {
         "en": [
-            "Refers to a specialized field of study or research within the domains of biology, chemistry, and"
-            " astrophysics. This includes specific branches such as quantum chemistry."
+            "Refers to a specialized field of study or research within the domains of natural science. Also label"
+            " words such as biology, chemistry, astrophysics, mathematics or physics. This also includes specific"
+            " branches such as quantum chemistry."
         ]
     },
     "crossner_naturalscience_enzyme": {
@@ -132,21 +116,17 @@ GUIDELINES = {
     "crossner_naturalscience_theory": {
         "en": [
             "Refers to a scientifically established principle or explanation that describes natural phenomena within"
-            " the scope of biology, chemistry, or astrophysics. This encompasses laws and theories like the Ptolemaic"
-            " planetary theories."
+            " the scope of biology, chemistry, or astrophysics, such as orbital resonance. This encompasses laws and"
+            " theories like the Ptolemaic planetary theories."
         ]
     },
     "crossner_naturalscience_miscellaneous": {
-        "en": [
-            "Refers to named entities that are not included in the university, person, organization, country,"
-            " location, discipline, enzyme, protein, chemical element, chemical compound, astronomical object,"
-            " academic journal, event, award, or theory categories."
-        ]
+        "en": ["Refers to named entities that are not included in any other category."]
     },
     "crossner_music_musicgenre": {
         "en": [
             "Refers to a distinct category or style of music, characterized by its unique characteristics, themes, and"
-            " instrumentation."
+            " instrumentation. Include regional musics typical of a certain place."
         ]
     },
     "crossner_music_song": {
@@ -194,18 +174,8 @@ GUIDELINES = {
             " government agencies."
         ]
     },
-    "crossner_music_person": {
-        "en": [
-            "Refers to an individual's name. Annotate any instance of a person's full name, including"
-            " given names and surnames, as a person entity."
-        ]
-    },
-    "crossner_music_miscellaneous": {
-        "en": [
-            "Refers to named entities that are not categorized as music genre, song, band, album, musical artist,"
-            " musical instrument, award, event, country, location, organization, or person."
-        ]
-    },
+    "crossner_music_person": {"en": ["Refers to an individual's name that is not a musical artist."]},
+    "crossner_music_miscellaneous": {"en": ["Refers to named entities that are not included in any other category."]},
     "crossner_literature_book": {
         "en": [
             "Refers to a published work of literature, typically consisting of written content bound in a physical or"
@@ -241,16 +211,12 @@ GUIDELINES = {
     },
     "crossner_literature_literarygenre": {
         "en": [
-            "Refers to a distinct category or style of literary composition, such as poem, verse, novel, and other"
-            " recognized forms."
+            "Refers to categories in literature defined by unique artistic techniques, themes, content, and lengths."
+            " Label words such as poetry, essay or novel as well as content categories like Science Fiction, Fantasy,"
+            " and Fiction. It also encompasses culturally influenced genres, such as Nordic countries poetry."
         ]
     },
-    "crossner_literature_person": {
-        "en": [
-            "Refers to an individual's name. Annotate any instance of a person's full name, including"
-            " given names and surnames, as a person entity."
-        ]
-    },
+    "crossner_literature_person": {"en": ["Refers to an individual's name that is not a writer."]},
     "crossner_literature_location": {
         "en": [
             "Refers to a specific geographical or structural location. This includes but is not limited"
@@ -266,13 +232,13 @@ GUIDELINES = {
     },
     "crossner_literature_country": {"en": ["Refers to a sovereign nation."]},
     "crossner_literature_miscellaneous": {
-        "en": [
-            "Refers to named entities that are not included in the book, writer, award, poem, event, magazine,"
-            " literary genre, person, location, organization, or country categories."
-        ]
+        "en": ["Refers to named entities that are not included in any other category."]
     },
     "crossner_ai_field": {
-        "en": ["Refers to a specific research area or subfield within the broader realm of Artificial Intelligence."]
+        "en": [
+            "Refers to a specific research area or subfield within Artificial Intelligence. Also annotate acronyms"
+            " such as NLP."
+        ]
     },
     "crossner_ai_task": {
         "en": [
@@ -313,12 +279,7 @@ GUIDELINES = {
         ]
     },
     "crossner_ai_country": {"en": ["Refers to a sovereign nation."]},
-    "crossner_ai_person": {
-        "en": [
-            "Refers to an individual's name. Annotate any instance of a person's full name, including"
-            " given names and surnames, as a person entity."
-        ]
-    },
+    "crossner_ai_person": {"en": ["Refers to an individual's name that is not a researcher."]},
     "crossner_ai_organization": {
         "en": [
             "Refers to a structured group, institution, company, or association. This category covers a"
@@ -344,11 +305,5 @@ GUIDELINES = {
             " includes conferences where AI research is presented and published."
         ]
     },
-    "crossner_ai_miscellaneous": {
-        "en": [
-            "Refers to named entities that are not included in the field, task, product, algorithm, researcher,"
-            " metric, university, country, person, organization, location, programming language, or conference"
-            " categories."
-        ]
-    },
+    "crossner_ai_miscellaneous": {"en": ["Refers to named entities that are not included in any other category."]},
 }
