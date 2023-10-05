@@ -8,7 +8,7 @@
 
 <p align="center">
     <a href="https://twitter.com/intent/tweet?text=Wow+this+new+model+is+amazing:&url=https%3A%2F%2Fgithub.com%2Fhitz-zentroa%2FGoLLIE"><img alt="Twitter" src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fosainz59%2FCoLLIE"></a>
-    <a href="https://github.com/hitz-zentroa/GoLLIE/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/osainz59/CoLLIE"></a>
+    <a href="https://github.com/hitz-zentroa/GoLLIE/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/hitz-zentroa/GoLLIE"></a>
     <a href="https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f"><img alt="Pretrained Models" src="https://img.shields.io/badge/🤗HuggingFace-Pretrained Models-green"></a>
     <a href="https://github.com/osainz59/CoLLIE/blob/dev/docs/index.md"><img alt="Blog" src="https://img.shields.io/badge/📒-Blog Post-blue"></a>
     <a href="https://github.com/osainz59/CoLLIE/blob/dev/docs/index.md"><img alt="Paper" src="https://img.shields.io/badge/📖-Paper-orange"></a>
