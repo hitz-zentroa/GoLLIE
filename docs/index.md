@@ -7,7 +7,7 @@
 </p>
 
 <p align="justify">
-Information Extraction (IE) is a challenging task, often requiring to follow strict and highly detailed guidelines in order to perform the task correctly. Traditionally, large amounts of annotations were used to train models to mimic expert annotators. This approach, however, is very expensive and rarely applicable in low-resource domains. Since several years ago, data-augmentation techniques like Distant Supervision [<a href="#references">1</a>] were developed to tackle data-scarcity. More recently, with the recent advances in NLP, zero and few-shot methods (cite something) were created exploiting the internal knowledge of LLMs.
+Information Extraction (IE) is a challenging task, often requiring to follow strict and highly detailed guidelines in order to perform the task correctly. Traditionally, large amounts of annotations were used to train models to mimic expert annotators. This approach, however, is very expensive and rarely applicable in low-resource domains. Since several years ago, data-augmentation techniques like Distant Supervision [<a href="#references">1</a>] were developed to tackle data-scarcity. More recently, with the recent advances in NLP, zero and few-shot methods [<a href="#references">2</a>] were created exploiting the internal knowledge of LLMs.
 </p>
 
 <p align="justify">
