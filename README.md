@@ -22,7 +22,7 @@
 <p align="justify">
 We present  <img src="assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. Code and models are publicly available.
 
-- 📒 Blog Post: [GoLLIE: Guideline-following Large Language Model for Information Extraction](docs/index.md)
+- 📒 Blog Post: [GoLLIE: Guideline-following Large Language Model for Information Extraction](https://hitz-zentroa.github.io/GoLLIE/)
 - 📖 Paper: [GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction](https://arxiv.org/abs/2310.03668)
 - <img src="assets/GoLLIE.png" width="20">GoLLIE in the 🤗HuggingFace Hub: [HiTZ/gollie](https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f)
 - 🚀 Example Jupyter Notebooks: [GoLLIE Notebooks](notebooks/)
