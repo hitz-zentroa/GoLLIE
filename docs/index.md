@@ -45,49 +45,12 @@ Despite the recent advances, the models still struggle to follow annotation guid
 
 <p align="justify">Although the given sentence is quite easy to annotate, the example above shows that, even when prompted with the instructions to annotate <b>pronouns</b> as person entities, ChatGPT ignores the instruction and forgets to annotate "I" as person. This imposes a problem when detailed instructions are needed to perform the task, something common on the field of IE where the task guidelines have lots of details and exceptions.</p>
 
-<p align="justify">To address these issues, we present <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/GoLLIE.png?raw=true" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. GoLLIE is based on Code-Llama. Our code and models are publicly available. In the following sections we will introduce in more detail how the model works, and show some interesting insights. We recommend the reader to read the <a href="">paper</a> for more details.</p>
+<p align="justify">To address these issues, we present <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/GoLLIE.png?raw=true" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. GoLLIE is based on Code-Llama. Our code and models are publicly available. In the following sections we will introduce in more detail how the model works, and show some interesting insights. We recommend the reader to read the <a href="https://arxiv.org/abs/2310.03668">paper</a> for more details.</p>
 
 
 ## Schema definition and inference
 
 <p align="justify">Our model allows the user to define custom schemas using Python code! Python classes allows to write human-readable code that is also familiar with current LLMs. Imagine that we want to extract information about space missions, the following Python code will define the guidelines for two <b>new types</b> of entities: <code>Launcher</code> and <code>Mission</code>.</p>
-
-<!---
-
-```python
-@dataclass
-class Launcher(Template):
-    """Refers to a vehicle designed primarily to transport payloads from the Earth's 
-    surface to space. Launchers can carry various payloads, including satellites, 
-    crewed spacecraft, and cargo, into various orbits or even beyond Earth's orbit. 
-    They are usually multi-stage vehicles that use rocket engines for propulsion."""
-
-    mention: str  
-    """
-    The name of the launcher vehicle. 
-    Such as: "Sturn V", "Atlas V", "Soyuz", "Ariane 5"
-    """
-    space_company: str # The company that operates the launcher. Such as: "Blue origin", "ESA", "Boeing", "ISRO", "Northrop Grumman", "Arianespace"
-    crew: List[str] # Names of the crew members boarding the Launcher. Such as: "Neil Armstrong", "Michael Collins", "Buzz Aldrin"
-    
-
-@dataclass
-class Mission(Template):
-    """Any planned or accomplished journey beyond Earth's atmosphere with specific objectives, 
-    either crewed or uncrewed. It includes missions to satellites, the International 
-    Space Station (ISS), other celestial bodies, and deep space."""
-    
-    mention: str
-    """
-    The name of the mission. 
-    Such as: "Apollo 11", "Artemis", "Mercury"
-    """
-    date: str # The start date of the mission
-    departure: str # The place from which the vehicle will be launched. Such as: "Florida", "Houston", "French Guiana"
-    destination: str # The place or planet to which the launcher will be sent. Such as "Moon", "low-orbit", "Saturn"
-
-```
--->
 
 <p align="center">
 <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_guidelines.png?raw=true">
@@ -97,29 +60,10 @@ class Mission(Template):
 
 <p align="justify">Once we defined our new labels, it is time to provide the model with a text to annotate. We can do that by simply creating a Python variable with the name <code>text</code> and assign our desired text to it. We can also add a comment to help the model understand what we want. In addition, we use  <a href="https://black.readthedocs.io/en/stable/">Black</a> code formatter to standarize the input.</p>
 
-<!---
-```python
-# This is the text to analyze
-text = (
-    "The Ares 3 mission to Mars is scheduled for 2032. The Starship rocket build by SpaceX will take off from Boca Chica,"
-    "carrying the astronauts Max Rutherford, Elena Soto, and Jake Martinez."
-)
-```
--->
-
 <p align="center">
 <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_text.png?raw=true">
 </p>
 After this, we just need to run the model to generate our annotations!
-
-<!---
-```python
-result = [
-    Mission(mention='Ares 3', date='2032', departure='Boca Chica', destination='Mars'),
-    Launcher(mention='Starship', space_company='SpaceX', crew=['Max Rutherford', 'Elena Soto', 'Jake Martinez'])
-]
-```
--->
 
 <p align="center">
 <img src="https://github.com/hitz-zentroa/GoLLIE/blob/main/assets/snippets/space_result.png?raw=true">
@@ -130,11 +74,11 @@ Please, have a look to our <a href="https://github.com/hitz-zentroa/GoLLIE/tree/
 
 ## Evaluation
 
-<p align="justify">We have evaluated GoLLIE on a set of diverse tasks across different datasets. Our primary goal is the zero-shot evaluation, although we also report the results obtained on the supervised datasets in the <a href="">paper</a>. The following figure shows a great summary of what our model is capable of:</p> 
+<p align="justify">We have evaluated GoLLIE on a set of diverse tasks across different datasets. Our primary goal is the zero-shot evaluation, although we also report the results obtained on the supervised datasets in the <a href="https://arxiv.org/abs/2310.03668">paper</a>. The following figure shows a great summary of what our model is capable of:</p> 
 
 ![Zero-Shot NER Results.](https://github.com/hitz-zentroa/GoLLIE/raw/main/assets/zero_shot_results.png)
 
-<p align="justify">We compared our model with GPT-3.5[<a href="#references">2</a>] and Instruct-UIE[<a href="#references">3</a>] (SOTA) on MIT Movie[<a href="#references">4</a>], MIT Restaurant[<a href="#references">4</a>] and CrossNER[<a href="#references">5</a>] Named Entity Recognition (NER)datasets. Our model outperforms previous approaches on almost all the datasets, and performs similar to the SOTA on the rest. In addition to those results showed in the figure, we also evaluated the model on Event Extraction (EE) and Event Argument Extraction (EAE) datasets. Please, check the <a href="">paper</a> or run the <a href="https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f">models</a> yourself for more detailed results.</p>
+<p align="justify">We compared our model with GPT-3.5[<a href="#references">2</a>] and Instruct-UIE[<a href="#references">3</a>] (SOTA) on MIT Movie[<a href="#references">4</a>], MIT Restaurant[<a href="#references">4</a>] and CrossNER[<a href="#references">5</a>] Named Entity Recognition (NER)datasets. Our model outperforms previous approaches on almost all the datasets, and performs similar to the SOTA on the rest. In addition to those results showed in the figure, we also evaluated the model on Event Extraction (EE) and Event Argument Extraction (EAE) datasets. Please, check the <a href="https://arxiv.org/abs/2310.03668">paper</a> or run the <a href="https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f">models</a> yourself for more detailed results.</p>
 
 ## Conclusions
 
@@ -144,7 +88,7 @@ In our initial iteration, we focused on demonstrating that instructing LLMs to a
 
 <table border="0" align="center">
  <tr>
-   <td><a href=""><img src="https://img.shields.io/badge/Paper-20B2AA?style=for-the-badge"></a></td>
+   <td><a href="https://arxiv.org/abs/2310.03668"><img src="https://img.shields.io/badge/Paper-20B2AA?style=for-the-badge"></a></td>
    <td><a href="https://github.com/hitz-zentroa/GoLLIE"><img src="https://img.shields.io/badge/Code-20B2AA?style=for-the-badge"></a></td>
    <td><a href="https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f"><img src="https://img.shields.io/badge/Models-20B2AA?style=for-the-badge"></a></td>
    <td><a href="https://github.com/hitz-zentroa/GoLLIE/tree/main/notebooks"><img src="https://img.shields.io/badge/Example Notebooks-20B2AA?style=for-the-badge"></a></td>
