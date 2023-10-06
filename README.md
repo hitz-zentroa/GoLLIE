@@ -11,7 +11,7 @@
     <a href="https://github.com/hitz-zentroa/GoLLIE/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/hitz-zentroa/GoLLIE"></a>
     <a href="https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f"><img alt="Pretrained Models" src="https://img.shields.io/badge/🤗HuggingFace-Pretrained Models-green"></a>
     <a href="https://github.com/osainz59/CoLLIE/blob/dev/docs/index.md"><img alt="Blog" src="https://img.shields.io/badge/📒-Blog Post-blue"></a>
-    <a href="https://github.com/osainz59/CoLLIE/blob/dev/docs/index.md"><img alt="Paper" src="https://img.shields.io/badge/📖-Paper-orange"></a>
+    <a href="https://arxiv.org/abs/2310.03668"><img alt="Paper" src="https://img.shields.io/badge/📖-Paper-orange"></a>
 <br>
      <a href="http://www.hitz.eus/"><img src="https://img.shields.io/badge/HiTZ-Basque%20Center%20for%20Language%20Technology-blueviolet"></a>
     <a href="http://www.ixa.eus/?language=en"><img src="https://img.shields.io/badge/IXA-%20NLP%20Group-ff3333"></a>
@@ -23,7 +23,7 @@
 We present  <img src="assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. Code and models are publicly available.
 
 - 📒 Blog Post: [GoLLIE: Guideline-following Large Language Model for Information Extraction](docs/index.md)
-- 📖 Paper: [GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction]()
+- 📖 Paper: [GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction](https://arxiv.org/abs/2310.03668)
 - <img src="assets/GoLLIE.png" width="20">GoLLIE in the 🤗HuggingFace Hub: [HiTZ/gollie](https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f)
 - 🚀 Example Jupyter Notebooks: [GoLLIE Notebooks](notebooks/)
 </p>
@@ -129,7 +129,7 @@ Please take a look at our 🚀 Example Jupyter Notebooks to learn how to use GoL
 ## Currently supported tasks
 
 This is the list of task used for training and evaluating GoLLIE. However, as demonstrated in the  🚀 [Create Custom Task notebook](notebooks/Create%20Custom%20Task.ipynb) GoLLIE can perform a wide range of unseen tasks. 
-For more info, read our [📖Paper]().
+For more info, read our [📖Paper](https://arxiv.org/abs/2310.03668).
 
 <p align="center">
 <img src="assets/datasets.png">
@@ -211,6 +211,13 @@ python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
 
 
 ## Citation
-```
-
+```bibtex
+@misc{sainz2023gollie,
+      title={GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction}, 
+      author={Oscar Sainz and Iker García-Ferrero and Rodrigo Agerri and Oier Lopez de Lacalle and German Rigau and Eneko Agirre},
+      year={2023},
+      eprint={2310.03668},
+      archivePrefix={arXiv},
+      primaryClass={cs.CL}
+}
 ```
