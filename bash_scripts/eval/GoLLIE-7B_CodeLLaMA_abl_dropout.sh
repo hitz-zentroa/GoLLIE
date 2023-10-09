@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=Baseline-7B_CodeLLaMA
+#SBATCH --job-name=GoLLIE-7B_CodeLLaMA_abl_dropout
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/Baseline-7B_CodeLLaMA.out.txt
-#SBATCH --error=.slurm/Baseline-7B_CodeLLaMA.err.txt
+#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_abl_dropout.out.txt
+#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_abl_dropout.err.txt
 
 
 source /ikerlariak/osainz006/venvs/GoLLIE/bin/activate
@@ -20,10 +20,9 @@ export WANDB_PROJECT=GoLLIEv1.0
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
-CONFIGS_FOLDER="configs/model_configs"
+CONFIGS_FOLDER="configs/model_configs/eval"
 
 
-# Call this script from root directory as: sbatch bash_scripts/Baseline-7B_CodeLLaMA.sh
+# Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA_abl_dropout.sh
 
-
-python3 -m src.run ${CONFIGS_FOLDER}/Baseline-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_ablation_dropout.yaml

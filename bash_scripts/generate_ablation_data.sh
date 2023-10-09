@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /gscratch4/users/osainz006/CoLLIE/venv/collie/bin/activate
+source /gscratch4/users/osainz006/GoLLIE/venv/GoLLIE/bin/activate
 
 CONFIG_DIR="configs/data_configs"
 

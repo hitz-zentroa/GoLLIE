@@ -1,7 +1,7 @@
 #Training args
-model_name_or_path: HiTZ/GoLLIE-7B
+model_name_or_path: codellama/CodeLlama-7b-hf
 torch_dtype: bfloat16
-use_lora: false
+use_lora: true
 quantization: 4
 quantization_inference: null
 gradient_checkpointing: true
@@ -27,6 +27,9 @@ train_tasks:
   - tacred.sf
   - wnut17.ner
 validation_tasks:
+  - ace05.ee
+  - conll03.ner
+test_tasks:
   - ace05.eae
   - ace05.ee
   - ace05.ner
@@ -58,19 +61,6 @@ validation_tasks:
   - crossner.crossner_politics
   - crossner.crossner_literature
   - crossner.crossner_natural_science
-test_tasks:
-  - crossner.crossner_ai
-  - crossner.crossner_music
-  - crossner.crossner_politics
-  - crossner.crossner_literature
-  - crossner.crossner_natural_science
-  - crossner_womisc.crossner_ai
-  - crossner_womisc.crossner_music
-  - crossner_womisc.crossner_politics
-  - crossner_womisc.crossner_literature
-  - crossner_womisc.crossner_natural_science
-  - mitmovie.ner
-  - mitrestaurant.ner
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
@@ -88,10 +78,10 @@ save_steps: 1000
 save_total_limit: 999
 
 # evaluation
-do_train: false
-do_eval: false
+do_train: true
+do_eval: true
 do_predict: true
-evaluation_strategy: "steps"
+evaluation_strategy: "epoch"
 eval_steps: 500
 eval_delay: 0
 predict_with_generate: true

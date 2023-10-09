@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=GoLLIE-7B_CodeLLaMA
+#SBATCH --job-name=GoLLIE-34B_CodeLLaMA
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA.out.txt
-#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA.err.txt
+#SBATCH --output=.slurm/GoLLIE-34B_CodeLLaMA.out.txt
+#SBATCH --error=.slurm/GoLLIE-34B_CodeLLaMA.err.txt
 
 
 source /ikerlariak/osainz006/venvs/GoLLIE/bin/activate
@@ -20,12 +20,10 @@ export WANDB_PROJECT=GoLLIEv1.0
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
+export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs/eval"
 
+# Call this script from root directory as: sbatch bash_scripts/GoLLIE-34B_CodeLLaMA.sh
 
-# Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
+torchrun --standalone --master_port 37228 --nproc_per_node=2 src/run.py ${CONFIGS_FOLDER}/GoLLIE-34B_CodeLLaMA.yaml
 
-
-# python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
-
-python3 -m src.run ${CONFIGS_FOLDER}/eval/GoLLIE-7B_CodeLLaMA.yaml
