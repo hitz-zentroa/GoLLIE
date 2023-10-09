@@ -1,6 +1,6 @@
 #Training args
 model_name_or_path: codellama/CodeLlama-7b-hf
-lora_weights_name_or_path: /ikerlariak/osainz006/models/collie/Baseline-7b_CodeLLaMA
+lora_weights_name_or_path: /ikerlariak/osainz006/models/GoLLIE/Baseline-7b_CodeLLaMA
 torch_dtype: bfloat16
 use_lora: true
 quantization: 4
@@ -11,7 +11,7 @@ use_flash_attention: true
 
 # dataset arguments
 dataset_dir:
-  /ikerlariak/osainz006/CoLLIE/data/baseline
+  /ikerlariak/osainz006/GoLLIE/data/baseline
 train_tasks:
   - ace05.eae
   - ace05.ee
@@ -81,7 +81,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/collie/Baseline-7b_CodeLLaMA
+output_dir: /ikerlariak/osainz006/models/GoLLIE/Baseline-7b_CodeLLaMA
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"

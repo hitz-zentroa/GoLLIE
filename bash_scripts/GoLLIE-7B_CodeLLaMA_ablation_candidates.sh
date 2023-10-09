@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=Baseline-7B_CodeLLaMA
+#SBATCH --job-name=GoLLIE-7B_CodeLLaMA
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/Baseline-7B_CodeLLaMA.out.txt
-#SBATCH --error=.slurm/Baseline-7B_CodeLLaMA.err.txt
+#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA.out.txt
+#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA.err.txt
 
 
 source /ikerlariak/osainz006/venvs/GoLLIE/bin/activate
@@ -23,7 +23,7 @@ echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 CONFIGS_FOLDER="configs/model_configs"
 
 
-# Call this script from root directory as: sbatch bash_scripts/Baseline-7B_CodeLLaMA.sh
+# Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA_ablation_candidates.sh
 
 
-python3 -m src.run ${CONFIGS_FOLDER}/Baseline-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_ablation_candidates.yaml
