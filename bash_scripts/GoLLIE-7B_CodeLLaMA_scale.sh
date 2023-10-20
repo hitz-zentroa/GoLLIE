@@ -7,7 +7,7 @@
 #SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_scale.err.txt
 
 
-source /ikerlariak/osainz006/venvs/GoLLIE/bin/activate
+source /ikerlariak/osainz006/venvs/collie/bin/activate
 
 
 export LC_ALL=en_US.UTF-8
