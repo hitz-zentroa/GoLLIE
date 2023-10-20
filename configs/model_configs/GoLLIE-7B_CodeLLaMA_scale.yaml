@@ -25,7 +25,15 @@ train_tasks:
   - ontonotes5.ner
   - rams.eae
   - tacred.sf
+  - wikievents.eae
+  - wikievents.ee
+  - wikievents.ner
   - wnut17.ner
+  - e3c.ner
+  - broadtwitter.ner
+  - fabner.ner
+  - harveyner.ner
+  - multinerd.ner
 validation_tasks:
   - ace05.ee
   - conll03.ner
@@ -70,7 +78,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA
+output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_scale
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -114,7 +122,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 25
 report_to: wandb
-run_name: "GoLLIE+-7b_CodeLLaMA_256"
+run_name: "GoLLIE+-7b_CodeLLaMA_256_scale"
 disable_tqdm: false
 
 # hub settings

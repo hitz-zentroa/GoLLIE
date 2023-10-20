@@ -224,16 +224,6 @@ def load_model(
             The loaded model and tokenizer.
     """
 
-    if not use_flash_attention and inference:
-        logging.warning(
-            "\n\n==========================================================\n\n"
-            "You are not using Flash Attention. The released\n"
-            "GoLLIE models have been trained with Flash Attention,\n"
-            "setting this flag to False can cause the model to perform\n"
-            "worse due to numerical differences in the attention weights."
-            "=====================================================\n\n"
-        )
-
     # Sanity checks
 
     if isinstance(quantization, str):
@@ -365,16 +355,7 @@ def load_model(
             f"Model {model_weights_name_or_path} is an decoder-only model. We will load it as a CausalLM model."
         )
 
-        if config.model_type == "llama" and use_flash_attention:
-            from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
-
-            logging.warning("Using Flash Attention for LLaMA model.")
-            load_fn = LlamaForCausalLMFlash
-            use_flash_attention = False  # Do not path the model twice
-
-        else:
-            load_fn = AutoModelForCausalLM
-
+        load_fn = AutoModelForCausalLM
         tokenizer.padding_side = "left"
         model_type = "causal"
 
@@ -387,6 +368,20 @@ def load_model(
         )
 
     #  Load the model weights
+    # Flash attention 2 was added to HuggingFace transformers very recently. Let's add it as kwargs to the load function
+    # so if it is set to False, we can load the model in older versions of transformers.
+    if use_flash_attention:
+        kwargs = {"use_flash_attention_2": True}
+        logging.info("Loading the model with flash attention 2")
+    else:
+        kwargs = {}
+        logging.info(
+            "Loading the model without flash attention. If the model supports it, "
+            "you can enable it by addding 'use_flash_attention: true' to "
+            "your config file."
+        )
+
+    #  Load the model weights
     model: PreTrainedModel = load_fn.from_pretrained(
         pretrained_model_name_or_path=model_weights_name_or_path,
         device_map=device_map,
@@ -396,27 +391,15 @@ def load_model(
         config=config,
         trust_remote_code=trust_remote_code,
         **quant_args,
+        **kwargs,
     )
-
-    # Path the model to use flash attention using OpenAssistant patching function
-    if use_flash_attention:
-        from src.model.patch_models.patching import patch_model
-
-        logging.info("Patching model to use flash attention")
-        patch_model(model, resid_pdrop=None, flash_attention=True)
 
     logging.info(f"Model dtype: {model.dtype}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     # Prepare the model for k-bit training and enable gradient checkpointing
     if quantization is not None and not inference:
-        # Custom prepare_model_for_kbit_training fuction that does not convert weights to float32
-        # Our fuction is faster and more memory efficient, altough it may introduce some numerical instability
-        # we have not observed any issues in our experiments. If you encounter any issues, you can comment
-        # the following line and uncomment the next one.
-        from .model_utils import prepare_model_for_kbit_training
-
-        # from peft import prepare_model_for_kbit_training
+        from peft import prepare_model_for_kbit_training
 
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
     else:
@@ -463,31 +446,6 @@ def load_model(
             model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
 
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
-
-    """
-    Convert the model layers to the correct dtype
-    If LoRA and bf16 is used, we convert the LoRA layers to bf16 for faster training
-    """
-
-    if use_lora:
-        from peft.tuners.lora import LoraLayer
-
-        for name, module in model.named_modules():
-            if isinstance(module, LoraLayer):
-                if torch_dtype == torch.bfloat16:
-                    logging.debug(f"Converting LoRA layer {name} to {torch_dtype}")
-                    module = module.to(torch.bfloat16)
-
-    if not fsdp_training:
-        for name, module in model.named_modules():
-            if "norm" in name:
-                logging.debug(f"Converting layer {name} to {torch.float32}")
-                module = module.to(torch.float32)
-            if "lm_head" in name or "embed_tokens" in name:
-                if hasattr(module, "weight"):
-                    if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
-                        logging.debug(f"Converting layer {name} to {torch_dtype}")
-                        module = module.to(torch.bfloat16)
 
     if inference:
         if quantization is None and use_lora:
