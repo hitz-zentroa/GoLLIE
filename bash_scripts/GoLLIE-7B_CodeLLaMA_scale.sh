@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=GoLLIE-7B_CodeLLaMA
+#SBATCH --job-name=GoLLIE-7B_CodeLLaMA_scale
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:1
 #SBATCH --mem=128G
-#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA.out.txt
-#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA.err.txt
+#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_scale.out.txt
+#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_scale.err.txt
 
 
 source /ikerlariak/osainz006/venvs/GoLLIE/bin/activate
