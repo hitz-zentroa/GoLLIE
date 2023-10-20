@@ -448,15 +448,16 @@ def load_model(
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
 
     if inference:
-        if quantization is None and use_lora:
-            # If we are not using quantization, we merge the LoRA layers into the model for faster inference.
-            # This is not possible if we are using 4/8 bit quantization.
-            logging.info("Merging LoRA layers into the model for faster inference.")
-            model = model.merge_and_unload()
-        else:
-            logging.info(
-                "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
-            )
+        if use_lora:
+            if quantization is None:
+                # If we are not using quantization, we merge the LoRA layers into the model for faster inference.
+                # This is not possible if we are using 4/8 bit quantization.
+                logging.info("Merging LoRA layers into the model for faster inference.")
+                model = model.merge_and_unload()
+            else:
+                logging.info(
+                    "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
+                )
     else:
         trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
         logging.info(
