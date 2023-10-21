@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=GoLLIE-7B_CodeLLaMA
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:1
-#SBATCH --mem=128G
+#SBATCH --gres=gpu:2
+#SBATCH --mem=200G
 #SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA.err.txt
 
@@ -28,4 +28,4 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
 
-python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
+torchrun --standalone --master_port 37229 --nproc_per_node=2 ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
