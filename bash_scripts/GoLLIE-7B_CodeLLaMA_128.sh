@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=GoLLIE-7B_CodeLLaMA
+#SBATCH --job-name=GoLLIE-7B_CodeLLaMA_128
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:2
 #SBATCH --mem=200G
-#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA.out.txt
-#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA.err.txt
+#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_128.out.txt
+#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_128.err.txt
 
 
 source /ikerlariak/osainz006/venvs/collie/bin/activate
