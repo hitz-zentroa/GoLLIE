@@ -20,12 +20,12 @@ export WANDB_PROJECT=GoLLIEv1.0
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
+export PYTHONPATH="$PYTHONPATH:$PWD"
 CONFIGS_FOLDER="configs/model_configs"
-
 
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
 
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
 
-torchrun --standalone --master_port 37229 --nproc_per_node=2 ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
+torchrun --standalone --master_port 37229 --nproc_per_node=2  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
