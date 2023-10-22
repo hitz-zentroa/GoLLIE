@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=GoLLIE-7B_CodeLLaMA_128
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:2
+#SBATCH --gres=gpu:4
 #SBATCH --mem=200G
 #SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_128.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_128.err.txt
@@ -17,7 +17,7 @@ export TOKENIZERS_PARALLELISM=true
 export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=GoLLIEv1.0
-export PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
+#export PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
@@ -29,4 +29,4 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
 
-torchrun --standalone --master_port 37227 --nproc_per_node=2  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_128.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_128.yaml
