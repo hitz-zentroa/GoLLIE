@@ -149,7 +149,7 @@ class ModelArguments:
         },
     )
 
-    merge_lora_before_eval: bool = field(
+    merge_lora_before_inference: bool = field(
         default=False,
         metadata={
             "help": (
@@ -166,10 +166,10 @@ class ModelArguments:
         default=False,
         metadata={
             "help": (
-                "If 'merge_lora_before_eval' is set to True, whether to keep the merged model after eval, or delete it"
-                " to save disk space. Merged model will be saved in {model_name_or_path}/merged_model and will use"
-                " the same disk space as the original model. While storing only the LoRA layers only takes a few MBs."
-                " Defaults to False."
+                "If 'merge_lora_before_inference' is set to True, whether to keep the merged model after eval, or"
+                " delete it to save disk space. Merged model will be saved in {model_name_or_path}/merged_model and"
+                " will use the same disk space as the original model. While storing only the LoRA layers only takes a"
+                " few MBs. Defaults to False."
             )
         },
     )

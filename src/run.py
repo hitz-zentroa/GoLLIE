@@ -199,15 +199,15 @@ def inference_collie(
         )
 
     delete_merged_model: bool = False
-    if model_args.merge_lora_before_eval:
-        logging.info("You have specified to merge the LORA weights before evaluation. We will attempt to do so.")
+    if model_args.merge_lora_before_inference:
+        logging.info("You have specified to merge the LORA weights before inference. We will attempt to do so.")
         if model_args.quantization_inference is None:
             logging.warning(
-                "You have specified to create a merged model (merge_lora_before_eval=True), but you have not specified"
-                " a quantization precision. Model loads without quantization are automatically merged when loaded for"
-                " inference, so there is no need to save a merged model and reaload it. This flag is only useful when"
-                " you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you plan to"
-                " release the merged model."
+                "You have specified to create a merged model (merge_lora_before_inference=True), but you have not"
+                " specified a quantization precision. Model loads without quantization are automatically merged when"
+                " loaded for inference, so there is no need to save a merged model and reaload it. This flag is only"
+                " useful when you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you"
+                " plan to release the merged model."
             )
         if os.path.exists(os.path.join(training_args.output_dir, "merged_model")):
             logging.info(
