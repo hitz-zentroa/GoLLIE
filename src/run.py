@@ -233,7 +233,7 @@ def inference_collie(
         inference=True,
         model_weights_name_or_path=model_path,
         quantization=model_args.quantization_inference,
-        use_lora=model_args.lora_weights_name_or_path is not None,
+        use_lora=lora_weights_name_or_path is not None,
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
         torch_dtype=get_correct_torch_dtype(
