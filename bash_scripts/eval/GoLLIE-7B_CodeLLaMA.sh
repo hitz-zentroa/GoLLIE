@@ -2,7 +2,7 @@
 #SBATCH --job-name=GoLLIE-7B_CodeLLaMA_eval
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
-#SBATCH --mem=200G
+#SBATCH --mem=100G
 #SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_eval.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_eval.err.txt
 
