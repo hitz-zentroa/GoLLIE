@@ -263,6 +263,13 @@ def load_model(
         logging.warning("You provided a path to LoRA weights but use_lora is set to False. We will set use_lora=True.")
         use_lora = True
 
+    if inference and use_flash_attention:
+        logging.warning(
+            "We found some instabilities when using Flash Attention for inference. For now we will disable it for "
+            "inference."
+        )
+        use_flash_attention = False
+
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
     # Get the device map config

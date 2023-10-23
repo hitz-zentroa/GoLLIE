@@ -8,7 +8,7 @@ quantization_inference: null
 bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
-use_flash_attention: true
+use_flash_attention: false
 
 # dataset arguments
 dataset_dir:
