@@ -5,7 +5,7 @@ torch_dtype: bfloat16
 use_lora: true
 quantization: 4
 quantization_inference: null
-merge_lora_before_inference: true
+bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
