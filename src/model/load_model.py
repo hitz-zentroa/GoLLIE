@@ -458,6 +458,10 @@ def load_model(
                 logging.info(
                     "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
                 )
+        if quantization is None:
+            logging.info(f"We will convert the model to {torch_dtype} for inference.")
+            model.to(dtype=torch_dtype)
+        model.eval()
     else:
         trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
         logging.info(
