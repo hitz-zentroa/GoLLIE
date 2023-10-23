@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=GoLLIE-7B_CodeLLaMA
+#SBATCH --job-name=GoLLIE-7B_CodeLLaMA_eval
 #SBATCH --cpus-per-task=16
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:2
 #SBATCH --mem=200G
-#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA.out.txt
-#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA.err.txt
+#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_eval.out.txt
+#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_eval.err.txt
 
 
 source /ikerlariak/osainz006/venvs/collie/bin/activate
@@ -30,4 +30,4 @@ CONFIGS_FOLDER="configs/model_configs/eval"
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
 
-torchrun --standalone --master_port 37229 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
+torchrun --standalone --master_port 37229 --nproc_per_node=2  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
