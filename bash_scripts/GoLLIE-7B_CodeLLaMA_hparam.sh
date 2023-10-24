@@ -41,6 +41,8 @@ torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFI
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R128.yaml
 # BS 128 R 128
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_BS128_R128.yaml
+# VS 128 R 128 LR 1e-4
+torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_BS128_R128_LR1e4.yaml
 # BS 128 R128 PROMPT LOSS 0.05
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS128_R128_prompt_loss_0.05.yaml
 # FT PROMPT LOSS 0.05
