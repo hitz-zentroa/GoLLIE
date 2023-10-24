@@ -11,7 +11,7 @@ deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
-  /ikerlariak/osainz006/GoLLIE/data/processed_w_examples
+  /ikerlariak/osainz006/CoLLIE/data/processed_w_examples
 train_tasks:
   - ace05.eae
   - ace05.ee
