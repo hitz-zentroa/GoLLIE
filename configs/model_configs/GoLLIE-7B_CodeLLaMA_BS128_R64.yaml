@@ -1,17 +1,17 @@
 #Training args
 model_name_or_path: codellama/CodeLlama-7b-hf
 torch_dtype: bfloat16
-use_lora: false
-quantization: null
+use_lora: true
+quantization: 4
 quantization_inference: null
+bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
-  /ikerlariak/osainz006/GoLLIE/data/processed_w_examples
+  /ikerlariak/osainz006/CoLLIE/data/processed_w_examples
 train_tasks:
   - ace05.eae
   - ace05.ee
@@ -71,7 +71,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_FULL_MODEL
+output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_BS128_R64
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -88,26 +88,24 @@ eval_delay: 0
 predict_with_generate: true
 evaluate_all_checkpoints: true
 
-# batch size: 16 batch size * 8 gradaccum * 1 GPUs = 128
-per_device_train_batch_size: 16
+# batch size
+per_device_train_batch_size: 32
 per_device_eval_batch_size: 8
 gradient_accumulation_steps: 1
 generation_num_beams: 1
 
 # optimizer settings
-optim: adamw_torch
-learning_rate: 0.00001
-weight_decay: 0.000001
-num_train_epochs: 6
+optim: adamw_torch_fused
+learning_rate: 0.0003
+weight_decay: 0.001
+num_train_epochs: 3
 lr_scheduler_type: cosine
-warmup_ratio: 0.05
-adam_beta1: 0.9
-adam_beta2: 0.95
-adam_epsilon: 1e-12
+warmup_ratio: 0.1
+adam_epsilon: 1e-7
 
 # lora settings
-lora_r: 8
-lora_alpha: 16
+lora_r: 64
+lora_alpha: 128
 lora_dropout: 0.05
 lora_target_modules:
   - all
@@ -117,7 +115,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 25
 report_to: wandb
-run_name: "GoLLIE+-7b_CodeLLaMA_FULL_MODEL"
+run_name: "GoLLIE+-7b_CodeLLaMA_BS128_R64"
 disable_tqdm: false
 
 # hub settings

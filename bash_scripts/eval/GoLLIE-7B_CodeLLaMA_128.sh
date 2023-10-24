@@ -28,6 +28,6 @@ CONFIGS_FOLDER="configs/model_configs/eval"
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
 
 
-# python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
+# python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
 
 torchrun --standalone --master_port 37225 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_128.yaml

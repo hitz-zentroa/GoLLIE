@@ -68,10 +68,10 @@ max_examples_per_task_test: null
 max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
-prompt_loss_weight: 0.0
+prompt_loss_weight: 0.05
 
 # checkpoint settings
-output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_128
+output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_BS128_R128_promptloss0.05
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -115,7 +115,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 25
 report_to: wandb
-run_name: "GoLLIE+-7b_CodeLLaMA_128"
+run_name: "GoLLIE+-7b_CodeLLaMA_BS128_R128_promptloss0.05"
 disable_tqdm: false
 
 # hub settings

@@ -26,6 +26,6 @@ CONFIGS_FOLDER="configs/model_configs"
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
 
 
-# python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA.yaml
+# python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
 
 python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_scale.yaml

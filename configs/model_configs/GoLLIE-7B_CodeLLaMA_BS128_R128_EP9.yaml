@@ -71,7 +71,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_256
+output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_BS128_R128_EP9
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -98,14 +98,14 @@ generation_num_beams: 1
 optim: adamw_torch_fused
 learning_rate: 0.0003
 weight_decay: 0.001
-num_train_epochs: 3
+num_train_epochs: 9
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 adam_epsilon: 1e-7
 
 # lora settings
-lora_r: 256
-lora_alpha: 512
+lora_r: 128
+lora_alpha: 256
 lora_dropout: 0.05
 lora_target_modules:
   - all
@@ -115,7 +115,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 25
 report_to: wandb
-run_name: "GoLLIE+-7b_CodeLLaMA_256"
+run_name: "GoLLIE+-7b_CodeLLaMA_BS128_R128_EP9"
 disable_tqdm: false
 
 # hub settings
