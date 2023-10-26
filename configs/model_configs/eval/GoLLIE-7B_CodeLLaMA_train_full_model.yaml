@@ -41,7 +41,6 @@ test_tasks:
   - conll03.ner
   - diann.ner
   - ncbidisease.ner
-  - ontonotes5.ner
   - rams.eae
   - tacred.sf
   - wikievents.eae
