@@ -28,7 +28,7 @@ CONFIGS_FOLDER="configs/model_configs"
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
 
 # FT
-# torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_train_full_model.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_train_full_model.yaml
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_train_full_model.yaml
 # BS 32 R 8
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
