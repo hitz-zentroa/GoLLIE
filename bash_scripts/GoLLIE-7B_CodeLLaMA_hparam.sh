@@ -18,7 +18,7 @@ export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=GoLLIEv1.0
 export OMP_NUM_THREADS=16
-#export PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
+export PYTORCH_CUDA_ALLOC_CONF=garbage_collection_threshold:0.6,max_split_size_mb:128
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
@@ -31,7 +31,7 @@ CONFIGS_FOLDER="configs/model_configs"
 #torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_train_full_model.yaml
 #torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_train_full_model.yaml
 # BS 32 R 8
-torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
+#torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
 # BS 128 R 8
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS128_R8.yaml
 # BS 32 R 64
