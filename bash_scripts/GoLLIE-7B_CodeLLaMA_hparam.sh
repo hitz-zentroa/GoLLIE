@@ -47,5 +47,5 @@ torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs
 # BS 128 R128 PROMPT LOSS 0.05
 torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS128_R128_prompt_loss_0.05.yaml
 # FT PROMPT LOSS 0.05
-torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_train_full_model_prompt_loss_0.05.yaml
-torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_train_full_model_prompt_loss_0.05.yaml
+#torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_train_full_model_prompt_loss_0.05.yaml
+#torchrun --standalone --master_port 37227 --nproc_per_node=4  src/run.py configs/model_configs/eval/GoLLIE-7B_CodeLLaMA_train_full_model_prompt_loss_0.05.yaml
