@@ -1,5 +1,5 @@
 #Training args
-model_name_or_path: /ikerlariak/osainz006/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_FULL_MODEL
+model_name_or_path: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_FULL_MODEL
 torch_dtype: bfloat16
 use_lora: false
 quantization: null
@@ -51,7 +51,6 @@ test_tasks:
   - broadtwitter.ner
   - fabner.ner
   - harveyner.ner
-  - multinerd.ner
   - casie.eae
   - casie.ee
   - mitmovie.ner
@@ -70,7 +69,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /ikerlariak/osainz006/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_FULL_MODEL
+output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_FULL_MODEL
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"

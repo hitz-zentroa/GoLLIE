@@ -51,7 +51,6 @@ test_tasks:
   - broadtwitter.ner
   - fabner.ner
   - harveyner.ner
-  - multinerd.ner
   - casie.eae
   - casie.ee
   - mitmovie.ner
