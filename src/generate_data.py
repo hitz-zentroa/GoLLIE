@@ -143,6 +143,12 @@ def main(args):
         with open(config_file, "rt") as f:
             config = json.load(f)
 
+        # Do not shuffle the data if set
+        config["do_not_shuffle"] = args.do_not_shuffle
+
+        # Disable paraphrases if set
+        config["disable_paraphrases"] = args.disable_paraphrases
+
         # Remove guidelines if baseline
         config["remove_guidelines"] = args.baseline
         config["include_examples_prob"] = float(args.include_examples)
@@ -240,6 +246,20 @@ if __name__ == "__main__":
         action="store_true",
         default=False,
         help="Remove guideline masking for the ablation analysis.",
+    )
+
+    parser.add_argument(
+        "--do_not_shuffle",
+        action="store_true",
+        default=False,
+        help="Do not shuffle the data.",
+    )
+
+    parser.add_argument(
+        "--disable_paraphrases",
+        action="store_true",
+        default=False,
+        help="Disable paraphrases",
     )
 
     args = parser.parse_args()

@@ -99,6 +99,10 @@ class Sampler:
             Dictionary from where to sample the examples. Defaults to None.
         label_noise_prob (`float`, optional):
             The probability to hide the label names. Defaults to `0.0`.
+        do_not_shuffle (`bool`, optional):
+            Whether or not to shuffle the examples. Defaults to `False`.
+        disable_paraphrases (`bool`, optional):
+            Whether or not to disable paraphrases. Defaults to `False`.
 
     Raises:
         ValueError:
@@ -132,8 +136,12 @@ class Sampler:
         examples: Dict[str, Any] = None,
         label_noise_prob: float = 0.0,
         coarse_dropout: float = 0.0,
+        do_not_shuffle: bool = False,
+        disable_paraphrases: bool = False,
         **kwargs,
     ) -> None:
+        self.do_not_shuffle = do_not_shuffle
+        self.disable_paraphrases = disable_paraphrases
         self.loader = dataset_loader
         self.task = task
         assert split in [
@@ -245,16 +253,22 @@ class Sampler:
                 )
                 p += 1.0 / p.shape[0]
                 p /= p.sum()
-                guidelines = np.random.choice(
-                    np.asarray(guidelines),
+                guidelines_ids = np.random.choice(
+                    np.asarray(range(len(guidelines))),
                     size=(self.sample_total_guidelines,),
                     replace=False,
                     p=p,
                 ).tolist()
 
+                guidelines_ids.sort()
+
+                guidelines = [guidelines[i] for i in guidelines_ids]
+
             # Shuffle the guidelines
-            random.shuffle(guidelines)
+            if not self.do_not_shuffle:
+                random.shuffle(guidelines)
             # Split the guidelines according to `max_guidelines`
+
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
                 _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
@@ -283,11 +297,17 @@ class Sampler:
                     continue
 
                 _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+
                 # Apply definition paraphrases if train
                 _definitions = {
-                    key: random.choice(value[self.lang]) if self.split == "train" else value[self.lang][0]
+                    key: (
+                        random.choice(value[self.lang])
+                        if self.split == "train" and not self.disable_paraphrases
+                        else value[self.lang][0]
+                    )
                     for key, value in self.definitions.items()
                 }
+
                 # Sample few-shot examples if train (add epsilon for not sampling a 0.0)
                 if min(random.random() + 1e-6, 1.0) <= self.include_examples_prob:
                     _examples = {
@@ -306,10 +326,11 @@ class Sampler:
                         for key in self._formatter.parse(definition)
                         if key[1] is not None and "example" in key[1]
                     }
+
                 _repl = {**_examples, **_definitions}
                 _guidelines = [definition.format(**_repl) for definition in _guidelines]
                 # If no examples are provide, empty comments are created, the following line removes them
-                _guidelines = {self._remove_empty_comments_fn(definition) for definition in _guidelines}
+                _guidelines = [self._remove_empty_comments_fn(definition) for definition in _guidelines]
 
                 # Remove definitions for baseline
                 if self.remove_guidelines:
