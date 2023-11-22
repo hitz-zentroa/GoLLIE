@@ -26,5 +26,7 @@ CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA_train_full_model.sh
 
+pip install flash-attn --no-build-isolation
+pip install git+https://github.com/HazyResearch/flash-attention.git#subdirectory=csrc/rotary
 
 torchrun --standalone --master_port 37223 --nproc_per_node=4 src/run.py  ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_train_full_model.yaml
