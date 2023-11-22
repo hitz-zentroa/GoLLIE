@@ -45,6 +45,7 @@ def prepare_data(
     max_length: int = 2048,
     inference: bool = False,
     prompt_loss_weight: float = 0.05,
+    prompt_until: str = "result",
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
@@ -64,14 +65,22 @@ def prepare_data(
         prompt_loss_weight (`float`, optional):
             The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
             of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
+        prompt_until (`str`, optional):
+            Which part of the sentence consider as non-prompt. Defaults to `result`.
+            It can be 'results', 'sentence', 'all'.
 
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
     """
 
     if is_encoder_decoder:
-        prompt, result = example.split("result =")
-        prompt = prompt + "result ="
+        if prompt_until == "all":
+            raise ValueError(
+                "Prompt until 'all' is not supported for encoder-decoder models. "
+                "Please use 'result' or 'text' instead."
+            )
+        prompt, result = example.split("result =" if prompt_until == "result" else "text =", maxsplit=1)
+        prompt = prompt + ("result =" if prompt_until == "result" else prompt + "text =")
         prompt = prompt.strip()
         result = result.strip()
 
@@ -97,7 +106,16 @@ def prepare_data(
 
     else:
         if inference:
-            prompt = example.split("result =")[0] + "result ="
+            if prompt_until == "all":
+                prompt = ""
+            elif prompt_until == "result":
+                prompt = example.split("result =")[0] + "result ="
+            elif prompt_until == "text":
+                prompt = example.split("text =")[0] + "text ="
+            else:
+                raise ValueError(
+                    f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'"
+                )
             model_inputs = tokenizer(
                 text=prompt,
                 max_length=max_length,
@@ -131,47 +149,60 @@ def prepare_data(
             model_inputs["labels"] = model_inputs["input_ids"].copy()
 
             # Find the prompt length
-            prompt = example.split("result =")[0] + "result ="
-            prompt = tokenizer(
-                text=prompt,
-                max_length=max_length,
-                truncation=True,
-                padding=False,
-                return_tensors=None,
-                add_special_tokens=True,
-            )["input_ids"]
 
-            # Remove the last token if it is an eos token
-            if prompt[-1] == tokenizer.eos_token_id:
-                prompt = prompt[:-1]
+            if prompt_until == "all":
+                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+            else:
+                if prompt_until == "result":
+                    prompt = example.split("result =", maxsplit=1)[0] + "result ="
+                elif prompt_until == "text":
+                    prompt = example.split("text =", maxsplit=1)[0] + "text ="
+                else:
+                    raise ValueError(
+                        f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'"
+                    )
 
-            if len(prompt) > len(model_inputs["labels"]):
-                raise ValueError(
-                    f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-                    f" {model_inputs['input_ids']}"
-                )
+                prompt = tokenizer(
+                    text=prompt,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
 
-            # Create the weight mask
-            loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+                # Remove the last token if it is an eos token
+                if prompt[-1] == tokenizer.eos_token_id:
+                    prompt = prompt[:-1]
 
-            # The sum of the loss of the prompt tokens should be equal to 'prompt_loss_weight' percent of the total loss
-            len_prompt = len(prompt)
-            len_result = len(model_inputs["labels"]) - len_prompt
-            prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
-            try:
-                prompt_token_weight = prompt_token_weight * (
-                    len_result / (len_result * (1 - prompt_loss_weight))
-                )  # Scale so result tokens can have 1.0 weight
-                prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
-            except ZeroDivisionError:
-                logging.warning(
-                    "Found division by zero in prompt token weight calculation. You might have an empty prompt, empty"
-                    f" result, or both. Example with error: {example}. Setting prompt token weight to 0.0."
-                )
-                prompt_token_weight = 0.0
+                if len(prompt) > len(model_inputs["labels"]):
+                    raise ValueError(
+                        f"Prompt is longer than the labels, something went wrong. Prompt: {prompt}, labels:"
+                        f" {model_inputs['labels']}"
+                    )
 
-            for i in range(len(prompt)):
-                loss_weight_mask[i] = prompt_token_weight
+                # Create the weight mask
+                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+
+                # The sum of the loss of the prompt tokens should be equal
+                # to 'prompt_loss_weight' percent of the total loss
+                len_prompt = len(prompt)
+                len_result = len(model_inputs["labels"]) - len_prompt
+                prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
+                try:
+                    prompt_token_weight = prompt_token_weight * (
+                        len_result / (len_result * (1 - prompt_loss_weight))
+                    )  # Scale so result tokens can have 1.0 weight
+                    prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
+                except ZeroDivisionError:
+                    logging.warning(
+                        "Found division by zero in prompt token weight calculation. You might have an empty prompt,"
+                        f" empty result, or both. Example with error: {example}. Setting prompt token weight to 0.0."
+                    )
+                    prompt_token_weight = 0.0
+
+                for i in range(len(prompt)):
+                    loss_weight_mask[i] = prompt_token_weight
 
             model_inputs["loss_weight_mask"] = loss_weight_mask
 
@@ -189,6 +220,7 @@ def batch_tokenization(
     max_length: int,
     inference: bool,
     prompt_loss_weight: float,
+    prompt_until: str,
     examples: List[str],
     process_no: int,
 ) -> List[BatchEncoding]:
@@ -212,6 +244,9 @@ def batch_tokenization(
         prompt_loss_weight (`float`):
             The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
             of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
+        prompt_until (`str`, optional):
+            Which part of the sentence consider as non-prompt. Defaults to `result`.
+            It can be 'results', 'text', 'all'.
         examples (`List[str]`):
             The examples to tokenize.
         process_no (`int`):
@@ -239,6 +274,7 @@ def batch_tokenization(
                         max_length=max_length,
                         inference=inference,
                         prompt_loss_weight=prompt_loss_weight,
+                        prompt_until=prompt_until,
                     )
                 )
                 progress.update(task, advance=1)
@@ -251,6 +287,7 @@ def batch_tokenization(
                 max_length=max_length,
                 inference=inference,
                 prompt_loss_weight=prompt_loss_weight,
+                prompt_until=prompt_until,
             )
             for example in examples
         ]
@@ -280,6 +317,9 @@ class CollieDataset(Dataset):
         prompt_loss_weight (`float`, optional):
             The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
             of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
+        prompt_until (`str`, optional):
+            Which part of the sentence consider as non-prompt. Defaults to `result`.
+            It can be 'results', 'sentence', 'text'.
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
@@ -297,6 +337,7 @@ class CollieDataset(Dataset):
         max_length: int = 2048,
         inference: bool = False,
         prompt_loss_weight: float = 0.0,
+        prompt_until: str = "result",
         num_workers: int = min(os.cpu_count(), 16),
         max_examples: Optional[int] = None,
     ):
@@ -305,11 +346,14 @@ class CollieDataset(Dataset):
         self.inference = inference
         self.max_examples = max_examples
 
-        assert (
-            prompt_loss_weight >= 0.0 and prompt_loss_weight < 1.0
-        ), f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}."
+        if not (0.0 <= prompt_loss_weight < 1.0):
+            raise ValueError(f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}.")
 
         self.prompt_loss_weight = prompt_loss_weight
+
+        if prompt_until not in ["result", "text", "all"]:
+            raise ValueError(f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'")
+        self.prompt_until = prompt_until
 
         try:
             self.dataset_name, self.task_name, self.split, extension = os.path.basename(dataset_path).split(".")
@@ -418,6 +462,7 @@ class CollieDataset(Dataset):
                 max_length=self.max_length,
                 inference=self.inference,
                 prompt_loss_weight=self.prompt_loss_weight,
+                prompt_until=self.prompt_until,
                 examples=examples,
                 process_no=0,
             )
@@ -430,6 +475,7 @@ class CollieDataset(Dataset):
                 self.max_length,
                 self.inference,
                 self.prompt_loss_weight,
+                self.prompt_until,
             )
             with Pool(num_workers) as p:
                 tokenized_examples = p.starmap(

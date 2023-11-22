@@ -97,7 +97,7 @@ class TestCollieTrainer(unittest.TestCase):
         from torch.utils.data import DataLoader
 
         from src.model.load_model import load_model
-        from src.tests.test_dataset import get_dataset
+        from src.tests.test_dataset import get_dataset_prompt_result
         from src.trainer import CollieTrainer
         from transformers import Seq2SeqTrainingArguments, Trainer
 
@@ -120,7 +120,7 @@ class TestCollieTrainer(unittest.TestCase):
             trainer = Trainer(model=model, args=training_args)
             trainer.model = trainer.model.to("cpu")
 
-            dataset, prompt, result = get_dataset(
+            dataset, prompt, result = get_dataset_prompt_result(
                 tokenizer=tokenizer,
                 is_encoder_decoder=False,
                 inference=False,
@@ -160,7 +160,7 @@ class TestCollieTrainer(unittest.TestCase):
         from torch.utils.data import DataLoader
 
         from src.model.load_model import load_model
-        from src.tests.test_dataset import get_dataset
+        from src.tests.test_dataset import get_dataset_prompt_result
         from src.trainer import CollieTrainer
         from transformers import Seq2SeqTrainingArguments, Trainer
 
@@ -182,7 +182,7 @@ class TestCollieTrainer(unittest.TestCase):
             trainer = Trainer(model=model, args=training_args)
             trainer.model = trainer.model.to("cpu")
 
-            dataset, prompt, result = get_dataset(
+            dataset, prompt, result = get_dataset_prompt_result(
                 tokenizer=tokenizer,
                 is_encoder_decoder=False,
                 inference=False,

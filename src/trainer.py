@@ -293,7 +293,7 @@ class CollieTrainer(Seq2SeqTrainer):
 
         logits = logits.view(-1, logits.size(-1))
         labels = labels.view(-1)
-        loss_weight_mask = loss_weight_mask.view(-1)
+        loss_weight_mask = loss_weight_mask.view(-1).to(dtype=logits.dtype)
         loss_fct = nn.CrossEntropyLoss(reduction="none", ignore_index=-100)
 
         loss = loss_fct(logits, labels)

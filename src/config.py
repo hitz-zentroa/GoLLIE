@@ -239,6 +239,16 @@ class DataTrainingArguments:
         },
     )
 
+    prompt_until: str = field(
+        default="result",
+        metadata={
+            "help": (
+                "Which part of the sentence consider as non-prompt. Defaults to `result`."
+                "It can be 'results', 'text', 'all'."
+            )
+        },
+    )
+
     max_examples_per_task_train: int = field(
         default=None,
         metadata={

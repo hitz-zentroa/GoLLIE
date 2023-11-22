@@ -75,8 +75,8 @@ def train_collie(
 
     logging.info(
         "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
-        f" {data_args.ignore_pad_token_for_loss} and 'prompt_loss_weight':"
-        f" {data_args.prompt_loss_weight}"
+        f" {data_args.ignore_pad_token_for_loss}; 'prompt_loss_weight':"
+        f" {data_args.prompt_loss_weight} and 'prompt_until': {data_args.prompt_until}."
     )
 
     training_datasets = []
@@ -89,6 +89,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=data_args.prompt_loss_weight,
+            prompt_until=data_args.prompt_until,
             max_examples=data_args.max_examples_per_task_train,
         )
         training_datasets.append(train_dataset)
@@ -105,6 +106,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=0.0,
+            prompt_until="result",
             max_examples=data_args.max_examples_per_task_val,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
@@ -269,6 +271,7 @@ def inference_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
             prompt_loss_weight=0.0,
+            prompt_until="result",
             max_examples=data_args.max_examples_per_task_test,
         )
 
