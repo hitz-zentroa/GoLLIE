@@ -67,7 +67,7 @@ max_seq_length: 2048
 generation_max_length: 2048
 ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
-prompy_until: "all"
+prompt_until: "all"
 
 # checkpoint settings
 output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_BS128_R128_loss_all
