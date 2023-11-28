@@ -1,4 +1,5 @@
 #!/bin/bash
+#SBATCH --partition=xlong
 #SBATCH --job-name=GoLLIE-7B_CodeLLaMA_loss_all
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
