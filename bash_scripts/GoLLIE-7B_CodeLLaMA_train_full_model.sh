@@ -1,5 +1,4 @@
 #!/bin/bash
-#SBATCH --partition=xlong
 #SBATCH --job-name=GoLLIE-7B_CodeLLaMA_FULL_MODEL
 #SBATCH --cpus-per-task=16
 #SBATCH --gres=gpu:4
