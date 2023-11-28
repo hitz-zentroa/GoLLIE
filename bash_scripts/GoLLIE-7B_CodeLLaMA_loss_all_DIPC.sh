@@ -9,7 +9,7 @@
 
 
 module load Python
-conda activate /scratch/igarcia945/conda-envs/transformers
+source /scratch/igarcia945/venvs/transformers/bin/activate
 
 
 export LC_ALL=en_US.UTF-8
@@ -30,8 +30,5 @@ CONFIGS_FOLDER="configs/model_configs"
 
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
-
-pip install flash-attn --no-build-isolation
-pip install git+https://github.com/HazyResearch/flash-attention.git#subdirectory=csrc/rotary
 
 python3 -m  src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS128_R128_loss_all.yaml

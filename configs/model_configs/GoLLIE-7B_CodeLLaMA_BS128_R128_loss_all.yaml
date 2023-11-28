@@ -11,7 +11,7 @@ use_flash_attention: true
 
 # dataset arguments
 dataset_dir:
-  /ikerlariak/osainz006/CoLLIE/data/processed_w_examples_no_noise
+  /home/igarcia945/scratch/GoLLIE/data/processed_w_examples_no_noise
 train_tasks:
   - ace05.eae
   - ace05.ee
@@ -70,7 +70,7 @@ prompt_loss_weight: 0.0
 prompt_until: "all"
 
 # checkpoint settings
-output_dir: /ikerlariak/igarcia945/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_BS128_R128_loss_all
+output_dir: /ikerlariak/igarcia945/scratch/models/GoLLIE/GoLLIE+-7b_CodeLLaMA_BS128_R128_loss_all
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"

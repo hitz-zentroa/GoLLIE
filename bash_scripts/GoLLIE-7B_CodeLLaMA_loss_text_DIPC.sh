@@ -9,7 +9,7 @@
 
 
 module load Python
-conda activate /scratch/igarcia945/conda-envs/transformers
+source /scratch/igarcia945/venvs/transformers/bin/activate
 
 
 export LC_ALL=en_US.UTF-8
