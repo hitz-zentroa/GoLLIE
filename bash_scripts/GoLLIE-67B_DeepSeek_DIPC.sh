@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --partition=xlong
-#SBATCH --job-name=GoLLIE-7B_CodeLLaMA_loss_text
+#SBATCH --job-name=GoLLIE-67B_DeepSeek
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100:1
 #SBATCH --mem=100G
-#SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_loss_text.out.txt
-#SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_loss_text.err.txt
+#SBATCH --output=.slurm/GoLLIE-67B_DeepSeek.out.txt
+#SBATCH --error=.slurm/GoLLIE-67B_DeepSeek.err.txt
 
 
 module load Python
@@ -25,11 +25,13 @@ export OMP_NUM_THREADS=16
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 
-CONFIGS_FOLDER="configs/model_configs"
 
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
 
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
 
-python3 -m  src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS128_R128_loss_text.yaml
+python3 -m  src.run configs/model_configs/GoLLIE-67B_DeepSeek_BS128_R128.yaml
+python3 -m  src.run configs/eval/model_configs/GoLLIE-67B_DeepSeek_BS128_R128.yaml
+
+
