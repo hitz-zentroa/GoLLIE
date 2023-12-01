@@ -1,10 +1,11 @@
 #!/bin/bash
-#SBATCH --partition=xlong
+#SBATCH --account=ixa
+#SBATCH --partition=ixa
 #SBATCH --job-name=GoLLIE-67B_DeepSeek
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:a100:1
-#SBATCH --mem=100G
+#SBATCH --gres=gpu:a100:4
+#SBATCH --mem=300G
 #SBATCH --output=.slurm/GoLLIE-67B_DeepSeek.out.txt
 #SBATCH --error=.slurm/GoLLIE-67B_DeepSeek.err.txt
 
