@@ -1,10 +1,11 @@
 #!/bin/bash
-#SBATCH --partition=xlong
+#SBATCH --account=ixa
+#SBATCH --partition=ixa
 #SBATCH --job-name=GoLLIE-7B_CodeLLaMA_loss_all
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100:1
-#SBATCH --mem=100G
+#SBATCH --mem=200G
 #SBATCH --output=.slurm/GoLLIE-7B_CodeLLaMA_loss_all.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B_CodeLLaMA_loss_all.err.txt
 
@@ -25,7 +26,7 @@ export OMP_NUM_THREADS=16
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 
-CONFIGS_FOLDER="configs/model_configs"
+CONFIGS_FOLDER="configs/model_configs/eval"
 
 # Call this script from root directory as: sbatch bash_scripts/GoLLIE-7B_CodeLLaMA.sh
 
