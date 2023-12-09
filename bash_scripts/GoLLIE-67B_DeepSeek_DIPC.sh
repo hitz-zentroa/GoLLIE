@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100:8
-#SBATCH --mem=300G
+#SBATCH --mem=900G
 #SBATCH --output=.slurm/GoLLIE-67B_DeepSeek.out.txt
 #SBATCH --error=.slurm/GoLLIE-67B_DeepSeek.err.txt
 
