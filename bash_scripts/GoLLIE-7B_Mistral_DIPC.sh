@@ -2,10 +2,10 @@
 #SBATCH --account=ixa
 #SBATCH --partition=ixa
 #SBATCH --job-name=GoLLIE-7B-Mistral
-#SBATCH --cpus-per-task=22
+#SBATCH --cpus-per-task=8
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100:4
-#SBATCH --mem=350G
+#SBATCH --mem=300G
 #SBATCH --output=.slurm/GoLLIE-7B-Mistral.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B-Mistral.err.txt
 
@@ -21,7 +21,7 @@ export TOKENIZERS_PARALLELISM=true
 export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=hitz-collie
 export WANDB_PROJECT=GoLLIEv1.0
-export OMP_NUM_THREADS=16
+export OMP_NUM_THREADS=8
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
