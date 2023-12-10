@@ -5,7 +5,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --nodes=1
 #SBATCH --gres=gpu:a100:4
-#SBATCH --mem=300G
+#SBATCH --mem=500G
 #SBATCH --output=.slurm/GoLLIE-7B-Mistral.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B-Mistral.err.txt
 
@@ -33,6 +33,6 @@ echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
 export PYTHONPATH="$PYTHONPATH:$PWD"
 torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/GoLLIE-7B_Mistral_BS128_R128.yaml
-torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/eval/model_configs/GoLLIE-7B_Mistral_BS128_R128.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/eval/GoLLIE-7B_Mistral_BS128_R128.yaml
 
 
