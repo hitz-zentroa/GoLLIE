@@ -9,7 +9,7 @@ bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
+deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
 
 # dataset arguments
 dataset_dir:
@@ -101,7 +101,7 @@ weight_decay: 0.001
 num_train_epochs: 3
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
-adam_epsilon: 1e-7
+adam_epsilon: 0.0000001
 
 # lora settings
 lora_r: 128
