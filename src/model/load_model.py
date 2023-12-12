@@ -475,7 +475,7 @@ def load_model(
                 # This is not possible if we are using 4/8 bit quantization.
                 logging.info("Merging LoRA layers into the model for faster inference.")
                 logging.info(f"Model device: {model.device}")
-                # model = model.merge_and_unload(progressbar=True)
+                model = model.merge_and_unload(progressbar=True)
             else:
                 logging.info(
                     "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
