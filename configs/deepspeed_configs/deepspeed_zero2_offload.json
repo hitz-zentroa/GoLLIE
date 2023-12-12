@@ -25,8 +25,7 @@
       "warmup_min_lr": "auto",
       "warmup_max_lr": "auto",
       "warmup_num_steps": "auto",
-      "warmup_type": "cosine",
-      "total_num_steps": "auto"
+      "warmup_type": "cosine"
     }
   },
   "zero_optimization": {

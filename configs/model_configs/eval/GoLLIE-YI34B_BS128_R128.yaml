@@ -9,7 +9,7 @@ bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
+#deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
 
 # dataset arguments
 dataset_dir:
