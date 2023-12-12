@@ -11,6 +11,7 @@
 
 
 module load Python
+conda activate /scratch/igarcia945/conda-envs/transformers
 source /scratch/igarcia945/venvs/transformers/bin/activate
 
 
