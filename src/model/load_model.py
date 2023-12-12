@@ -411,7 +411,6 @@ def load_model(
         torch_dtype=torch_dtype,
         config=config,
         trust_remote_code=trust_remote_code,
-        low_cpu_mem_usage=False,
         **quant_args,
         **kwargs,
     )

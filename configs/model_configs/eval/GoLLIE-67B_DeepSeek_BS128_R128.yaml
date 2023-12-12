@@ -7,7 +7,7 @@ quantization: 4
 quantization_inference: null
 bf16_full_eval: true
 gradient_checkpointing: true
-force_auto_device_map: false
+force_auto_device_map: true
 use_flash_attention: true
 deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
