@@ -4,7 +4,7 @@ lora_weights_name_or_path: /home/igarcia945/scratch/models/GoLLIE/GoLLIE+-67b_De
 torch_dtype: bfloat16
 use_lora: true
 quantization: 4
-quantization_inference: null
+quantization_inference: 4
 bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: true
