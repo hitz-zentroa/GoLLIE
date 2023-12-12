@@ -401,7 +401,7 @@ def load_model(
         **kwargs,
     )
 
-    logging.info(f"Model dtype: {model.dtype}")
+    logging.info(f"Model dtype: {model.dtype}. Model device: {model.device}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     # Prepare the model for k-bit training and enable gradient checkpointing
@@ -450,7 +450,7 @@ def load_model(
         else:
             logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
 
-            model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+            model = PeftModel.from_pretrained(model, lora_weights_name_or_path, is_trainable=not inference)
 
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
 
