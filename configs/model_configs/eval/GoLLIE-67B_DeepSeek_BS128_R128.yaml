@@ -7,7 +7,7 @@ quantization: 4
 quantization_inference: 4
 bf16_full_eval: true
 gradient_checkpointing: true
-force_auto_device_map: true
+force_auto_device_map: false
 use_flash_attention: true
 # deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
@@ -90,7 +90,7 @@ evaluate_all_checkpoints: true
 
 # batch size
 per_device_train_batch_size: 32
-per_device_eval_batch_size: 8
+per_device_eval_batch_size: 1
 gradient_accumulation_steps: 1
 generation_num_beams: 1
 
