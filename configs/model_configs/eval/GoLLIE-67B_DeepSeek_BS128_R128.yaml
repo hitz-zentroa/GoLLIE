@@ -4,12 +4,12 @@ lora_weights_name_or_path: /home/igarcia945/scratch/models/GoLLIE/GoLLIE+-67b_De
 torch_dtype: bfloat16
 use_lora: true
 quantization: 4
-quantization_inference: 4
+quantization_inference: null
 bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-#deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
+deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
@@ -90,7 +90,7 @@ evaluate_all_checkpoints: true
 
 # batch size
 per_device_train_batch_size: 32
-per_device_eval_batch_size: 1
+per_device_eval_batch_size: 8
 gradient_accumulation_steps: 1
 generation_num_beams: 1
 
