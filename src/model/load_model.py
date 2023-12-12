@@ -389,6 +389,20 @@ def load_model(
         )
 
     #  Load the model weights
+
+    logging.info(
+        "Loading model with config:\n"
+        f"pretrained_model_name_or_path: {model_weights_name_or_path}\n"
+        f"device_map: {device_map}\n"
+        f"max_memory: {max_memory}\n"
+        f"quantization_config: {bnb_config}\n"
+        f"torch_dtype: {torch_dtype}\n"
+        f"config: {config}\n"
+        f"trust_remote_code: {trust_remote_code}\n"
+        f"quant_args: {quant_args}\n"
+        f"kwargs: {kwargs}\n"
+    )
+
     model: PreTrainedModel = load_fn.from_pretrained(
         pretrained_model_name_or_path=model_weights_name_or_path,
         device_map=device_map,
