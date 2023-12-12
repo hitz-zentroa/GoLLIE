@@ -32,7 +32,7 @@ echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 # python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
 export PYTHONPATH="$PYTHONPATH:$PWD"
-torchrun --standalone --master_port 37223 --nproc_per_node=8 src/run.py configs/model_configs/GoLLIE-67B_DeepSeek_BS128_R128.yaml
+#torchrun --standalone --master_port 37223 --nproc_per_node=8 src/run.py configs/model_configs/GoLLIE-67B_DeepSeek_BS128_R128.yaml
 torchrun --standalone --master_port 37223 --nproc_per_node=8 src/run.py configs/model_configs/eval/GoLLIE-67B_DeepSeek_BS128_R128.yaml
 
 
