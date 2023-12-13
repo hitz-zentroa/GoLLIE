@@ -2,8 +2,8 @@
 model_name_or_path: 01-ai/Yi-34B
 torch_dtype: bfloat16
 use_lora: true
-quantization: 4
-quantization_inference: 4
+quantization: null
+quantization_inference: null
 bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
