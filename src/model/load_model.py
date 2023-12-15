@@ -90,9 +90,7 @@ def get_device_map(
                 "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
                 "on each GPU."
             )
-            device_map = (
-                {"": get_current_device()} if torch.cuda.is_available() else None
-            )  # {"": int(os.environ.get("LOCAL_RANK", 0))}
+            device_map = None  # {"": get_current_device()} if torch.cuda.is_available() else None
 
         else:
             if not use_better_transformer:
