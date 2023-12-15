@@ -4,12 +4,12 @@ lora_weights_name_or_path: /home/igarcia945/scratch/models/GoLLIE/GoLLIE+-34b_Yi
 torch_dtype: bfloat16
 use_lora: true
 quantization: null
-quantization_inference: null
+quantization_inference: 4
 bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
+#deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
