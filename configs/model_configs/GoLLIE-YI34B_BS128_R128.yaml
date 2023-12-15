@@ -80,7 +80,7 @@ save_total_limit: 999
 # evaluation
 do_train: true
 do_eval: true
-do_predict: true
+do_predict: false
 evaluation_strategy: "epoch"
 eval_steps: 500
 eval_delay: 0
