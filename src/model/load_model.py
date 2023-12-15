@@ -1,7 +1,7 @@
 import json
 import logging
 import os
-from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union, Dict
 
 import torch
 
@@ -21,6 +21,13 @@ from transformers.models.auto.modeling_auto import (
 from transformers.utils import is_ipex_available
 
 from .model_utils import find_all_linear_names, get_trainable_parameters
+
+from accelerate import Accelerator
+
+
+def get_current_device() -> int:
+    """Get the current device. For GPU we return the local process index to enable multiple GPU training."""
+    return Accelerator().local_process_index if torch.cuda.is_available() else "cpu"
 
 
 def get_device_map(
@@ -83,7 +90,9 @@ def get_device_map(
                 "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
                 "on each GPU."
             )
-            device_map = None  # {"": int(os.environ.get("LOCAL_RANK", 0))}
+            device_map = (
+                {"": get_current_device()} if torch.cuda.is_available() else None
+            )  # {"": int(os.environ.get("LOCAL_RANK", 0))}
 
         else:
             if not use_better_transformer:
