@@ -7,7 +7,7 @@
 
 
 <p align="center">
-    <a href="https://twitter.com/intent/tweet?text=Wow+this+new+model+is+amazing:&url=https%3A%2F%2Fgithub.com%2Fhitz-zentroa%2FGoLLIE"><img alt="Twitter" src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fhitz-zentroa%2FCoLLIE"></a>
+    <a href="https://twitter.com/intent/tweet?text=Wow+this+new+model+is+amazing:&url=https%3A%2F%2Fgithub.com%2Fhitz-zentroa%2FGoLLIE"><img alt="Twitter" src="https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fhitz-zentroa%2FGoLLIE"></a>
     <a href="https://github.com/hitz-zentroa/GoLLIE/blob/main/LICENSE"><img alt="GitHub license" src="https://img.shields.io/github/license/hitz-zentroa/GoLLIE"></a>
     <a href="https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f"><img alt="Pretrained Models" src="https://img.shields.io/badge/🤗HuggingFace-Pretrained Models-green"></a>
     <a href="https://hitz-zentroa.github.io/GoLLIE/"><img alt="Blog" src="https://img.shields.io/badge/📒-Blog Post-blue"></a>
@@ -181,7 +181,7 @@ python -m src.generate_data \
 
 For the datasets available in the HuggingFace Datasets library, the script will download them automatically.
 
-For the following datasets, you must provide the path to the dataset by modifying the corresponding [configs/data_configs/](configs/data_configs/) file: [ACE05](https://catalog.ldc.upenn.edu/LDC2006T06) ([Preprocessing script](https://github.com/hitz-zentroa/CoLLIE/blob/main/src/tasks/ace/preprocess_ace.py)), [CASIE](https://github.com/Ebiquity/CASIE/tree/master/data), [CrossNer](https://github.com/zliucr/CrossNER), [DIANN](http://nlp.uned.es/diann/), [E3C](https://github.com/hltfbk/E3C-Corpus/tree/main/preprocessed_data/clinical_entities/English), [HarveyNER](https://github.com/brickee/HarveyNER/tree/main/data/tweets), [MitMovie](https://groups.csail.mit.edu/sls/downloads/movie/), [MitRestaurant](https://groups.csail.mit.edu/sls/downloads/restaurant/), [RAMS](https://nlp.jhu.edu/rams/), [TACRED](https://nlp.stanford.edu/projects/tacred/), [WikiEvents](https://github.com/raspberryice/gen-arg).
+For the following datasets, you must provide the path to the dataset by modifying the corresponding [configs/data_configs/](configs/data_configs/) file: [ACE05](https://catalog.ldc.upenn.edu/LDC2006T06) ([Preprocessing script](https://github.com/hitz-zentroa/GoLLIE/blob/main/src/tasks/ace/preprocess_ace.py)), [CASIE](https://github.com/Ebiquity/CASIE/tree/master/data), [CrossNer](https://github.com/zliucr/CrossNER), [DIANN](http://nlp.uned.es/diann/), [E3C](https://github.com/hltfbk/E3C-Corpus/tree/main/preprocessed_data/clinical_entities/English), [HarveyNER](https://github.com/brickee/HarveyNER/tree/main/data/tweets), [MitMovie](https://groups.csail.mit.edu/sls/downloads/movie/), [MitRestaurant](https://groups.csail.mit.edu/sls/downloads/restaurant/), [RAMS](https://nlp.jhu.edu/rams/), [TACRED](https://nlp.stanford.edu/projects/tacred/), [WikiEvents](https://github.com/raspberryice/gen-arg).
 
 If you encounter difficulties generating the dataset, please don't hesitate to contact us.
 
@@ -194,7 +194,7 @@ Second, you must create a configuration file. Please, see the [configs/model_con
 Finally, you can train your own GoLLIE by running the following command (See [bash_scripts/](bash_scripts/) folder for more examples): 
 ```bash
 CONFIGS_FOLDER="configs/model_configs"
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE+-7B_CodeLLaMA.yaml
 ```
 
 ## How to evaluate a model
@@ -205,7 +205,7 @@ Second, you must create a configuration file. Please, see the [configs/model_con
 Finally, you can evaluate your own GoLLIE by running the following command (See [bash_scripts/eval](bash_scripts/eval) folder for more examples): 
 ```bash
 CONFIGS_FOLDER="configs/model_configs/eval"
-python3 -m src.run ${CONFIGS_FOLDER}/CoLLIE+-7B_CodeLLaMA.yaml
+python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE+-7B_CodeLLaMA.yaml
 ```
 
 
