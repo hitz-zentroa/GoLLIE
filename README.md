@@ -23,7 +23,7 @@
 We present  <img src="assets/GoLLIE.png" width="20"> GoLLIE, a Large Language Model trained to follow annotation guidelines. GoLLIE outperforms previous approaches on zero-shot Information Extraction and allows the user to perform inferences with annotation schemas defined on the fly. Different from previous approaches, GoLLIE is able to follow detailed definitions and does not only rely on the knowledge already encoded in the LLM. Code and models are publicly available.
 
 - 📒 Blog Post: [GoLLIE: Guideline-following Large Language Model for Information Extraction](https://hitz-zentroa.github.io/GoLLIE/)
-- 📖 Paper: [GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction](https://arxiv.org/abs/2310.03668)
+- 📖 Paper: [GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction](https://openreview.net/forum?id=Y3wpuxd7u9)
 - <img src="assets/GoLLIE.png" width="20">GoLLIE in the 🤗HuggingFace Hub: [HiTZ/gollie](https://huggingface.co/collections/HiTZ/gollie-651bf19ee315e8a224aacc4f)
 - 🚀 Example Jupyter Notebooks: [GoLLIE Notebooks](notebooks/)
 </p>
@@ -212,12 +212,12 @@ python3 -m src.run ${CONFIGS_FOLDER}/GoLLIE+-7B_CodeLLaMA.yaml
 
 ## Citation
 ```bibtex
-@misc{sainz2023gollie,
-      title={GoLLIE: Annotation Guidelines improve Zero-Shot Information-Extraction}, 
-      author={Oscar Sainz and Iker García-Ferrero and Rodrigo Agerri and Oier Lopez de Lacalle and German Rigau and Eneko Agirre},
-      year={2023},
-      eprint={2310.03668},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{
+    sainz2024gollie,
+    title={Go{LLIE}: Annotation Guidelines improve Zero-Shot Information-Extraction},
+    author={Oscar Sainz and Iker Garc{\'\i}a-Ferrero and Rodrigo Agerri and Oier Lopez de Lacalle and German Rigau and Eneko Agirre},
+    booktitle={The Twelfth International Conference on Learning Representations},
+    year={2024},
+    url={https://openreview.net/forum?id=Y3wpuxd7u9}
 }
 ```
