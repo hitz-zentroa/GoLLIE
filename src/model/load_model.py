@@ -1,9 +1,10 @@
 import json
 import logging
 import os
-from typing import List, Optional, Tuple, Union, Dict
+from typing import List, Optional, Tuple, Union
 
 import torch
+from accelerate import Accelerator
 
 from transformers import (
     AutoConfig,
@@ -22,8 +23,6 @@ from transformers.utils import is_ipex_available
 
 from .model_utils import find_all_linear_names, get_trainable_parameters
 
-from accelerate import Accelerator
-
 
 def get_current_device() -> int:
     """Get the current device. For GPU we return the local process index to enable multiple GPU training."""
@@ -31,7 +30,9 @@ def get_current_device() -> int:
 
 
 def get_device_map(
-    force_auto_device_map: bool, max_memory_MB: int = None, use_better_transformer: bool = False
+    force_auto_device_map: bool,
+    max_memory_MB: int = None,
+    use_better_transformer: bool = False,
 ) -> (str, Union[int, List[int]]):
     """
     Get the device map to use for loading the model
@@ -132,6 +133,8 @@ def merge_lora_model(
         use_lora=True,
         lora_weights_name_or_path=lora_weights_name_or_path,
         torch_dtype=torch_dtype,
+        use_flash_attention=False,
+        force_auto_device_map=True,
     )
 
     model.config.save_pretrained(output_path)
@@ -159,6 +162,7 @@ def load_model(
     use_better_transformer: bool = False,
     fsdp_training: bool = False,
     max_memory_MB: Optional[int] = None,
+    rope_scaling_factor: Optional[float] = None,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -222,6 +226,8 @@ def load_model(
             an error: ValueError: Must flatten tensors with uniform dtype but got torch.float16 and torch.float32
         max_memory_MB (`int`):
             Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True.
+        rope_scaling_factor (`Optional[float]`, optional):
+            The scaling factor for ROPE scaling, if not provide, we won't use ROPE scaling. Defaults to None.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -270,12 +276,12 @@ def load_model(
         logging.warning("You provided a path to LoRA weights but use_lora is set to False. We will set use_lora=True.")
         use_lora = True
 
-    if inference and use_flash_attention:
-        logging.warning(
-            "We found some instabilities when using Flash Attention for inference. For now we will disable it for "
-            "inference."
-        )
-        use_flash_attention = False
+    # if inference and use_flash_attention:
+    #    logging.warning(
+    #        "We found some instabilities when using Flash Attention for inference. For now we will disable it for "
+    #        "inference."
+    #    )
+    #    use_flash_attention = False
 
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
@@ -288,6 +294,11 @@ def load_model(
     )
 
     # Load the model config
+    config_kwargs = {}
+    if rope_scaling_factor is not None:
+        rope_scaling = {"type": "dynamic", "factor": rope_scaling_factor}
+        logging.info(f"ROPE scaling config: {rope_scaling_factor}")
+        config_kwargs["rope_scaling"] = rope_scaling
 
     if use_lora:
         config = AutoConfig.from_pretrained(
@@ -295,18 +306,20 @@ def load_model(
             trust_remote_code=trust_remote_code,
             pretraining_tp=1,  # Fix mat1 and mat2 shapes cannot be multiplied  error with LLaMA-2
             # See https://github.com/huggingface/transformers/pull/24906
+            **config_kwargs,
         )
     else:
         config = AutoConfig.from_pretrained(
             model_weights_name_or_path,
             trust_remote_code=trust_remote_code,
+            **config_kwargs,
         )
 
     # Load the model tokenizer
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
-        add_eos_token=True,
+        add_eos_token="solar" in model_weights_name_or_path.lower(),
         trust_remote_code=trust_remote_code,
     )
 
@@ -324,11 +337,9 @@ def load_model(
     # Load the model weights
 
     #  Get the quantization config
-    quant_args = {}
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
 
     if quantization is not None:
-        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
         if quantization == 4:
             bnb_config = BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -374,18 +385,18 @@ def load_model(
         model_type = "causal"
 
     else:
-        raise ValueError(
-            f"Model {model_weights_name_or_path} of type {config.model_type} is not supported by CoLLIE."
-            "Supported models are:\n"
-            f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
-            f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
+        logging.warning(
+            f"Model {model_weights_name_or_path} is not in the "
+            "MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES or MODEL_FOR_CAUSAL_LM_MAPPING_NAMES. "
+            "We will attempt load it as a CausalLM model."
         )
+        load_fn = AutoModelForCausalLM
+        tokenizer.padding_side = "left"
+        model_type = "causal"
 
     #  Load the model weights
-    # Flash attention 2 was added to HuggingFace transformers very recently. Let's add it as kwargs to the load function
-    # so if it is set to False, we can load the model in older versions of transformers.
     if use_flash_attention:
-        kwargs = {"use_flash_attention_2": True}
+        kwargs = {"attn_implementation": "flash_attention_2"}
         logging.info("Loading the model with flash attention 2")
     else:
         kwargs = {}
@@ -406,7 +417,6 @@ def load_model(
         f"torch_dtype: {torch_dtype}\n"
         f"config: {config}\n"
         f"trust_remote_code: {trust_remote_code}\n"
-        f"quant_args: {quant_args}\n"
         f"kwargs: {kwargs}\n"
     )
 
@@ -418,9 +428,29 @@ def load_model(
         torch_dtype=torch_dtype,
         config=config,
         trust_remote_code=trust_remote_code,
-        **quant_args,
         **kwargs,
     )
+
+    # Fix for Yi-Chat models
+    try:
+        if len(tokenizer) > model.model.embed_tokens.num_embeddings:
+            logging.warning(
+                "The tokenizer has more tokens than the model. This is probably a Yi-Chat model. We will fix it "
+                "by setting bos_token to <|im_start|> and eos_token to <|im_end|>."
+            )
+            tokenizer.bos_token = "<|im_start|>"
+            tokenizer.eos_token = "<|im_end|>"
+    except AttributeError:
+        try:
+            if len(tokenizer) > model.embed_tokens.num_embeddings:
+                logging.warning(
+                    "The tokenizer has more tokens than the model. This is probably a Yi-Chat model. We will fix it "
+                    "by setting bos_token to <|im_start|> and eos_token to <|im_end|>."
+                )
+                tokenizer.bos_token = "<|im_start|>"
+                tokenizer.eos_token = "<|im_end|>"
+        except AttributeError:
+            pass
 
     logging.info(f"Model dtype: {model.dtype}. Model device: {model.device}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
@@ -487,9 +517,6 @@ def load_model(
                 logging.info(
                     "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
                 )
-        if quantization is None:
-            logging.info(f"We will convert the model to {torch_dtype} for inference.")
-            model.to(dtype=torch_dtype)
         model.eval()
     else:
         trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)

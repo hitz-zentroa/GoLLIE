@@ -74,27 +74,23 @@ def plot_curves(args):
                 for chkpt, values in values.items():
                     if args.hue:
                         for hue, values in values.items():
-                            result_list.append(
-                                {
-                                    "dataset": dataset,
-                                    "task": task,
-                                    "model": model,
-                                    "steps": chkpt,
-                                    f"{args.hue}": hue,
-                                    **values,
-                                }
-                            )
-                    else:
-                        result_list.append(
-                            {
+                            result_list.append({
                                 "dataset": dataset,
                                 "task": task,
                                 "model": model,
                                 "steps": chkpt,
-                                f"{args.hue}": False,
+                                f"{args.hue}": hue,
                                 **values,
-                            }
-                        )
+                            })
+                    else:
+                        result_list.append({
+                            "dataset": dataset,
+                            "task": task,
+                            "model": model,
+                            "steps": chkpt,
+                            f"{args.hue}": False,
+                            **values,
+                        })
     localtime = time.localtime()
     timestamp = (
         f"{localtime.tm_year}-{localtime.tm_mon}-{localtime.tm_mday}-{localtime.tm_hour}-"

@@ -411,25 +411,21 @@ for dataset, task, entity_dict, seen_scores, unseen_scores, general_f1 in ZERO_D
     for entity in entity_dict["seen"]:
         seen_entity_f1[f"{dataset}_{entity}"] = []
         for i in range(len(SEEDS)):
-            seen_entity_f1[f"{dataset}_{entity}"].append(
-                {
-                    "TP": 0,
-                    "total_pos": 0,
-                    "total_pre": 0,
-                    "F1": 0,
-                }
-            )
+            seen_entity_f1[f"{dataset}_{entity}"].append({
+                "TP": 0,
+                "total_pos": 0,
+                "total_pre": 0,
+                "F1": 0,
+            })
     for entity in entity_dict["unseen"]:
         unseen_entity_f1[f"{dataset}_{entity}"] = []
         for i in range(len(SEEDS)):
-            unseen_entity_f1[f"{dataset}_{entity}"].append(
-                {
-                    "TP": 0,
-                    "total_pos": 0,
-                    "total_pre": 0,
-                    "F1": 0,
-                }
-            )
+            unseen_entity_f1[f"{dataset}_{entity}"].append({
+                "TP": 0,
+                "total_pos": 0,
+                "total_pre": 0,
+                "F1": 0,
+            })
 
 for name, path in PATHS.items():
     print()
@@ -515,34 +511,30 @@ for name, path in PATHS.items():
             avg_general[it].append(f1[0])
 
         # print(general_f1s)
-        result_table.append(
-            [
-                dataset_name,
-                np.array(seen_f1s).mean(0),
-                np.array(seen_f1s).std(0),
-                np.array(unseen_f1s).mean(0),
-                np.array(unseen_f1s).std(0),
-                np.array(general_f1s).mean(0),
-                np.array(general_f1s).std(0),
-            ]
-        )
+        result_table.append([
+            dataset_name,
+            np.array(seen_f1s).mean(0),
+            np.array(seen_f1s).std(0),
+            np.array(unseen_f1s).mean(0),
+            np.array(unseen_f1s).std(0),
+            np.array(general_f1s).mean(0),
+            np.array(general_f1s).std(0),
+        ])
 
     # Append averages
     avg_seen = np.array(avg_seen).mean(1)
     avg_unseen = np.array(avg_unseen).mean(1)
     avg_general = np.array(avg_general).mean(1)
     # print(avg_general)
-    result_table.append(
-        [
-            "Average",
-            np.array(avg_seen).mean(0),
-            np.array(avg_seen).std(0),
-            np.array(avg_unseen).mean(0),
-            np.array(avg_unseen).std(0),
-            np.array(avg_general).mean(0),
-            np.array(avg_general).std(0),
-        ]
-    )
+    result_table.append([
+        "Average",
+        np.array(avg_seen).mean(0),
+        np.array(avg_seen).std(0),
+        np.array(avg_unseen).mean(0),
+        np.array(avg_unseen).std(0),
+        np.array(avg_general).mean(0),
+        np.array(avg_general).std(0),
+    ])
 
     columns = ["Dataset", "Seen F1", "Seen F1 Std", "Unseen F1", "Unseen F1 Std", "Total F1", "Total F1 Std"]
 

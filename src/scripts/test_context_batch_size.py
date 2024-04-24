@@ -72,13 +72,11 @@ class TestDataset(Dataset):
             inputs_ids = random.sample(range(100, len(tokenizer) - 100), seq_len)
 
             self.data.append(
-                BatchEncoding(
-                    {
-                        "input_ids": inputs_ids,
-                        "attention_mask": [1] * seq_len,
-                        "labels": inputs_ids.copy(),
-                    }
-                )
+                BatchEncoding({
+                    "input_ids": inputs_ids,
+                    "attention_mask": [1] * seq_len,
+                    "labels": inputs_ids.copy(),
+                })
             )
 
     def __len__(self):

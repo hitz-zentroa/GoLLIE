@@ -1294,7 +1294,7 @@ class TestCollieDataset(unittest.TestCase):
             dataloder = DataLoader(dataset, batch_size=1, collate_fn=datacollator, shuffle=False)
             batch = list(dataloder)[0]
 
-            model_input = batch["input_ids"][0].tolist()
+            # model_input = batch["input_ids"][0].tolist()
             labels = batch["labels"][0].tolist()
             loss_weights_mask = batch["loss_weight_mask"][0].tolist()
 

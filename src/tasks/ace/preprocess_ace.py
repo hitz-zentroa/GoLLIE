@@ -461,25 +461,21 @@ def read_sgm_file(path: str, language: str = "english") -> List[Tuple[str, int, 
                 if current_sentence:
                     sentence = " ".join(current_sentence)
                     if start + chunk_offset >= min_offset:
-                        sentences.append(
-                            (
-                                sentence,
-                                start + chunk_offset,
-                                start + chunk_offset + len(sentence),
-                            )
-                        )
+                        sentences.append((
+                            sentence,
+                            start + chunk_offset,
+                            start + chunk_offset + len(sentence),
+                        ))
                     current_sentence = []
                 start = offset
         if current_sentence:
             sentence = " ".join(current_sentence)
             if start + chunk_offset >= min_offset:
-                sentences.append(
-                    (
-                        sentence,
-                        start + chunk_offset,
-                        start + chunk_offset + len(sentence),
-                    )
-                )
+                sentences.append((
+                    sentence,
+                    start + chunk_offset,
+                    start + chunk_offset + len(sentence),
+                ))
         chunk_offset += len(chunk)
 
     # Re-tokenize sentences
@@ -821,13 +817,11 @@ def tokenize(
             if token_start == -1:
                 raise ValueError("Cannot find token {} in {}".format(token, text))
             token_end = token_start + len(token)
-            chunk_tokens_.append(
-                (
-                    token_start + start + last + chunk_start,
-                    token_end + start + last + chunk_start,
-                    unmask_escape(token),
-                )
-            )
+            chunk_tokens_.append((
+                token_start + start + last + chunk_start,
+                token_end + start + last + chunk_start,
+                unmask_escape(token),
+            ))
             last += token_end
         tokens.extend(chunk_tokens_)
     return tokens
@@ -967,60 +961,52 @@ def convert_to_oneie(input_path: str, output_path: str):
                 # entities
                 entities = []
                 for entity in sentence["entities"]:
-                    entities.append(
-                        {
-                            "id": entity["mention_id"],
-                            "text": entity["text"],
-                            "entity_type": entity["entity_type"] if entity["mention_type"] != "TIME" else "TIME",
-                            "mention_type": entity["mention_type"],
-                            "entity_subtype": entity["entity_subtype"],
-                            "start": entity["start"],
-                            "end": entity["end"],
-                        }
-                    )
+                    entities.append({
+                        "id": entity["mention_id"],
+                        "text": entity["text"],
+                        "entity_type": entity["entity_type"] if entity["mention_type"] != "TIME" else "TIME",
+                        "mention_type": entity["mention_type"],
+                        "entity_subtype": entity["entity_subtype"],
+                        "start": entity["start"],
+                        "end": entity["end"],
+                    })
                 # relations
                 relations = []
                 for relation in sentence["relations"]:
-                    relations.append(
-                        {
-                            "id": relation["relation_id"],
-                            "relation_type": relation["relation_type"],
-                            "relation_subtype": "{}:{}".format(
-                                relation["relation_type"], relation["relation_subtype"]
-                            ),
-                            "arguments": [
-                                {
-                                    "entity_id": relation["arg1"]["mention_id"],
-                                    "text": relation["arg1"]["text"],
-                                    "role": relation["arg1"]["role"],
-                                },
-                                {
-                                    "entity_id": relation["arg2"]["mention_id"],
-                                    "text": relation["arg2"]["text"],
-                                    "role": relation["arg2"]["role"],
-                                },
-                            ],
-                        }
-                    )
+                    relations.append({
+                        "id": relation["relation_id"],
+                        "relation_type": relation["relation_type"],
+                        "relation_subtype": "{}:{}".format(relation["relation_type"], relation["relation_subtype"]),
+                        "arguments": [
+                            {
+                                "entity_id": relation["arg1"]["mention_id"],
+                                "text": relation["arg1"]["text"],
+                                "role": relation["arg1"]["role"],
+                            },
+                            {
+                                "entity_id": relation["arg2"]["mention_id"],
+                                "text": relation["arg2"]["text"],
+                                "role": relation["arg2"]["role"],
+                            },
+                        ],
+                    })
 
                 # events
                 events = []
                 for event in sentence["events"]:
-                    events.append(
-                        {
-                            "id": event["mention_id"],
-                            "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
-                            "trigger": event["trigger"],
-                            "arguments": [
-                                {
-                                    "entity_id": arg["mention_id"],
-                                    "text": arg["text"],
-                                    "role": arg["role"],
-                                }
-                                for arg in event["arguments"]
-                            ],
-                        }
-                    )
+                    events.append({
+                        "id": event["mention_id"],
+                        "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
+                        "trigger": event["trigger"],
+                        "arguments": [
+                            {
+                                "entity_id": arg["mention_id"],
+                                "text": arg["text"],
+                                "role": arg["role"],
+                            }
+                            for arg in event["arguments"]
+                        ],
+                    })
 
                 sent_obj = {
                     "doc_id": doc["doc_id"],
@@ -1073,27 +1059,23 @@ def convert_to_event_only(input_path: str, output_path: str):
                                 else:  # arg type is in ontology, but misnamed in data
                                     arg["role"] = new_role  # update its name
 
-                        cleaned_arguments.append(
-                            {
-                                "text": arg["text"],
-                                "role": arg["role"],
-                                "start": arg["start"],
-                                "end": arg["end"],
-                            }
-                        )
+                        cleaned_arguments.append({
+                            "text": arg["text"],
+                            "role": arg["role"],
+                            "start": arg["start"],
+                            "end": arg["end"],
+                        })
                     event["arguments"] = cleaned_arguments
 
                 # events
 
                 events = []
                 for event in sentence["events"]:
-                    events.append(
-                        {
-                            "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
-                            "trigger": event["trigger"],
-                            "arguments": event["arguments"],
-                        }
-                    )
+                    events.append({
+                        "event_type": "{}:{}".format(event["event_type"], event["event_subtype"]),
+                        "trigger": event["trigger"],
+                        "arguments": event["arguments"],
+                    })
 
                 sent_obj = {
                     "doc_id": doc["doc_id"],

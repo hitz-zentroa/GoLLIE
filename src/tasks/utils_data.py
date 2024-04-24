@@ -245,12 +245,10 @@ class Sampler:
 
             # Reduce the ammount of labels by sampling. We can make sure positive guidelines are sampled using `ensure_positives_on_train`
             if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
-                p = np.asarray(
-                    [
-                        (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
-                        for _def in guidelines
-                    ]
-                )
+                p = np.asarray([
+                    (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+                    for _def in guidelines
+                ])
                 p += 1.0 / p.shape[0]
                 p /= p.sum()
                 guidelines_ids = np.random.choice(

@@ -238,6 +238,44 @@ class CollieTrainer(Seq2SeqTrainer):
         else:
             self.tokenizer = None
 
+        if args.deepspeed is not None:
+            try:
+                leaf_module = model.model.layers[0].block_sparse_moe.__class__
+            except AttributeError:
+                leaf_module = None
+                logging.warning("Deepspeed enabled. The current model is not a MoE model.")
+
+            if leaf_module is not None:
+                try:
+                    from deepspeed.utils import set_z3_leaf_modules
+
+                    set_z3_leaf_modules(model, [leaf_module])
+                    logging.warning(
+                        "MoE model detected. We have used the deepspeed set_z3_leaf_modules function to ensure"
+                        f" that the model works correctly. The leaf module used is {leaf_module}. "
+                        "See https://github.com/microsoft/DeepSpeed/pull/5008 for more details."
+                    )
+                except ImportError:
+                    logging.warning(
+                        "set_z3_leaf_modules function not found. You are not running the latest version of DeepSpeed. "
+                        "You can safely ignore this warning if you are not using MoE models. If you are, "
+                        "the training/inference will fail. Please update to the latest version of DeepSpeed "
+                        "to fix this issue. More details at https://github.com/microsoft/DeepSpeed/pull/5008. "
+                        "We will attempt to continue the training/inference."
+                    )
+
+                except Exception as e:
+                    logging.warning(
+                        "MoE model detected. "
+                        "Something went wrong when trying to use the deepspeed set_z3_leaf_modules function. "
+                        "Please see https://github.com/microsoft/DeepSpeed/pull/5008 for more details.\n"
+                        f"The leaf module used is {leaf_module}.\n"
+                        f"Error message: {e}\n"
+                        "We will attempt to continue the training/inference, although it will probably freeze/crash."
+                    )
+        else:
+            logging.warning("Deepspeed not enabled.")
+
     def compute_loss(self, model, inputs, return_outputs=False):
         """
         How the loss is computed by Trainer. By default, all models return the loss in the first element.
@@ -368,6 +406,7 @@ class ConcatDataset(Dataset[T_co]):
     Args:
         datasets (sequence): List of datasets to be concatenated
     """
+
     datasets: List[CollieDataset]
     cumulative_sizes: List[int]
 
