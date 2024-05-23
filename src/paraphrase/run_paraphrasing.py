@@ -93,7 +93,7 @@ def run_paraphrasing(
             for i in range(num_return_sequences):
                 predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
                 predictions[predictions == -100] = tokenizer.pad_token_id
-
+                predictions_postprocessed = []
                 try:
                     predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
                 except OverflowError:
@@ -101,13 +101,12 @@ def run_paraphrasing(
 
                 for prediction, prompt in zip(predictions, test_dataset.get_prompts()):
                     prediction = prediction[len(prompt) :].strip()
+                    predictions_postprocessed.append(prediction)
                     print(prediction, file=f)
                     print("\n====================\n", file=f)
 
-                predictions = [prediction.strip() for prediction in predictions]
-
                 guidelines = update_guidelines(
-                    paraphrases=predictions,
+                    paraphrases=predictions_postprocessed,
                     guidelines=guidelines,
                     language=data_args.language,
                 )
