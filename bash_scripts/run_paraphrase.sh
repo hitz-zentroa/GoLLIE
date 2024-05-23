@@ -24,7 +24,7 @@ export WANDB_PROJECT=GoLLIE
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 CONFIGS_FOLDER="configs/pharapharse_config"
-
+export PYTHONPATH="$PYTHONPATH:$PWD"
 
 torchrun --standalone --master_port 37227 --nproc_per_node=2 src/paraphrase/run_paraphrasing.py ${CONFIGS_FOLDER}/llama3-8b.yaml
 
