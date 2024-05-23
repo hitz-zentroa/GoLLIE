@@ -70,6 +70,10 @@ def prepare_data(
         # LLaMa tokenizer adds token type ids, but we don't need them
         model_inputs.pop("token_type_ids")
 
+    if "labels" in model_inputs:
+        # Remove labels if they are present
+        model_inputs.pop("labels")
+
     return model_inputs
 
 
