@@ -10,7 +10,7 @@ from src.paraphrase.dataset import ParaphraseDataset
 from src.paraphrase.utils import clean_guidelines, format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines
 from src.trainer import get_correct_torch_dtype
-from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
+from transformers import DataCollatorWithPadding, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
 
 
 def run_paraphrasing(
@@ -47,12 +47,11 @@ def run_paraphrasing(
         tokenizer=tokenizer,
         model=model,
         args=training_args,
-        data_collator=DataCollatorForSeq2Seq(
+        data_collator=DataCollatorWithPadding(
             tokenizer,
-            pad_to_multiple_of=8,
+            pad_to_multiple_of=None,
             return_tensors="pt",
             padding=True,
-            label_pad_token_id=tokenizer.pad_token_id,
         ),
     )
 
