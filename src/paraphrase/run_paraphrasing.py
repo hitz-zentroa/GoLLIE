@@ -94,14 +94,17 @@ def run_paraphrasing(
                 predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
                 predictions[predictions == -100] = tokenizer.pad_token_id
                 predictions_postprocessed = []
-                try:
-                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-                except OverflowError:
-                    raise OverflowError(f"Unable to decode predictions: {predictions}")
+                for prediction, prompt in zip(predictions, test_dataset.dataset):
+                    prediction = prediction[len(prompt["input_ids"]) :]
+                    try:
+                        prediction = tokenizer.decode(
+                            prediction, skip_special_tokens=True, clean_up_tokenization_spaces=True
+                        ).strip()
+                    except OverflowError:
+                        raise OverflowError(f"Unable to decode prediction: {prediction}")
 
-                for prediction, prompt in zip(predictions, test_dataset.get_prompts()):
-                    prediction = prediction[len(prompt) :].strip()
                     predictions_postprocessed.append(prediction)
+
                     print(prediction, file=f)
                     print("\n====================\n", file=f)
 
