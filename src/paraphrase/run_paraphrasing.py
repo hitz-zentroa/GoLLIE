@@ -80,8 +80,7 @@ def run_paraphrasing(
             dataset_name=dataset_name,
             language=data_args.language,
             is_encoder_decoder=model.config.is_encoder_decoder,
-            max_length=1024,
-            conv_template=data_args.config_template,
+            max_length=2048,
         )
 
         output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines.py")
