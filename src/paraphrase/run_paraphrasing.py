@@ -3,8 +3,6 @@ import logging
 import os
 import sys
 
-from fastchat.conversation import get_conv_template
-
 from src.config import ModelArguments
 from src.model.load_model import load_model
 from src.paraphrase.config import DataInferenceArguments
@@ -107,14 +105,7 @@ def run_paraphrasing(
                     print(prediction, file=f)
                     print("\n====================\n", file=f)
 
-                if data_args.config_template is not None:
-                    conv = get_conv_template(data_args.config_template)
-                    predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
-                # rich.print(predictions)
-
-                predictions = [prediction.strip().strip("\n") for prediction in predictions]
-                predictions = [prediction.split("\n")[-1].strip() for prediction in predictions]
-                predictions = [":".join(prediction.split(":")[1:]) for prediction in predictions]
+                predictions = [prediction.strip() for prediction in predictions]
 
                 guidelines = update_guidelines(
                     paraphrases=predictions,
