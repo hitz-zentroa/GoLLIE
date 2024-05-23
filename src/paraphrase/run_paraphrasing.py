@@ -83,9 +83,6 @@ def run_paraphrasing(
             max_length=2048,
         )
 
-        for example in test_dataset:
-            print(example)
-
         output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines.py")
         output_path_orig_outputs = os.path.join(training_args.output_dir, dataset_name, "original_outputs.txt")
 
