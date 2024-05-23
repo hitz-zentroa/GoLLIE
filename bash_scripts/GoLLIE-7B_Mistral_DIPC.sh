@@ -9,7 +9,7 @@
 #SBATCH --output=.slurm/GoLLIE-7B-Mistral.out.txt
 #SBATCH --error=.slurm/GoLLIE-7B-Mistral.err.txt
 
-
+module load CUDA/12.2.2
 module load Python
 source /scratch/igarcia945/venvs/transformers/bin/activate
 

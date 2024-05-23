@@ -8,6 +8,7 @@
 #SBATCH --output=.slurm/paraphrase-llama-8b.out.txt
 #SBATCH --error=.slurm/paraphrase-llama-8b.err.txt
 
+module load CUDA/12.2.2
 module load Python
 source /scratch/igarcia945/venvs/transformers/bin/activate
 
