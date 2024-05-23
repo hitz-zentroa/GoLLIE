@@ -99,7 +99,8 @@ def run_paraphrasing(
                 except OverflowError:
                     raise OverflowError(f"Unable to decode predictions: {predictions}")
 
-                for prediction in predictions:
+                for prediction, prompt in zip(predictions, test_dataset.get_prompts()):
+                    prediction = prediction[len(prompt) :].strip()
                     print(prediction, file=f)
                     print("\n====================\n", file=f)
 

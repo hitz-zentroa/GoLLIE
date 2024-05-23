@@ -4,7 +4,7 @@
 #SBATCH --job-name=paraphrase-llama-8b
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:a100:1
+#SBATCH --gres=gpu:a100:4
 #SBATCH --output=.slurm/paraphrase-llama-8b.out.txt
 #SBATCH --error=.slurm/paraphrase-llama-8b.err.txt
 
@@ -25,6 +25,8 @@ echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
 
 CONFIGS_FOLDER="configs/pharapharse_config"
 
-# torchrun --standalone --master_port 37227 --nproc_per_node=2 src/paraphrase/run_paraphrasing.py ${CONFIGS_FOLDER}/llama3-8b.yaml
-python3 -m src.paraphrase.run_paraphrasing ${CONFIGS_FOLDER}/llama3-8b.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=4 src/paraphrase/run_paraphrasing.py ${CONFIGS_FOLDER}/llama3-8b.yaml
+
+torchrun --standalone --master_port 37227 --nproc_per_node=4 src/paraphrase/run_paraphrasing.py ${CONFIGS_FOLDER}/llama3-70b.yaml
+# python3 -m src.paraphrase.run_paraphrasing ${CONFIGS_FOLDER}/llama3-8b.yaml
 

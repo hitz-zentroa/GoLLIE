@@ -7,7 +7,7 @@ predict_with_generate: true
 do_predict: true
 per_device_eval_batch_size: 1
 use_flash_attention: true
-#deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
+deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
 
 generation_args_json: configs/pharapharse_config/generation_config.json

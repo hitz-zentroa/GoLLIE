@@ -74,7 +74,7 @@ def prepare_data(
         # Remove labels if they are present
         model_inputs.pop("labels")
 
-    return model_inputs
+    return model_inputs, prompt
 
 
 class ParaphraseDataset(Dataset):
@@ -106,13 +106,16 @@ class ParaphraseDataset(Dataset):
         self.language = language
         self.is_encoder_decoder = is_encoder_decoder
         self.max_length = max_length
+        self.prompts = []
         guidelines = task_id_to_guidelines(dataset_name)
         guidelines = clean_guidelines(guidelines)
         self.dataset: List[BatchEncoding] = []
         for guideline in tqdm(guidelines.values(), desc="Data Tokenization"):
             for text in guideline[language]:
                 # rich.print(f"Guideline: {text}")
-                self.dataset.append(prepare_data(text, tokenizer, is_encoder_decoder, max_length))
+                model_inputs, prompt = prepare_data(text, tokenizer, is_encoder_decoder, max_length)
+                self.dataset.append(model_inputs)
+                self.prompts.append(prompt)
 
         logging.info(f"Dataset {dataset_name} has {len(self.dataset)} guidelines.")
 
@@ -121,3 +124,6 @@ class ParaphraseDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.dataset[idx]
+
+    def get_prompts(self):
+        return self.prompts
