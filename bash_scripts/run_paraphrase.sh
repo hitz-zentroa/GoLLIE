@@ -22,6 +22,7 @@ export WANDB_PROJECT=GoLLIE
 
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
+export PYTHONPATH="$PYTHONPATH:$PWD"
 
 CONFIGS_FOLDER="configs/pharapharse_config"
 
