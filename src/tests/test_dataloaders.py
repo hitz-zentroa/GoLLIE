@@ -20,6 +20,25 @@ class TestDataLoaders(unittest.TestCase):
 
         # TODO: Implement a better TEST
 
+    @unittest.skipIf(not os.path.exists("data/ace05/english.sentence.json"), "No ACE data available")
+    def test_ACE_end2end(self):
+        from src.tasks.ace.data_loader import ACEDatasetLoader, ACESampler
+
+        with open("configs/data_configs/ace_config.json") as f:
+            config = json.load(f)
+        if isinstance(config["seed"], list):
+            config["seed"] = 0
+            config["label_noise_prob"] = 0.0
+
+        config["task_configuration"]["EAE"]["is_end_to_end"] = True
+        config["task_configuration"]["EAE"]["sample_total_guidelines"] = -1
+
+        dataloader = ACEDatasetLoader("data/ace05/english.sentence.json", group_by="sentence")
+
+        _ = next(iter(ACESampler(dataloader, task="EAE", **config, **config["task_configuration"]["EAE"])))
+
+        self.assertEqual(len(_["text"]), 16917)
+
     @unittest.skipIf(not os.path.exists("data/casie/data.jsonl"), "No CASIE data available")
     def test_CASIE(self):
         from src.tasks.casie.data_loader import CASIEDatasetLoader, CASIESampler

@@ -1,7 +1,7 @@
 .slurm/*
 .vscode/*
 .ignore/
-data/*
+data
 wandb/*
 assets/plots/*
 

@@ -173,6 +173,8 @@ class CASIESampler(Sampler):
            The scorer class import string. Defaults to `None`.
         sample_only_gold_guidelines (`bool`, optional):
             Whether to sample only guidelines of present annotations. Defaults to `False`.
+        is_end_to_end (`bool`, optional):
+            Whether or not perform the task in end to end fashion. Defaults to `False`.
     """
 
     def __init__(
@@ -188,6 +190,7 @@ class CASIESampler(Sampler):
         dataset_name: str = None,
         scorer: str = None,
         sample_only_gold_guidelines: bool = False,
+        is_end_to_end: bool = False,
         **kwargs,
     ) -> None:
         assert task in [
@@ -197,7 +200,11 @@ class CASIESampler(Sampler):
 
         task_definitions, task_target, task_template = {
             "EE": (ED_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
-            "EAE": (EAE_EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
+            "EAE": (
+                EAE_EVENT_DEFINITIONS,
+                "arguments",
+                "templates/prompt_ace_eae.txt" if not is_end_to_end else "templates/prompt.txt",
+            ),
         }[task]
 
         kwargs.pop("prompt_template")
@@ -218,6 +225,7 @@ class CASIESampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             is_coarse_to_fine=False,
+            is_end_to_end=is_end_to_end,
             coarse_to_fine=None,
             fine_to_coarse=None,
             definitions=GUIDELINES,

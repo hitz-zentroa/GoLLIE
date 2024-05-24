@@ -89,6 +89,8 @@ class Sampler:
         fine_to_coarse (`Dict[Type, Type]`, optional):
             If `is_coarse_to_fine` this argument contains the information to map from fine
             labels to coarse labels. Defaults to `None`.
+        is_end_to_end (`bool`, optional):
+            Whether or not perform the task in end to end fashion. Defaults to `False`.
         lang (`str`, optional):
             Language of the guidelines to sample. Defaults to `"en"`.
         definitions (`Dict[str, Any]`, optional):
@@ -130,6 +132,7 @@ class Sampler:
         is_coarse_to_fine: bool = False,
         coarse_to_fine: Dict[Type, List[Type]] = None,
         fine_to_coarse: Dict[Type, Type] = None,
+        is_end_to_end: bool = False,
         lang: str = "en",
         definitions: Dict[str, Any] = None,
         include_examples_prob: float = 0.0,
@@ -180,8 +183,12 @@ class Sampler:
 
         # Maping information for coarse --> fine tasks such as EAE or RC
         self.is_coarse_to_fine = is_coarse_to_fine
+        self.is_end_to_end = is_end_to_end
         self._coarse_to_fine = coarse_to_fine
         self._fine_to_coarse = fine_to_coarse
+        assert not self.is_end_to_end or (
+            self.is_end_to_end and not self.is_coarse_to_fine
+        ), "If the task is end2end it can not be coarse to fine."
 
         self._black_mode = black.Mode()
         self.remove_guidelines = remove_guidelines
@@ -245,10 +252,12 @@ class Sampler:
 
             # Reduce the ammount of labels by sampling. We can make sure positive guidelines are sampled using `ensure_positives_on_train`
             if self.sample_total_guidelines < len(guidelines) and not self.sample_only_gold_guidelines:
-                p = np.asarray([
-                    (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
-                    for _def in guidelines
-                ])
+                p = np.asarray(
+                    [
+                        (100.0 if _def in positive_guidelines and self.ensure_positives_on_train else 0.0)
+                        for _def in guidelines
+                    ]
+                )
                 p += 1.0 / p.shape[0]
                 p /= p.sum()
                 guidelines_ids = np.random.choice(
