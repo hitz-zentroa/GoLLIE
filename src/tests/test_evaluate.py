@@ -32,13 +32,15 @@ class TestEvaluate(unittest.TestCase):
 
         self.assertListEqual(
             annotations,
-            AnnotationList([
-                Person("Peter"),
-                Organization("Hitz-zentroa"),
-                Person("carlos"),
-                Location("Tokyo"),
-                Location("Donosti"),
-            ]),
+            AnnotationList(
+                [
+                    Person("Peter"),
+                    Organization("Hitz-zentroa"),
+                    Person("carlos"),
+                    Location("Tokyo"),
+                    Location("Donosti"),
+                ]
+            ),
         )
 
     def test_entity_hallucination(self):
@@ -65,11 +67,13 @@ class TestEvaluate(unittest.TestCase):
 
         self.assertListEqual(
             filtered_predictions,
-            AnnotationList([
-                Person("Peter"),
-                Person("carlos"),
-                Location("Donosti"),
-            ]),
+            AnnotationList(
+                [
+                    Person("Peter"),
+                    Person("carlos"),
+                    Location("Donosti"),
+                ]
+            ),
         )
 
     def test_type_hallucination(self):
@@ -95,11 +99,13 @@ class TestEvaluate(unittest.TestCase):
 
         self.assertListEqual(
             filtered_predictions,
-            AnnotationList([
-                Person("Peter"),
-                Person("carlos"),
-                Location("Donosti"),
-            ]),
+            AnnotationList(
+                [
+                    Person("Peter"),
+                    Person("carlos"),
+                    Location("Donosti"),
+                ]
+            ),
         )
 
     def test_relation_hallucination(self):
@@ -125,10 +131,12 @@ class TestEvaluate(unittest.TestCase):
 
         self.assertListEqual(
             filtered_predictions,
-            AnnotationList([
-                location,
-                family,
-            ]),
+            AnnotationList(
+                [
+                    location,
+                    family,
+                ]
+            ),
         )
 
     def test_event_hallucination(self):
@@ -137,24 +145,8 @@ class TestEvaluate(unittest.TestCase):
 
         text = "Peter was born in Donosti. He married Carlos on May 18th."
 
-        predictions = str([
-            BeBorn("born", person=[], time=[], place=[]),
-            Marry(
-                "married",
-                person=[
-                    "Peter",
-                ],
-                time=["May 18th"],
-                place=["Tokyo"],
-            ),
-        ])
-        predictions = AnnotationList.from_output(
-            predictions, task_module="src.tasks.ace.prompts", text=text, filter_hallucinations=True
-        )
-
-        self.assertListEqual(
-            predictions,
-            AnnotationList([
+        predictions = str(
+            [
                 BeBorn("born", person=[], time=[], place=[]),
                 Marry(
                     "married",
@@ -162,7 +154,27 @@ class TestEvaluate(unittest.TestCase):
                         "Peter",
                     ],
                     time=["May 18th"],
-                    place=[],
+                    place=["Tokyo"],
                 ),
-            ]),
+            ]
+        )
+        predictions = AnnotationList.from_output(
+            predictions, task_module="src.tasks.ace.prompts", text=text, filter_hallucinations=True
+        )
+
+        self.assertListEqual(
+            predictions,
+            AnnotationList(
+                [
+                    BeBorn("born", person=[], time=[], place=[]),
+                    Marry(
+                        "married",
+                        person=[
+                            "Peter",
+                        ],
+                        time=["May 18th"],
+                        place=[],
+                    ),
+                ]
+            ),
         )

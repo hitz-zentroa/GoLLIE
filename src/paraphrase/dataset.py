@@ -35,12 +35,11 @@ def prepare_data(
     """
 
     prompt = (
-        "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase. If "
-        "possible rearrange the word order. Please answer only with the paraphrase, do not write any additional text "
-        "or clarifications. Do not start your answer with 'This is the paraphrase of...' or any other similar phrase. "
-        "Just answer the pharaphrase. Try to be creative and avoid using the same words as the original text. But "
-        "remember to keep the meaning and information of the original text. "
-        f'Text: "{example}"'
+        "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase."
+        " If possible rearrange the word order. Please answer only with the paraphrase, do not write any additional"
+        " text or clarifications. Do not start your answer with 'This is the paraphrase of...' or any other similar"
+        " phrase. Just answer the pharaphrase. Try to be creative and avoid using the same words as the original"
+        f' text. But remember to keep the meaning and information of the original text. Text: "{example}"'
     )
 
     if tokenizer.chat_template is not None:
