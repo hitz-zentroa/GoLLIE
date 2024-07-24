@@ -12,6 +12,9 @@ import datasets
 from tqdm import tqdm
 
 
+import sys
+print("Python Module Search Path:", sys.path)
+
 def get_class(class_path: str) -> Type:
     components = class_path.split(".")
     mod = __import__(components[0])

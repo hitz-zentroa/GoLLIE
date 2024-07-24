@@ -141,5 +141,5 @@ pretrained_models/
 collie/
 configs/model_configs/legacy/debug.yaml
 
-*.out
-*.err
+out.*
+err.*

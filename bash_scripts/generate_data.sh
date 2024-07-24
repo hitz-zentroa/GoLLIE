@@ -1,12 +1,29 @@
 #!/bin/bash
+#SBATCH --job-name=generate_data
+#SBATCH --cpus-per-task=1
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --time=7-00:00:00
+#SBATCH --mem=512GB
+#SBATCH --gres=gpu:1
+#SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/out.%j
+#SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/err.%j
 
-source /gscratch4/users/osainz006/GoLLIE/venv/GoLLIE/bin/activate
+# Activate virtual environment
+source /sorgin1/users/neildlf/gollie/bin/activate
 
+# Print the current working directory
+echo "Current working directory: $(pwd)"
+
+# Change to the GoLLIE-dev directory 
+cd /sorgin1/users/neildlf/GoLLIE-dev 
+
+# Set the configurations directory
 CONFIG_DIR="configs/data_configs"
 
+# Generate data with examples
 OUTPUT_DIR="data/processed_w_examples"
-
-python -m src.generate_data \
+srun /sorgin1/users/neildlf/gollie/bin/python -m src.generate_data \
      --configs \
         ${CONFIG_DIR}/ace_config.json \
         ${CONFIG_DIR}/bc5cdr_config.json \
@@ -37,10 +54,9 @@ python -m src.generate_data \
      --overwrite_output_dir \
      --include_examples
 
+# Generate processed data
 OUTPUT_DIR="data/processed"
-
-
- python -m src.generate_data \
+srun /sorgin1/users/neildlf/gollie/bin/python -m src.generate_data \
      --configs \
         ${CONFIG_DIR}/ace_config.json \
         ${CONFIG_DIR}/bc5cdr_config.json \
@@ -72,8 +88,7 @@ OUTPUT_DIR="data/processed"
 
 # Generate baseline data
 OUTPUT_DIR="data/baseline"
-
-python -m src.generate_data \
+srun /sorgin1/users/neildlf/gollie/bin/python -m src.generate_data \
     --configs \
         ${CONFIG_DIR}/ace_config.json \
         ${CONFIG_DIR}/bc5cdr_config.json \
