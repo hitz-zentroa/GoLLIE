@@ -102,11 +102,7 @@ INFO:root:Loading model model from meta-llama/Meta-Llama-3.1-8B
 WARNING:root:Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model on each GPU.
 INFO:root:We will load the model using the following device map: None and max_memory: None
 INFO:root:Loading meta-llama/Meta-Llama-3.1-8B model...
-INFO:root:Loading meta-llama/Meta-Llama-3.1-8B model...
 INFO:root:Loading model model from meta-llama/Meta-Llama-3.1-8B
-INFO:root:Loading model model from meta-llama/Meta-Llama-3.1-8B
-WARNING:root:Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model on each GPU.
-INFO:root:We will load the model using the following device map: None and max_memory: None
 WARNING:root:Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model on each GPU.
 INFO:root:We will load the model using the following device map: None and max_memory: None
 INFO:root:Loading meta-llama/Meta-Llama-3.1-8B model...
@@ -125,6 +121,166 @@ INFO:root:Loading meta-llama/Meta-Llama-3.1-8B model...
 INFO:root:Loading model model from meta-llama/Meta-Llama-3.1-8B
 WARNING:root:Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model on each GPU.
 INFO:root:We will load the model using the following device map: None and max_memory: None
+INFO:root:Loading meta-llama/Meta-Llama-3.1-8B model...
+INFO:root:Loading model model from meta-llama/Meta-Llama-3.1-8B
+WARNING:root:Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model on each GPU.
+INFO:root:We will load the model using the following device map: None and max_memory: None
+WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
+INFO:root:Bits and Bytes config: {
+    "quant_method": "bitsandbytes",
+    "_load_in_8bit": false,
+    "_load_in_4bit": true,
+    "llm_int8_threshold": 6.0,
+    "llm_int8_skip_modules": null,
+    "llm_int8_enable_fp32_cpu_offload": false,
+    "llm_int8_has_fp16_weight": false,
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "bnb_4bit_compute_dtype": "bfloat16",
+    "bnb_4bit_quant_storage": "uint8",
+    "load_in_4bit": true,
+    "load_in_8bit": false
+}
+WARNING:root:Model meta-llama/Meta-Llama-3.1-8B is an decoder-only model. We will load it as a CausalLM model.
+INFO:root:Loading the model with flash attention 2
+INFO:root:Loading model with config:
+pretrained_model_name_or_path: meta-llama/Meta-Llama-3.1-8B
+device_map: None
+max_memory: None
+quantization_config: BitsAndBytesConfig {
+  "_load_in_4bit": true,
+  "_load_in_8bit": false,
+  "bnb_4bit_compute_dtype": "bfloat16",
+  "bnb_4bit_quant_storage": "uint8",
+  "bnb_4bit_quant_type": "nf4",
+  "bnb_4bit_use_double_quant": true,
+  "llm_int8_enable_fp32_cpu_offload": false,
+  "llm_int8_has_fp16_weight": false,
+  "llm_int8_skip_modules": null,
+  "llm_int8_threshold": 6.0,
+  "load_in_4bit": true,
+  "load_in_8bit": false,
+  "quant_method": "bitsandbytes"
+}
+
+torch_dtype: torch.bfloat16
+config: LlamaConfig {
+  "_name_or_path": "meta-llama/Meta-Llama-3.1-8B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 14336,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 8.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.43.2",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+trust_remote_code: False
+kwargs: {'attn_implementation': 'flash_attention_2'}
+
+WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
+INFO:root:Bits and Bytes config: {
+    "quant_method": "bitsandbytes",
+    "_load_in_8bit": false,
+    "_load_in_4bit": true,
+    "llm_int8_threshold": 6.0,
+    "llm_int8_skip_modules": null,
+    "llm_int8_enable_fp32_cpu_offload": false,
+    "llm_int8_has_fp16_weight": false,
+    "bnb_4bit_quant_type": "nf4",
+    "bnb_4bit_use_double_quant": true,
+    "bnb_4bit_compute_dtype": "bfloat16",
+    "bnb_4bit_quant_storage": "uint8",
+    "load_in_4bit": true,
+    "load_in_8bit": false
+}
+WARNING:root:Model meta-llama/Meta-Llama-3.1-8B is an decoder-only model. We will load it as a CausalLM model.
+INFO:root:Loading the model with flash attention 2
+INFO:root:Loading model with config:
+pretrained_model_name_or_path: meta-llama/Meta-Llama-3.1-8B
+device_map: None
+max_memory: None
+quantization_config: BitsAndBytesConfig {
+  "_load_in_4bit": true,
+  "_load_in_8bit": false,
+  "bnb_4bit_compute_dtype": "bfloat16",
+  "bnb_4bit_quant_storage": "uint8",
+  "bnb_4bit_quant_type": "nf4",
+  "bnb_4bit_use_double_quant": true,
+  "llm_int8_enable_fp32_cpu_offload": false,
+  "llm_int8_has_fp16_weight": false,
+  "llm_int8_skip_modules": null,
+  "llm_int8_threshold": 6.0,
+  "load_in_4bit": true,
+  "load_in_8bit": false,
+  "quant_method": "bitsandbytes"
+}
+
+torch_dtype: torch.bfloat16
+config: LlamaConfig {
+  "_name_or_path": "meta-llama/Meta-Llama-3.1-8B",
+  "architectures": [
+    "LlamaForCausalLM"
+  ],
+  "attention_bias": false,
+  "attention_dropout": 0.0,
+  "bos_token_id": 128000,
+  "eos_token_id": 128001,
+  "hidden_act": "silu",
+  "hidden_size": 4096,
+  "initializer_range": 0.02,
+  "intermediate_size": 14336,
+  "max_position_embeddings": 131072,
+  "mlp_bias": false,
+  "model_type": "llama",
+  "num_attention_heads": 32,
+  "num_hidden_layers": 32,
+  "num_key_value_heads": 8,
+  "pretraining_tp": 1,
+  "rms_norm_eps": 1e-05,
+  "rope_scaling": {
+    "factor": 8.0,
+    "high_freq_factor": 4.0,
+    "low_freq_factor": 1.0,
+    "original_max_position_embeddings": 8192,
+    "rope_type": "llama3"
+  },
+  "rope_theta": 500000.0,
+  "tie_word_embeddings": false,
+  "torch_dtype": "bfloat16",
+  "transformers_version": "4.43.2",
+  "use_cache": true,
+  "vocab_size": 128256
+}
+
+trust_remote_code: False
+kwargs: {'attn_implementation': 'flash_attention_2'}
+
 WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
 INFO:root:Bits and Bytes config: {
     "quant_method": "bitsandbytes",
@@ -360,87 +516,6 @@ trust_remote_code: False
 kwargs: {'attn_implementation': 'flash_attention_2'}
 
 `low_cpu_mem_usage` was None, now set to True since model is quantized.
-`low_cpu_mem_usage` was None, now set to True since model is quantized.
-WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
-INFO:root:Bits and Bytes config: {
-    "quant_method": "bitsandbytes",
-    "_load_in_8bit": false,
-    "_load_in_4bit": true,
-    "llm_int8_threshold": 6.0,
-    "llm_int8_skip_modules": null,
-    "llm_int8_enable_fp32_cpu_offload": false,
-    "llm_int8_has_fp16_weight": false,
-    "bnb_4bit_quant_type": "nf4",
-    "bnb_4bit_use_double_quant": true,
-    "bnb_4bit_compute_dtype": "bfloat16",
-    "bnb_4bit_quant_storage": "uint8",
-    "load_in_4bit": true,
-    "load_in_8bit": false
-}
-WARNING:root:Model meta-llama/Meta-Llama-3.1-8B is an decoder-only model. We will load it as a CausalLM model.
-INFO:root:Loading the model with flash attention 2
-INFO:root:Loading model with config:
-pretrained_model_name_or_path: meta-llama/Meta-Llama-3.1-8B
-device_map: None
-max_memory: None
-quantization_config: BitsAndBytesConfig {
-  "_load_in_4bit": true,
-  "_load_in_8bit": false,
-  "bnb_4bit_compute_dtype": "bfloat16",
-  "bnb_4bit_quant_storage": "uint8",
-  "bnb_4bit_quant_type": "nf4",
-  "bnb_4bit_use_double_quant": true,
-  "llm_int8_enable_fp32_cpu_offload": false,
-  "llm_int8_has_fp16_weight": false,
-  "llm_int8_skip_modules": null,
-  "llm_int8_threshold": 6.0,
-  "load_in_4bit": true,
-  "load_in_8bit": false,
-  "quant_method": "bitsandbytes"
-}
-
-torch_dtype: torch.bfloat16
-config: LlamaConfig {
-  "_name_or_path": "meta-llama/Meta-Llama-3.1-8B",
-  "architectures": [
-    "LlamaForCausalLM"
-  ],
-  "attention_bias": false,
-  "attention_dropout": 0.0,
-  "bos_token_id": 128000,
-  "eos_token_id": 128001,
-  "hidden_act": "silu",
-  "hidden_size": 4096,
-  "initializer_range": 0.02,
-  "intermediate_size": 14336,
-  "max_position_embeddings": 131072,
-  "mlp_bias": false,
-  "model_type": "llama",
-  "num_attention_heads": 32,
-  "num_hidden_layers": 32,
-  "num_key_value_heads": 8,
-  "pretraining_tp": 1,
-  "rms_norm_eps": 1e-05,
-  "rope_scaling": {
-    "factor": 8.0,
-    "high_freq_factor": 4.0,
-    "low_freq_factor": 1.0,
-    "original_max_position_embeddings": 8192,
-    "rope_type": "llama3"
-  },
-  "rope_theta": 500000.0,
-  "tie_word_embeddings": false,
-  "torch_dtype": "bfloat16",
-  "transformers_version": "4.43.2",
-  "use_cache": true,
-  "vocab_size": 128256
-}
-
-trust_remote_code: False
-kwargs: {'attn_implementation': 'flash_attention_2'}
-
-`low_cpu_mem_usage` was None, now set to True since model is quantized.
-`low_cpu_mem_usage` was None, now set to True since model is quantized.
 WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
 INFO:root:Bits and Bytes config: {
     "quant_method": "bitsandbytes",
@@ -520,84 +595,7 @@ trust_remote_code: False
 kwargs: {'attn_implementation': 'flash_attention_2'}
 
 WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
-INFO:root:Bits and Bytes config: {
-    "quant_method": "bitsandbytes",
-    "_load_in_8bit": false,
-    "_load_in_4bit": true,
-    "llm_int8_threshold": 6.0,
-    "llm_int8_skip_modules": null,
-    "llm_int8_enable_fp32_cpu_offload": false,
-    "llm_int8_has_fp16_weight": false,
-    "bnb_4bit_quant_type": "nf4",
-    "bnb_4bit_use_double_quant": true,
-    "bnb_4bit_compute_dtype": "bfloat16",
-    "bnb_4bit_quant_storage": "uint8",
-    "load_in_4bit": true,
-    "load_in_8bit": false
-}
-WARNING:root:Model meta-llama/Meta-Llama-3.1-8B is an decoder-only model. We will load it as a CausalLM model.
-INFO:root:Loading the model with flash attention 2
-INFO:root:Loading model with config:
-pretrained_model_name_or_path: meta-llama/Meta-Llama-3.1-8B
-device_map: None
-max_memory: None
-quantization_config: BitsAndBytesConfig {
-  "_load_in_4bit": true,
-  "_load_in_8bit": false,
-  "bnb_4bit_compute_dtype": "bfloat16",
-  "bnb_4bit_quant_storage": "uint8",
-  "bnb_4bit_quant_type": "nf4",
-  "bnb_4bit_use_double_quant": true,
-  "llm_int8_enable_fp32_cpu_offload": false,
-  "llm_int8_has_fp16_weight": false,
-  "llm_int8_skip_modules": null,
-  "llm_int8_threshold": 6.0,
-  "load_in_4bit": true,
-  "load_in_8bit": false,
-  "quant_method": "bitsandbytes"
-}
-
-torch_dtype: torch.bfloat16
-config: LlamaConfig {
-  "_name_or_path": "meta-llama/Meta-Llama-3.1-8B",
-  "architectures": [
-    "LlamaForCausalLM"
-  ],
-  "attention_bias": false,
-  "attention_dropout": 0.0,
-  "bos_token_id": 128000,
-  "eos_token_id": 128001,
-  "hidden_act": "silu",
-  "hidden_size": 4096,
-  "initializer_range": 0.02,
-  "intermediate_size": 14336,
-  "max_position_embeddings": 131072,
-  "mlp_bias": false,
-  "model_type": "llama",
-  "num_attention_heads": 32,
-  "num_hidden_layers": 32,
-  "num_key_value_heads": 8,
-  "pretraining_tp": 1,
-  "rms_norm_eps": 1e-05,
-  "rope_scaling": {
-    "factor": 8.0,
-    "high_freq_factor": 4.0,
-    "low_freq_factor": 1.0,
-    "original_max_position_embeddings": 8192,
-    "rope_type": "llama3"
-  },
-  "rope_theta": 500000.0,
-  "tie_word_embeddings": false,
-  "torch_dtype": "bfloat16",
-  "transformers_version": "4.43.2",
-  "use_cache": true,
-  "vocab_size": 128256
-}
-
-trust_remote_code: False
-kwargs: {'attn_implementation': 'flash_attention_2'}
-
-WARNING:root:Tokenizer does not have a pad token. We will use the eos token as pad token.
+`low_cpu_mem_usage` was None, now set to True since model is quantized.
 INFO:root:Bits and Bytes config: {
     "quant_method": "bitsandbytes",
     "_load_in_8bit": false,
@@ -678,39 +676,41 @@ kwargs: {'attn_implementation': 'flash_attention_2'}
 `low_cpu_mem_usage` was None, now set to True since model is quantized.
 `low_cpu_mem_usage` was None, now set to True since model is quantized.
 `low_cpu_mem_usage` was None, now set to True since model is quantized.
-Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.13s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.19s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.15s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.41s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.25s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.32s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:03<00:09,  3.02s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.48s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.09s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.15s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.13s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.21s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.35s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.22s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:04<00:03,  1.96s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.40s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.05s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.10s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.09s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.29it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.13it/s]
-Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.26it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.09it/s]
-Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.26it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.10it/s]
-INFO:root:Model dtype: torch.bfloat16. Model device: cuda:1
+`low_cpu_mem_usage` was None, now set to True since model is quantized.
+`low_cpu_mem_usage` was None, now set to True since model is quantized.
+Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:   0%|          | 0/4 [00:00<?, ?it/s]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.07s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.12s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.17s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.24s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:03,  1.23s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.36s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:01<00:04,  1.34s/it]Loading checkpoint shards:  25%|██▌       | 1/4 [00:02<00:08,  2.78s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.01s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.05s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.07s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.09s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.11s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.16s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:02<00:02,  1.17s/it]Loading checkpoint shards:  50%|█████     | 2/4 [00:03<00:03,  1.76s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:00,  1.01it/s]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.01s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.03s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.05s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.40it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.21it/s]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.04s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.08s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.38it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.18it/s]
+Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.36it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.16it/s]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.08s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.34it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.14it/s]
+Loading checkpoint shards:  75%|███████▌  | 3/4 [00:04<00:01,  1.40s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.34it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.14it/s]
+INFO:root:Model dtype: torch.bfloat16. Model device: cuda:4
 INFO:root:Total model memory footprint: 5591.54816 MB
 INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
 WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
-INFO:root:Model dtype: torch.bfloat16. Model device: cuda:7
-INFO:root:Total model memory footprint: 5591.54816 MB
-INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
-WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
-Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.18s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.28s/it]INFO:root:Model dtype: torch.bfloat16. Model device: cuda:6
-INFO:root:Total model memory footprint: 5591.54816 MB
-INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
-WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
-Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.24s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:05<00:01,  1.62s/it]Loading checkpoint shards:  75%|███████▌  | 3/4 [00:03<00:01,  1.27s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.20it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.03it/s]
-Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.09it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07s/it]
-Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.09it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.03s/it]
-Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.12it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:04<00:00,  1.07s/it]
-Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.14s/it]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.46s/it]
-INFO:root:Model dtype: torch.bfloat16. Model device: cuda:2
-INFO:root:Total model memory footprint: 5591.54816 MB
-INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
-WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
+Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.31it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.10it/s]
 INFO:root:Model dtype: torch.bfloat16. Model device: cuda:3
 INFO:root:Total model memory footprint: 5591.54816 MB
 INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
 WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
-INFO:root:Model dtype: torch.bfloat16. Model device: cuda:5
+Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.31it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:03<00:00,  1.10it/s]
+INFO:root:Model dtype: torch.bfloat16. Model device: cuda:6
 INFO:root:Total model memory footprint: 5591.54816 MB
 INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
 WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
-INFO:root:Model dtype: torch.bfloat16. Model device: cuda:4
+Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.04it/s]Loading checkpoint shards: 100%|██████████| 4/4 [00:05<00:00,  1.27s/it]
+INFO:root:Model dtype: torch.bfloat16. Model device: cuda:7
+INFO:root:Total model memory footprint: 5591.54816 MB
+INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
+WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
+INFO:root:Model dtype: torch.bfloat16. Model device: cuda:1
+INFO:root:Total model memory footprint: 5591.54816 MB
+INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
+WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
+INFO:root:Model dtype: torch.bfloat16. Model device: cuda:2
+INFO:root:Total model memory footprint: 5591.54816 MB
+INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
+WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
+INFO:root:Model dtype: torch.bfloat16. Model device: cuda:5
 INFO:root:Total model memory footprint: 5591.54816 MB
 INFO:root:No pretrained LORA weights provided, we will initialize the weights randomly.
 WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
@@ -720,7 +720,7 @@ INFO:root:No pretrained LORA weights provided, we will initialize the weights ra
 WARNING:root:You provided 'all' as target modules, we will use all the model to which LoRA can be applied.
 INFO:root:
 LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'up_proj', 'gate_proj', 'down_proj', 'q_proj', 'o_proj', 'k_proj', 'v_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'q_proj', 'down_proj', 'up_proj', 'o_proj', 'v_proj', 'gate_proj', 'k_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
 
 INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
 
@@ -731,29 +731,7 @@ INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': Tru
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:
 LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'v_proj', 'o_proj', 'down_proj', 'q_proj', 'gate_proj', 'up_proj', 'k_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
-
-INFO:root:
-LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'v_proj', 'up_proj', 'gate_proj', 'o_proj', 'down_proj', 'k_proj', 'q_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
-
-INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
-
-INFO:root:Loading datasets...
-INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
-
-INFO:root:We will train CoLLIE on 14 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.rc.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.re.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ver.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/bc5cdr.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
-INFO:root:We will validate CoLLIE on 2 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
-INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': True; 'prompt_loss_weight': 0.0 and 'prompt_until': result.
-INFO:root:Loading datasets...
-INFO:root:We will train CoLLIE on 14 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.rc.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.re.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ver.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/bc5cdr.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
-INFO:root:We will validate CoLLIE on 2 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
-INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': True; 'prompt_loss_weight': 0.0 and 'prompt_until': result.
-INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:
-LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'down_proj', 'v_proj', 'gate_proj', 'up_proj', 'o_proj', 'k_proj', 'q_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'q_proj', 'up_proj', 'down_proj', 'gate_proj', 'v_proj', 'o_proj', 'k_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
 
 INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
 
@@ -764,7 +742,7 @@ INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': Tru
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:
 LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'k_proj', 'q_proj', 'v_proj', 'up_proj', 'o_proj', 'down_proj', 'gate_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'o_proj', 'gate_proj', 'down_proj', 'up_proj', 'v_proj', 'q_proj', 'k_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
 
 INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
 
@@ -775,7 +753,7 @@ INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': Tru
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:
 LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'up_proj', 'q_proj', 'o_proj', 'down_proj', 'k_proj', 'v_proj', 'gate_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'down_proj', 'q_proj', 'v_proj', 'k_proj', 'up_proj', 'o_proj', 'gate_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
 
 INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
 
@@ -786,7 +764,7 @@ INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': Tru
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:
 LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'up_proj', 'v_proj', 'gate_proj', 'q_proj', 'o_proj', 'k_proj', 'down_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'down_proj', 'up_proj', 'v_proj', 'q_proj', 'gate_proj', 'k_proj', 'o_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
 
 INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
 
@@ -797,7 +775,29 @@ INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': Tru
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:
 LoRA config:
-{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'v_proj', 'gate_proj', 'k_proj', 'o_proj', 'up_proj', 'down_proj', 'q_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'o_proj', 'down_proj', 'gate_proj', 'up_proj', 'k_proj', 'q_proj', 'v_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+
+INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
+
+INFO:root:Loading datasets...
+INFO:root:We will train CoLLIE on 14 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.rc.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.re.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ver.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/bc5cdr.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:We will validate CoLLIE on 2 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': True; 'prompt_loss_weight': 0.0 and 'prompt_until': result.
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:
+LoRA config:
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'up_proj', 'q_proj', 'o_proj', 'down_proj', 'gate_proj', 'k_proj', 'v_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
+
+INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
+
+INFO:root:Loading datasets...
+INFO:root:We will train CoLLIE on 14 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.rc.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.re.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ver.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/bc5cdr.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:We will validate CoLLIE on 2 datasets: /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl, /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+INFO:root:Training dataset will be loaded with. 'ignore_pad_token_for_loss': True; 'prompt_loss_weight': 0.0 and 'prompt_until': result.
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:
+LoRA config:
+{'default': LoraConfig(peft_type=<PeftType.LORA: 'LORA'>, auto_mapping=None, base_model_name_or_path='meta-llama/Meta-Llama-3.1-8B', revision=None, task_type=<TaskType.CAUSAL_LM: 'CAUSAL_LM'>, inference_mode=False, r=128, target_modules={'q_proj', 'gate_proj', 'up_proj', 'k_proj', 'down_proj', 'v_proj', 'o_proj'}, lora_alpha=16, lora_dropout=0.05, fan_in_fan_out=False, bias='none', use_rslora=False, modules_to_save=None, init_lora_weights=True, layers_to_transform=None, layers_pattern=None, rank_pattern={}, alpha_pattern={}, megatron_config=None, megatron_core='megatron.core', loftq_config={}, use_dora=False, layer_replication=None)}
 
 INFO:root:---> Trainable params: 335544320 || all params: 4876144640 || trainable%: 6.881345
 
@@ -928,23 +928,27 @@ INFO:root:Loaded [14041, 14041, 14041] examples from /sorgin1/users/neildlf/GoLL
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [14041, 14041, 14041] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [14041, 14041, 14041] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [14041, 14041, 14041] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [14041, 14041, 14041] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [14041, 14041, 14041] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.train.jsonl
-INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
+INFO:root:Loaded [5433, 5433, 5433] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
+INFO:root:Loaded [5433, 5433, 5433] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [3976, 3976, 3976] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/diann.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
@@ -961,14 +965,6 @@ INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [5433, 5433, 5433] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [5433, 5433, 5433] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl
-INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [5433, 5433, 5433] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl
-INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [5433, 5433, 5433] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ncbidisease.ner.train.jsonl
-INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [30000, 30000, 30000] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl
-INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [30000, 30000, 30000] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [30000, 30000, 30000] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
@@ -986,7 +982,9 @@ INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
-INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl
+INFO:root:Loaded [30000, 30000, 30000] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [30000, 30000, 30000] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ontonotes5.ner.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
@@ -998,9 +996,78 @@ INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [7329, 7329, 7329] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/rams.eae.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
 INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
 INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+WARNING:accelerate.utils.other:Detected kernel version 4.18.0, which is below the recommended minimum of 5.5.0; this can cause the process to hang. It is recommended to upgrade the kernel to the minimum version or higher.
+INFO:root:Loaded [10027, 10027, 10027] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/tacred.sf.train.jsonl
+INFO:root:Found 3 pre-computed epoch datasets.
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+INFO:root:Loaded [3394, 3394, 3394] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/wnut17.ner.train.jsonl
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+INFO:root:Loaded [901] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/ace05.ee.dev.jsonl
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+INFO:root:Loaded [3250] examples from /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples/conll03.ner.dev.jsonl
+WARNING:root:Deepspeed enabled. The current model is not a MoE model.
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+wandb: Currently logged in as: neilus03. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.17.6
+wandb: Run data is saved locally in /sorgin1/users/neildlf/GoLLIE-dev/wandb/run-20240808_102131-pz9mn9vj
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run GoLLIE-8b_Llama3_BS128_R128
+wandb: ⭐️ View project at https://wandb.ai/neilus03/GoLLIEv2.0
+wandb: 🚀 View run at https://wandb.ai/neilus03/GoLLIEv2.0/runs/pz9mn9vj
+  0%|          | 0/3873 [00:00<?, ?it/s]/sorgin1/users/neildlf/gollie/lib/python3.9/site-packages/torch/utils/checkpoint.py:464: UserWarning: torch.utils.checkpoint: the use_reentrant parameter should be passed explicitly. In version 2.4 we will raise an exception if use_reentrant is not passed. use_reentrant=False is recommended, but if you need to preserve the current default behavior, you can pass use_reentrant=True. Refer to docs for more details on the differences between the two variants.
+  warnings.warn(
+  0%|          | 1/3873 [00:05<6:00:03,  5.58s/it]                                                    0%|          | 1/3873 [00:07<6:00:03,  5.58s/it]  0%|          | 2/3873 [00:12<6:48:38,  6.33s/it]  0%|          | 3/3873 [00:18<6:42:16,  6.24s/it]  0%|          | 4/3873 [00:23<6:07:03,  5.69s/it]  0%|          | 5/3873 [00:28<5:47:17,  5.39s/it]  0%|          | 6/3873 [00:33<5:50:25,  5.44s/it]  0%|          | 7/3873 [00:38<5:35:56,  5.21s/it]  0%|          | 8/3873 [00:43<5:25:54,  5.06s/it]  0%|          | 9/3873 [00:47<5:17:02,  4.92s/it]  0%|          | 10/3873 [00:52<5:17:42,  4.93s/it]  0%|          | 11/3873 [00:57<5:15:31,  4.90s/it]  0%|          | 12/3873 [01:02<5:13:33,  4.87s/it]  0%|          | 13/3873 [01:07<5:15:31,  4.90s/it]  0%|          | 14/3873 [01:13<5:35:06,  5.21s/it]  0%|          | 15/3873 [01:18<5:32:59,  5.18s/it]  0%|          | 16/3873 [01:23<5:25:12,  5.06s/it]  0%|          | 17/3873 [01:28<5:19:38,  4.97s/it]  0%|          | 18/3873 [01:32<5:15:34,  4.91s/it]  0%|          | 19/3873 [01:37<5:14:59,  4.90s/it]  1%|          | 20/3873 [01:42<5:13:20,  4.88s/it]  1%|          | 21/3873 [01:48<5:32:12,  5.17s/it]  1%|          | 22/3873 [01:53<5:23:56,  5.05s/it]  1%|          | 23/3873 [01:58<5:21:46,  5.01s/it]  1%|          | 24/3873 [02:03<5:37:24,  5.26s/it]  1%|          | 25/3873 [02:08<5:29:18,  5.13s/it]                                                     1%|          | 25/3873 [02:08<5:29:18,  5.13s/it]  1%|          | 26/3873 [02:13<5:25:42,  5.08s/it]  1%|          | 27/3873 [02:18<5:21:53,  5.02s/it]  1%|          | 28/3873 [02:24<5:36:57,  5.26s/it]  1%|          | 29/3873 [02:29<5:29:03,  5.14s/it]  1%|          | 30/3873 [02:34<5:24:00,  5.06s/it]  1%|          | 31/3873 [02:40<5:41:57,  5.34s/it]  1%|          | 32/3873 [02:46<6:01:40,  5.65s/it]  1%|          | 33/3873 [02:51<5:45:03,  5.39s/it]  1%|          | 34/3873 [02:56<5:35:10,  5.24s/it]  1%|          | 35/3873 [03:01<5:28:27,  5.13s/it]  1%|          | 36/3873 [03:05<5:23:11,  5.05s/it]  1%|          | 37/3873 [03:10<5:19:33,  5.00s/it]  1%|          | 38/3873 [03:15<5:16:21,  4.95s/it]  1%|          | 39/3873 [03:20<5:14:40,  4.92s/it]  1%|          | 40/3873 [03:25<5:18:23,  4.98s/it]  1%|          | 41/3873 [03:30<5:16:03,  4.95s/it]  1%|          | 42/3873 [03:35<5:12:01,  4.89s/it]  1%|          | 43/3873 [03:40<5:10:50,  4.87s/it]  1%|          | 44/3873 [03:44<5:09:54,  4.86s/it]  1%|          | 45/3873 [03:49<5:13:18,  4.91s/it]  1%|          | 46/3873 [03:54<5:12:27,  4.90s/it]  1%|          | 47/3873 [03:59<5:10:59,  4.88s/it]  1%|          | 48/3873 [04:04<5:11:54,  4.89s/it]  1%|▏         | 49/3873 [04:09<5:13:39,  4.92s/it]  1%|▏         | 50/3873 [04:14<5:10:42,  4.88s/it]                                                     1%|▏         | 50/3873 [04:14<5:10:42,  4.88s/it]  1%|▏         | 51/3873 [04:19<5:09:49,  4.86s/it]  1%|▏         | 52/3873 [04:24<5:10:48,  4.88s/it]  1%|▏         | 53/3873 [04:29<5:14:09,  4.93s/it]  1%|▏         | 54/3873 [04:33<5:07:50,  4.84s/it]  1%|▏         | 55/3873 [04:38<5:08:20,  4.85s/it]  1%|▏         | 56/3873 [04:43<5:09:10,  4.86s/it]  1%|▏         | 57/3873 [04:48<5:11:20,  4.90s/it]  1%|▏         | 58/3873 [04:53<5:11:07,  4.89s/it]  2%|▏         | 59/3873 [04:58<5:12:53,  4.92s/it]  2%|▏         | 60/3873 [05:04<5:44:30,  5.42s/it]  2%|▏         | 61/3873 [05:09<5:35:54,  5.29s/it]  2%|▏         | 62/3873 [05:14<5:28:04,  5.17s/it]  2%|▏         | 63/3873 [05:19<5:22:10,  5.07s/it]  2%|▏         | 64/3873 [05:24<5:17:23,  5.00s/it]  2%|▏         | 65/3873 [05:30<5:43:56,  5.42s/it]  2%|▏         | 66/3873 [05:35<5:33:43,  5.26s/it]  2%|▏         | 67/3873 [05:40<5:26:26,  5.15s/it]  2%|▏         | 68/3873 [05:45<5:20:05,  5.05s/it]  2%|▏         | 69/3873 [05:50<5:16:48,  5.00s/it]  2%|▏         | 70/3873 [05:55<5:16:53,  5.00s/it]  2%|▏         | 71/3873 [06:00<5:14:41,  4.97s/it]  2%|▏         | 72/3873 [06:05<5:11:18,  4.91s/it]  2%|▏         | 73/3873 [06:10<5:12:34,  4.94s/it]  2%|▏         | 74/3873 [06:14<5:11:49,  4.92s/it]  2%|▏         | 75/3873 [06:19<5:09:26,  4.89s/it]                                                     2%|▏         | 75/3873 [06:19<5:09:26,  4.89s/it]  2%|▏         | 76/3873 [06:24<5:03:50,  4.80s/it]  2%|▏         | 77/3873 [06:29<5:04:01,  4.81s/it]  2%|▏         | 78/3873 [06:33<5:02:26,  4.78s/it]  2%|▏         | 79/3873 [06:38<5:04:09,  4.81s/it]  2%|▏         | 80/3873 [06:43<5:08:32,  4.88s/it]  2%|▏         | 81/3873 [06:48<5:02:37,  4.79s/it]  2%|▏         | 82/3873 [06:53<5:06:28,  4.85s/it]  2%|▏         | 83/3873 [06:58<5:10:26,  4.91s/it]  2%|▏         | 84/3873 [07:03<5:08:59,  4.89s/it]  2%|▏         | 85/3873 [07:08<5:06:51,  4.86s/it]  2%|▏         | 86/3873 [07:12<5:07:13,  4.87s/it]  2%|▏         | 87/3873 [07:18<5:11:47,  4.94s/it]  2%|▏         | 88/3873 [07:23<5:29:33,  5.22s/it]  2%|▏         | 89/3873 [07:28<5:23:24,  5.13s/it]  2%|▏         | 90/3873 [07:33<5:19:40,  5.07s/it]  2%|▏         | 91/3873 [07:38<5:18:48,  5.06s/it]  2%|▏         | 92/3873 [07:43<5:21:18,  5.10s/it]  2%|▏         | 93/3873 [07:48<5:17:48,  5.04s/it]  2%|▏         | 94/3873 [07:53<5:15:13,  5.01s/it]  2%|▏         | 95/3873 [07:58<5:14:22,  4.99s/it]  2%|▏         | 96/3873 [08:03<5:12:29,  4.96s/it]  3%|▎         | 97/3873 [08:10<5:43:38,  5.46s/it]  3%|▎         | 98/3873 [08:15<5:38:20,  5.38s/it]  3%|▎         | 99/3873 [08:20<5:30:18,  5.25s/it]  3%|▎         | 100/3873 [08:25<5:21:53,  5.12s/it]                                                      3%|▎         | 100/3873 [08:25<5:21:53,  5.12s/it]  3%|▎         | 101/3873 [08:30<5:18:04,  5.06s/it]  3%|▎         | 102/3873 [08:34<5:13:03,  4.98s/it]  3%|▎         | 103/3873 [08:39<5:11:49,  4.96s/it]  3%|▎         | 104/3873 [08:44<5:08:06,  4.91s/it]  3%|▎         | 105/3873 [08:49<5:05:35,  4.87s/it]  3%|▎         | 106/3873 [08:54<5:03:20,  4.83s/it]  3%|▎         | 107/3873 [08:59<5:04:19,  4.85s/it]  3%|▎         | 108/3873 [09:03<5:02:01,  4.81s/it]  3%|▎         | 109/3873 [09:08<5:01:53,  4.81s/it]  3%|▎         | 110/3873 [09:13<5:01:18,  4.80s/it]  3%|▎         | 111/3873 [09:18<5:03:28,  4.84s/it]  3%|▎         | 112/3873 [09:23<5:02:20,  4.82s/it]  3%|▎         | 113/3873 [09:28<5:04:21,  4.86s/it]  3%|▎         | 114/3873 [09:32<5:05:56,  4.88s/it]  3%|▎         | 115/3873 [09:38<5:08:35,  4.93s/it]  3%|▎         | 116/3873 [09:42<5:08:27,  4.93s/it]  3%|▎         | 117/3873 [09:47<5:04:53,  4.87s/it]  3%|▎         | 118/3873 [09:52<5:03:34,  4.85s/it]  3%|▎         | 119/3873 [09:57<5:07:38,  4.92s/it]  3%|▎         | 120/3873 [10:02<5:03:38,  4.85s/it]  3%|▎         | 121/3873 [10:07<5:04:27,  4.87s/it]  3%|▎         | 122/3873 [10:12<5:03:58,  4.86s/it]  3%|▎         | 123/3873 [10:16<5:05:22,  4.89s/it]  3%|▎         | 124/3873 [10:21<5:07:11,  4.92s/it]  3%|▎         | 125/3873 [10:26<5:04:45,  4.88s/it]                                                      3%|▎         | 125/3873 [10:26<5:04:45,  4.88s/it]  3%|▎         | 126/3873 [10:31<5:03:50,  4.87s/it]  3%|▎         | 127/3873 [10:36<5:04:42,  4.88s/it]  3%|▎         | 128/3873 [10:41<5:02:06,  4.84s/it]  3%|▎         | 129/3873 [10:46<5:01:12,  4.83s/it]  3%|▎         | 130/3873 [10:50<5:00:27,  4.82s/it]  3%|▎         | 131/3873 [10:55<5:06:17,  4.91s/it]  3%|▎         | 132/3873 [11:00<5:02:08,  4.85s/it]  3%|▎         | 133/3873 [11:05<5:00:29,  4.82s/it]  3%|▎         | 134/3873 [11:10<5:00:39,  4.82s/it]  3%|▎         | 135/3873 [11:15<5:15:34,  5.07s/it]
