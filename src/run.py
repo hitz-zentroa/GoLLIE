@@ -332,6 +332,10 @@ def inference_collie(
 
 
 if __name__ == "__main__":
+
+    # Get project root directory
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     logging.basicConfig(level=logging.INFO)
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
@@ -347,7 +351,12 @@ if __name__ == "__main__":
         # If we pass only one argument to the script, and it's the path to a yaml file,
         # let's parse it to get our arguments.
         logging.info(f"Loading yaml config {sys.argv[-1]}")
-        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
+
+        # Construct absolute path to YAML file
+        yaml_file_path = os.path.join(project_root, sys.argv[-1])
+
+        # model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=yaml_file_path)
     else:
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()

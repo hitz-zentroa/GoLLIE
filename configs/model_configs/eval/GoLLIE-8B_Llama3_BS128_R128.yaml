@@ -1,5 +1,6 @@
 #Training args
 model_name_or_path: meta-llama/Meta-Llama-3.1-8B
+lora_weights_name_or_path: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128
 torch_dtype: bfloat16
 use_lora: true
 quantization: 4
@@ -8,7 +9,7 @@ bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
+#deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
 
 # dataset arguments
 dataset_dir:
@@ -78,8 +79,8 @@ save_steps: 1000
 save_total_limit: 999
 
 # evaluation
-do_train: true
-do_eval: true
+do_train: false
+do_eval: false
 do_predict: true
 eval_strategy: "epoch"
 eval_steps: 500
@@ -88,9 +89,9 @@ predict_with_generate: true
 evaluate_all_checkpoints: true
 
 # batch size
-per_device_train_batch_size: 16
+per_device_train_batch_size: 4
 per_device_eval_batch_size: 8
-gradient_accumulation_steps: 1
+gradient_accumulation_steps: 4
 generation_num_beams: 1
 
 # optimizer settings
@@ -114,7 +115,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 25
 report_to: wandb
-run_name: "GoLLIE+-8b_Llama3_BS128_R128"
+run_name: "GoLLIE+-7b_Mistral_BS128_R128"
 disable_tqdm: false
 
 # hub settings

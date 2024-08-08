@@ -1,0 +1,377 @@
+CUDA_VISIBLE_DEVICES 0,1,2,3,4,5,6,7
+[2024-08-08 08:28:19,952] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:19,957] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:19,968] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:19,993] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:20,000] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:20,048] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:20,072] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-08-08 08:28:20,225] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[2024-08-08 08:28:22,221] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,221] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,221] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,221] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,222] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,222] [INFO] [comm.py:668:init_distributed] Initializing TorchBackend in DeepSpeed with backend nccl
+[2024-08-08 08:28:22,222] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,222] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-08-08 08:28:22,222] [INFO] [comm.py:637:init_distributed] cdb=None
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:04
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ee.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:03
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.re.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ncbidisease.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:06
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ontonotes5.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:05
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing rams.eae.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:02
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
+  Tokenizing wnut17.ner.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.train ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:01
