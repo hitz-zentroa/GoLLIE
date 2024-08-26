@@ -143,3 +143,13 @@ configs/model_configs/legacy/debug.yaml
 
 out.*
 err.*
+
+*.out
+*.err
+
+*.err.txt
+*.out.txt
+
+*.pt
+
+model/GoLLIE*
