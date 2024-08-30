@@ -61,6 +61,7 @@ TASK_ID_TO_TASKS = {
     "CrossNER_woMISC_CrossNER_NATURAL_SCIENCES": "src.tasks.crossner",
     "CrossNER_woMISC_CrossNER_LITERATURE": "src.tasks.crossner",
     "CrossNER_woMISC_CrossNER_MUSIC": "src.tasks.crossner",
+    "fineweb-edu_pretrain_gollie2": "src.tasks.fineweb-edu_pretrain"
 }
 
 __all__ = [
