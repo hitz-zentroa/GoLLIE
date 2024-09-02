@@ -246,6 +246,8 @@ def inference_collie(
         use_flash_attention=model_args.use_flash_attention,
         max_memory_MB=model_args.max_memory_MB,
     )
+    
+    model.to('cuda')
 
     trainer = CollieTrainer(
         model=model,

@@ -54,6 +54,7 @@ generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch_fused
+#optim: adamw_hf
 learning_rate: 0.0003
 weight_decay: 0.001
 num_train_epochs: 3
