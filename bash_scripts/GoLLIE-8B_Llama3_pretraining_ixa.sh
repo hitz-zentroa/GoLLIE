@@ -34,5 +34,5 @@ cd /sorgin1/users/neildlf/GoLLIE-dev/
 
 # Now torchrun should execute with the correct working directory
 torchrun --standalone --master_port 37227 --nproc_per_node=8 src/run.py configs/model_configs/pretrain/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
-torchrun --standalone --master_port 37227 --nproc_per_node=8 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
+#torchrun --standalone --master_port 37227 --nproc_per_node=8 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
 
