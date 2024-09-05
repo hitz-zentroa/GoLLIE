@@ -47,7 +47,7 @@ predict_with_generate: true
 evaluate_all_checkpoints: true
 
 # batch size
-per_device_train_batch_size: 2 #4 #16
+per_device_train_batch_size: 4 #4 #16
 per_device_eval_batch_size: 2 #2 #8
 gradient_accumulation_steps: 2
 generation_num_beams: 1
@@ -65,7 +65,7 @@ adam_epsilon: 0.0000001
 # lora settings
 lora_r: 128
 lora_alpha: 256
-lora_dropout: 0.05
+lora_dropout: 0.08
 lora_target_modules:
   - all
 

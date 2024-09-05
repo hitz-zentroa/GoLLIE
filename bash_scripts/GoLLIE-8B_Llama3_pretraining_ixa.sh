@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
 #SBATCH --time=3-00:00:00
-#SBATCH --gres=gpu:8
+#SBATCH --gres=gpu:2
 #SBATCH --mem=1000G
 #SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining3.out.txt
 #SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining3.err.txt
@@ -33,6 +33,6 @@ export PYTHONPATH="$PYTHONPATH:/sorgin1/users/neildlf/GoLLIE-dev/"
 cd /sorgin1/users/neildlf/GoLLIE-dev/
 
 # Now torchrun should execute with the correct working directory
-torchrun --standalone --master_port 37227 --nproc_per_node=8 src/run.py configs/model_configs/pretrain/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
-#torchrun --standalone --master_port 37227 --nproc_per_node=8 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=2 src/run.py configs/model_configs/pretrain/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
+#torchrun --standalone --master_port 37227 --nproc_per_node=2 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
 
