@@ -72,7 +72,7 @@ lora_target_modules:
 # reporting
 logging_strategy: steps
 logging_first_step: true
-logging_steps: 25
+logging_steps: 10
 report_to: wandb
 run_name: "GoLLIE-8b_Llama3_BS128_R128_pretrain"
 disable_tqdm: false

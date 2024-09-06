@@ -1,6 +1,6 @@
 #Training args
 model_name_or_path: meta-llama/Meta-Llama-3.1-8B
-lora_weights_name_or_path: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128
+lora_weights_name_or_path: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128_pretrain
 torch_dtype: bfloat16
 use_lora: true
 quantization: 4
@@ -13,23 +13,65 @@ use_flash_attention: true
 
 # dataset arguments
 dataset_dir:
-  /sorgin1/users/neildlf/GoLLIE-dev/data/pretraining_data_processed_w_examples
+  /sorgin1/users/neildlf/GoLLIE-dev/data/processed_w_examples
 train_tasks:
-  - gollie_pretrain_data.ie
+  - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
+  - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - ontonotes5.ner
+  - rams.eae
+  - tacred.sf
+  - wnut17.ner
 validation_tasks:
-  - gollie_pretrain_data.ie
+  - ace05.ee
+  - conll03.ner
 test_tasks:
-  - gollie_pretrain_data.ie
+  - ace05.eae
+  - ace05.ee
+  - ace05.ner
+  - ace05.rc
+  - ace05.re
+  - ace05.ver
+  - bc5cdr.ner
+  - conll03.ner
+  - diann.ner
+  - ncbidisease.ner
+  - rams.eae
+  - tacred.sf
+  - wikievents.eae
+  - wikievents.ee
+  - wikievents.ner
+  - wnut17.ner
+  - e3c.ner
+  - broadtwitter.ner
+  - fabner.ner
+  - harveyner.ner
+  - casie.eae
+  - casie.ee
+  - mitmovie.ner
+  - mitrestaurant.ner
+  - crossner.crossner_ai
+  - crossner.crossner_music
+  - crossner.crossner_politics
+  - crossner.crossner_literature
+  - crossner.crossner_natural_science
 max_examples_per_task_train: 30000
 max_examples_per_task_val: 5000
 max_examples_per_task_test: null
-max_seq_length: 8192
-generation_max_length: 8192
+max_seq_length: 2048
+generation_max_length: 2048
 ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128_pretrain
+output_dir: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128_finetuning
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -47,13 +89,14 @@ predict_with_generate: true
 evaluate_all_checkpoints: true
 
 # batch size
-per_device_train_batch_size: 1 #4
-per_device_eval_batch_size: 1 #8
-gradient_accumulation_steps: 2 #4
+per_device_train_batch_size: 4
+per_device_eval_batch_size: 8
+gradient_accumulation_steps: 4
 generation_num_beams: 1
 
 # optimizer settings
 optim: adamw_torch_fused
+#optim: adamw_hf
 learning_rate: 0.0003
 weight_decay: 0.001
 num_train_epochs: 3
@@ -73,7 +116,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 25
 report_to: wandb
-run_name: "GoLLIE-8B_Llama3_BS128_R128_pretrain"
+run_name: "GoLLIE-8B_Llama3_BS128_R128_finetuning"
 disable_tqdm: false
 
 # hub settings
