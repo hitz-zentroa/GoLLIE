@@ -1,0 +1,1508 @@
+.
+├── assets
+│   ├── datasets.png
+│   ├── GoLLIE.png
+│   ├── snippets
+│   │   ├── space_guidelines.png
+│   │   ├── space.png
+│   │   ├── space_result.png
+│   │   ├── space_text.png
+│   │   ├── space_transparent.png
+│   │   └── space_two_terminals.png
+│   └── zero_shot_results.png
+├── bash_scripts
+│   ├── eval
+│   │   ├── Baseline-7B_CodeLLaMA.sh
+│   │   ├── eval_all.sh
+│   │   ├── GoLLIE-13B_CodeLLaMA.sh
+│   │   ├── GoLLIE-34B_CodeLLaMA.sh
+│   │   ├── GoLLIE-7B_CodeLLaMA_128.sh
+│   │   ├── GoLLIE-7B_CodeLLaMA_ablation_candidates.sh
+│   │   ├── GoLLIE-7B_CodeLLaMA_abl_dropout.sh
+│   │   ├── GoLLIE-7B_CodeLLaMA_abl_masking.sh
+│   │   ├── GoLLIE-7B_CodeLLaMA.sh
+│   │   └── run_all_metrics.sh
+│   ├── generate_data.sh
+│   ├── GoLLIE-7B_Mistral_DIPC.sh
+│   ├── GoLLIE-8B_Llama3_ixa.sh
+│   ├── GoLLIE-8B_Llama3_pretraining_ixa.sh
+│   ├── preprocess_ace.sh
+│   ├── reformat_code.sh
+│   └── run_paraphrase.sh
+├── configs
+│   ├── data_configs
+│   │   ├── ace_config_end2end.json
+│   │   ├── ace_config.json
+│   │   ├── bc5cdr_config.json
+│   │   ├── broadtwitter_config.json
+│   │   ├── casie_config_end2end.json
+│   │   ├── casie_config.json
+│   │   ├── conll03_config.json
+│   │   ├── crossner_ai_config.json
+│   │   ├── crossner_ai_wo_misc_config.json
+│   │   ├── crossner_literature_config.json
+│   │   ├── crossner_literature_wo_misc_config.json
+│   │   ├── crossner_music_config.json
+│   │   ├── crossner_music_wo_misc_config.json
+│   │   ├── crossner_politics_config.json
+│   │   ├── crossner_politics_wo_misc_config.json
+│   │   ├── crossner_science_config.json
+│   │   ├── crossner_science_wo_misc_config.json
+│   │   ├── diann_config.json
+│   │   ├── e3c_config.json
+│   │   ├── europarl_config.json
+│   │   ├── fabner_config.json
+│   │   ├── harveyner_config.json
+│   │   ├── mitmovie_config.json
+│   │   ├── mitrestaurant_config.json
+│   │   ├── multinerd_config.json
+│   │   ├── ncbidisease_config.json
+│   │   ├── ontonotes_config.json
+│   │   ├── rams_config.json
+│   │   ├── tacred_config.json
+│   │   ├── wikievents_config end2end.json
+│   │   ├── wikievents_config.json
+│   │   └── wnut17_config.json
+│   ├── deepspeed_configs
+│   │   ├── deepspeed_zero2.json
+│   │   ├── deepspeed_zero2_offload.json
+│   │   ├── deepspeed_zero3.json
+│   │   └── deepspeed_zero3_offload.json
+│   ├── model_configs
+│   │   ├── eval
+│   │   │   ├── Baseline-7B_CodeLLaMA.yaml
+│   │   │   ├── GoLLIE-13B_CodeLLaMA.yaml
+│   │   │   ├── GoLLIE-34B_CodeLLaMA.yaml
+│   │   │   ├── GoLLIE-67B_DeepSeek_BS128_R128.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_ablation_candidates.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_ablation_dropout.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_ablation_masking.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_BS128_R128_loss_all.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_BS128_R128_loss_text.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_BS128_R128.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_BS32_R8.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_train_full_model_prompt_loss_0.05.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA_train_full_model.yaml
+│   │   │   ├── GoLLIE-7B_CodeLLaMA.yaml
+│   │   │   ├── GoLLIE-7B_Mistral_BS128_R128.yaml
+│   │   │   ├── GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
+│   │   │   ├── GoLLIE-8B_Llama3_BS128_R128.yaml
+│   │   │   └── GoLLIE-YI34B_BS128_R128.yaml
+│   │   ├── GoLLIE-7B_Mistral_BS128_R128.yaml
+│   │   ├── GoLLIE-8B_Llama3_BS128_R128.yaml
+│   │   └── pretrain
+│   │       └── GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
+│   └── pharapharse_config
+│       ├── generation_config.json
+│       ├── llama3-70b.yaml
+│       └── llama3-8b.yaml
+├── data
+│   ├── ace05
+│   │   └── Trainable
+│   ├── baseline
+│   │   ├── fabner.ner.dev.jsonl
+│   │   ├── fabner.ner.test.jsonl
+│   │   ├── fabner.ner.train.0.jsonl
+│   │   ├── fabner.ner.train.24.jsonl
+│   │   └── fabner.ner.train.42.jsonl
+│   ├── pretraining_data_processed_w_examples
+│   │   ├── gollie_pretrain_data.ie.dev.jsonl
+│   │   ├── gollie_pretrain_data.ie.test.jsonl
+│   │   └── gollie_pretrain_data.ie.train.jsonl
+│   ├── processed
+│   │   ├── ace05.eae.dev.jsonl
+│   │   ├── ace05.eae.test.jsonl
+│   │   ├── ace05.eae.train.0.jsonl
+│   │   ├── ace05.eae.train.24.jsonl
+│   │   ├── ace05.eae.train.42.jsonl
+│   │   ├── ace05.ee.dev.jsonl
+│   │   ├── ace05.ee.test.jsonl
+│   │   ├── ace05.ee.train.0.jsonl
+│   │   ├── ace05.ee.train.24.jsonl
+│   │   ├── ace05.ee.train.42.jsonl
+│   │   ├── ace05.ner.dev.jsonl
+│   │   ├── ace05.ner.test.jsonl
+│   │   ├── ace05.ner.train.0.jsonl
+│   │   ├── ace05.ner.train.24.jsonl
+│   │   ├── ace05.ner.train.42.jsonl
+│   │   ├── ace05.rc.dev.jsonl
+│   │   ├── ace05.rc.test.jsonl
+│   │   ├── ace05.rc.train.0.jsonl
+│   │   ├── ace05.rc.train.24.jsonl
+│   │   ├── ace05.rc.train.42.jsonl
+│   │   ├── ace05.re.dev.jsonl
+│   │   ├── ace05.re.test.jsonl
+│   │   ├── ace05.re.train.0.jsonl
+│   │   ├── ace05.re.train.24.jsonl
+│   │   ├── ace05.re.train.42.jsonl
+│   │   ├── ace05.ver.dev.jsonl
+│   │   ├── ace05.ver.test.jsonl
+│   │   ├── ace05.ver.train.0.jsonl
+│   │   ├── ace05.ver.train.24.jsonl
+│   │   ├── ace05.ver.train.42.jsonl
+│   │   ├── bc5cdr.ner.dev.jsonl
+│   │   ├── bc5cdr.ner.test.jsonl
+│   │   ├── bc5cdr.ner.train.0.jsonl
+│   │   ├── bc5cdr.ner.train.24.jsonl
+│   │   ├── bc5cdr.ner.train.42.jsonl
+│   │   ├── broadtwitter.ner.dev.jsonl
+│   │   ├── broadtwitter.ner.test.jsonl
+│   │   ├── broadtwitter.ner.train.0.jsonl
+│   │   ├── broadtwitter.ner.train.24.jsonl
+│   │   ├── broadtwitter.ner.train.42.jsonl
+│   │   ├── casie.eae.dev.jsonl
+│   │   ├── casie.eae.test.jsonl
+│   │   ├── casie.ee.dev.jsonl
+│   │   ├── casie.ee.test.jsonl
+│   │   ├── conll03.ner.dev.jsonl
+│   │   ├── conll03.ner.test.jsonl
+│   │   ├── conll03.ner.train.0.jsonl
+│   │   ├── conll03.ner.train.24.jsonl
+│   │   ├── conll03.ner.train.42.jsonl
+│   │   ├── crossner.crossner_ai.dev.jsonl
+│   │   ├── crossner.crossner_ai.test.jsonl
+│   │   ├── crossner.crossner_ai.train.0.jsonl
+│   │   ├── crossner.crossner_ai.train.24.jsonl
+│   │   ├── crossner.crossner_ai.train.42.jsonl
+│   │   ├── crossner.crossner_literature.dev.jsonl
+│   │   ├── crossner.crossner_literature.test.jsonl
+│   │   ├── crossner.crossner_literature.train.0.jsonl
+│   │   ├── crossner.crossner_literature.train.24.jsonl
+│   │   ├── crossner.crossner_literature.train.42.jsonl
+│   │   ├── crossner.crossner_music.dev.jsonl
+│   │   ├── crossner.crossner_music.test.jsonl
+│   │   ├── crossner.crossner_music.train.0.jsonl
+│   │   ├── crossner.crossner_music.train.24.jsonl
+│   │   ├── crossner.crossner_music.train.42.jsonl
+│   │   ├── crossner.crossner_natural_science.dev.jsonl
+│   │   ├── crossner.crossner_natural_science.test.jsonl
+│   │   ├── crossner.crossner_natural_science.train.0.jsonl
+│   │   ├── crossner.crossner_natural_science.train.24.jsonl
+│   │   ├── crossner.crossner_natural_science.train.42.jsonl
+│   │   ├── crossner.crossner_politics.dev.jsonl
+│   │   ├── crossner.crossner_politics.test.jsonl
+│   │   ├── crossner.crossner_politics.train.0.jsonl
+│   │   ├── crossner.crossner_politics.train.24.jsonl
+│   │   ├── crossner.crossner_politics.train.42.jsonl
+│   │   ├── crossner_womisc.crossner_ai.dev.jsonl
+│   │   ├── crossner_womisc.crossner_ai.test.jsonl
+│   │   ├── crossner_womisc.crossner_ai.train.0.jsonl
+│   │   ├── crossner_womisc.crossner_ai.train.24.jsonl
+│   │   ├── crossner_womisc.crossner_ai.train.42.jsonl
+│   │   ├── crossner_womisc.crossner_literature.dev.jsonl
+│   │   ├── crossner_womisc.crossner_literature.test.jsonl
+│   │   ├── crossner_womisc.crossner_literature.train.0.jsonl
+│   │   ├── crossner_womisc.crossner_literature.train.24.jsonl
+│   │   ├── crossner_womisc.crossner_literature.train.42.jsonl
+│   │   ├── crossner_womisc.crossner_music.dev.jsonl
+│   │   ├── crossner_womisc.crossner_music.test.jsonl
+│   │   ├── crossner_womisc.crossner_music.train.0.jsonl
+│   │   ├── crossner_womisc.crossner_music.train.24.jsonl
+│   │   ├── crossner_womisc.crossner_music.train.42.jsonl
+│   │   ├── crossner_womisc.crossner_natural_science.dev.jsonl
+│   │   ├── crossner_womisc.crossner_natural_science.test.jsonl
+│   │   ├── crossner_womisc.crossner_natural_science.train.0.jsonl
+│   │   ├── crossner_womisc.crossner_natural_science.train.24.jsonl
+│   │   ├── crossner_womisc.crossner_natural_science.train.42.jsonl
+│   │   ├── crossner_womisc.crossner_politics.dev.jsonl
+│   │   ├── crossner_womisc.crossner_politics.test.jsonl
+│   │   ├── crossner_womisc.crossner_politics.train.0.jsonl
+│   │   ├── crossner_womisc.crossner_politics.train.24.jsonl
+│   │   ├── crossner_womisc.crossner_politics.train.42.jsonl
+│   │   ├── diann.ner.dev.jsonl
+│   │   ├── diann.ner.test.jsonl
+│   │   ├── diann.ner.train.0.jsonl
+│   │   ├── diann.ner.train.24.jsonl
+│   │   ├── diann.ner.train.42.jsonl
+│   │   ├── e3c.ner.dev.jsonl
+│   │   ├── e3c.ner.test.jsonl
+│   │   ├── e3c.ner.train.0.jsonl
+│   │   ├── e3c.ner.train.24.jsonl
+│   │   ├── e3c.ner.train.42.jsonl
+│   │   ├── europarl.ner.test.jsonl
+│   │   ├── fabner.ner.dev.jsonl
+│   │   ├── fabner.ner.test.jsonl
+│   │   ├── fabner.ner.train.0.jsonl
+│   │   ├── fabner.ner.train.24.jsonl
+│   │   ├── fabner.ner.train.42.jsonl
+│   │   ├── harveyner.ner.dev.jsonl
+│   │   ├── harveyner.ner.test.jsonl
+│   │   ├── harveyner.ner.train.0.jsonl
+│   │   ├── harveyner.ner.train.24.jsonl
+│   │   ├── harveyner.ner.train.42.jsonl
+│   │   ├── mitmovie.ner.dev.jsonl
+│   │   ├── mitmovie.ner.test.jsonl
+│   │   ├── mitmovie.ner.train.0.jsonl
+│   │   ├── mitmovie.ner.train.24.jsonl
+│   │   ├── mitmovie.ner.train.42.jsonl
+│   │   ├── mitrestaurant.ner.dev.jsonl
+│   │   ├── mitrestaurant.ner.test.jsonl
+│   │   ├── mitrestaurant.ner.train.0.jsonl
+│   │   ├── mitrestaurant.ner.train.24.jsonl
+│   │   ├── mitrestaurant.ner.train.42.jsonl
+│   │   ├── multinerd.ner.dev.jsonl
+│   │   ├── multinerd.ner.test.jsonl
+│   │   ├── multinerd.ner.train.0.jsonl
+│   │   ├── multinerd.ner.train.24.jsonl
+│   │   ├── multinerd.ner.train.42.jsonl
+│   │   ├── ncbidisease.ner.dev.jsonl
+│   │   ├── ncbidisease.ner.test.jsonl
+│   │   ├── ncbidisease.ner.train.0.jsonl
+│   │   ├── ncbidisease.ner.train.24.jsonl
+│   │   ├── ncbidisease.ner.train.42.jsonl
+│   │   ├── ontonotes5.ner.dev.jsonl
+│   │   ├── ontonotes5.ner.test.jsonl
+│   │   ├── ontonotes5.ner.train.0.jsonl
+│   │   ├── ontonotes5.ner.train.24.jsonl
+│   │   ├── ontonotes5.ner.train.42.jsonl
+│   │   ├── rams.eae.dev.jsonl
+│   │   ├── rams.eae.test.jsonl
+│   │   ├── rams.eae.train.0.jsonl
+│   │   ├── rams.eae.train.24.jsonl
+│   │   ├── rams.eae.train.42.jsonl
+│   │   ├── tacred.sf.dev.jsonl
+│   │   ├── tacred.sf.test.jsonl
+│   │   ├── tacred.sf.train.0.jsonl
+│   │   ├── tacred.sf.train.24.jsonl
+│   │   ├── tacred.sf.train.42.jsonl
+│   │   ├── wikievents.eae.dev.jsonl
+│   │   ├── wikievents.eae.test.jsonl
+│   │   ├── wikievents.eae.train.0.jsonl
+│   │   ├── wikievents.eae.train.24.jsonl
+│   │   ├── wikievents.eae.train.42.jsonl
+│   │   ├── wikievents.ee.dev.jsonl
+│   │   ├── wikievents.ee.test.jsonl
+│   │   ├── wikievents.ee.train.0.jsonl
+│   │   ├── wikievents.ee.train.24.jsonl
+│   │   ├── wikievents.ee.train.42.jsonl
+│   │   ├── wikievents.ner.dev.jsonl
+│   │   ├── wikievents.ner.test.jsonl
+│   │   ├── wikievents.ner.train.0.jsonl
+│   │   ├── wikievents.ner.train.24.jsonl
+│   │   ├── wikievents.ner.train.42.jsonl
+│   │   ├── wnut17.ner.dev.jsonl
+│   │   ├── wnut17.ner.test.jsonl
+│   │   ├── wnut17.ner.train.0.jsonl
+│   │   ├── wnut17.ner.train.24.jsonl
+│   │   └── wnut17.ner.train.42.jsonl
+│   └── processed_w_examples
+│       ├── ace05.eae.dev.jsonl
+│       ├── ace05.eae.test.jsonl
+│       ├── ace05.eae.train.0.jsonl
+│       ├── ace05.eae.train.24.jsonl
+│       ├── ace05.eae.train.42.jsonl
+│       ├── ace05.ee.dev.jsonl
+│       ├── ace05.ee.test.jsonl
+│       ├── ace05.ee.train.0.jsonl
+│       ├── ace05.ee.train.24.jsonl
+│       ├── ace05.ee.train.42.jsonl
+│       ├── ace05.ner.dev.jsonl
+│       ├── ace05.ner.test.jsonl
+│       ├── ace05.ner.train.0.jsonl
+│       ├── ace05.ner.train.24.jsonl
+│       ├── ace05.ner.train.42.jsonl
+│       ├── ace05.rc.dev.jsonl
+│       ├── ace05.rc.test.jsonl
+│       ├── ace05.rc.train.0.jsonl
+│       ├── ace05.rc.train.24.jsonl
+│       ├── ace05.rc.train.42.jsonl
+│       ├── ace05.re.dev.jsonl
+│       ├── ace05.re.test.jsonl
+│       ├── ace05.re.train.0.jsonl
+│       ├── ace05.re.train.24.jsonl
+│       ├── ace05.re.train.42.jsonl
+│       ├── ace05.ver.dev.jsonl
+│       ├── ace05.ver.test.jsonl
+│       ├── ace05.ver.train.0.jsonl
+│       ├── ace05.ver.train.24.jsonl
+│       ├── ace05.ver.train.42.jsonl
+│       ├── bc5cdr.ner.dev.jsonl
+│       ├── bc5cdr.ner.test.jsonl
+│       ├── bc5cdr.ner.train.0.jsonl
+│       ├── bc5cdr.ner.train.24.jsonl
+│       ├── bc5cdr.ner.train.42.jsonl
+│       ├── broadtwitter.ner.dev.jsonl
+│       ├── broadtwitter.ner.test.jsonl
+│       ├── broadtwitter.ner.train.0.jsonl
+│       ├── broadtwitter.ner.train.24.jsonl
+│       ├── broadtwitter.ner.train.42.jsonl
+│       ├── casie.eae.dev.jsonl
+│       ├── casie.eae.test.jsonl
+│       ├── casie.ee.dev.jsonl
+│       ├── casie.ee.test.jsonl
+│       ├── conll03.ner.dev.jsonl
+│       ├── conll03.ner.test.jsonl
+│       ├── conll03.ner.train.0.jsonl
+│       ├── conll03.ner.train.24.jsonl
+│       ├── conll03.ner.train.42.jsonl
+│       ├── crossner.crossner_ai.dev.jsonl
+│       ├── crossner.crossner_ai.test.jsonl
+│       ├── crossner.crossner_ai.train.0.jsonl
+│       ├── crossner.crossner_ai.train.24.jsonl
+│       ├── crossner.crossner_ai.train.42.jsonl
+│       ├── crossner.crossner_literature.dev.jsonl
+│       ├── crossner.crossner_literature.test.jsonl
+│       ├── crossner.crossner_literature.train.0.jsonl
+│       ├── crossner.crossner_literature.train.24.jsonl
+│       ├── crossner.crossner_literature.train.42.jsonl
+│       ├── crossner.crossner_music.dev.jsonl
+│       ├── crossner.crossner_music.test.jsonl
+│       ├── crossner.crossner_music.train.0.jsonl
+│       ├── crossner.crossner_music.train.24.jsonl
+│       ├── crossner.crossner_music.train.42.jsonl
+│       ├── crossner.crossner_natural_science.dev.jsonl
+│       ├── crossner.crossner_natural_science.test.jsonl
+│       ├── crossner.crossner_natural_science.train.0.jsonl
+│       ├── crossner.crossner_natural_science.train.24.jsonl
+│       ├── crossner.crossner_natural_science.train.42.jsonl
+│       ├── crossner.crossner_politics.dev.jsonl
+│       ├── crossner.crossner_politics.test.jsonl
+│       ├── crossner.crossner_politics.train.0.jsonl
+│       ├── crossner.crossner_politics.train.24.jsonl
+│       ├── crossner.crossner_politics.train.42.jsonl
+│       ├── crossner_womisc.crossner_ai.dev.jsonl
+│       ├── crossner_womisc.crossner_ai.test.jsonl
+│       ├── crossner_womisc.crossner_ai.train.0.jsonl
+│       ├── crossner_womisc.crossner_ai.train.24.jsonl
+│       ├── crossner_womisc.crossner_ai.train.42.jsonl
+│       ├── crossner_womisc.crossner_literature.dev.jsonl
+│       ├── crossner_womisc.crossner_literature.test.jsonl
+│       ├── crossner_womisc.crossner_literature.train.0.jsonl
+│       ├── crossner_womisc.crossner_literature.train.24.jsonl
+│       ├── crossner_womisc.crossner_literature.train.42.jsonl
+│       ├── crossner_womisc.crossner_music.dev.jsonl
+│       ├── crossner_womisc.crossner_music.test.jsonl
+│       ├── crossner_womisc.crossner_music.train.0.jsonl
+│       ├── crossner_womisc.crossner_music.train.24.jsonl
+│       ├── crossner_womisc.crossner_music.train.42.jsonl
+│       ├── crossner_womisc.crossner_natural_science.dev.jsonl
+│       ├── crossner_womisc.crossner_natural_science.test.jsonl
+│       ├── crossner_womisc.crossner_natural_science.train.0.jsonl
+│       ├── crossner_womisc.crossner_natural_science.train.24.jsonl
+│       ├── crossner_womisc.crossner_natural_science.train.42.jsonl
+│       ├── crossner_womisc.crossner_politics.dev.jsonl
+│       ├── crossner_womisc.crossner_politics.test.jsonl
+│       ├── crossner_womisc.crossner_politics.train.0.jsonl
+│       ├── crossner_womisc.crossner_politics.train.24.jsonl
+│       ├── crossner_womisc.crossner_politics.train.42.jsonl
+│       ├── diann.ner.dev.jsonl
+│       ├── diann.ner.test.jsonl
+│       ├── diann.ner.train.0.jsonl
+│       ├── diann.ner.train.24.jsonl
+│       ├── diann.ner.train.42.jsonl
+│       ├── e3c.ner.dev.jsonl
+│       ├── e3c.ner.test.jsonl
+│       ├── e3c.ner.train.0.jsonl
+│       ├── e3c.ner.train.24.jsonl
+│       ├── e3c.ner.train.42.jsonl
+│       ├── europarl.ner.test.jsonl
+│       ├── fabner.ner.dev.jsonl
+│       ├── fabner.ner.test.jsonl
+│       ├── fabner.ner.train.0.jsonl
+│       ├── fabner.ner.train.24.jsonl
+│       ├── fabner.ner.train.42.jsonl
+│       ├── harveyner.ner.dev.jsonl
+│       ├── harveyner.ner.test.jsonl
+│       ├── harveyner.ner.train.0.jsonl
+│       ├── harveyner.ner.train.24.jsonl
+│       ├── harveyner.ner.train.42.jsonl
+│       ├── mitmovie.ner.dev.jsonl
+│       ├── mitmovie.ner.test.jsonl
+│       ├── mitmovie.ner.train.0.jsonl
+│       ├── mitmovie.ner.train.24.jsonl
+│       ├── mitmovie.ner.train.42.jsonl
+│       ├── mitrestaurant.ner.dev.jsonl
+│       ├── mitrestaurant.ner.test.jsonl
+│       ├── mitrestaurant.ner.train.0.jsonl
+│       ├── mitrestaurant.ner.train.24.jsonl
+│       ├── mitrestaurant.ner.train.42.jsonl
+│       ├── multinerd.ner.dev.jsonl
+│       ├── multinerd.ner.test.jsonl
+│       ├── multinerd.ner.train.0.jsonl
+│       ├── multinerd.ner.train.24.jsonl
+│       ├── multinerd.ner.train.42.jsonl
+│       ├── ncbidisease.ner.dev.jsonl
+│       ├── ncbidisease.ner.test.jsonl
+│       ├── ncbidisease.ner.train.0.jsonl
+│       ├── ncbidisease.ner.train.24.jsonl
+│       ├── ncbidisease.ner.train.42.jsonl
+│       ├── ontonotes5.ner.dev.jsonl
+│       ├── ontonotes5.ner.test.jsonl
+│       ├── ontonotes5.ner.train.0.jsonl
+│       ├── ontonotes5.ner.train.24.jsonl
+│       ├── ontonotes5.ner.train.42.jsonl
+│       ├── rams.eae.dev.jsonl
+│       ├── rams.eae.test.jsonl
+│       ├── rams.eae.train.0.jsonl
+│       ├── rams.eae.train.24.jsonl
+│       ├── rams.eae.train.42.jsonl
+│       ├── tacred.sf.dev.jsonl
+│       ├── tacred.sf.test.jsonl
+│       ├── tacred.sf.train.0.jsonl
+│       ├── tacred.sf.train.24.jsonl
+│       ├── tacred.sf.train.42.jsonl
+│       ├── wikievents.eae.dev.jsonl
+│       ├── wikievents.eae.test.jsonl
+│       ├── wikievents.eae.train.0.jsonl
+│       ├── wikievents.eae.train.24.jsonl
+│       ├── wikievents.eae.train.42.jsonl
+│       ├── wikievents.ee.dev.jsonl
+│       ├── wikievents.ee.test.jsonl
+│       ├── wikievents.ee.train.0.jsonl
+│       ├── wikievents.ee.train.24.jsonl
+│       ├── wikievents.ee.train.42.jsonl
+│       ├── wikievents.ner.dev.jsonl
+│       ├── wikievents.ner.test.jsonl
+│       ├── wikievents.ner.train.0.jsonl
+│       ├── wikievents.ner.train.24.jsonl
+│       ├── wikievents.ner.train.42.jsonl
+│       ├── wnut17.ner.dev.jsonl
+│       ├── wnut17.ner.test.jsonl
+│       ├── wnut17.ner.train.0.jsonl
+│       ├── wnut17.ner.train.24.jsonl
+│       └── wnut17.ner.train.42.jsonl
+├── docs
+│   ├── assets
+│   │   ├── openai.svg
+│   │   └── user.svg
+│   ├── index.md
+│   └── _layouts
+│       └── default.html
+├── LICENSE
+├── Makefile
+├── model
+│   ├── GoLLIE+-8b_Llama3_BS128_R128
+│   │   ├── adapter_config.json
+│   │   ├── adapter_model.safetensors
+│   │   ├── checkpoint-1291
+│   │   │   ├── adapter_config.json
+│   │   │   ├── adapter_model.safetensors
+│   │   │   ├── global_step1291
+│   │   │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_4_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_5_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_6_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_7_mp_rank_00_optim_states.pt
+│   │   │   │   └── mp_rank_00_model_states.pt
+│   │   │   ├── latest
+│   │   │   ├── predictions
+│   │   │   │   ├── ace05.eae.eval_file.json
+│   │   │   │   ├── ace05.eae.predictions.jsonl
+│   │   │   │   ├── ace05.ee.eval_file.json
+│   │   │   │   ├── ace05.ee.predictions.jsonl
+│   │   │   │   ├── ace05.ner.eval_file.json
+│   │   │   │   ├── ace05.ner.predictions.jsonl
+│   │   │   │   ├── ace05.rc.eval_file.json
+│   │   │   │   ├── ace05.rc.predictions.jsonl
+│   │   │   │   ├── ace05.re.eval_file.json
+│   │   │   │   ├── ace05.re.predictions.jsonl
+│   │   │   │   ├── ace05.ver.eval_file.json
+│   │   │   │   ├── ace05.ver.predictions.jsonl
+│   │   │   │   ├── bc5cdr.ner.eval_file.json
+│   │   │   │   ├── bc5cdr.ner.predictions.jsonl
+│   │   │   │   ├── broadtwitter.ner.eval_file.json
+│   │   │   │   ├── broadtwitter.ner.predictions.jsonl
+│   │   │   │   ├── casie.eae.eval_file.json
+│   │   │   │   ├── casie.eae.predictions.jsonl
+│   │   │   │   ├── casie.ee.eval_file.json
+│   │   │   │   ├── casie.ee.predictions.jsonl
+│   │   │   │   ├── conll03.ner.eval_file.json
+│   │   │   │   ├── conll03.ner.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_ai.eval_file.json
+│   │   │   │   ├── crossner.crossner_ai.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_literature.eval_file.json
+│   │   │   │   ├── crossner.crossner_literature.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_music.eval_file.json
+│   │   │   │   ├── crossner.crossner_music.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_natural_science.eval_file.json
+│   │   │   │   ├── crossner.crossner_natural_science.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_politics.eval_file.json
+│   │   │   │   ├── crossner.crossner_politics.predictions.jsonl
+│   │   │   │   ├── diann.ner.eval_file.json
+│   │   │   │   ├── diann.ner.predictions.jsonl
+│   │   │   │   ├── e3c.ner.eval_file.json
+│   │   │   │   ├── e3c.ner.predictions.jsonl
+│   │   │   │   ├── fabner.ner.eval_file.json
+│   │   │   │   ├── fabner.ner.predictions.jsonl
+│   │   │   │   ├── harveyner.ner.eval_file.json
+│   │   │   │   ├── harveyner.ner.predictions.jsonl
+│   │   │   │   ├── mitmovie.ner.eval_file.json
+│   │   │   │   ├── mitmovie.ner.predictions.jsonl
+│   │   │   │   ├── mitrestaurant.ner.eval_file.json
+│   │   │   │   ├── mitrestaurant.ner.predictions.jsonl
+│   │   │   │   ├── ncbidisease.ner.eval_file.json
+│   │   │   │   ├── ncbidisease.ner.predictions.jsonl
+│   │   │   │   ├── rams.eae.eval_file.json
+│   │   │   │   ├── rams.eae.predictions.jsonl
+│   │   │   │   ├── tacred.sf.eval_file.json
+│   │   │   │   ├── tacred.sf.predictions.jsonl
+│   │   │   │   ├── wikievents.eae.eval_file.json
+│   │   │   │   ├── wikievents.eae.predictions.jsonl
+│   │   │   │   ├── wikievents.ee.eval_file.json
+│   │   │   │   ├── wikievents.ee.predictions.jsonl
+│   │   │   │   ├── wikievents.ner.eval_file.json
+│   │   │   │   ├── wikievents.ner.predictions.jsonl
+│   │   │   │   ├── wnut17.ner.eval_file.json
+│   │   │   │   └── wnut17.ner.predictions.jsonl
+│   │   │   ├── README.md
+│   │   │   ├── rng_state_0.pth
+│   │   │   ├── rng_state_1.pth
+│   │   │   ├── rng_state_2.pth
+│   │   │   ├── rng_state_3.pth
+│   │   │   ├── rng_state_4.pth
+│   │   │   ├── rng_state_5.pth
+│   │   │   ├── rng_state_6.pth
+│   │   │   ├── rng_state_7.pth
+│   │   │   ├── scheduler.pt
+│   │   │   ├── special_tokens_map.json
+│   │   │   ├── task_scores.json
+│   │   │   ├── task_scores_summary.json
+│   │   │   ├── tokenizer_config.json
+│   │   │   ├── tokenizer.json
+│   │   │   ├── trainer_state.json
+│   │   │   ├── training_args.bin
+│   │   │   └── zero_to_fp32.py
+│   │   ├── checkpoint-2582
+│   │   │   ├── adapter_config.json
+│   │   │   ├── adapter_model.safetensors
+│   │   │   ├── global_step2582
+│   │   │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_4_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_5_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_6_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_7_mp_rank_00_optim_states.pt
+│   │   │   │   └── mp_rank_00_model_states.pt
+│   │   │   ├── latest
+│   │   │   ├── predictions
+│   │   │   │   ├── ace05.eae.eval_file.json
+│   │   │   │   ├── ace05.eae.predictions.jsonl
+│   │   │   │   ├── ace05.ee.eval_file.json
+│   │   │   │   ├── ace05.ee.predictions.jsonl
+│   │   │   │   ├── ace05.ner.eval_file.json
+│   │   │   │   ├── ace05.ner.predictions.jsonl
+│   │   │   │   ├── ace05.rc.eval_file.json
+│   │   │   │   ├── ace05.rc.predictions.jsonl
+│   │   │   │   ├── ace05.re.eval_file.json
+│   │   │   │   ├── ace05.re.predictions.jsonl
+│   │   │   │   ├── ace05.ver.eval_file.json
+│   │   │   │   ├── ace05.ver.predictions.jsonl
+│   │   │   │   ├── bc5cdr.ner.eval_file.json
+│   │   │   │   ├── bc5cdr.ner.predictions.jsonl
+│   │   │   │   ├── broadtwitter.ner.eval_file.json
+│   │   │   │   ├── broadtwitter.ner.predictions.jsonl
+│   │   │   │   ├── casie.eae.eval_file.json
+│   │   │   │   ├── casie.eae.predictions.jsonl
+│   │   │   │   ├── casie.ee.eval_file.json
+│   │   │   │   ├── casie.ee.predictions.jsonl
+│   │   │   │   ├── conll03.ner.eval_file.json
+│   │   │   │   ├── conll03.ner.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_ai.eval_file.json
+│   │   │   │   ├── crossner.crossner_ai.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_literature.eval_file.json
+│   │   │   │   ├── crossner.crossner_literature.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_music.eval_file.json
+│   │   │   │   ├── crossner.crossner_music.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_natural_science.eval_file.json
+│   │   │   │   ├── crossner.crossner_natural_science.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_politics.eval_file.json
+│   │   │   │   ├── crossner.crossner_politics.predictions.jsonl
+│   │   │   │   ├── diann.ner.eval_file.json
+│   │   │   │   ├── diann.ner.predictions.jsonl
+│   │   │   │   ├── e3c.ner.eval_file.json
+│   │   │   │   ├── e3c.ner.predictions.jsonl
+│   │   │   │   ├── fabner.ner.eval_file.json
+│   │   │   │   ├── fabner.ner.predictions.jsonl
+│   │   │   │   ├── harveyner.ner.eval_file.json
+│   │   │   │   ├── harveyner.ner.predictions.jsonl
+│   │   │   │   ├── mitmovie.ner.eval_file.json
+│   │   │   │   ├── mitmovie.ner.predictions.jsonl
+│   │   │   │   ├── mitrestaurant.ner.eval_file.json
+│   │   │   │   ├── mitrestaurant.ner.predictions.jsonl
+│   │   │   │   ├── ncbidisease.ner.eval_file.json
+│   │   │   │   ├── ncbidisease.ner.predictions.jsonl
+│   │   │   │   ├── rams.eae.eval_file.json
+│   │   │   │   ├── rams.eae.predictions.jsonl
+│   │   │   │   ├── tacred.sf.eval_file.json
+│   │   │   │   ├── tacred.sf.predictions.jsonl
+│   │   │   │   ├── wikievents.eae.eval_file.json
+│   │   │   │   ├── wikievents.eae.predictions.jsonl
+│   │   │   │   ├── wikievents.ee.eval_file.json
+│   │   │   │   ├── wikievents.ee.predictions.jsonl
+│   │   │   │   ├── wikievents.ner.eval_file.json
+│   │   │   │   ├── wikievents.ner.predictions.jsonl
+│   │   │   │   ├── wnut17.ner.eval_file.json
+│   │   │   │   └── wnut17.ner.predictions.jsonl
+│   │   │   ├── README.md
+│   │   │   ├── rng_state_0.pth
+│   │   │   ├── rng_state_1.pth
+│   │   │   ├── rng_state_2.pth
+│   │   │   ├── rng_state_3.pth
+│   │   │   ├── rng_state_4.pth
+│   │   │   ├── rng_state_5.pth
+│   │   │   ├── rng_state_6.pth
+│   │   │   ├── rng_state_7.pth
+│   │   │   ├── scheduler.pt
+│   │   │   ├── special_tokens_map.json
+│   │   │   ├── task_scores.json
+│   │   │   ├── task_scores_summary.json
+│   │   │   ├── tokenizer_config.json
+│   │   │   ├── tokenizer.json
+│   │   │   ├── trainer_state.json
+│   │   │   ├── training_args.bin
+│   │   │   └── zero_to_fp32.py
+│   │   ├── checkpoint-3873
+│   │   │   ├── adapter_config.json
+│   │   │   ├── adapter_model.safetensors
+│   │   │   ├── global_step3873
+│   │   │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_4_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_5_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_6_mp_rank_00_optim_states.pt
+│   │   │   │   ├── bf16_zero_pp_rank_7_mp_rank_00_optim_states.pt
+│   │   │   │   └── mp_rank_00_model_states.pt
+│   │   │   ├── latest
+│   │   │   ├── predictions
+│   │   │   │   ├── ace05.eae.eval_file.json
+│   │   │   │   ├── ace05.eae.predictions.jsonl
+│   │   │   │   ├── ace05.ee.eval_file.json
+│   │   │   │   ├── ace05.ee.predictions.jsonl
+│   │   │   │   ├── ace05.ner.eval_file.json
+│   │   │   │   ├── ace05.ner.predictions.jsonl
+│   │   │   │   ├── ace05.rc.eval_file.json
+│   │   │   │   ├── ace05.rc.predictions.jsonl
+│   │   │   │   ├── ace05.re.eval_file.json
+│   │   │   │   ├── ace05.re.predictions.jsonl
+│   │   │   │   ├── ace05.ver.eval_file.json
+│   │   │   │   ├── ace05.ver.predictions.jsonl
+│   │   │   │   ├── bc5cdr.ner.eval_file.json
+│   │   │   │   ├── bc5cdr.ner.predictions.jsonl
+│   │   │   │   ├── broadtwitter.ner.eval_file.json
+│   │   │   │   ├── broadtwitter.ner.predictions.jsonl
+│   │   │   │   ├── casie.eae.eval_file.json
+│   │   │   │   ├── casie.eae.predictions.jsonl
+│   │   │   │   ├── casie.ee.eval_file.json
+│   │   │   │   ├── casie.ee.predictions.jsonl
+│   │   │   │   ├── conll03.ner.eval_file.json
+│   │   │   │   ├── conll03.ner.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_ai.eval_file.json
+│   │   │   │   ├── crossner.crossner_ai.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_literature.eval_file.json
+│   │   │   │   ├── crossner.crossner_literature.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_music.eval_file.json
+│   │   │   │   ├── crossner.crossner_music.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_natural_science.eval_file.json
+│   │   │   │   ├── crossner.crossner_natural_science.predictions.jsonl
+│   │   │   │   ├── crossner.crossner_politics.eval_file.json
+│   │   │   │   ├── crossner.crossner_politics.predictions.jsonl
+│   │   │   │   ├── diann.ner.eval_file.json
+│   │   │   │   ├── diann.ner.predictions.jsonl
+│   │   │   │   ├── e3c.ner.eval_file.json
+│   │   │   │   ├── e3c.ner.predictions.jsonl
+│   │   │   │   ├── fabner.ner.eval_file.json
+│   │   │   │   ├── fabner.ner.predictions.jsonl
+│   │   │   │   ├── harveyner.ner.eval_file.json
+│   │   │   │   ├── harveyner.ner.predictions.jsonl
+│   │   │   │   ├── mitmovie.ner.eval_file.json
+│   │   │   │   ├── mitmovie.ner.predictions.jsonl
+│   │   │   │   ├── mitrestaurant.ner.eval_file.json
+│   │   │   │   ├── mitrestaurant.ner.predictions.jsonl
+│   │   │   │   ├── ncbidisease.ner.eval_file.json
+│   │   │   │   ├── ncbidisease.ner.predictions.jsonl
+│   │   │   │   ├── rams.eae.eval_file.json
+│   │   │   │   ├── rams.eae.predictions.jsonl
+│   │   │   │   ├── tacred.sf.eval_file.json
+│   │   │   │   ├── tacred.sf.predictions.jsonl
+│   │   │   │   ├── wikievents.eae.eval_file.json
+│   │   │   │   ├── wikievents.eae.predictions.jsonl
+│   │   │   │   ├── wikievents.ee.eval_file.json
+│   │   │   │   ├── wikievents.ee.predictions.jsonl
+│   │   │   │   ├── wikievents.ner.eval_file.json
+│   │   │   │   ├── wikievents.ner.predictions.jsonl
+│   │   │   │   ├── wnut17.ner.eval_file.json
+│   │   │   │   └── wnut17.ner.predictions.jsonl
+│   │   │   ├── README.md
+│   │   │   ├── rng_state_0.pth
+│   │   │   ├── rng_state_1.pth
+│   │   │   ├── rng_state_2.pth
+│   │   │   ├── rng_state_3.pth
+│   │   │   ├── rng_state_4.pth
+│   │   │   ├── rng_state_5.pth
+│   │   │   ├── rng_state_6.pth
+│   │   │   ├── rng_state_7.pth
+│   │   │   ├── scheduler.pt
+│   │   │   ├── special_tokens_map.json
+│   │   │   ├── task_scores.json
+│   │   │   ├── task_scores_summary.json
+│   │   │   ├── tokenizer_config.json
+│   │   │   ├── tokenizer.json
+│   │   │   ├── trainer_state.json
+│   │   │   ├── training_args.bin
+│   │   │   └── zero_to_fp32.py
+│   │   ├── README.md
+│   │   ├── special_tokens_map.json
+│   │   ├── tokenizer_config.json
+│   │   ├── tokenizer.json
+│   │   └── training_args.bin
+│   └── GoLLIE+-8b_Llama3_BS128_R128_pretrain
+│       ├── adapter_config.json
+│       ├── adapter_model.safetensors
+│       ├── checkpoint-1011
+│       │   ├── adapter_config.json
+│       │   ├── adapter_model.safetensors
+│       │   ├── global_step1011
+│       │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_4_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_5_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_6_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_7_mp_rank_00_optim_states.pt
+│       │   │   └── mp_rank_00_model_states.pt
+│       │   ├── latest
+│       │   ├── predictions
+│       │   │   └── gollie_pretrain_data.ie.predictions.jsonl
+│       │   ├── README.md
+│       │   ├── rng_state_0.pth
+│       │   ├── rng_state_1.pth
+│       │   ├── rng_state_2.pth
+│       │   ├── rng_state_3.pth
+│       │   ├── rng_state_4.pth
+│       │   ├── rng_state_5.pth
+│       │   ├── rng_state_6.pth
+│       │   ├── rng_state_7.pth
+│       │   ├── scheduler.pt
+│       │   ├── special_tokens_map.json
+│       │   ├── tokenizer_config.json
+│       │   ├── tokenizer.json
+│       │   ├── trainer_state.json
+│       │   ├── training_args.bin
+│       │   └── zero_to_fp32.py
+│       ├── checkpoint-1014
+│       │   ├── adapter_config.json
+│       │   ├── adapter_model.safetensors
+│       │   ├── global_step1014
+│       │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│       │   │   └── mp_rank_00_model_states.pt
+│       │   ├── latest
+│       │   ├── README.md
+│       │   ├── rng_state_0.pth
+│       │   ├── rng_state_1.pth
+│       │   ├── scheduler.pt
+│       │   ├── special_tokens_map.json
+│       │   ├── tokenizer_config.json
+│       │   ├── tokenizer.json
+│       │   ├── trainer_state.json
+│       │   ├── training_args.bin
+│       │   └── zero_to_fp32.py
+│       ├── checkpoint-675
+│       │   ├── adapter_config.json
+│       │   ├── adapter_model.safetensors
+│       │   ├── global_step675
+│       │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_2_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_3_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_4_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_5_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_6_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_7_mp_rank_00_optim_states.pt
+│       │   │   └── mp_rank_00_model_states.pt
+│       │   ├── latest
+│       │   ├── README.md
+│       │   ├── rng_state_0.pth
+│       │   ├── rng_state_1.pth
+│       │   ├── rng_state_2.pth
+│       │   ├── rng_state_3.pth
+│       │   ├── rng_state_4.pth
+│       │   ├── rng_state_5.pth
+│       │   ├── rng_state_6.pth
+│       │   ├── rng_state_7.pth
+│       │   ├── scheduler.pt
+│       │   ├── special_tokens_map.json
+│       │   ├── tokenizer_config.json
+│       │   ├── tokenizer.json
+│       │   ├── trainer_state.json
+│       │   ├── training_args.bin
+│       │   └── zero_to_fp32.py
+│       ├── checkpoint-676
+│       │   ├── adapter_config.json
+│       │   ├── adapter_model.safetensors
+│       │   ├── global_step676
+│       │   │   ├── bf16_zero_pp_rank_0_mp_rank_00_optim_states.pt
+│       │   │   ├── bf16_zero_pp_rank_1_mp_rank_00_optim_states.pt
+│       │   │   └── mp_rank_00_model_states.pt
+│       │   ├── latest
+│       │   ├── README.md
+│       │   ├── rng_state_0.pth
+│       │   ├── rng_state_1.pth
+│       │   ├── scheduler.pt
+│       │   ├── special_tokens_map.json
+│       │   ├── tokenizer_config.json
+│       │   ├── tokenizer.json
+│       │   ├── trainer_state.json
+│       │   ├── training_args.bin
+│       │   └── zero_to_fp32.py
+│       ├── README.md
+│       ├── special_tokens_map.json
+│       ├── tokenizer_config.json
+│       ├── tokenizer.json
+│       └── training_args.bin
+├── notebooks
+│   ├── Create Custom Task.ipynb
+│   ├── Event Extraction.ipynb
+│   ├── Named Entity Recognition.ipynb
+│   └── Relation Extraction.ipynb
+├── out
+│   ├── err.17811
+│   ├── err.9553
+│   ├── GoLLIE-8B-Llama3.err.txt
+│   ├── GoLLIE-8B-Llama3.out.txt
+│   ├── GoLLIE-8B-Llama3_pretraining2.err.txt
+│   ├── GoLLIE-8B-Llama3_pretraining2.out.txt
+│   ├── GoLLIE-8B-Llama3_pretraining3.err.txt
+│   ├── GoLLIE-8B-Llama3_pretraining3.out.txt
+│   ├── GoLLIE-8B-Llama3_pretraining.err.txt
+│   ├── GoLLIE-8B-Llama3_pretraining.out.txt
+│   ├── out.17811
+│   └── out.9553
+├── pyproject.toml
+├── README.md
+├── slurm-9551.out
+├── slurm-9552.out
+├── src
+│   ├── config.py
+│   ├── dataset
+│   │   ├── dataset.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── dataset.cpython-39.pyc
+│   │       └── __init__.cpython-39.pyc
+│   ├── evaluate.py
+│   ├── generate_data.py
+│   ├── __init__.py
+│   ├── model
+│   │   ├── __init__.py
+│   │   ├── load_model.py
+│   │   ├── model_utils.py
+│   │   └── __pycache__
+│   │       ├── __init__.cpython-39.pyc
+│   │       ├── load_model.cpython-39.pyc
+│   │       └── model_utils.cpython-39.pyc
+│   ├── paraphrase
+│   │   ├── config.py
+│   │   ├── dataset.py
+│   │   ├── __init__.py
+│   │   ├── run_paraphrasing.py
+│   │   └── utils.py
+│   ├── __pycache__
+│   │   ├── config.cpython-39.pyc
+│   │   ├── evaluate.cpython-39.pyc
+│   │   ├── generate_data.cpython-39.pyc
+│   │   ├── __init__.cpython-39.pyc
+│   │   └── trainer.cpython-39.pyc
+│   ├── run.py
+│   ├── scripts
+│   │   ├── compare_class_scores.py
+│   │   ├── get_examples.py
+│   │   ├── get_result_table.py
+│   │   ├── get_result_table_seen_unseen.py
+│   │   ├── __init__.py
+│   │   ├── plot_f1_curves.py
+│   │   ├── plot_results.py
+│   │   ├── test_context_batch_size.py
+│   │   └── visualize_example.py
+│   ├── tasks
+│   │   ├── ace
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── preprocess_ace.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── bc5cdr
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── broadtwitter
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── casie
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── preprocess_casie.py
+│   │   │   ├── prompts_eae.py
+│   │   │   ├── prompts_ed.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts_eae.cpython-39.pyc
+│   │   │   │   ├── prompts_ed.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── conll03
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── crossner
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts_ai.py
+│   │   │   ├── prompts_literature.py
+│   │   │   ├── prompts_music.py
+│   │   │   ├── prompts_natural_science.py
+│   │   │   ├── prompts_politics.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts_ai.cpython-39.pyc
+│   │   │   │   ├── prompts_literature.cpython-39.pyc
+│   │   │   │   ├── prompts_music.cpython-39.pyc
+│   │   │   │   ├── prompts_natural_science.cpython-39.pyc
+│   │   │   │   ├── prompts_politics.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── diann
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── e3c
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── fabner
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── fineweb-edu_pretrain
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── harveyner
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── __init__.py
+│   │   ├── label_encoding.py
+│   │   ├── mitmovie
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── mitrestaurant
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── multiconer2
+│   │   │   └── prompts.py
+│   │   ├── multinerd
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── ncbidisease
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── ner_tasks.csv
+│   │   ├── ontonotes
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-39.pyc
+│   │   │   ├── label_encoding.cpython-39.pyc
+│   │   │   ├── utils_data.cpython-39.pyc
+│   │   │   ├── utils_scorer.cpython-39.pyc
+│   │   │   └── utils_typing.cpython-39.pyc
+│   │   ├── rams
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── tacred
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   ├── utils_data.py
+│   │   ├── utils_scorer.py
+│   │   ├── utils_typing.py
+│   │   ├── wikievents
+│   │   │   ├── data_loader.py
+│   │   │   ├── guidelines_gold.py
+│   │   │   ├── guidelines.py
+│   │   │   ├── __init__.py
+│   │   │   ├── preprocess_wikievents.py
+│   │   │   ├── prompts.py
+│   │   │   ├── __pycache__
+│   │   │   │   ├── data_loader.cpython-39.pyc
+│   │   │   │   ├── guidelines.cpython-39.pyc
+│   │   │   │   ├── guidelines_gold.cpython-39.pyc
+│   │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   │   ├── prompts.cpython-39.pyc
+│   │   │   │   └── scorer.cpython-39.pyc
+│   │   │   └── scorer.py
+│   │   └── wnut
+│   │       ├── data_loader.py
+│   │       ├── guidelines_gold.py
+│   │       ├── guidelines.py
+│   │       ├── __init__.py
+│   │       ├── prompts.py
+│   │       ├── __pycache__
+│   │       │   ├── data_loader.cpython-39.pyc
+│   │       │   ├── guidelines.cpython-39.pyc
+│   │       │   ├── guidelines_gold.cpython-39.pyc
+│   │       │   ├── __init__.cpython-39.pyc
+│   │       │   ├── prompts.cpython-39.pyc
+│   │       │   └── scorer.cpython-39.pyc
+│   │       └── scorer.py
+│   ├── tests
+│   │   ├── __init__.py
+│   │   ├── test_dataloaders.py
+│   │   ├── test_dataset.py
+│   │   ├── test_evaluate.py
+│   │   ├── test_label_encoding.py
+│   │   ├── test_prompts.py
+│   │   ├── test_scorers.py
+│   │   └── test_trainer.py
+│   └── trainer.py
+├── templates
+│   ├── prompt_ace_eae.txt
+│   ├── prompt_ace_rc.txt
+│   ├── prompt_ace_re.txt
+│   ├── prompt_eae.txt
+│   ├── prompt_tacred.txt
+│   └── prompt.txt
+├── Trainable
+├── tree.txt
+└── wandb
+    ├── debug-cli.neildlf.log
+    ├── debug-internal.log -> run-20240902_112227-qngf7yil/logs/debug-internal.log
+    ├── debug.log -> run-20240902_112227-qngf7yil/logs/debug.log
+    ├── latest-run -> run-20240902_112227-qngf7yil
+    ├── run-20240808_084233-wu4ky106
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-wu4ky106.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240808_091453-texah2p7
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-texah2p7.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240808_100055-4112gtff
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-4112gtff.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240808_102131-pz9mn9vj
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-pz9mn9vj.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240808_174420-f2jttx6m
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-f2jttx6m.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_101332-9shyjtt0
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   └── wandb-metadata.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-9shyjtt0.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_101625-srsem35n
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   └── wandb-metadata.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-srsem35n.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_112950-np7pdc13
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-np7pdc13.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_132141-25c2avrg
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-25c2avrg.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_175857-ja37w9nw
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-ja37w9nw.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_193249-9ekpwxhp
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-9ekpwxhp.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_195455-t667acby
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-t667acby.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_195814-t37nu1ov
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-t37nu1ov.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_201326-juvu19xf
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-juvu19xf.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240829_224959-fpzo07sy
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-fpzo07sy.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240830_113029-ha353wez
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-ha353wez.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240901_150435-hlwoqevi
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-hlwoqevi.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240902_013346-j8955te9
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-j8955te9.wandb
+    │   └── tmp
+    │       └── code
+    ├── run-20240902_025524-oydzhnsv
+    │   ├── files
+    │   │   ├── config.yaml
+    │   │   ├── output.log
+    │   │   ├── requirements.txt
+    │   │   ├── wandb-metadata.json
+    │   │   └── wandb-summary.json
+    │   ├── logs
+    │   │   ├── debug-internal.log
+    │   │   └── debug.log
+    │   ├── run-oydzhnsv.wandb
+    │   └── tmp
+    │       └── code
+    └── run-20240902_112227-qngf7yil
+        ├── files
+        │   ├── config.yaml
+        │   ├── output.log
+        │   ├── requirements.txt
+        │   ├── wandb-metadata.json
+        │   └── wandb-summary.json
+        ├── logs
+        │   ├── debug-internal.log
+        │   └── debug.log
+        ├── run-qngf7yil.wandb
+        └── tmp
+            └── code
+
+198 directories, 1307 files

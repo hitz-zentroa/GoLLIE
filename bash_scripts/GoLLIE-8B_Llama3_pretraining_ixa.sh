@@ -6,8 +6,8 @@
 #SBATCH --time=3-00:00:00
 #SBATCH --gres=gpu:8
 #SBATCH --mem=1000G
-#SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining3.out.txt
-#SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining3.err.txt
+#SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining.out.txt
+#SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining.err.txt
 
 #module load CUDA/12.1
 #module load Python

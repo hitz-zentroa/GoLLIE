@@ -510,3 +510,925 @@ Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/use
 {'loss': 0.2395, 'grad_norm': 0.11929122358560562, 'learning_rate': 5.798969072164948e-05, 'epoch': 0.06}
 {'loss': 0.1871, 'grad_norm': 0.20400072634220123, 'learning_rate': 7.731958762886596e-05, 'epoch': 0.08}
 {'loss': 0.1605, 'grad_norm': 0.18180692195892334, 'learning_rate': 9.664948453608247e-05, 'epoch': 0.1}
+{'loss': 0.1404, 'grad_norm': 0.15267711877822876, 'learning_rate': 0.00011597938144329897, 'epoch': 0.12}
+{'loss': 0.1236, 'grad_norm': 0.1611846685409546, 'learning_rate': 0.00013530927835051545, 'epoch': 0.14}
+{'loss': 0.1213, 'grad_norm': 0.16404183208942413, 'learning_rate': 0.00015463917525773192, 'epoch': 0.15}
+{'loss': 0.1153, 'grad_norm': 0.14045970141887665, 'learning_rate': 0.00017396907216494844, 'epoch': 0.17}
+{'loss': 0.1125, 'grad_norm': 0.10749787837266922, 'learning_rate': 0.00019329896907216494, 'epoch': 0.19}
+{'loss': 0.111, 'grad_norm': 0.12748678028583527, 'learning_rate': 0.00021262886597938144, 'epoch': 0.21}
+{'loss': 0.1055, 'grad_norm': 0.12465622276067734, 'learning_rate': 0.00023195876288659793, 'epoch': 0.23}
+{'loss': 0.1065, 'grad_norm': 0.14463293552398682, 'learning_rate': 0.00025128865979381443, 'epoch': 0.25}
+{'loss': 0.0991, 'grad_norm': 0.15452063083648682, 'learning_rate': 0.0002706185567010309, 'epoch': 0.27}
+{'loss': 0.1003, 'grad_norm': 0.10459338128566742, 'learning_rate': 0.0002899484536082474, 'epoch': 0.29}
+{'loss': 0.1008, 'grad_norm': 0.11850232630968094, 'learning_rate': 0.0002999912236547205, 'epoch': 0.31}
+{'loss': 0.0972, 'grad_norm': 0.10766512155532837, 'learning_rate': 0.0002999165706943416, 'epoch': 0.33}
+{'loss': 0.0899, 'grad_norm': 0.08209193497896194, 'learning_rate': 0.0002997657790342494, 'epoch': 0.35}
+{'loss': 0.0926, 'grad_norm': 0.08168166130781174, 'learning_rate': 0.00029953892525757863, 'epoch': 0.37}
+{'loss': 0.0898, 'grad_norm': 0.08192350715398788, 'learning_rate': 0.0002992361245774208, 'epoch': 0.39}
+{'loss': 0.0862, 'grad_norm': 0.08273524791002274, 'learning_rate': 0.0002988575307783106, 'epoch': 0.41}
+{'loss': 0.0866, 'grad_norm': 0.09046410024166107, 'learning_rate': 0.0002984033361381226, 'epoch': 0.43}
+{'loss': 0.0899, 'grad_norm': 0.0788380354642868, 'learning_rate': 0.0002978737713304185, 'epoch': 0.45}
+{'loss': 0.0845, 'grad_norm': 0.09627729654312134, 'learning_rate': 0.00029726910530729404, 'epoch': 0.46}
+{'loss': 0.0831, 'grad_norm': 0.07649259269237518, 'learning_rate': 0.00029658964516278527, 'epoch': 0.48}
+{'loss': 0.0884, 'grad_norm': 0.07003534585237503, 'learning_rate': 0.00029583573597690343, 'epoch': 0.5}
+{'loss': 0.0865, 'grad_norm': 0.1042354553937912, 'learning_rate': 0.00029500776064037807, 'epoch': 0.52}
+{'loss': 0.0848, 'grad_norm': 0.08139906078577042, 'learning_rate': 0.0002941061396601967, 'epoch': 0.54}
+{'loss': 0.0795, 'grad_norm': 0.07575609534978867, 'learning_rate': 0.00029313133094604024, 'epoch': 0.56}
+{'loss': 0.0798, 'grad_norm': 0.08432740718126297, 'learning_rate': 0.000292083829577723, 'epoch': 0.58}
+{'loss': 0.0816, 'grad_norm': 0.08261873573064804, 'learning_rate': 0.0002909641675537542, 'epoch': 0.6}
+{'loss': 0.0796, 'grad_norm': 0.07805363088846207, 'learning_rate': 0.00028977291352115015, 'epoch': 0.62}
+{'loss': 0.0762, 'grad_norm': 0.06763695180416107, 'learning_rate': 0.0002885106724866334, 'epoch': 0.64}
+{'loss': 0.0781, 'grad_norm': 0.06790425628423691, 'learning_rate': 0.0002871780855093653, 'epoch': 0.66}
+{'loss': 0.0787, 'grad_norm': 0.06523320078849792, 'learning_rate': 0.0002857758293753691, 'epoch': 0.68}
+{'loss': 0.0764, 'grad_norm': 0.06883236765861511, 'learning_rate': 0.00028430461625380805, 'epoch': 0.7}
+{'loss': 0.082, 'grad_norm': 0.05927606672048569, 'learning_rate': 0.0002827651933352933, 'epoch': 0.72}
+{'loss': 0.0797, 'grad_norm': 0.06705248355865479, 'learning_rate': 0.00028115834245240535, 'epoch': 0.74}
+{'loss': 0.0726, 'grad_norm': 0.08171944320201874, 'learning_rate': 0.00027948487968262176, 'epoch': 0.76}
+{'loss': 0.0794, 'grad_norm': 0.06398344039916992, 'learning_rate': 0.00027774565493385273, 'epoch': 0.77}
+{'loss': 0.0787, 'grad_norm': 0.0879531055688858, 'learning_rate': 0.0002759415515127953, 'epoch': 0.79}
+{'loss': 0.0781, 'grad_norm': 0.07334811240434647, 'learning_rate': 0.0002740734856763248, 'epoch': 0.81}
+{'loss': 0.0738, 'grad_norm': 0.0681176409125328, 'learning_rate': 0.00027214240616615205, 'epoch': 0.83}
+{'loss': 0.08, 'grad_norm': 0.13123208284378052, 'learning_rate': 0.00027014929372698237, 'epoch': 0.85}
+{'loss': 0.071, 'grad_norm': 0.05374883487820625, 'learning_rate': 0.000268095160608421, 'epoch': 0.87}
+{'loss': 0.0739, 'grad_norm': 0.06851477175951004, 'learning_rate': 0.00026598105005087803, 'epoch': 0.89}
+{'loss': 0.0739, 'grad_norm': 0.06858811527490616, 'learning_rate': 0.00026380803575573386, 'epoch': 0.91}
+{'loss': 0.0757, 'grad_norm': 0.08237212151288986, 'learning_rate': 0.0002615772213400344, 'epoch': 0.93}
+{'loss': 0.0712, 'grad_norm': 0.07996875047683716, 'learning_rate': 0.00025928973977599296, 'epoch': 0.95}
+{'loss': 0.0738, 'grad_norm': 0.055949866771698, 'learning_rate': 0.00025694675281558345, 'epoch': 0.97}
+{'loss': 0.0718, 'grad_norm': 0.06768012046813965, 'learning_rate': 0.0002545494504005165, 'epoch': 0.99}
+{'eval_ace05.ee.dev_loss': 0.13169534504413605, 'eval_ace05.ee.dev_runtime': 11.2977, 'eval_ace05.ee.dev_samples_per_second': 79.751, 'eval_ace05.ee.dev_steps_per_second': 1.328, 'epoch': 1.0}
+{'eval_conll03.ner.dev_loss': 0.02164486050605774, 'eval_conll03.ner.dev_runtime': 33.393, 'eval_conll03.ner.dev_samples_per_second': 97.326, 'eval_conll03.ner.dev_steps_per_second': 1.527, 'epoch': 1.0}
+{'loss': 0.0719, 'grad_norm': 0.09145312011241913, 'learning_rate': 0.0002520990500578998, 'epoch': 1.01}
+{'loss': 0.0604, 'grad_norm': 0.054633621126413345, 'learning_rate': 0.00024959679628188774, 'epoch': 1.03}
+{'loss': 0.0613, 'grad_norm': 0.06467334926128387, 'learning_rate': 0.0002470439599016352, 'epoch': 1.05}
+{'loss': 0.0624, 'grad_norm': 0.06209808215498924, 'learning_rate': 0.0002444418374358771, 'epoch': 1.07}
+{'loss': 0.0607, 'grad_norm': 0.06917113810777664, 'learning_rate': 0.00024179175043446038, 'epoch': 1.08}
+{'loss': 0.0593, 'grad_norm': 0.04699544608592987, 'learning_rate': 0.00023909504480716317, 'epoch': 1.1}
+{'loss': 0.0612, 'grad_norm': 0.05402149260044098, 'learning_rate': 0.0002363530901401427, 'epoch': 1.12}
+{'loss': 0.0593, 'grad_norm': 0.06894132494926453, 'learning_rate': 0.0002335672790003585, 'epoch': 1.14}
+{'loss': 0.0611, 'grad_norm': 0.08166196197271347, 'learning_rate': 0.00023073902622832378, 'epoch': 1.16}
+{'loss': 0.0553, 'grad_norm': 0.07649660855531693, 'learning_rate': 0.0002278697682195453, 'epoch': 1.18}
+{'loss': 0.0581, 'grad_norm': 0.04263295233249664, 'learning_rate': 0.0002249609621950154, 'epoch': 1.2}
+{'loss': 0.0566, 'grad_norm': 0.044580355286598206, 'learning_rate': 0.000222014085461128, 'epoch': 1.22}
+{'loss': 0.0579, 'grad_norm': 0.06073690578341484, 'learning_rate': 0.00021903063465939301, 'epoch': 1.24}
+{'loss': 0.0586, 'grad_norm': 0.09164406359195709, 'learning_rate': 0.0002160121250063315, 'epoch': 1.26}
+{'loss': 0.0625, 'grad_norm': 0.0443270206451416, 'learning_rate': 0.00021296008952393698, 'epoch': 1.28}
+{'loss': 0.0559, 'grad_norm': 0.06991226971149445, 'learning_rate': 0.0002098760782610935, 'epoch': 1.3}
+{'loss': 0.0593, 'grad_norm': 0.05233626440167427, 'learning_rate': 0.00020676165750634654, 'epoch': 1.32}
+{'loss': 0.0541, 'grad_norm': 0.07977217435836792, 'learning_rate': 0.00020361840899242597, 'epoch': 1.34}
+{'loss': 0.0583, 'grad_norm': 0.05192247033119202, 'learning_rate': 0.00020044792909292567, 'epoch': 1.36}
+{'loss': 0.0542, 'grad_norm': 0.05009401962161064, 'learning_rate': 0.00019725182801154676, 'epoch': 1.37}
+{'loss': 0.0568, 'grad_norm': 0.06553598493337631, 'learning_rate': 0.00019403172896431792, 'epoch': 1.39}
+{'loss': 0.0545, 'grad_norm': 0.053841471672058105, 'learning_rate': 0.00019078926735520578, 'epoch': 1.41}
+{'loss': 0.0563, 'grad_norm': 0.05268146097660065, 'learning_rate': 0.00018752608994553678, 'epoch': 1.43}
+{'loss': 0.0571, 'grad_norm': 0.046862710267305374, 'learning_rate': 0.00018424385401764963, 'epoch': 1.45}
+{'loss': 0.0536, 'grad_norm': 0.04967538267374039, 'learning_rate': 0.00018094422653320544, 'epoch': 1.47}
+{'loss': 0.0569, 'grad_norm': 0.05521110072731972, 'learning_rate': 0.0001776288832865812, 'epoch': 1.49}
+{'loss': 0.0573, 'grad_norm': 0.05798276886343956, 'learning_rate': 0.0001742995080537781, 'epoch': 1.51}
+{'loss': 0.0539, 'grad_norm': 0.06220797449350357, 'learning_rate': 0.00017095779173727547, 'epoch': 1.53}
+{'loss': 0.0504, 'grad_norm': 0.0531453974545002, 'learning_rate': 0.0001676054315072658, 'epoch': 1.55}
+{'loss': 0.0512, 'grad_norm': 0.06451866030693054, 'learning_rate': 0.00016424412993970653, 'epoch': 1.57}
+{'loss': 0.0528, 'grad_norm': 0.05527302250266075, 'learning_rate': 0.00016087559415162628, 'epoch': 1.59}
+{'loss': 0.0544, 'grad_norm': 0.04817308485507965, 'learning_rate': 0.00015750153493412477, 'epoch': 1.61}
+{'loss': 0.0538, 'grad_norm': 0.05194847658276558, 'learning_rate': 0.00015412366588350672, 'epoch': 1.63}
+{'loss': 0.0537, 'grad_norm': 0.07374171912670135, 'learning_rate': 0.00015074370253099158, 'epoch': 1.65}
+{'loss': 0.0559, 'grad_norm': 0.05487533286213875, 'learning_rate': 0.00014736336147143955, 'epoch': 1.67}
+{'loss': 0.0539, 'grad_norm': 0.05886731296777725, 'learning_rate': 0.00014398435949153867, 'epoch': 1.68}
+{'loss': 0.0538, 'grad_norm': 0.06661976873874664, 'learning_rate': 0.0001406084126978933, 'epoch': 1.7}
+{'loss': 0.0531, 'grad_norm': 0.04791761562228203, 'learning_rate': 0.00013723723564545873, 'epoch': 1.72}
+{'loss': 0.0531, 'grad_norm': 0.05454852804541588, 'learning_rate': 0.00013387254046676365, 'epoch': 1.74}
+{'loss': 0.0541, 'grad_norm': 0.044252607971429825, 'learning_rate': 0.0001305160360023629, 'epoch': 1.76}
+{'loss': 0.0491, 'grad_norm': 0.06069305166602135, 'learning_rate': 0.00012716942693296205, 'epoch': 1.78}
+{'loss': 0.0517, 'grad_norm': 0.05796108767390251, 'learning_rate': 0.00012383441291365454, 'epoch': 1.8}
+{'loss': 0.0495, 'grad_norm': 0.051343511790037155, 'learning_rate': 0.00012051268771071174, 'epoch': 1.82}
+{'loss': 0.0518, 'grad_norm': 0.05583471804857254, 'learning_rate': 0.00011720593834136328, 'epoch': 1.84}
+{'loss': 0.051, 'grad_norm': 0.09073176980018616, 'learning_rate': 0.00011391584421700504, 'epoch': 1.86}
+{'loss': 0.049, 'grad_norm': 0.06087290868163109, 'learning_rate': 0.00011064407629027016, 'epoch': 1.88}
+{'loss': 0.0505, 'grad_norm': 0.059909332543611526, 'learning_rate': 0.00010739229620639614, 'epoch': 1.9}
+{'loss': 0.0496, 'grad_norm': 0.042261578142642975, 'learning_rate': 0.0001041621554593185, 'epoch': 1.92}
+{'loss': 0.0489, 'grad_norm': 0.04191487282514572, 'learning_rate': 0.00010095529455292038, 'epoch': 1.94}
+{'loss': 0.0515, 'grad_norm': 0.03740788996219635, 'learning_rate': 9.777334216786368e-05, 'epoch': 1.96}
+{'loss': 0.0515, 'grad_norm': 0.07646594196557999, 'learning_rate': 9.461791433442448e-05, 'epoch': 1.98}
+{'loss': 0.0532, 'grad_norm': 0.051580801606178284, 'learning_rate': 9.149061361175398e-05, 'epoch': 1.99}
+{'eval_ace05.ee.dev_loss': 0.11666056513786316, 'eval_ace05.ee.dev_runtime': 11.2921, 'eval_ace05.ee.dev_samples_per_second': 79.791, 'eval_ace05.ee.dev_steps_per_second': 1.328, 'epoch': 2.0}
+{'eval_conll03.ner.dev_loss': 0.017477137967944145, 'eval_conll03.ner.dev_runtime': 33.3936, 'eval_conll03.ner.dev_samples_per_second': 97.324, 'eval_conll03.ner.dev_steps_per_second': 1.527, 'epoch': 2.0}
+{'loss': 0.0434, 'grad_norm': 0.047852370887994766, 'learning_rate': 8.839302827398052e-05, 'epoch': 2.01}
+{'loss': 0.0376, 'grad_norm': 0.04688123241066933, 'learning_rate': 8.532673150356668e-05, 'epoch': 2.03}
+{'loss': 0.0333, 'grad_norm': 0.056039534509181976, 'learning_rate': 8.229328059233117e-05, 'epoch': 2.05}
+{'loss': 0.0378, 'grad_norm': 0.04009358957409859, 'learning_rate': 7.929421615054111e-05, 'epoch': 2.07}
+{'loss': 0.0357, 'grad_norm': 0.052846070379018784, 'learning_rate': 7.63310613244765e-05, 'epoch': 2.09}
+{'loss': 0.0368, 'grad_norm': 0.042781103402376175, 'learning_rate': 7.340532102286398e-05, 'epoch': 2.11}
+{'loss': 0.0342, 'grad_norm': 0.05780976265668869, 'learning_rate': 7.051848115257307e-05, 'epoch': 2.13}
+{'loss': 0.0361, 'grad_norm': 0.05265295132994652, 'learning_rate': 6.767200786396325e-05, 'epoch': 2.15}
+{'loss': 0.0351, 'grad_norm': 0.04643237218260765, 'learning_rate': 6.486734680626432e-05, 'epoch': 2.17}
+{'loss': 0.0343, 'grad_norm': 0.03873565047979355, 'learning_rate': 6.210592239336918e-05, 'epoch': 2.19}
+{'loss': 0.0345, 'grad_norm': 0.04877716302871704, 'learning_rate': 5.9389137080411296e-05, 'epoch': 2.21}
+{'loss': 0.0385, 'grad_norm': 0.04279676824808121, 'learning_rate': 5.671837065149428e-05, 'epoch': 2.23}
+{'loss': 0.0339, 'grad_norm': 0.05783451348543167, 'learning_rate': 5.409497951893599e-05, 'epoch': 2.25}
+{'loss': 0.0354, 'grad_norm': 0.048834241926670074, 'learning_rate': 5.152029603438209e-05, 'epoch': 2.27}
+{'loss': 0.0337, 'grad_norm': 0.04816632345318794, 'learning_rate': 4.899562781213952e-05, 'epoch': 2.29}
+{'loss': 0.0364, 'grad_norm': 0.0478234738111496, 'learning_rate': 4.6522257065073444e-05, 'epoch': 2.3}
+{'loss': 0.0346, 'grad_norm': 0.0596478134393692, 'learning_rate': 4.410143995340498e-05, 'epoch': 2.32}
+{'loss': 0.0328, 'grad_norm': 0.03205809369683266, 'learning_rate': 4.1734405946740264e-05, 'epoch': 2.34}
+{'loss': 0.0339, 'grad_norm': 0.056333985179662704, 'learning_rate': 3.942235719965514e-05, 'epoch': 2.36}
+{'loss': 0.0343, 'grad_norm': 0.05327175557613373, 'learning_rate': 3.716646794115205e-05, 'epoch': 2.38}
+{'loss': 0.0353, 'grad_norm': 0.04183925315737724, 'learning_rate': 3.496788387830032e-05, 'epoch': 2.4}
+{'loss': 0.0351, 'grad_norm': 0.048533570021390915, 'learning_rate': 3.282772161436119e-05, 'epoch': 2.42}
+{'loss': 0.0342, 'grad_norm': 0.059720925986766815, 'learning_rate': 3.074706808169447e-05, 'epoch': 2.44}
+{'loss': 0.0343, 'grad_norm': 0.05801404267549515, 'learning_rate': 2.8726979989733866e-05, 'epoch': 2.46}
+{'loss': 0.0318, 'grad_norm': 0.05026727542281151, 'learning_rate': 2.676848328831212e-05, 'epoch': 2.48}
+{'loss': 0.0341, 'grad_norm': 0.05973392352461815, 'learning_rate': 2.4872572646607903e-05, 'epoch': 2.5}
+{'loss': 0.0364, 'grad_norm': 0.07238101959228516, 'learning_rate': 2.3040210947979377e-05, 'epoch': 2.52}
+{'loss': 0.0357, 'grad_norm': 0.06381988525390625, 'learning_rate': 2.127232880094094e-05, 'epoch': 2.54}
+{'loss': 0.034, 'grad_norm': 0.04981401190161705, 'learning_rate': 1.9569824066531513e-05, 'epoch': 2.56}
+{'loss': 0.0336, 'grad_norm': 0.05458538979291916, 'learning_rate': 1.7933561402314562e-05, 'epoch': 2.58}
+{'loss': 0.0339, 'grad_norm': 0.0441972017288208, 'learning_rate': 1.6364371823241035e-05, 'epoch': 2.59}
+{'loss': 0.0329, 'grad_norm': 0.06246126443147659, 'learning_rate': 1.4863052279598681e-05, 'epoch': 2.61}
+{'loss': 0.0352, 'grad_norm': 0.05644568055868149, 'learning_rate': 1.343036525226187e-05, 'epoch': 2.63}
+{'loss': 0.0326, 'grad_norm': 0.05192314088344574, 'learning_rate': 1.2067038365447585e-05, 'epoch': 2.65}
+{'loss': 0.0331, 'grad_norm': 0.03837450593709946, 'learning_rate': 1.0773764017173991e-05, 'epoch': 2.67}
+{'loss': 0.0338, 'grad_norm': 0.046465784311294556, 'learning_rate': 9.551199027609796e-06, 'epoch': 2.69}
+{'loss': 0.0339, 'grad_norm': 0.07969636470079422, 'learning_rate': 8.39996430549234e-06, 'epoch': 2.71}
+{'loss': 0.0331, 'grad_norm': 0.037857793271541595, 'learning_rate': 7.320644532784403e-06, 'epoch': 2.73}
+{'loss': 0.0312, 'grad_norm': 0.05563552305102348, 'learning_rate': 6.3137878677295306e-06, 'epoch': 2.75}
+{'loss': 0.0349, 'grad_norm': 0.050711989402770996, 'learning_rate': 5.379905666456813e-06, 'epoch': 2.77}
+{'loss': 0.0311, 'grad_norm': 0.04915740713477135, 'learning_rate': 4.519472223276477e-06, 'epoch': 2.79}
+{'loss': 0.0326, 'grad_norm': 0.049979716539382935, 'learning_rate': 3.7329245297982534e-06, 'epoch': 2.81}
+{'loss': 0.0348, 'grad_norm': 0.035587914288043976, 'learning_rate': 3.020662052994777e-06, 'epoch': 2.83}
+{'loss': 0.0295, 'grad_norm': 0.060402970761060715, 'learning_rate': 2.3830465323227853e-06, 'epoch': 2.85}
+{'loss': 0.0288, 'grad_norm': 0.048929862678050995, 'learning_rate': 1.8204017960051164e-06, 'epoch': 2.87}
+{'loss': 0.0328, 'grad_norm': 0.049744024872779846, 'learning_rate': 1.333013596566812e-06, 'epoch': 2.89}
+{'loss': 0.0357, 'grad_norm': 0.06454263627529144, 'learning_rate': 9.211294657089585e-07, 'epoch': 2.9}
+{'loss': 0.0303, 'grad_norm': 0.06149233877658844, 'learning_rate': 5.849585885937146e-07, 'epoch': 2.92}
+{'loss': 0.0342, 'grad_norm': 0.047124434262514114, 'learning_rate': 3.2467169760477805e-07, 'epoch': 2.94}
+{'loss': 0.0317, 'grad_norm': 0.04986999183893204, 'learning_rate': 1.4040098563672942e-07, 'epoch': 2.96}
+{'loss': 0.0333, 'grad_norm': 0.049381695687770844, 'learning_rate': 3.224003895790361e-08, 'epoch': 2.98}
+{'eval_ace05.ee.dev_loss': 0.13357692956924438, 'eval_ace05.ee.dev_runtime': 11.223, 'eval_ace05.ee.dev_samples_per_second': 80.282, 'eval_ace05.ee.dev_steps_per_second': 1.337, 'epoch': 3.0}
+{'eval_conll03.ner.dev_loss': 0.016294246539473534, 'eval_conll03.ner.dev_runtime': 33.3226, 'eval_conll03.ner.dev_samples_per_second': 97.531, 'eval_conll03.ner.dev_steps_per_second': 1.53, 'epoch': 3.0}
+{'train_runtime': 19576.9127, 'train_samples_per_second': 25.31, 'train_steps_per_second': 0.198, 'train_loss': 0.06780808229887175, 'epoch': 3.0}
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:16:06,914] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:17:41,776] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:18:52,177] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+[2024-08-08 17:19:02,341] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:23:59,661] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:33:42,614] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:33:59,312] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+[2024-08-08 17:43:38,625] [INFO] [real_accelerator.py:203:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+Warning: The default cache directory for DeepSpeed Triton autotune, /sorgin1/users/neildlf/.triton/autotune, appears to be on an NFS system. While this is generally acceptable, if you experience slowdowns or hanging when DeepSpeed exits, it is recommended to set the TRITON_CACHE_DIR environment variable to a non-NFS path.
+[93m [WARNING] [0m async_io requires the dev libaio .so object and headers but these were not found.
+[93m [WARNING] [0m async_io: please install the libaio-devel package with yum
+[93m [WARNING] [0m If libaio is already installed (perhaps from source), try setting the CFLAGS and LDFLAGS environment variables to where it can be found.
+[93m [WARNING] [0m Please specify the CUTLASS repo directory as environment variable $CUTLASS_PATH
+[93m [WARNING] [0m sparse_attn requires a torch version >= 1.5 and < 2.0 but detected 2.3
+[93m [WARNING] [0m using untested triton version (2.3.1), only 1.0.0 is known to be compatible
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+Quentin Fabris
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.rc.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.re.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ace05.ver.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing bc5cdr.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing conll03.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing diann.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing ncbidisease.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing rams.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing tacred.sf.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wikievents.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing wnut17.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing e3c.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing broadtwitter.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing fabner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing harveyner.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.eae.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing casie.ee.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitmovie.ner.test ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing mitrestaurant.ner.test ━━━━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_ai.test ━━━━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_music.test ━━━━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_politics.test ━━━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_literature.test ━━━━━━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
+  Tokenizing crossner.crossner_natural_science.test ━━━━━━━ 100% 0:00:00 0:00:00
