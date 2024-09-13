@@ -56,6 +56,10 @@ def train_collie(
         fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
         max_memory_MB=model_args.max_memory_MB,
     )
+    
+    #Send model to GPU
+    device = torch.device(f'cuda:{training_args.local_rank}')
+    model.to(device)
 
     logging.info("Loading datasets...")
     training_datasets_path = [
