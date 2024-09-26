@@ -8,7 +8,7 @@ bf16_full_eval: true
 gradient_checkpointing: true
 force_auto_device_map: false
 use_flash_attention: true
-deepspeed: configs/deepspeed_configs/deepspeed_zero2.json
+deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
 
 # dataset arguments
 dataset_dir:
@@ -32,28 +32,28 @@ validation_tasks:
   - ace05.ee
   - conll03.ner
 test_tasks:
-  - ace05.eae
-  - ace05.ee
-  - ace05.ner
-  - ace05.rc
-  - ace05.re
-  - ace05.ver
-  - bc5cdr.ner
-  - conll03.ner
-  - diann.ner
-  - ncbidisease.ner
-  - rams.eae
-  - tacred.sf
+  #- ace05.eae
+  #- ace05.ee
+  #- ace05.ner
+  #- ace05.rc
+  #- ace05.re
+  #- ace05.ver
+  #- bc5cdr.ner
+  #- conll03.ner
+  #- diann.ner
+  #- ncbidisease.ner
+  #- rams.eae
+  #- tacred.sf
   - wikievents.eae
   - wikievents.ee
   - wikievents.ner
-  - wnut17.ner
-  - e3c.ner
-  - broadtwitter.ner
+  #- wnut17.ner
+  #- e3c.ner
+  #- broadtwitter.ner
   - fabner.ner
-  - harveyner.ner
-  - casie.eae
-  - casie.ee
+  #- harveyner.ner
+  #- casie.eae
+  #- casie.ee
   - mitmovie.ner
   - mitrestaurant.ner
   - crossner.crossner_ai
@@ -97,7 +97,7 @@ generation_num_beams: 1
 optim: adamw_torch_fused
 learning_rate: 0.0003
 weight_decay: 0.001
-num_train_epochs: 3
+num_train_epochs: 1 #previously 3
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
 adam_epsilon: 0.0000001

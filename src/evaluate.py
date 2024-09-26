@@ -232,7 +232,7 @@ def evaluate(
                     )
 
                     pred_labels = pred_line["model_prediction"].strip().split("result = ")[-1]
-                    pred_labels: AnnotationList = AnnotationList.from_output(str(pred_labels), task_module=task_module)
+                    pred_labels: AnnotationList = AnnotationList.from_output(str(pred_labels), task_module=task_module, assert_typing_constraints=False)
 
                     task_logger.add_sentence(
                         sentence=gold_line["unlabelled_sentence"], gold_labels=gold_labels, pred_labels=pred_labels
