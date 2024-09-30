@@ -17,6 +17,16 @@ from torch.utils.data import Dataset
 from transformers import BatchEncoding, PreTrainedTokenizerBase
 from transformers.utils import PaddingStrategy
 
+#get the os path to be able to import functions from different directories within the project
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+#i want to import the functions from data_transformations.py which is located at 
+# /sorgin1/users/neildlf/GoLLIE-dev/src/data_transformations.py while this file is
+# located at /sorgin1/users/neildlf/GoLLIE-dev/src/dataset/dataset.py
+from data_transformations import apply_entity_type_masking, apply_negatives
+
 
 def batch(iterable: Sized, n=1) -> Iterator:
     """
@@ -504,6 +514,90 @@ class CollieDataset(Dataset):
                 f' Dataset {".".join([self.dataset_name, self.task_name, self.split])} rotated to split'
                 f" {self.current_dataset_key}"
             )
+
+
+
+class CollieDatasetWithTransformations(CollieDataset):
+    '''
+    Collie dataset with data transformations such as entity type masking and negatives.
+    '''
+    def __init__(
+        self,
+        *args,
+        entity_type_masking_prob=0.0,
+        negatives_prob=0.0,
+        **kwargs
+    ):
+        self.entity_type_masking_prob = entity_type_masking_prob
+        self.negatives_prob = negatives_prob
+        super().__init__(*args, **kwargs)
+
+    def compute_tokenized_examples(
+        self,
+        dataset_path,
+        num_workers,
+        tokenizer,
+    ) -> List[BatchEncoding]:
+        """
+        Compute the tokenized examples, applying masking transformations before tokenization.
+        """
+        with open(dataset_path, "r", encoding="utf8") as f:
+            examples = f.readlines()
+
+        # Read the full entries as JSON objects
+        entries = [json.loads(example.strip()) for example in examples]
+
+        if self.max_examples is not None and self.max_examples < len(entries):
+            entries = random.sample(entries, self.max_examples)
+
+        # Apply transformations to entries
+        if self.entity_type_masking_prob > 0.0 or self.negatives_prob > 0.0:
+            for i, entry in enumerate(entries):
+                if self.entity_type_masking_prob > 0.0:
+                    entry = apply_entity_type_masking(entry, self.entity_type_masking_prob)
+                if self.negatives_prob > 0.0:
+                    entry = apply_negatives(entry, self.negatives_prob)
+                entries[i] = entry
+
+        # After applying transformations
+        for i, entry in enumerate(entries[:5]):
+            print("Sample Masked Entry:")
+            print(entry)
+
+        # Extract 'text' field from entries
+        examples = [entry["text"] for entry in entries]
+        
+        if num_workers <= 1:
+            return batch_tokenization(
+                tokenizer=tokenizer,
+                dataset_name=".".join([self.dataset_name, self.task_name, self.split]),
+                is_encoder_decoder=self.is_encoder_decoder,
+                max_length=self.max_length,
+                inference=self.inference,
+                prompt_loss_weight=self.prompt_loss_weight,
+                prompt_until=self.prompt_until,
+                examples=examples,
+                process_no=0,
+            )
+        else:
+            tokenizer_fn = partial(
+                batch_tokenization,
+                tokenizer,
+                ".".join([self.dataset_name, self.task_name, self.split]),
+                self.is_encoder_decoder,
+                self.max_length,
+                self.inference,
+                self.prompt_loss_weight,
+                self.prompt_until,
+            )
+            with Pool(num_workers) as p:
+                tokenized_examples = p.starmap(
+                    tokenizer_fn,
+                    zip(batch(examples, num_workers), range(num_workers)),
+                )
+
+            return list(chain.from_iterable(tokenized_examples))
+
 
 
 @dataclass
