@@ -10,7 +10,8 @@ import torch.utils.data
 from datasets import DatasetDict
 
 from src.config import DataTrainingArguments, ModelArguments
-from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
+from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE, CollieDatasetWithTransformations
+
 from src.evaluate import evaluate
 from src.model.load_model import load_model, merge_lora_model
 from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
@@ -83,10 +84,20 @@ def train_collie(
         f" {data_args.prompt_loss_weight} and 'prompt_until': {data_args.prompt_until}."
     )
 
+    if data_args.entity_type_masking_prob > 0.0 or data_args.negatives_prob > 0.0:
+        train_dataset_class = CollieDatasetWithTransformations
+        additional_args = {
+            'entity_type_masking_prob': data_args.entity_type_masking_prob,
+            'negatives_prob': data_args.negatives_prob,
+        }
+    else:
+        train_dataset_class = CollieDataset
+        additional_args = {}
+
     training_datasets = []
     for train_task in data_args.train_tasks:
         train_path = os.path.join(data_args.dataset_dir, f"{train_task}.train.jsonl")
-        train_dataset = CollieDataset(
+        train_dataset = train_dataset_class(
             tokenizer=tokenizer,
             dataset_path=train_path,
             max_length=data_args.max_seq_length,
@@ -95,6 +106,7 @@ def train_collie(
             prompt_loss_weight=data_args.prompt_loss_weight,
             prompt_until=data_args.prompt_until,
             max_examples=data_args.max_examples_per_task_train,
+            **additional_args
         )
         training_datasets.append(train_dataset)
 
