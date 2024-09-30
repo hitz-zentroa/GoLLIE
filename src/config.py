@@ -279,3 +279,6 @@ class DataTrainingArguments:
             )
         },
     )
+    
+    entity_type_masking_prob: float = 0.0
+    negatives_prob: float = 0.0
