@@ -86,9 +86,13 @@ bf16: true
 fp16: false
 torch_compile: false
 ddp_find_unused_parameters: false
-
 # Pretraining strategies
-strategies:
-  curriculum_learning: false
-  entity_masking: false
-  negatives: true
+#strategies:
+#  curriculum_learning: false
+#  entity_masking: true
+#  masking_probability: 0.15
+#  negatives: false
+#  negatives_probability: 0.0
+
+entity_type_masking_prob: 0.0
+negatives_prob: 0.15
