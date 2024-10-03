@@ -1,6 +1,13 @@
 import random
 import re
 from typing import Dict, Any
+import ast
+import random
+import sys
+import nltk
+import spacy
+from collections import defaultdict
+
 
 def apply_entity_type_masking(entry: Dict[str, Any], probability: float) -> Dict[str, Any]:
     """
@@ -61,14 +68,167 @@ def apply_entity_type_masking(entry: Dict[str, Any], probability: float) -> Dict
 
     return entry
 
+
 def apply_negatives(entry: Dict[str, Any], probability: float) -> Dict[str, Any]:
     """
-    Placeholder function for applying negative examples to the entry.
-    Implement your negative sampling logic here.
+    Removes class instances from 'labels' and 'result' list in 'text' with a certain probability.
+    Additionally, removes phrases mentioning these classes from 'unlabelled_sentence' and
+    the unlabelled text within 'text'.
+    
+    Args:
+        entry (Dict[str, Any]): The JSON object containing the data fields.
+        probability (float): The probability of each class being removed.
+    
+    Returns:
+        Dict[str, Any]: The modified entry with negatives applied.
     """
-    # TODO: Implement the logic for applying negatives
-    return entry
-
+    # Make a deep copy to avoid modifying the original entry
+    modified_entry = entry.copy()
+    
+    # Extract relevant fields
+    text = modified_entry.get('text', '')
+    labels = modified_entry.get('labels', '')
+    unlabelled_sentence = modified_entry.get('unlabelled_sentence', '')
+    
+    # Step 1: Extract class names from class definitions in 'text'
+    # Pattern matches lines starting with '@dataclass' followed by 'class ClassName'
+    class_def_pattern = re.compile(r'^@dataclass\s*\nclass\s+(\w+)', re.MULTILINE)
+    class_names = class_def_pattern.findall(text)
+    
+    if not class_names:
+        # No class definitions found; return the original entry
+        return modified_entry
+    
+    # Step 2: Extract class instances from 'labels'
+    # Assuming labels are in the format: [ClassName(field1="value1", field2="value2"), ...]
+    class_instance_pattern = re.compile(r'(\w+)\s*\(([^)]*)\)')
+    class_instances = class_instance_pattern.findall(labels)
+    
+    if not class_instances:
+        # No class instances found; return the original entry
+        return modified_entry
+    
+    # Step 3: Organize class instances by class name
+    class_to_instances = defaultdict(list)
+    for cls, fields in class_instances:
+        class_to_instances[cls].append(fields)
+    
+    # Step 4: Determine which classes to remove based on probability
+    classes_to_remove = []
+    for cls in class_names:
+        if random.random() < probability:
+            if cls in class_to_instances:
+                classes_to_remove.append(cls)
+    
+    if not classes_to_remove:
+        # No classes selected for removal; return the original entry
+        return modified_entry
+    
+    # Debugging: Log which classes are selected for removal
+    print(f"Classes selected for removal: {classes_to_remove}")
+    
+    # Step 5: Remove selected class instances from 'labels'
+    # Reconstruct 'labels' as a list string excluding the classes to remove
+    remaining_instances = [
+        f"{cls}({fields})" for cls, fields in class_instances if cls not in classes_to_remove
+    ]
+    labels_modified = "[\n" + ",\n".join(remaining_instances) + "]"
+    modified_entry['labels'] = labels_modified
+    
+    # Step 6: Remove selected class instances from 'result' list in 'text'
+    # Assuming 'result = [ClassName(...), ...]'
+    result_pattern = re.compile(r'(result\s*=\s*\[)([\s\S]*?)(\])', re.MULTILINE)
+    result_match = result_pattern.search(text)
+    
+    if result_match:
+        result_prefix, result_content, result_suffix = result_match.groups()
+        
+        # Extract individual class instances within 'result'
+        result_class_instances = class_instance_pattern.findall(result_content)
+        
+        # Reconstruct 'result' list excluding the classes to remove
+        remaining_result_instances = [
+            f"{cls}({fields})" for cls, fields in result_class_instances if cls not in classes_to_remove
+        ]
+        if remaining_result_instances:
+            result_content_modified = ",\n    ".join(remaining_result_instances)
+            result_modified = f"{result_prefix}\n    {result_content_modified}\n{result_suffix}"
+        else:
+            result_modified = f"{result_prefix}\n]\n{result_suffix}"
+        
+        # Replace the old 'result' list with the modified one
+        text = text[:result_match.start()] + result_modified + text[result_match.end():]
+        modified_entry['text'] = text
+    else:
+        # 'result' list not found; proceed without modification
+        pass
+    
+    # Step 7: Remove related phrases from 'unlabelled_sentence'
+    # and the unlabelled text within 'text'
+    
+    # Function to remove phrases mentioning any of the classes to remove
+    def remove_class_phrases(text_to_modify: str, classes: list) -> str:
+        """
+        Removes phrases mentioning any of the specified classes.
+        
+        Args:
+            text_to_modify (str): The text containing sentences.
+            classes (list): The list of class names to remove.
+        
+        Returns:
+            str: The text with relevant phrases removed.
+        """
+        for cls in classes:
+            # Define patterns to identify phrases mentioning the class
+            # Example pattern: "and the Cat he has is 12 and is called Miau"
+            pattern = re.compile(rf'\b(?:and\s+)?the\s+{re.escape(cls)}\b[^.]*', re.IGNORECASE)
+            text_to_modify = pattern.sub('', text_to_modify)
+        # Clean up any redundant spaces or punctuation
+        text_to_modify = re.sub(r'\s+,', ',', text_to_modify)
+        text_to_modify = re.sub(r'\s+', ' ', text_to_modify).strip()
+        return text_to_modify
+    
+    # Remove from 'unlabelled_sentence'
+    unlabelled_sentence_modified = remove_class_phrases(unlabelled_sentence, classes_to_remove)
+    modified_entry['unlabelled_sentence'] = unlabelled_sentence_modified
+    
+    # Remove from unlabelled text in 'text' field
+    # Assuming unlabelled text is after the line '# This is the text to analyze\ntext = "..."'
+    # Adjust the regex based on the actual structure of 'text'
+    unlabelled_text_pattern = re.compile(
+        r'(# This is the text to analyze\s*text\s*=\s*["\'])([\s\S]*?)(["\']\n# The list called result contains)',
+        re.MULTILINE
+    )
+    unlabelled_text_match = unlabelled_text_pattern.search(text)
+    
+    if unlabelled_text_match:
+        prefix, unlabelled_text, suffix = unlabelled_text_match.groups()
+        # Remove phrases mentioning the classes to remove
+        unlabelled_text_filtered = remove_class_phrases(unlabelled_text, classes_to_remove)
+        # Reconstruct the 'text' field with the modified unlabelled text
+        text_modified = prefix + unlabelled_text_filtered + suffix
+        modified_entry['text'] = text_modified
+    else:
+        # Unlabelled text pattern not found; proceed without modification
+        pass
+    
+    # Final Check: Ensure that 'labels' and 'result' list have the same classes
+    # Extract remaining class names from 'labels'
+    remaining_labels_classes = class_instance_pattern.findall(labels_modified)
+    remaining_labels_class_names = set(cls for cls, _ in remaining_labels_classes)
+    
+    # Extract remaining class names from 'result' list
+    if result_match:
+        remaining_result_class_instances = class_instance_pattern.findall(result_content_modified)
+        remaining_result_class_names = set(cls for cls, _ in remaining_result_class_instances)
+    else:
+        remaining_result_class_names = set()
+    
+    # Compare both sets; they should be identical
+    if remaining_labels_class_names != remaining_result_class_names:
+        raise ValueError("Mismatch between 'labels' and 'result' list after applying negatives.")
+    
+    return modified_entry
 
 if __name__ == "__main__":
     import json
@@ -77,27 +237,74 @@ if __name__ == "__main__":
     random.seed(42)
 
     # Define the example JSON object
-    entry = {
-        "ids": ["<urn:uuid:10a10a8a-c433-497e-b939-429fea3e7e01>"],
+    '''entry = {"ids": ["<urn:uuid:ce2e2d4d-f5f6-4796-a159-7624c53c7390>"],
+            "task_id": "fineweb-edu_pretrain_gollie2",
+            "scorer_cls": "src.tasks.fineweb-edu_pretrain.scorer.fineweb-edu_pretrainScorer",
+            "labels": "[\nDog(name=\"Woof\", age=5),\n Cat(name=\"Miau\", age=12)]", 
+            "text": "# The following lines describe the task definition\nfrom dataclasses import dataclass\nfrom typing import Dict, Any\n\n@dataclass\nclass Dog:\n    \"\"\"\n    a 4 legged animal that is said to be men's best friend\n    \"\"\"\n    name: str\n    # The name of the dog.\n\n    age: int\n    # The age of the dog.\n\n\n@dataclass\nclass Cat:\n    \"\"\"\n    a 4 legged animal that is relaxed and loves being home, they eat fish\n    \"\"\"\n    name: str\n    # The name of the cat.\n\n    age: int\n    # The age of the cat.\n\n\n# This is the text to analyze \ntext = \"the dog of my friend Luis is 5 years old and is called Woof, and the cat he has is 12 and is called Miau\"\n\n# The list called result contains the instances for the following events according to the guidelines above:\nresult = [\n    Dog(name=\"Woof\", age=5),\n    Cat(name=\"Miau\", age=12)]\n",
+            "unlabelled_sentence": "the dog of my friend Luis is 5 years old and is called Woof, and the cat he has is 12 and is called Miau"
+                
+            }
+    '''
+    entry ={
+        "ids": [
+            "<urn:uuid:ce2e2d4d-f5f6-4796-a159-7624c53c7390>"
+        ],
         "task_id": "fineweb-edu_pretrain_gollie2",
         "scorer_cls": "src.tasks.fineweb-edu_pretrain.scorer.fineweb-edu_pretrainScorer",
-        "labels": "[\n    NapaRiverEcologicalReserveGuide(\n        purpose=\"encourage use of the Napa River Ecological Reserve as a learning laboratory\",\n        description=ReserveDescription(\n            area=\"73-acre\",\n            significance=\"last sizable section of riparian vegetation in Napa Valley\",\n            habitat=\"diverse community of birds, butterflies, mammals and plants\",\n            historical=\"Valley oaks significant to Wappo tribe and early European settlers\"\n        ),\n        educational_opportunities=EducationalOpportunities(\n            topics=[\"watershed function\", \"ecology\", \"biodiversity\", \"ecological restoration\", \"local history\", \"appreciation for conservation\"]\n        ),\n        activities=Activities(\n            categories=[\"art\", \"ecology\", \"history\"],\n            hands_on_learning=\"see, hear, feel, and appreciate Napa River Watershed\"\n        ),\n        curriculum=Curriculum(\n            alignment=\"established classroom standards\",\n            adaptability=\"alter lessons for multiple grade levels\"\n        ),\n        extensions=\"lesson extensions for classroom follow-up\",\n        resources=Resources(\n            volunteer_opportunities=\"list available\",\n            stewardship_projects=\"project ideas included\",\n            local_resources=\"for natural resource appreciation and conservation\"\n        )\n    )\n]",
-        "text": "# The following lines describe the task definition\nfrom dataclasses import dataclass\nfrom typing import List, Optional\n\n@dataclass\nclass ReserveDescription:\n    \"\"\"\n    Contains detailed information about the Napa River Ecological Reserve,\n    its significance, habitat diversity, and historical context.\n    \"\"\"\n    area: str\n    \"\"\"The total area of the Reserve, indicating its size in acres.\"\"\"\n    significance: str\n    \"\"\"Description of the ecological importance of the Reserve within Napa Valley.\"\"\"\n    habitat: str\n    \"\"\"Information on the variety of living organisms that inhabit the Reserve.\"\"\"\n    historical: str\n    \"\"\"Summary of the historical relevance of the vegetation in connection with the native tribe and early settlers.\"\"\"\n\n@dataclass\nclass EducationalOpportunities:\n    \"\"\"\n    Holds various educational topics that can be explored through activities in the Reserve.\n    \"\"\"\n    topics: List[str]\n    \"\"\"A list of key educational topics related to ecology, history, and conservation.\"\"\"\n\n@dataclass\nclass Activities:\n    \"\"\"\n    Represents the types of activities designed for engagement in the Reserve,\n    focused on holistic learning experiences.\n    \"\"\"\n    categories: List[str]\n    \"\"\"List of categories for the activities, such as art, ecology, and history.\"\"\"\n    hands_on_learning: str\n    \"\"\"Description of the experiential learning component provided by the activities.\"\"\"\n\n@dataclass\nclass Curriculum:\n    \"\"\"\n    Provides information on how the activities align with educational standards\n    and their adaptability for different educational levels.\n    \"\"\"\n    alignment: str\n    \"\"\"Indicates how the activities fit with established classroom standards.\"\"\"\n    adaptability: str\n    \"\"\"Describes how lessons can be tailored for various grade levels.\"\"\"\n\n@dataclass\nclass Resources:\n    \"\"\"\n    Contains additional resources available for students and educators\n    that promote involvement in conservation and appreciation of natural areas.\n    \"\"\"\n    volunteer_opportunities: str\n    \"\"\"A description of available volunteer options for students.\"\"\"\n    stewardship_projects: str\n    \"\"\"Ideas for stewardship projects that contribute to local conservation efforts.\"\"\"\n    local_resources: str\n    \"\"\"Additional resources that support natural resource appreciation and conservation.\"\"\"\n\n@dataclass\nclass NapaRiverEcologicalReserveGuide:\n    \"\"\"\n    Encapsulates all relevant information pertaining to the Napa River Ecological Reserve\n    Curriculum Guide, including educational purposes, activities, and resources for students.\n    \"\"\"\n    purpose: str\n    \"\"\"Explanation of why the guide was created and its intended use for education.\"\"\"\n    description: ReserveDescription\n    \"\"\"Detailed description of the Reserve itself, including size and ecological significance.\"\"\"\n    educational_opportunities: EducationalOpportunities\n    \"\"\"List of educational opportunities associated with the Reserve activities.\"\"\"\n    activities: Activities\n    \"\"\"Information on activities available for hands-on learning experiences.\"\"\"\n    curriculum: Curriculum\n    \"\"\"Details on how the activities align with educational standards and their adaptability.\"\"\"\n    extensions: str\n    \"\"\"Information on lesson extensions that can be implemented in the classroom.\"\"\"\n    resources: Resources\n    \"\"\"Collection of additional resources for volunteer work and conservation initiatives.\"\"\"\n\n# This is the text to analyze\ntext = \"The Napa River Ecological Reserve Curriculum Guide was created to encourage the use of the Napa River Ecological Reserve as a learning laboratory for students of all ages. The 73-acre Reserve is the last sizable section of riparian vegetation in the Napa Valley and provides habitat for a diverse community of birds, butterflies, mammals and plants. Valley oaks that surrounded the native Wappo tribe and early European settlers of the Valley can still be found in the diverse habitats within the Reserve. The Reserve\\u2019s ecological and historical significance make it an ideal location for students to learn about watershed function and ecology, biodiversity, ecological restoration, the history of the people and industries of Napa Valley, and appreciation for the need to conserve natural areas.\\nThe activities in the guide allow students to develop an understanding and appreciation for the natural environment through activities in three main categories: art, ecology, and history. The activities will give participating classes the opportunity to see, hear, feel, and appreciate the Napa River Watershed in a hands-on way that classroom lessons alone cannot provide. The activities in the guide align with established classroom curriculum standards and contain notes on how to alter the lessons for multiple grade levels. Many of the activities in this guide also contain lesson extensions that can be brought back into the classroom so that the knowledge gained while at the Reserve can continue to grow. The guide concludes with a list of volunteer opportunities, stewardship project ideas, and other local resources that can help your students become involved with natural resource appreciation and conservation.\\nNapa River Ecological Reserve Guide 2014 (pdf=33.2mb)\"\n",
-        "unlabelled_sentence": "The Napa River Ecological Reserve Curriculum Guide was created to encourage the use of the Napa River Ecological Reserve as a learning laboratory for students of all ages. The 73-acre Reserve is the last sizable section of riparian vegetation in the Napa Valley and provides habitat for a diverse community of birds, butterflies, mammals and plants. Valley oaks that surrounded the native Wappo tribe and early European settlers of the Valley can still be found in the diverse habitats within the Reserve. The Reserve’s ecological and historical significance make it an ideal location for students to learn about watershed function and ecology, biodiversity, ecological restoration, the history of the people and industries of Napa Valley, and appreciation for the need to conserve natural areas.\nThe activities in the guide allow students to develop an understanding and appreciation for the natural environment through activities in three main categories: art, ecology, and history. The activities will give participating classes the opportunity to see, hear, feel, and appreciate the Napa River Watershed in a hands-on way that classroom lessons alone cannot provide. The activities in the guide align with established classroom curriculum standards and contain notes on how to alter the lessons for multiple grade levels. Many of the activities in this guide also contain lesson extensions that can be brought back into the classroom so that the knowledge gained while at the Reserve can continue to grow. The guide concludes with a list of volunteer opportunities, stewardship project ideas, and other local resources that can help your students become involved with natural resource appreciation and conservation.\nNapa River Ecological Reserve Guide 2014 (pdf=33.2mb)"
+        "labels": "[\nDog(name=\"Woof\", age=5),\nTurtle(name=\"Shelly\", age=2),\nCat(name=\"Miau\", age=12),\nBird(name=\"Tweety\", age=3),\nDog(name=\"Rex\", age=7),\nBird(name=\"Polly\", age=4)]",
+        "text": "# The following lines describe the task definition\nfrom dataclasses import dataclass\nfrom typing import Dict, Any\n\n@dataclass\nclass Dog:\n    \"\"\"\n    A 4-legged animal that is said to be men's best friend.\n    \"\"\"\n    name: str\n    # The name of the dog.\n\n    age: int\n    # The age of the dog.\n\n\n@dataclass\nclass Cat:\n    \"\"\"\n    A 4-legged animal that is relaxed and loves being home; they eat fish.\n    \"\"\"\n    name: str\n    # The name of the cat.\n\n    age: int\n    # The age of the cat.\n\n\n@dataclass\nclass Turtle:\n    \"\"\"\n    A slow-moving reptile often kept as a pet in aquariums or terrariums.\n    \"\"\"\n    name: str\n    # The name of the turtle.\n\n    age: int\n    # The age of the turtle.\n\n\n@dataclass\nclass Bird:\n    \"\"\"\n    A feathered animal capable of flight, often kept as pets for their singing or colorful appearance.\n    \"\"\"\n    name: str\n    # The name of the bird.\n\n    age: int\n    # The age of the bird.\n\n\n# This is the text to analyze \ntext = \"The dog of my friend Luis is 5 years old and is called Woof, the turtle he has is 2 and is called Shelly, the cat he has is 12 and is called Miau, and the bird he has is 3 and is called Tweety. Another dog named Rex is 7, and another bird named Polly is 4.\"\n\n# The list called result contains the instances for the following events according to the guidelines above:\nresult = [\n    Dog(name=\"Woof\", age=5),\n    Turtle(name=\"Shelly\", age=2),\n    Cat(name=\"Miau\", age=12),\n    Bird(name=\"Tweety\", age=3),\n    Dog(name=\"Rex\", age=7),\n    Bird(name=\"Polly\", age=4)]\n",
+        "unlabelled_sentence": "The dog of my friend Luis is 5 years old and is called Woof, the turtle he has is 2 and is called Shelly, the cat he has is 12 and is called Miau, and the bird he has is 3 and is called Tweety. Another dog named Rex is 7, and another bird named Polly is 4."
     }
 
-    # Apply the masking function with probability p
-    p = 0.5  # Adjust the probability as needed
-    modified_entry = apply_entity_type_masking(entry, p)
+
+
+    # Apply the negatives function with probability p
+    p = 0.7 #for testing  # Adjust the probability as needed
     
-    #print the original entry
+    
+
+    # Print the original entry
     print("Original Entry:")
     print("-----------------")
     print(json.dumps(entry, indent=4))
-    
+
     print("\n")
 
     # Print the modified entry
-    print("Modified Entry:")
+    modified_entry_masking = apply_entity_type_masking(entry, p)
+    print("\n\nModified Entry with Masking:")
     print("-----------------")
-    print(json.dumps(modified_entry, indent=4))
+    print(json.dumps(modified_entry_masking, indent=4))
+    
+    modified_entry_negatives = apply_negatives(entry, p)
+    print("\n\nModified Entry with Negatives:")
+    print("-----------------")
+    print(json.dumps(modified_entry_negatives, indent=4))
+    
+    print("Expected output from modified entry with negatives:")
+    print("----------------------------------------------------")
+    
+    '''expected_output_with_negatives_applied = {
+    "ids": ["<urn:uuid:ce2e2d4d-f5f6-4796-a159-7624c53c7390>"],
+    "task_id": "fineweb-edu_pretrain_gollie2",
+    "scorer_cls": "src.tasks.fineweb-edu_pretrain.scorer.fineweb-edu_pretrainScorer",
+    "labels": "[\nDog(name=\"Woof\", age=5)]",
+    "text": "# The following lines describe the task definition\nfrom dataclasses import dataclass\nfrom typing import Dict, Any\n\n@dataclass\nclass Dog:\n    \"\"\"\n    a 4 legged animal that is said to be men's best friend\n    \"\"\"\n    name: str\n    # The name of the dog.\n\n    age: int\n    # The age of the dog.\n\n\n@dataclass\nclass Cat:\n    \"\"\"\n    a 4 legged animal that is relaxed and loves being home, they eat fish\n    \"\"\"\n    name: str\n    # The name of the cat.\n\n    age: int\n    # The age of the cat.\n\n\n# This is the text to analyze \ntext = \"the dog of my friend Luis is 5 years old and is called Woof\"\n\n# The list called result contains the instances for the following events according to the guidelines above:\nresult = [\n    Dog(name=\"Woof\", age=5)]\n",
+    "unlabelled_sentence": "the dog of my friend Luis is 5 years old and is called Woof"
+    }'''
+    
+    expected_output_with_negatives_applied = {
+        "ids": [
+            "<urn:uuid:ce2e2d4d-f5f6-4796-a159-7624c53c7390>"
+        ],
+        "task_id": "fineweb-edu_pretrain_gollie2",
+        "scorer_cls": "src.tasks.fineweb-edu_pretrain.scorer.fineweb-edu_pretrainScorer",
+        "labels": "[\nDog(name=\"Woof\", age=5),\nTurtle(name=\"Shelly\", age=2),\nDog(name=\"Rex\", age=7)]",
+        "text": "# The following lines describe the task definition\nfrom dataclasses import dataclass\nfrom typing import Dict, Any\n\n@dataclass\nclass Dog:\n    \"\"\"\n    A 4-legged animal that is said to be men's best friend.\n    \"\"\"\n    name: str\n    # The name of the dog.\n\n    age: int\n    # The age of the dog.\n\n\n@dataclass\nclass Cat:\n    \"\"\"\n    A 4-legged animal that is relaxed and loves being home; they eat fish.\n    \"\"\"\n    name: str\n    # The name of the cat.\n\n    age: int\n    # The age of the cat.\n\n\n@dataclass\nclass Turtle:\n    \"\"\"\n    A slow-moving reptile often kept as a pet in aquariums or terrariums.\n    \"\"\"\n    name: str\n    # The name of the turtle.\n\n    age: int\n    # The age of the turtle.\n\n\n@dataclass\nclass Bird:\n    \"\"\"\n    A feathered animal capable of flight, often kept as pets for their singing or colorful appearance.\n    \"\"\"\n    name: str\n    # The name of the bird.\n\n    age: int\n    # The age of the bird.\n\n\n# This is the text to analyze \ntext = \"The dog of my friend Luis is 5 years old and is called Woof, the turtle he has is 2 and is called Shelly. Another dog named Rex is 7.\"\n\n# The list called result contains the instances for the following events according to the guidelines above:\nresult = [\n    Dog(name=\"Woof\", age=5),\n    Turtle(name=\"Shelly\", age=2),\n    Dog(name=\"Rex\", age=7)\n]\n",
+        "unlabelled_sentence": "The dog of my friend Luis is 5 years old and is called Woof, the turtle he has is 2 and is called Shelly. Another dog named Rex is 7."
+    }
+
+
+    
+    print(json.dumps(expected_output_with_negatives_applied, indent=4))
