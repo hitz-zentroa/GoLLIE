@@ -8,6 +8,9 @@ import nltk
 import spacy
 from collections import defaultdict
 
+# Load spaCy model for sentence segmentation used in negatives
+nlp = spacy.load("en_core_web_sm")
+
 
 def apply_entity_type_masking(entry: Dict[str, Any], probability: float) -> Dict[str, Any]:
     """
@@ -69,166 +72,86 @@ def apply_entity_type_masking(entry: Dict[str, Any], probability: float) -> Dict
     return entry
 
 
-def apply_negatives(entry: Dict[str, Any], probability: float) -> Dict[str, Any]:
+
+def apply_negatives(entry, ratio=0.2):
     """
-    Removes class instances from 'labels' and 'result' list in 'text' with a certain probability.
-    Additionally, removes phrases mentioning these classes from 'unlabelled_sentence' and
-    the unlabelled text within 'text'.
+    Modify a dataset entry by introducing negative examples.
+    
+    This function removes a percentage of entities from the entry's text fields,
+    effectively creating a "negative" version of the original data. The function
+    ensures consistency across multiple fields, removing references from all
+    relevant parts of the entry.
     
     Args:
-        entry (Dict[str, Any]): The JSON object containing the data fields.
-        probability (float): The probability of each class being removed.
+        entry (dict): The dataset entry to modify, containing multiple fields such as
+                      'unlabelled_sentence', 'labels', 'text'.
+        ratio (float): The ratio of spans to remove from the text (default is 0.2).
     
     Returns:
-        Dict[str, Any]: The modified entry with negatives applied.
+        dict: A new dictionary representing the modified dataset entry with negative examples.
     """
-    # Make a deep copy to avoid modifying the original entry
+    # Extract entry components
+    unlabelled_sentence = entry["unlabelled_sentence"]
+    labels = entry["labels"]
+    text = entry["text"]
+
+
+    # Split text into different parts
+    guidelines = text.split("# This is the text to analyze")[0]
+    unlabelled_text = text.split("# The list")[0]
+    result = "# The list " + text.split("# The list ")[1]
+
+
+    # Make a copy of the entry for modification
     modified_entry = entry.copy()
-    
-    # Extract relevant fields
-    text = modified_entry.get('text', '')
-    labels = modified_entry.get('labels', '')
-    unlabelled_sentence = modified_entry.get('unlabelled_sentence', '')
-    
-    # Step 1: Extract class names from class definitions in 'text'
-    # Pattern matches lines starting with '@dataclass' followed by 'class ClassName'
-    class_def_pattern = re.compile(r'^@dataclass\s*\nclass\s+(\w+)', re.MULTILINE)
-    class_names = class_def_pattern.findall(text)
-    
-    if not class_names:
-        # No class definitions found; return the original entry
-        return modified_entry
-    
-    # Step 2: Extract class instances from 'labels'
-    # Assuming labels are in the format: [ClassName(field1="value1", field2="value2"), ...]
-    class_instance_pattern = re.compile(r'(\w+)\s*\(([^)]*)\)')
-    class_instances = class_instance_pattern.findall(labels)
-    
-    if not class_instances:
-        # No class instances found; return the original entry
-        return modified_entry
-    
-    # Step 3: Organize class instances by class name
-    class_to_instances = defaultdict(list)
-    for cls, fields in class_instances:
-        class_to_instances[cls].append(fields)
-    
-    # Step 4: Determine which classes to remove based on probability
-    classes_to_remove = []
-    for cls in class_names:
-        if random.random() < probability:
-            if cls in class_to_instances:
-                classes_to_remove.append(cls)
-    
-    if not classes_to_remove:
-        # No classes selected for removal; return the original entry
-        return modified_entry
-    
-    # Debugging: Log which classes are selected for removal
-    print(f"Classes selected for removal: {classes_to_remove}")
-    
-    # Step 5: Remove selected class instances from 'labels'
-    # Reconstruct 'labels' as a list string excluding the classes to remove
-    remaining_instances = [
-        f"{cls}({fields})" for cls, fields in class_instances if cls not in classes_to_remove
-    ]
-    labels_modified = "[\n" + ",\n".join(remaining_instances) + "]"
-    modified_entry['labels'] = labels_modified
-    
-    # Step 6: Remove selected class instances from 'result' list in 'text'
-    # Assuming 'result = [ClassName(...), ...]'
-    result_pattern = re.compile(r'(result\s*=\s*\[)([\s\S]*?)(\])', re.MULTILINE)
-    result_match = result_pattern.search(text)
-    
-    if result_match:
-        result_prefix, result_content, result_suffix = result_match.groups()
-        
-        # Extract individual class instances within 'result'
-        result_class_instances = class_instance_pattern.findall(result_content)
-        
-        # Reconstruct 'result' list excluding the classes to remove
-        remaining_result_instances = [
-            f"{cls}({fields})" for cls, fields in result_class_instances if cls not in classes_to_remove
-        ]
-        if remaining_result_instances:
-            result_content_modified = ",\n    ".join(remaining_result_instances)
-            result_modified = f"{result_prefix}\n    {result_content_modified}\n{result_suffix}"
-        else:
-            result_modified = f"{result_prefix}\n]\n{result_suffix}"
-        
-        # Replace the old 'result' list with the modified one
-        text = text[:result_match.start()] + result_modified + text[result_match.end():]
-        modified_entry['text'] = text
-    else:
-        # 'result' list not found; proceed without modification
-        pass
-    
-    # Step 7: Remove related phrases from 'unlabelled_sentence'
-    # and the unlabelled text within 'text'
-    
-    # Function to remove phrases mentioning any of the classes to remove
-    def remove_class_phrases(text_to_modify: str, classes: list) -> str:
-        """
-        Removes phrases mentioning any of the specified classes.
-        
-        Args:
-            text_to_modify (str): The text containing sentences.
-            classes (list): The list of class names to remove.
-        
-        Returns:
-            str: The text with relevant phrases removed.
-        """
-        for cls in classes:
-            # Define patterns to identify phrases mentioning the class
-            # Example pattern: "and the Cat he has is 12 and is called Miau"
-            pattern = re.compile(rf'\b(?:and\s+)?the\s+{re.escape(cls)}\b[^.]*', re.IGNORECASE)
-            text_to_modify = pattern.sub('', text_to_modify)
-        # Clean up any redundant spaces or punctuation
-        text_to_modify = re.sub(r'\s+,', ',', text_to_modify)
-        text_to_modify = re.sub(r'\s+', ' ', text_to_modify).strip()
-        return text_to_modify
-    
-    # Remove from 'unlabelled_sentence'
-    unlabelled_sentence_modified = remove_class_phrases(unlabelled_sentence, classes_to_remove)
-    modified_entry['unlabelled_sentence'] = unlabelled_sentence_modified
-    
-    # Remove from unlabelled text in 'text' field
-    # Assuming unlabelled text is after the line '# This is the text to analyze\ntext = "..."'
-    # Adjust the regex based on the actual structure of 'text'
-    unlabelled_text_pattern = re.compile(
-        r'(# This is the text to analyze\s*text\s*=\s*["\'])([\s\S]*?)(["\']\n# The list called result contains)',
-        re.MULTILINE
-    )
-    unlabelled_text_match = unlabelled_text_pattern.search(text)
-    
-    if unlabelled_text_match:
-        prefix, unlabelled_text, suffix = unlabelled_text_match.groups()
-        # Remove phrases mentioning the classes to remove
-        unlabelled_text_filtered = remove_class_phrases(unlabelled_text, classes_to_remove)
-        # Reconstruct the 'text' field with the modified unlabelled text
-        text_modified = prefix + unlabelled_text_filtered + suffix
-        modified_entry['text'] = text_modified
-    else:
-        # Unlabelled text pattern not found; proceed without modification
-        pass
-    
-    # Final Check: Ensure that 'labels' and 'result' list have the same classes
-    # Extract remaining class names from 'labels'
-    remaining_labels_classes = class_instance_pattern.findall(labels_modified)
-    remaining_labels_class_names = set(cls for cls, _ in remaining_labels_classes)
-    
-    # Extract remaining class names from 'result' list
-    if result_match:
-        remaining_result_class_instances = class_instance_pattern.findall(result_content_modified)
-        remaining_result_class_names = set(cls for cls, _ in remaining_result_class_instances)
-    else:
-        remaining_result_class_names = set()
-    
-    # Compare both sets; they should be identical
-    if remaining_labels_class_names != remaining_result_class_names:
-        raise ValueError("Mismatch between 'labels' and 'result' list after applying negatives.")
-    
+
+    # Segment text into sentences using spaCy
+    doc = nlp(unlabelled_sentence)
+    sentences = [sent.text for sent in doc.sents]
+
+
+    # Get the spans of the annotations in the text
+    spans_re = re.compile(r'"(.*?)"')
+    spans = spans_re.findall(labels)
+
+
+    # Get the existing spans in the text
+    existing_spans = [span for span in spans if span in unlabelled_sentence]
+
+
+    # Remove a percentage of spans from the text given the ratio
+    n_spans = len(existing_spans)
+    n_remove = int(n_spans * ratio)
+    spans_to_remove = random.sample(existing_spans, n_remove)
+
+
+    # Remove spans from the unlabelled_sentence
+    filtered_sentence = [line for line in sentences if not any(span in line for span in spans_to_remove)]
+
+
+    # Update the unlabelled_sentence and unlabelled_text
+    modified_entry["unlabelled_sentence"] = " ".join(filtered_sentence)
+    unlabelled_text = "# This is the text to analyze\n" + " ".join(filtered_sentence)
+
+
+    # Remove spans from the labels field
+    modified_labels = labels
+    for span in spans_to_remove:
+        # Remove lines in the labels that contain the span
+        modified_labels = re.sub(r'.*' + re.escape(span) + r'.*\n?', '', modified_labels)
+    modified_entry["labels"] = modified_labels
+
+    # Update the result field
+    result = "# The list called result contains the instances for the following events according to the guidelines above:\nresult=" + modified_labels
+
+    # Concatenate the guidelines, unlabelled_text, and result to get the modified text
+    modified_text = guidelines + unlabelled_text + result
+    modified_entry["text"] = modified_text
+
+
     return modified_entry
+
+
 
 if __name__ == "__main__":
     import json
@@ -260,10 +183,9 @@ if __name__ == "__main__":
 
 
     # Apply the negatives function with probability p
-    p = 0.7 #for testing  # Adjust the probability as needed
+    p = 0.3 #for testing  # Adjust the probability as needed
     
     
-
     # Print the original entry
     print("Original Entry:")
     print("-----------------")
