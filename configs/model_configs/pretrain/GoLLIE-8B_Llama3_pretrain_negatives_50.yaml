@@ -29,7 +29,7 @@ ignore_pad_token_for_loss: true
 prompt_loss_weight: 0.0
 
 # checkpoint settings
-output_dir: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128_pretrain_masking
+output_dir: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128_pretrain_negatives_50
 overwrite_output_dir: true
 load_best_model_at_end: false
 save_strategy: "epoch"
@@ -74,7 +74,7 @@ logging_strategy: steps
 logging_first_step: true
 logging_steps: 10
 report_to: wandb
-run_name: "GoLLIE-8b_Llama3_BS128_R128_pretrain_masking"
+run_name: "GoLLIE-8b_Llama3_BS128_R128_pretrain_negatives_50"
 disable_tqdm: false
 
 # hub settings
@@ -90,9 +90,9 @@ ddp_find_unused_parameters: false
 #strategies:
 #  curriculum_learning: false
 #  entity_masking: true
-#  masking_probability: 0.15
+#  masking_probability: 0.0
 #  negatives: false
-#  negatives_probability: 0.0
+#  negatives_probability: 0.5
 
-entity_type_masking_prob: 0.15
-negatives_prob: 0.0
+entity_type_masking_prob: 0.0
+negatives_prob: 0.50
