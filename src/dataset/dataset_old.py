@@ -17,11 +17,14 @@ from torch.utils.data import Dataset
 from transformers import BatchEncoding, PreTrainedTokenizerBase
 from transformers.utils import PaddingStrategy
 
-# get the os path to be able to import functions from different directories within the project
+#get the os path to be able to import functions from different directories within the project
+import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-# import the functions from data_transformations.py
+#i want to import the functions from data_transformations.py which is located at 
+# /sorgin1/users/neildlf/GoLLIE-dev/src/data_transformations.py while this file is
+# located at /sorgin1/users/neildlf/GoLLIE-dev/src/dataset/dataset.py
 from data_transformations import apply_entity_type_masking, apply_negatives
 
 
@@ -42,7 +45,7 @@ def batch(iterable: Sized, n=1) -> Iterator:
     l: int = len(iterable)
     p: int = math.ceil(l / n)
     for ndx in range(0, l, p):
-        yield iterable[ndx: min(ndx + p, l)]
+        yield iterable[ndx : min(ndx + p, l)]
 
 
 def prepare_data(
@@ -182,6 +185,7 @@ def prepare_data(
                 if prompt[-1] == tokenizer.eos_token_id:
                     prompt = prompt[:-1]
 
+                #This if raise below is causing problems with negatives (do not know why)
                 if len(prompt) > len(model_inputs["labels"]):
                     raise ValueError(
                         f"Prompt is longer than the labels, something went wrong. Prompt: {prompt}, labels:"
@@ -399,6 +403,13 @@ class CollieDataset(Dataset):
 
                     self.dataset_keys.append(int(epoch))
 
+                # Truncate datasers to ensure all datasets have the same length
+                # min_length = min([len(x) for x in self.dataset_dict.values()])
+                # for key in self.dataset_dict.keys():
+                #    if len(self.dataset_dict[key]) > min_length:
+                #        logging.warning(f"Truncating dataset {key} from {len(self.dataset_dict[key])} to {min_length}")
+                #    self.dataset_dict[key] = self.dataset_dict[key][:min_length]
+
                 # Oversample datasets to ensure all datasets have the same length
                 max_length = max([len(x) for x in self.dataset_dict.values()])
                 for key in self.dataset_dict.keys():
@@ -506,54 +517,6 @@ class CollieDataset(Dataset):
             )
 
 
-# Define the process_entry function at the module level
-def process_entry(
-    entry,
-    tokenizer,
-    is_encoder_decoder,
-    max_length,
-    inference,
-    prompt_loss_weight,
-    prompt_until,
-    negatives_prob,
-    try_again=False
-):
-    example = entry["text"]
-    try:
-        tokenized_example = prepare_data(
-            example=example,
-            tokenizer=tokenizer,
-            is_encoder_decoder=is_encoder_decoder,
-            max_length=max_length,
-            inference=inference,
-            prompt_loss_weight=prompt_loss_weight,
-            prompt_until=prompt_until,
-        )
-        return tokenized_example
-    except ValueError as e:
-        if "Prompt is longer than the labels, something went wrong" in str(e):
-            if try_again:
-                # Skip this entry
-                logging.warning(f"Skipping entry due to ValueError after retrying: {entry}")
-                return None
-            else:
-                # Apply apply_negatives once more and retry
-                entry = apply_negatives(entry, negatives_prob)
-                return process_entry(
-                    entry,
-                    tokenizer,
-                    is_encoder_decoder,
-                    max_length,
-                    inference,
-                    prompt_loss_weight,
-                    prompt_until,
-                    negatives_prob,
-                    try_again=True
-                )
-        else:
-            # Raise other ValueErrors
-            raise e
-
 
 class CollieDatasetWithTransformations(CollieDataset):
     '''
@@ -602,41 +565,40 @@ class CollieDatasetWithTransformations(CollieDataset):
             print("Sample Masked Entry:")
             print(entry)
 
+        # Extract 'text' field from entries
+        examples = [entry["text"] for entry in entries]
+        
         if num_workers <= 1:
-            tokenized_examples = []
-            for entry in entries:
-                tokenized_example = process_entry(
-                    entry=entry,
-                    tokenizer=tokenizer,
-                    is_encoder_decoder=self.is_encoder_decoder,
-                    max_length=self.max_length,
-                    inference=self.inference,
-                    prompt_loss_weight=self.prompt_loss_weight,
-                    prompt_until=self.prompt_until,
-                    negatives_prob=self.negatives_prob
-                )
-                if tokenized_example is not None:
-                    tokenized_examples.append(tokenized_example)
+            return batch_tokenization(
+                tokenizer=tokenizer,
+                dataset_name=".".join([self.dataset_name, self.task_name, self.split]),
+                is_encoder_decoder=self.is_encoder_decoder,
+                max_length=self.max_length,
+                inference=self.inference,
+                prompt_loss_weight=self.prompt_loss_weight,
+                prompt_until=self.prompt_until,
+                examples=examples,
+                process_no=0,
+            )
         else:
-            # Use multiprocessing Pool
-            with Pool(num_workers) as pool:
-                # We need to pass all necessary parameters to the function
-                func = partial(
-                    process_entry,
-                    tokenizer=tokenizer,
-                    is_encoder_decoder=self.is_encoder_decoder,
-                    max_length=self.max_length,
-                    inference=self.inference,
-                    prompt_loss_weight=self.prompt_loss_weight,
-                    prompt_until=self.prompt_until,
-                    negatives_prob=self.negatives_prob
+            tokenizer_fn = partial(
+                batch_tokenization,
+                tokenizer,
+                ".".join([self.dataset_name, self.task_name, self.split]),
+                self.is_encoder_decoder,
+                self.max_length,
+                self.inference,
+                self.prompt_loss_weight,
+                self.prompt_until,
+            )
+            with Pool(num_workers) as p:
+                tokenized_examples = p.starmap(
+                    tokenizer_fn,
+                    zip(batch(examples, num_workers), range(num_workers)),
                 )
-                tokenized_examples = pool.map(func, entries)
 
-            # Filter out None entries (skipped entries)
-            tokenized_examples = [ex for ex in tokenized_examples if ex is not None]
+            return list(chain.from_iterable(tokenized_examples))
 
-        return tokenized_examples
 
 
 @dataclass
