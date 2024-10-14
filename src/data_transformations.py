@@ -98,7 +98,7 @@ def apply_negatives(entry, ratio=0.2):
 
     # Split text into different parts
     guidelines = text.split("# This is the text to analyze")[0]
-    unlabelled_text = text.split("# The list")[0]
+    unlabelled_text = text.split("# This is the text to analyze")[1].split("# The list ")[0]
     result = "# The list " + text.split("# The list ")[1]
 
 
@@ -107,7 +107,7 @@ def apply_negatives(entry, ratio=0.2):
 
     # Segment text into sentences using spaCy
     doc = nlp(unlabelled_sentence)
-    sentences = [sent.text for sent in doc.sents]
+    sentences = [sent for sent in doc.sents for sent in sent.text.split('\n') if sent]
 
 
     # Get the spans of the annotations in the text
