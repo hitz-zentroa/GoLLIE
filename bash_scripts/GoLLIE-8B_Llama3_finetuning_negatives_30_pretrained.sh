@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#SBATCH --job-name=GoLLIE-8B-Llama3
+#SBATCH --job-name=GoLLIE-8B-Llama3_finetuning
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
 #SBATCH --time=3-00:00:00
 #SBATCH --gres=gpu:4
-#SBATCH --mem=200G
-#SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining_negatives_15.out.txt
-#SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_pretraining_negatives_15.err.txt
+#SBATCH --mem=400G
+#SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_finetuning_negatives_30_pretrained.out.txt
+#SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_finetuning_negatives_30_pretrained.err.txt
 
 #module load CUDA/12.1
 #module load Python
@@ -19,7 +19,7 @@ export LANGUAGE=en_US.UTF-8
 export TOKENIZERS_PARALLELISM=true
 export TRANSFORMERS_NO_ADVISORY_WARNINGS=true
 export WANDB_ENTITY=neilus03
-export WANDB_PROJECT=GoLLIEv2.0-pretraining
+export WANDB_PROJECT=GoLLIEv2.0
 export OMP_NUM_THREADS=16
 
 echo CUDA_VISIBLE_DEVICES "${CUDA_VISIBLE_DEVICES}"
@@ -33,6 +33,5 @@ export PYTHONPATH="$PYTHONPATH:/sorgin1/users/neildlf/GoLLIE-dev/"
 cd /sorgin1/users/neildlf/GoLLIE-dev/
 
 # Now torchrun should execute with the correct working directory
-torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/pretrain/GoLLIE-8B_Llama3_pretrain_negatives_15.yaml
-#torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_pretrain.yaml
-
+torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/finetuning/GoLLIE-8B_LLama3_BS128_R128_finetuning_negatives_30_pretrained.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_finetuning_negatives_30_pretrained.yaml

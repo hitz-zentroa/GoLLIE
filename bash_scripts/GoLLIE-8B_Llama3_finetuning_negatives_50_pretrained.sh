@@ -4,7 +4,7 @@
 #SBATCH --cpus-per-task=22
 #SBATCH --nodes=1
 #SBATCH --time=3-00:00:00
-#SBATCH --gres=gpu:4
+#SBATCH --gres=gpu:2
 #SBATCH --mem=400G
 #SBATCH --output=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_finetuning_negatives_50_pretrained.out.txt
 #SBATCH --error=/sorgin1/users/neildlf/GoLLIE-dev/out/GoLLIE-8B-Llama3_finetuning_negatives_50_pretrained.err.txt
@@ -33,5 +33,5 @@ export PYTHONPATH="$PYTHONPATH:/sorgin1/users/neildlf/GoLLIE-dev/"
 cd /sorgin1/users/neildlf/GoLLIE-dev/
 
 # Now torchrun should execute with the correct working directory
-torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/finetuning/GoLLIE-8B_LLama3_BS128_R128_finetuning_negatives_50_pretrained.yaml
-torchrun --standalone --master_port 37227 --nproc_per_node=4 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_finetuning_negatives_50_pretrained.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=2 src/run.py configs/model_configs/finetuning/GoLLIE-8B_LLama3_BS128_R128_finetuning_negatives_50_pretrained.yaml
+torchrun --standalone --master_port 37227 --nproc_per_node=2 src/run.py configs/model_configs/eval/GoLLIE-8B_Llama3_BS128_R128_finetuning_negatives_50_pretrained.yaml
