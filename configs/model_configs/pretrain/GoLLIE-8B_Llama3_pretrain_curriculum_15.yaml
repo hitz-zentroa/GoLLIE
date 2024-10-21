@@ -1,0 +1,96 @@
+# Training arguments
+model_name_or_path: meta-llama/Meta-Llama-3.1-8B
+torch_dtype: bfloat16
+use_lora: true
+quantization: 4
+quantization_inference: null
+bf16_full_eval: true
+gradient_checkpointing: true
+force_auto_device_map: false
+use_flash_attention: true
+deepspeed: configs/deepspeed_configs/deepspeed_zero3.json
+
+# Dataset arguments
+dataset_dir: /sorgin1/users/neildlf/GoLLIE-dev/data/pretraining_data_processed_w_examples
+train_tasks:
+  - gollie_pretrain_data.ie
+validation_tasks:
+  - gollie_pretrain_data.ie
+test_tasks:
+  - gollie_pretrain_data.ie
+
+max_examples_per_task_train: 30000
+max_examples_per_task_val: 5000
+max_examples_per_task_test: null
+max_seq_length: 8192
+generation_max_length: 8192
+ignore_pad_token_for_loss: true
+prompt_loss_weight: 0.0
+
+# Checkpoint settings
+output_dir: /sorgin1/users/neildlf/GoLLIE-dev/model/GoLLIE+-8b_Llama3_BS128_R128_pretrain_curriculum_15
+overwrite_output_dir: true
+load_best_model_at_end: false
+save_strategy: "epoch"
+save_steps: 1000
+save_total_limit: 3
+
+# Evaluation
+do_train: true
+do_eval: true
+do_predict: true
+eval_strategy: "epoch"
+eval_steps: 500
+eval_delay: 0
+predict_with_generate: true
+evaluate_all_checkpoints: false  # Set to false for quicker testing
+
+# Batch size
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 2
+generation_num_beams: 1
+
+# Optimizer settings
+optim: adamw_hf
+learning_rate: 0.0003
+weight_decay: 0.001
+num_train_epochs: 3
+lr_scheduler_type: cosine
+warmup_ratio: 0.1
+adam_epsilon: 1e-7
+
+# LoRA settings
+lora_r: 128
+lora_alpha: 256
+lora_dropout: 0.08
+lora_target_modules:
+  - all
+
+# Reporting
+logging_strategy: steps
+logging_first_step: true
+logging_steps: 10
+report_to: wandb
+run_name: "GoLLIE-8b_Llama3_pretrain_curriculum_15"
+disable_tqdm: false
+
+# Hub settings
+push_to_hub: false
+resume_from_checkpoint: false
+
+# Performance
+bf16: true
+fp16: false
+torch_compile: false
+ddp_find_unused_parameters: false
+
+# Curriculum Learning Strategies
+entity_type_masking_prob:
+  - 0.0   # Epoch 1: No masking
+  - 0.15  # Epoch 2: Apply masking
+  - 0.15  # Epoch 3: Continue masking
+negatives_prob:
+  - 0.0   # Epoch 1: No negatives
+  - 0.0   # Epoch 2: No negatives yet
+  - 0.15  # Epoch 3: Introduce negatives
