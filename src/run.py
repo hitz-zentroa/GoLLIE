@@ -10,7 +10,8 @@ import torch.utils.data
 from datasets import DatasetDict
 
 from src.config import DataTrainingArguments, ModelArguments
-from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE
+from src.dataset.dataset import CollieDataset, DataCollatorForCoLLIE, CollieDatasetWithTransformations
+
 from src.evaluate import evaluate
 from src.model.load_model import load_model, merge_lora_model
 from src.trainer import CollieTrainer, ConcatDataset, get_correct_torch_dtype
@@ -56,6 +57,10 @@ def train_collie(
         fsdp_training=len(training_args.fsdp) > 1 or training_args.fsdp_config is not None,
         max_memory_MB=model_args.max_memory_MB,
     )
+    
+    #Send model to GPU
+    device = torch.device(f'cuda:{training_args.local_rank}')
+    model.to(device)
 
     logging.info("Loading datasets...")
     training_datasets_path = [
@@ -75,21 +80,36 @@ def train_collie(
 
     logging.info(
         "Training dataset will be loaded with. 'ignore_pad_token_for_loss':"
-        f" {data_args.ignore_pad_token_for_loss} and 'prompt_loss_weight':"
-        f" {data_args.prompt_loss_weight}"
+        f" {data_args.ignore_pad_token_for_loss}; 'prompt_loss_weight':"
+        f" {data_args.prompt_loss_weight} and 'prompt_until': {data_args.prompt_until}."
     )
+
+    if data_args.entity_type_masking_prob or data_args.negatives_prob:
+        # Use CollieDatasetWithTransformations if any probability is set
+        train_dataset_class = CollieDatasetWithTransformations
+        additional_args = {
+            'entity_type_masking_prob': data_args.entity_type_masking_prob,
+            'negatives_prob': data_args.negatives_prob,
+        }
+    else:
+        # Use the base class if no transformations are needed
+        train_dataset_class = CollieDataset
+        additional_args = {}
 
     training_datasets = []
     for train_task in data_args.train_tasks:
         train_path = os.path.join(data_args.dataset_dir, f"{train_task}.train.jsonl")
-        train_dataset = CollieDataset(
+        train_dataset = train_dataset_class(
             tokenizer=tokenizer,
             dataset_path=train_path,
             max_length=data_args.max_seq_length,
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=data_args.prompt_loss_weight,
+            prompt_until=data_args.prompt_until,
             max_examples=data_args.max_examples_per_task_train,
+            num_workers=min(os.cpu_count(), 16),
+            **additional_args # Pass the transformation probabilities
         )
         training_datasets.append(train_dataset)
 
@@ -105,6 +125,7 @@ def train_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=False,
             prompt_loss_weight=0.0,
+            prompt_until="result",
             max_examples=data_args.max_examples_per_task_val,
         )
         dev_datasets[os.path.splitext(os.path.basename(dev_path))[0]] = dev_dataset
@@ -199,15 +220,15 @@ def inference_collie(
         )
 
     delete_merged_model: bool = False
-    if model_args.merge_lora_before_eval:
-        logging.info("You have specified to merge the LORA weights before evaluation. We will attempt to do so.")
-        if model_args.quantization is None:
+    if model_args.merge_lora_before_inference:
+        logging.info("You have specified to merge the LORA weights before inference. We will attempt to do so.")
+        if model_args.quantization_inference is None:
             logging.warning(
-                "You have specified to create a merged model (merge_lora_before_eval=True), but you have not specified"
-                " a quantization precision. Model loades without quantization are automatically merged when loaded for"
-                " inference, so there is no need to save a merged model and reaload it. This flag is only useful when"
-                " you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you plan to"
-                " release the merged model."
+                "You have specified to create a merged model (merge_lora_before_inference=True), but you have not"
+                " specified a quantization precision. Model loads without quantization are automatically merged when"
+                " loaded for inference, so there is no need to save a merged model and reaload it. This flag is only"
+                " useful when you want to merge a model and then load it using 4 bits ot 8 bits quantization or if you"
+                " plan to release the merged model."
             )
         if os.path.exists(os.path.join(training_args.output_dir, "merged_model")):
             logging.info(
@@ -233,7 +254,7 @@ def inference_collie(
         inference=True,
         model_weights_name_or_path=model_path,
         quantization=model_args.quantization_inference,
-        use_lora=model_args.lora_weights_name_or_path is not None,
+        use_lora=lora_weights_name_or_path is not None,
         lora_weights_name_or_path=lora_weights_name_or_path,
         force_auto_device_map=model_args.force_auto_device_map,
         torch_dtype=get_correct_torch_dtype(
@@ -244,6 +265,8 @@ def inference_collie(
         use_flash_attention=model_args.use_flash_attention,
         max_memory_MB=model_args.max_memory_MB,
     )
+    
+    model.to('cuda')
 
     trainer = CollieTrainer(
         model=model,
@@ -269,6 +292,7 @@ def inference_collie(
             is_encoder_decoder=model.config.is_encoder_decoder,
             inference=True if training_args.predict_with_generate else False,
             prompt_loss_weight=0.0,
+            prompt_until="result",
             max_examples=data_args.max_examples_per_task_test,
         )
 
@@ -329,6 +353,10 @@ def inference_collie(
 
 
 if __name__ == "__main__":
+
+    # Get project root directory
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     logging.basicConfig(level=logging.INFO)
 
     parser = HfArgumentParser((ModelArguments, DataTrainingArguments, Seq2SeqTrainingArguments))
@@ -344,7 +372,12 @@ if __name__ == "__main__":
         # If we pass only one argument to the script, and it's the path to a yaml file,
         # let's parse it to get our arguments.
         logging.info(f"Loading yaml config {sys.argv[-1]}")
-        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
+
+        # Construct absolute path to YAML file
+        yaml_file_path = os.path.join(project_root, sys.argv[-1])
+
+        # model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=os.path.abspath(sys.argv[-1]))
+        model_args, data_args, training_args = parser.parse_yaml_file(yaml_file=yaml_file_path)
     else:
         logging.info("No config file passed, using command line arguments.")
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()

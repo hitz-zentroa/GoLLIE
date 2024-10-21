@@ -1,10 +1,10 @@
 {
   "_from_model_config": true,
-  "max_new_tokens": 1024,
+  "max_new_tokens": 2048,
   "min_new_tokens": 4,
   "do_sample": true,
   "num_beams": 1,
-  "temperature": 0.7,
+  "temperature": 0.8,
   "top_k": 50,
   "top_p": 0.95,
   "num_return_sequences": 4

@@ -543,6 +543,8 @@ class WikiEventsSampler(Sampler):
            The scorer class import string. Defaults to `None`.
         sample_only_gold_guidelines (`bool`, optional):
             Whether to sample only guidelines of present annotations. Defaults to `False`.
+        is_end_to_end (`bool`, optional):
+            Whether or not perform the task in end to end fashion. Defaults to `False`.
     """
 
     def __init__(
@@ -558,6 +560,7 @@ class WikiEventsSampler(Sampler):
         dataset_name: str = None,
         scorer: str = None,
         sample_only_gold_guidelines: bool = False,
+        is_end_to_end: bool = False,
         **kwargs,
     ) -> None:
         assert task in [
@@ -569,10 +572,14 @@ class WikiEventsSampler(Sampler):
         task_definitions, task_target, task_template = {
             "NER": (ENTITY_DEFINITIONS, "entities", "templates/prompt.txt"),
             "EE": (COARSE_EVENT_DEFINITIONS, "events", "templates/prompt.txt"),
-            "EAE": (EVENT_DEFINITIONS, "arguments", "templates/prompt_ace_eae.txt"),
+            "EAE": (
+                EVENT_DEFINITIONS,
+                "arguments",
+                "templates/prompt_ace_eae.txt" if not is_end_to_end else "templates/prompt.txt",
+            ),
         }[task]
 
-        if task in ["EAE"]:
+        if task in ["EAE"] and not is_end_to_end:
             is_coarse_to_fine: bool = True
             COARSE_TO_FINE = COARSE_TO_FINE_EVENTS
             FINE_TO_COARSE = FINE_TO_COARSE_EVENTS
@@ -599,6 +606,7 @@ class WikiEventsSampler(Sampler):
             task_definitions=task_definitions,
             task_target=task_target,
             is_coarse_to_fine=is_coarse_to_fine,
+            is_end_to_end=is_end_to_end,
             coarse_to_fine=COARSE_TO_FINE,
             fine_to_coarse=FINE_TO_COARSE,
             definitions=GUIDELINES,

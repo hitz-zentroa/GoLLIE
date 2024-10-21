@@ -1,7 +1,7 @@
 .slurm/*
 .vscode/*
 .ignore/
-data/*
+data
 wandb/*
 assets/plots/*
 
@@ -141,3 +141,15 @@ pretrained_models/
 collie/
 configs/model_configs/legacy/debug.yaml
 
+out.*
+err.*
+
+*.out
+*.err
+
+*.err.txt
+*.out.txt
+
+*.pt
+
+model/GoLLIE*

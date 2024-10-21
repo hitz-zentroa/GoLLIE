@@ -9,6 +9,7 @@ from collections import defaultdict
 from copy import deepcopy
 from dataclasses import dataclass as org_dataclass
 from typing import Any, Dict, List, Tuple, Type, TypeVar, Union
+from typing import get_origin, get_args
 
 
 def dataclass(

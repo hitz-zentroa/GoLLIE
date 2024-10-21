@@ -13,16 +13,6 @@ class DataInferenceArguments:
         metadata={"help": "The tasks to train on. Can be a list of tasks or a single task."},
     )
 
-    config_template: str = field(
-        default="vicuna_v1.1",
-        metadata={
-            "help": (
-                "The config template to use. Available templates: 'one_shot', 'vicuna_v1.1', 'koala_v1', 'dolly_v2',"
-                " 'oasst_pythia', 'stablelm', 'baize', 'rwkv', 'openbuddy', 'phoenix', 'chatgpt', 'claude', 'mpt'"
-            )
-        },
-    )
-
     language: str = field(
         default="en",
         metadata={"help": "The language to do phrase paraphrasing."},

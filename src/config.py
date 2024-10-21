@@ -149,7 +149,7 @@ class ModelArguments:
         },
     )
 
-    merge_lora_before_eval: bool = field(
+    merge_lora_before_inference: bool = field(
         default=False,
         metadata={
             "help": (
@@ -166,10 +166,10 @@ class ModelArguments:
         default=False,
         metadata={
             "help": (
-                "If 'merge_lora_before_eval' is set to True, whether to keep the merged model after eval, or delete it"
-                " to save disk space. Merged model will be saved in {model_name_or_path}/merged_model and will use"
-                " the same disk space as the original model. While storing only the LoRA layers only takes a few MBs."
-                " Defaults to False."
+                "If 'merge_lora_before_inference' is set to True, whether to keep the merged model after eval, or"
+                " delete it to save disk space. Merged model will be saved in {model_name_or_path}/merged_model and"
+                " will use the same disk space as the original model. While storing only the LoRA layers only takes a"
+                " few MBs. Defaults to False."
             )
         },
     )
@@ -239,6 +239,16 @@ class DataTrainingArguments:
         },
     )
 
+    prompt_until: str = field(
+        default="result",
+        metadata={
+            "help": (
+                "Which part of the sentence consider as non-prompt. Defaults to `result`."
+                "It can be 'results', 'text', 'all'."
+            )
+        },
+    )
+
     max_examples_per_task_train: int = field(
         default=None,
         metadata={
@@ -269,3 +279,6 @@ class DataTrainingArguments:
             )
         },
     )
+    
+    entity_type_masking_prob: float = 0.0
+    negatives_prob: float = 0.0

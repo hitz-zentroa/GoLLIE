@@ -1,7 +1,6 @@
 import logging
 from typing import List
 
-from fastchat.conversation import get_conv_template
 from torch.utils.data import Dataset
 from tqdm import tqdm
 
@@ -15,7 +14,6 @@ def prepare_data(
     tokenizer: PreTrainedTokenizerBase,
     is_encoder_decoder: bool = False,
     max_length: int = 2048,
-    conv_template: str = None,
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
@@ -37,17 +35,20 @@ def prepare_data(
     """
 
     prompt = (
-        "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase. If"
-        " possible rearrange the word order. Write a short explanation of how are you paraphrasing the text.\n"
-        'Use the following format: "Explanation: <your explanation>". \n "Paraphrase: <your paraphrase>". \n'
-        f'Text: "{example}"'
+        "Please, generate a paraphrase of the following text. Ensure that no information is lost in the paraphrase."
+        " If possible rearrange the word order. Please answer only with the paraphrase, do not write any additional"
+        " text or clarifications. Do not start your answer with 'This is the paraphrase of...' or any other similar"
+        " phrase. Just answer the pharaphrase. Try to be creative and avoid using the same words as the original"
+        f' text. But remember to keep the meaning and information of the original text. Text: "{example}"'
     )
 
-    if conv_template is not None:
-        conv = get_conv_template(conv_template)
-        conv.append_message(conv.roles[0], prompt)
-        conv.append_message(conv.roles[1], None)
-        prompt = conv.get_prompt()
+    if tokenizer.chat_template is not None:
+        prompt = tokenizer.apply_chat_template(
+            [{"role": "user", "content": prompt}],
+            tokenize=False,
+            add_generation_prompt=True,
+            add_special_tokens=False,
+        )
 
     model_inputs = tokenizer(
         text=prompt,
@@ -68,7 +69,11 @@ def prepare_data(
         # LLaMa tokenizer adds token type ids, but we don't need them
         model_inputs.pop("token_type_ids")
 
-    return model_inputs
+    if "labels" in model_inputs:
+        # Remove labels if they are present
+        model_inputs.pop("labels")
+
+    return model_inputs, prompt
 
 
 class ParaphraseDataset(Dataset):
@@ -86,8 +91,6 @@ class ParaphraseDataset(Dataset):
             Whether the model is an encoder-decoder model. Defaults to `False`.
         max_length (`int`, optional):
             The maximum length of the input. Defaults to `2048`.
-        conv_template (`str`, optional):
-            The conversation template to use. Defaults to `None`. If `None` we will return the prompt.
     """
 
     def __init__(
@@ -97,20 +100,21 @@ class ParaphraseDataset(Dataset):
         language: str,
         is_encoder_decoder: bool = False,
         max_length: int = 2048,
-        conv_template: str = None,
     ):
         self.dataset_name = dataset_name
         self.language = language
         self.is_encoder_decoder = is_encoder_decoder
         self.max_length = max_length
-        self.conv_template = conv_template
+        self.prompts = []
         guidelines = task_id_to_guidelines(dataset_name)
         guidelines = clean_guidelines(guidelines)
         self.dataset: List[BatchEncoding] = []
         for guideline in tqdm(guidelines.values(), desc="Data Tokenization"):
             for text in guideline[language]:
                 # rich.print(f"Guideline: {text}")
-                self.dataset.append(prepare_data(text, tokenizer, is_encoder_decoder, max_length, conv_template))
+                model_inputs, prompt = prepare_data(text, tokenizer, is_encoder_decoder, max_length)
+                self.dataset.append(model_inputs)
+                self.prompts.append(prompt)
 
         logging.info(f"Dataset {dataset_name} has {len(self.dataset)} guidelines.")
 
@@ -119,3 +123,6 @@ class ParaphraseDataset(Dataset):
 
     def __getitem__(self, idx):
         return self.dataset[idx]
+
+    def get_prompts(self):
+        return self.prompts

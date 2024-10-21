@@ -3,8 +3,6 @@ import logging
 import os
 import sys
 
-from fastchat.conversation import get_conv_template
-
 from src.config import ModelArguments
 from src.model.load_model import load_model
 from src.paraphrase.config import DataInferenceArguments
@@ -12,7 +10,7 @@ from src.paraphrase.dataset import ParaphraseDataset
 from src.paraphrase.utils import clean_guidelines, format_guidelines_as_py, update_guidelines
 from src.tasks import task_id_to_guidelines
 from src.trainer import get_correct_torch_dtype
-from transformers import DataCollatorForSeq2Seq, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
+from transformers import DataCollatorWithPadding, HfArgumentParser, Seq2SeqTrainer, Seq2SeqTrainingArguments
 
 
 def run_paraphrasing(
@@ -49,12 +47,11 @@ def run_paraphrasing(
         tokenizer=tokenizer,
         model=model,
         args=training_args,
-        data_collator=DataCollatorForSeq2Seq(
+        data_collator=DataCollatorWithPadding(
             tokenizer,
-            pad_to_multiple_of=8,
+            pad_to_multiple_of=None,
             return_tensors="pt",
             padding=True,
-            label_pad_token_id=tokenizer.pad_token_id,
         ),
     )
 
@@ -82,8 +79,7 @@ def run_paraphrasing(
             dataset_name=dataset_name,
             language=data_args.language,
             is_encoder_decoder=model.config.is_encoder_decoder,
-            max_length=1024,
-            conv_template=data_args.config_template,
+            max_length=2048,
         )
 
         output_path = os.path.join(training_args.output_dir, dataset_name, "guidelines.py")
@@ -97,27 +93,23 @@ def run_paraphrasing(
             for i in range(num_return_sequences):
                 predictions = trainer.predict(test_dataset, **gen_kwargs).predictions
                 predictions[predictions == -100] = tokenizer.pad_token_id
+                predictions_postprocessed = []
+                for prediction, prompt in zip(predictions, test_dataset.dataset):
+                    prediction = prediction[len(prompt["input_ids"]) :]
+                    try:
+                        prediction = tokenizer.decode(
+                            prediction, skip_special_tokens=True, clean_up_tokenization_spaces=True
+                        ).strip()
+                    except OverflowError:
+                        raise OverflowError(f"Unable to decode prediction: {prediction}")
 
-                try:
-                    predictions = tokenizer.batch_decode(predictions, skip_special_tokens=True)
-                except OverflowError:
-                    raise OverflowError(f"Unable to decode predictions: {predictions}")
+                    predictions_postprocessed.append(prediction)
 
-                for prediction in predictions:
                     print(prediction, file=f)
                     print("\n====================\n", file=f)
 
-                if data_args.config_template is not None:
-                    conv = get_conv_template(data_args.config_template)
-                    predictions = [prediction.split(conv.roles[1])[-1].strip() for prediction in predictions]
-                # rich.print(predictions)
-
-                predictions = [prediction.strip().strip("\n") for prediction in predictions]
-                predictions = [prediction.split("\n")[-1].strip() for prediction in predictions]
-                predictions = [":".join(prediction.split(":")[1:]) for prediction in predictions]
-
                 guidelines = update_guidelines(
-                    paraphrases=predictions,
+                    paraphrases=predictions_postprocessed,
                     guidelines=guidelines,
                     language=data_args.language,
                 )

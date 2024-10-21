@@ -89,6 +89,8 @@ class Sampler:
         fine_to_coarse (`Dict[Type, Type]`, optional):
             If `is_coarse_to_fine` this argument contains the information to map from fine
             labels to coarse labels. Defaults to `None`.
+        is_end_to_end (`bool`, optional):
+            Whether or not perform the task in end to end fashion. Defaults to `False`.
         lang (`str`, optional):
             Language of the guidelines to sample. Defaults to `"en"`.
         definitions (`Dict[str, Any]`, optional):
@@ -99,6 +101,10 @@ class Sampler:
             Dictionary from where to sample the examples. Defaults to None.
         label_noise_prob (`float`, optional):
             The probability to hide the label names. Defaults to `0.0`.
+        do_not_shuffle (`bool`, optional):
+            Whether or not to shuffle the examples. Defaults to `False`.
+        disable_paraphrases (`bool`, optional):
+            Whether or not to disable paraphrases. Defaults to `False`.
 
     Raises:
         ValueError:
@@ -126,14 +132,19 @@ class Sampler:
         is_coarse_to_fine: bool = False,
         coarse_to_fine: Dict[Type, List[Type]] = None,
         fine_to_coarse: Dict[Type, Type] = None,
+        is_end_to_end: bool = False,
         lang: str = "en",
         definitions: Dict[str, Any] = None,
         include_examples_prob: float = 0.0,
         examples: Dict[str, Any] = None,
         label_noise_prob: float = 0.0,
         coarse_dropout: float = 0.0,
+        do_not_shuffle: bool = False,
+        disable_paraphrases: bool = False,
         **kwargs,
     ) -> None:
+        self.do_not_shuffle = do_not_shuffle
+        self.disable_paraphrases = disable_paraphrases
         self.loader = dataset_loader
         self.task = task
         assert split in [
@@ -172,8 +183,12 @@ class Sampler:
 
         # Maping information for coarse --> fine tasks such as EAE or RC
         self.is_coarse_to_fine = is_coarse_to_fine
+        self.is_end_to_end = is_end_to_end
         self._coarse_to_fine = coarse_to_fine
         self._fine_to_coarse = fine_to_coarse
+        assert not self.is_end_to_end or (
+            self.is_end_to_end and not self.is_coarse_to_fine
+        ), "If the task is end2end it can not be coarse to fine."
 
         self._black_mode = black.Mode()
         self.remove_guidelines = remove_guidelines
@@ -245,16 +260,22 @@ class Sampler:
                 )
                 p += 1.0 / p.shape[0]
                 p /= p.sum()
-                guidelines = np.random.choice(
-                    np.asarray(guidelines),
+                guidelines_ids = np.random.choice(
+                    np.asarray(range(len(guidelines))),
                     size=(self.sample_total_guidelines,),
                     replace=False,
                     p=p,
                 ).tolist()
 
+                guidelines_ids.sort()
+
+                guidelines = [guidelines[i] for i in guidelines_ids]
+
             # Shuffle the guidelines
-            random.shuffle(guidelines)
+            if not self.do_not_shuffle:
+                random.shuffle(guidelines)
             # Split the guidelines according to `max_guidelines`
+
             splits = math.ceil(len(guidelines) / self.max_guidelines)
             for i in range(splits):
                 _guidelines = guidelines[i * self.max_guidelines : (i + 1) * self.max_guidelines]
@@ -283,11 +304,17 @@ class Sampler:
                     continue
 
                 _guidelines = [inspect.getsource(definition) for definition in _guidelines]
+
                 # Apply definition paraphrases if train
                 _definitions = {
-                    key: random.choice(value[self.lang]) if self.split == "train" else value[self.lang][0]
+                    key: (
+                        random.choice(value[self.lang])
+                        if self.split == "train" and not self.disable_paraphrases
+                        else value[self.lang][0]
+                    )
                     for key, value in self.definitions.items()
                 }
+
                 # Sample few-shot examples if train (add epsilon for not sampling a 0.0)
                 if min(random.random() + 1e-6, 1.0) <= self.include_examples_prob:
                     _examples = {
@@ -306,10 +333,11 @@ class Sampler:
                         for key in self._formatter.parse(definition)
                         if key[1] is not None and "example" in key[1]
                     }
+
                 _repl = {**_examples, **_definitions}
                 _guidelines = [definition.format(**_repl) for definition in _guidelines]
                 # If no examples are provide, empty comments are created, the following line removes them
-                _guidelines = {self._remove_empty_comments_fn(definition) for definition in _guidelines}
+                _guidelines = [self._remove_empty_comments_fn(definition) for definition in _guidelines]
 
                 # Remove definitions for baseline
                 if self.remove_guidelines:

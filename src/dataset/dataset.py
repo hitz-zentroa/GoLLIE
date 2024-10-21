@@ -17,6 +17,16 @@ from torch.utils.data import Dataset
 from transformers import BatchEncoding, PreTrainedTokenizerBase
 from transformers.utils import PaddingStrategy
 
+#get the os path to be able to import functions from different directories within the project
+import os
+import sys
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+#i want to import the functions from data_transformations.py which is located at 
+# /sorgin1/users/neildlf/GoLLIE-dev/src/data_transformations.py while this file is
+# located at /sorgin1/users/neildlf/GoLLIE-dev/src/dataset/dataset.py
+from data_transformations import apply_entity_type_masking, apply_negatives
+
 
 def batch(iterable: Sized, n=1) -> Iterator:
     """
@@ -45,6 +55,7 @@ def prepare_data(
     max_length: int = 2048,
     inference: bool = False,
     prompt_loss_weight: float = 0.05,
+    prompt_until: str = "result",
 ) -> BatchEncoding:
     """
     Prepare data for training or inference.
@@ -64,14 +75,22 @@ def prepare_data(
         prompt_loss_weight (`float`, optional):
             The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
             of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
+        prompt_until (`str`, optional):
+            Which part of the sentence consider as non-prompt. Defaults to `result`.
+            It can be 'results', 'sentence', 'all'.
 
     Returns:
         `BatchEncoding`: `BatchEncoding` with the prepared data.
     """
 
     if is_encoder_decoder:
-        prompt, result = example.split("result =")
-        prompt = prompt + "result ="
+        if prompt_until == "all":
+            raise ValueError(
+                "Prompt until 'all' is not supported for encoder-decoder models. "
+                "Please use 'result' or 'text' instead."
+            )
+        prompt, result = example.split("result =" if prompt_until == "result" else "text =", maxsplit=1)
+        prompt = prompt + ("result =" if prompt_until == "result" else prompt + "text =")
         prompt = prompt.strip()
         result = result.strip()
 
@@ -97,7 +116,16 @@ def prepare_data(
 
     else:
         if inference:
-            prompt = example.split("result =")[0] + "result ="
+            if prompt_until == "all":
+                prompt = ""
+            elif prompt_until == "result":
+                prompt = example.split("result =")[0] + "result ="
+            elif prompt_until == "text":
+                prompt = example.split("text =")[0] + "text ="
+            else:
+                raise ValueError(
+                    f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'"
+                )
             model_inputs = tokenizer(
                 text=prompt,
                 max_length=max_length,
@@ -131,47 +159,66 @@ def prepare_data(
             model_inputs["labels"] = model_inputs["input_ids"].copy()
 
             # Find the prompt length
-            prompt = example.split("result =")[0] + "result ="
-            prompt = tokenizer(
-                text=prompt,
-                max_length=max_length,
-                truncation=True,
-                padding=False,
-                return_tensors=None,
-                add_special_tokens=True,
-            )["input_ids"]
 
-            # Remove the last token if it is an eos token
-            if prompt[-1] == tokenizer.eos_token_id:
-                prompt = prompt[:-1]
+            if prompt_until == "all":
+                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+            else:
+                if prompt_until == "result":
+                    prompt = example.split("result =", maxsplit=1)[0] + "result ="
+                elif prompt_until == "text":
+                    prompt = example.split("text =", maxsplit=1)[0] + "text ="
+                else:
+                    raise ValueError(
+                        f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'"
+                    )
 
-            if len(prompt) > len(model_inputs["labels"]):
-                raise ValueError(
-                    f"Prompt is longer than the input, something went wrong. Prompt: {prompt}, input:"
-                    f" {model_inputs['input_ids']}"
-                )
+                prompt = tokenizer(
+                    text=prompt,
+                    max_length=max_length,
+                    truncation=True,
+                    padding=False,
+                    return_tensors=None,
+                    add_special_tokens=True,
+                )["input_ids"]
 
-            # Create the weight mask
-            loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+                # Remove the last token if it is an eos token
+                if prompt[-1] == tokenizer.eos_token_id:
+                    prompt = prompt[:-1]
 
-            # The sum of the loss of the prompt tokens should be equal to 'prompt_loss_weight' percent of the total loss
-            len_prompt = len(prompt)
-            len_result = len(model_inputs["labels"]) - len_prompt
-            prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
-            try:
-                prompt_token_weight = prompt_token_weight * (
-                    len_result / (len_result * (1 - prompt_loss_weight))
-                )  # Scale so result tokens can have 1.0 weight
-                prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
-            except ZeroDivisionError:
-                logging.warning(
-                    "Found division by zero in prompt token weight calculation. You might have an empty prompt, empty"
-                    f" result, or both. Example with error: {example}. Setting prompt token weight to 0.0."
-                )
-                prompt_token_weight = 0.0
+                #This if raise below is causing problems with negatives (do not know why)
+                if len(prompt) > len(model_inputs["labels"]):
+                    logging.error(
+                        f"Prompt is longer than the labels, something went wrong. "
+                        f"Prompt: {prompt}, labels: {model_inputs['labels']}, "
+                        f"original text: {example}"
+                    )
+                    raise ValueError(
+                        f"Prompt is longer than the labels, something went wrong. Prompt: {prompt}, labels:"
+                        f" {model_inputs['labels']}"
+                    )
 
-            for i in range(len(prompt)):
-                loss_weight_mask[i] = prompt_token_weight
+                # Create the weight mask
+                loss_weight_mask = np.ones(len(model_inputs["labels"]), dtype=np.float32)
+
+                # The sum of the loss of the prompt tokens should be equal
+                # to 'prompt_loss_weight' percent of the total loss
+                len_prompt = len(prompt)
+                len_result = len(model_inputs["labels"]) - len_prompt
+                prompt_token_weight = len_result * prompt_loss_weight  # 'prompt_loss_weight' percent of the total loss
+                try:
+                    prompt_token_weight = prompt_token_weight * (
+                        len_result / (len_result * (1 - prompt_loss_weight))
+                    )  # Scale so result tokens can have 1.0 weight
+                    prompt_token_weight = prompt_token_weight / len_prompt  # Divide by the number of prompt tokens
+                except ZeroDivisionError:
+                    logging.warning(
+                        "Found division by zero in prompt token weight calculation. You might have an empty prompt,"
+                        f" empty result, or both. Example with error: {example}. Setting prompt token weight to 0.0."
+                    )
+                    prompt_token_weight = 0.0
+
+                for i in range(len(prompt)):
+                    loss_weight_mask[i] = prompt_token_weight
 
             model_inputs["loss_weight_mask"] = loss_weight_mask
 
@@ -189,6 +236,7 @@ def batch_tokenization(
     max_length: int,
     inference: bool,
     prompt_loss_weight: float,
+    prompt_until: str,
     examples: List[str],
     process_no: int,
 ) -> List[BatchEncoding]:
@@ -212,6 +260,9 @@ def batch_tokenization(
         prompt_loss_weight (`float`):
             The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
             of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
+        prompt_until (`str`, optional):
+            Which part of the sentence consider as non-prompt. Defaults to `result`.
+            It can be 'results', 'text', 'all'.
         examples (`List[str]`):
             The examples to tokenize.
         process_no (`int`):
@@ -239,6 +290,7 @@ def batch_tokenization(
                         max_length=max_length,
                         inference=inference,
                         prompt_loss_weight=prompt_loss_weight,
+                        prompt_until=prompt_until,
                     )
                 )
                 progress.update(task, advance=1)
@@ -251,6 +303,7 @@ def batch_tokenization(
                 max_length=max_length,
                 inference=inference,
                 prompt_loss_weight=prompt_loss_weight,
+                prompt_until=prompt_until,
             )
             for example in examples
         ]
@@ -280,6 +333,9 @@ class CollieDataset(Dataset):
         prompt_loss_weight (`float`, optional):
             The weight of the prompt tokens in the loss. If set to '0.05' the prompt tokens will have a total weight
             of 5% in the loss while the result tokens will have a total weight of 95%. Defaults to `0.05`.
+        prompt_until (`str`, optional):
+            Which part of the sentence consider as non-prompt. Defaults to `result`.
+            It can be 'results', 'sentence', 'text'.
         num_workers (`int`, optional):
             The number of workers to use for tokenization. Defaults to
             `min(os.cpu_count(), 16)`.
@@ -297,6 +353,7 @@ class CollieDataset(Dataset):
         max_length: int = 2048,
         inference: bool = False,
         prompt_loss_weight: float = 0.0,
+        prompt_until: str = "result",
         num_workers: int = min(os.cpu_count(), 16),
         max_examples: Optional[int] = None,
     ):
@@ -305,11 +362,14 @@ class CollieDataset(Dataset):
         self.inference = inference
         self.max_examples = max_examples
 
-        assert (
-            prompt_loss_weight >= 0.0 and prompt_loss_weight < 1.0
-        ), f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}."
+        if not (0.0 <= prompt_loss_weight < 1.0):
+            raise ValueError(f"Prompt loss weight must be in [0, 1). Found {prompt_loss_weight}.")
 
         self.prompt_loss_weight = prompt_loss_weight
+
+        if prompt_until not in ["result", "text", "all"]:
+            raise ValueError(f"Invalid prompt_until value: {prompt_until}. Valid values are 'all', 'result', 'text'")
+        self.prompt_until = prompt_until
 
         try:
             self.dataset_name, self.task_name, self.split, extension = os.path.basename(dataset_path).split(".")
@@ -418,6 +478,7 @@ class CollieDataset(Dataset):
                 max_length=self.max_length,
                 inference=self.inference,
                 prompt_loss_weight=self.prompt_loss_weight,
+                prompt_until=self.prompt_until,
                 examples=examples,
                 process_no=0,
             )
@@ -430,6 +491,7 @@ class CollieDataset(Dataset):
                 self.max_length,
                 self.inference,
                 self.prompt_loss_weight,
+                self.prompt_until,
             )
             with Pool(num_workers) as p:
                 tokenized_examples = p.starmap(
@@ -458,6 +520,185 @@ class CollieDataset(Dataset):
                 f' Dataset {".".join([self.dataset_name, self.task_name, self.split])} rotated to split'
                 f" {self.current_dataset_key}"
             )
+
+
+
+class CollieDatasetWithTransformations(CollieDataset):
+    '''
+    Collie dataset with data transformations such as entity type masking and negatives.
+    '''
+    def __init__(
+        self,
+        *args,
+        entity_type_masking_prob=0.0,
+        negatives_prob=0.0,
+        **kwargs
+    ):
+        
+        #self.entity_type_masking_prob = entity_type_masking_prob
+        #self.negatives_prob = negatives_prob
+        
+        # Store additional arguments for later use
+        self.num_workers = kwargs.get('num_workers', min(os.cpu_count(), 16))
+        self.tokenizer = kwargs.get('tokenizer')
+        self.dataset_path = kwargs.get('dataset_path')
+        self.max_examples = kwargs.get('max_examples')  
+        
+        # Handle both single values and lists for probabilities
+        # This ensures backward compatibility both for curriculum and normal pretraining
+        if isinstance(entity_type_masking_prob, list):
+            # If a list is provided, use it directly
+            self.entity_type_masking_probs = entity_type_masking_prob
+        else:
+            # If a single value is provided, create a list with that value
+            self.entity_type_masking_probs = [entity_type_masking_prob] 
+            
+        if isinstance(negatives_prob, list):
+            self.negatives_probs = negatives_prob
+        else:
+            self.negatives_probs = [negatives_prob]
+        
+        # Initialize the current epoch to 0
+        self.current_epoch = 0
+        
+        #Update probabilities based on the current epoch
+        self.update_probabilities()
+        
+        super().__init__(*args, **kwargs)
+        
+        # Compute the initial tokenized examples
+        # This ensures that the dataset is ready for the first epoch
+        self.dataset_dict[self.current_dataset_key] = self.compute_tokenized_examples(
+            dataset_path=self.dataset_path,
+            num_workers=self.num_workers,
+            tokenizer=self.tokenizer,
+        )
+        
+        
+        
+    def update_probabilities(self):
+        '''Function to update the entity_type_masking_prob and negatives_prob based on the current epoch.'''
+        # Determine the maximum number of epochs based on the length of probability lists
+        max_epochs = max(len(self.entity_type_masking_probs), len(self.negatives_probs))
+
+        # Ensure current_epoch does not exceed the maximum index
+        epoch_idx = min(self.current_epoch, max_epochs - 1)
+
+        # Update entity_type_masking_prob
+        if epoch_idx < len(self.entity_type_masking_probs):
+            self.entity_type_masking_prob = self.entity_type_masking_probs[epoch_idx]
+        else:
+            # If the list is shorter, use the last available value
+            self.entity_type_masking_prob = self.entity_type_masking_probs[-1]
+
+        # Update negatives_prob
+        if epoch_idx < len(self.negatives_probs):
+            self.negatives_prob = self.negatives_probs[epoch_idx]
+        else:
+            self.negatives_prob = self.negatives_probs[-1]
+
+        # Log the updated probabilities
+        logging.info(
+            f"Updated probabilities for epoch {self.current_epoch}: "
+            f"entity_type_masking_prob={self.entity_type_masking_prob}, "
+            f"negatives_prob={self.negatives_prob}"
+        )
+        
+    def rotate_split(self):
+        # Increment the current epoch
+        self.current_epoch += 1
+
+        # Update probabilities based on the new epoch
+        self.update_probabilities()
+
+        # Log that we are recomputing tokenized examples
+        logging.info(f"Recomputing tokenized examples for epoch {self.current_epoch}")
+
+        # Recompute tokenized examples with updated probabilities
+        self.dataset_dict[self.current_dataset_key] = self.compute_tokenized_examples(
+            dataset_path=self.dataset_path,
+            num_workers=self.num_workers,
+            tokenizer=self.tokenizer,
+        )
+
+        
+    def compute_tokenized_examples(
+        self,
+        dataset_path,
+        num_workers,
+        tokenizer,
+    ) -> List[BatchEncoding]:
+
+        """
+        Compute the tokenized examples, applying transformations before tokenization.
+
+        Args:
+            dataset_path (str): Path to the dataset file.
+            num_workers (int): Number of workers for tokenization.
+            tokenizer (PreTrainedTokenizerBase): Tokenizer to use.
+
+        Returns:
+            List[BatchEncoding]: List of tokenized examples.
+        """
+
+        #Load the dataset entries
+        with open(dataset_path, "r", encoding="utf8") as f:
+            examples = f.readlines()
+
+        # Read the full entries as JSON objects
+        entries = [json.loads(example.strip()) for example in examples]
+
+        # Limit the number of examples if max_examples is set
+        if self.max_examples is not None and self.max_examples < len(entries):
+            entries = random.sample(entries, self.max_examples)
+
+        # Apply transformations to each entry
+        for i, entry in enumerate(entries):
+            # Apply entity type masking if probability > 0
+            if self.entity_type_masking_prob > 0.0:
+                entry = apply_entity_type_masking(entry, self.entity_type_masking_prob)
+            # Apply negatives if probability > 0
+            if self.negatives_prob > 0.0:
+                entry = apply_negatives(entry, self.negatives_prob)
+            # Update the entry in the list
+            entries[i] = entry
+                
+        # Extract 'text' field from transformed entries
+        examples = [entry["text"] for entry in entries]
+        
+        # Proceed with tokenization using the existing batch_tokenization function
+        if num_workers <= 1:
+            return batch_tokenization(
+                tokenizer=tokenizer,
+                dataset_name=".".join([self.dataset_name, self.task_name, self.split]),
+                is_encoder_decoder=self.is_encoder_decoder,
+                max_length=self.max_length,
+                inference=self.inference,
+                prompt_loss_weight=self.prompt_loss_weight,
+                prompt_until=self.prompt_until,
+                examples=examples,
+                process_no=0,
+            )
+        else:
+            # Use multiprocessing for tokenization if num_workers > 1
+            tokenizer_fn = partial(
+                batch_tokenization,
+                tokenizer,
+                ".".join([self.dataset_name, self.task_name, self.split]),
+                self.is_encoder_decoder,
+                self.max_length,
+                self.inference,
+                self.prompt_loss_weight,
+                self.prompt_until,
+            )
+            with Pool(num_workers) as p:
+                tokenized_examples = p.starmap(
+                    tokenizer_fn,
+                    zip(batch(examples, num_workers), range(num_workers)),
+                )
+
+            return list(chain.from_iterable(tokenized_examples))
+
 
 
 @dataclass

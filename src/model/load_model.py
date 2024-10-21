@@ -4,6 +4,7 @@ import os
 from typing import List, Optional, Tuple, Union
 
 import torch
+from accelerate import Accelerator
 
 from transformers import (
     AutoConfig,
@@ -23,8 +24,15 @@ from transformers.utils import is_ipex_available
 from .model_utils import find_all_linear_names, get_trainable_parameters
 
 
+def get_current_device() -> int:
+    """Get the current device. For GPU we return the local process index to enable multiple GPU training."""
+    return Accelerator().local_process_index if torch.cuda.is_available() else "cpu"
+
+
 def get_device_map(
-    force_auto_device_map: bool, max_memory_MB: int = None, use_better_transformer: bool = False
+    force_auto_device_map: bool,
+    max_memory_MB: int = None,
+    use_better_transformer: bool = False,
 ) -> (str, Union[int, List[int]]):
     """
     Get the device map to use for loading the model
@@ -83,7 +91,7 @@ def get_device_map(
                 "Found DDP environment and force_auto_device_map is set to False, we will load a copy of the model "
                 "on each GPU."
             )
-            device_map = None  # {"": int(os.environ.get("LOCAL_RANK", 0))}
+            device_map = None  # {"": get_current_device()} if torch.cuda.is_available() else None
 
         else:
             if not use_better_transformer:
@@ -125,6 +133,8 @@ def merge_lora_model(
         use_lora=True,
         lora_weights_name_or_path=lora_weights_name_or_path,
         torch_dtype=torch_dtype,
+        use_flash_attention=False,
+        force_auto_device_map=True,
     )
 
     model.config.save_pretrained(output_path)
@@ -152,6 +162,7 @@ def load_model(
     use_better_transformer: bool = False,
     fsdp_training: bool = False,
     max_memory_MB: Optional[int] = None,
+    rope_scaling_factor: Optional[float] = None,
 ) -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     """
     Load any Decoder model for training.
@@ -215,6 +226,8 @@ def load_model(
             an error: ValueError: Must flatten tensors with uniform dtype but got torch.float16 and torch.float32
         max_memory_MB (`int`):
             Free memory per gpu in MB. Used to compute the device map when force_auto_device_map is set to True.
+        rope_scaling_factor (`Optional[float]`, optional):
+            The scaling factor for ROPE scaling, if not provide, we won't use ROPE scaling. Defaults to None.
     Raises:
         `ValueError`:
             is raised when `int8_quantization=True` but `use_lora=False`.
@@ -223,16 +236,6 @@ def load_model(
         `Tuple[PreTrainedModel, PreTrainedTokenizerBase]`:
             The loaded model and tokenizer.
     """
-
-    if not use_flash_attention and inference:
-        logging.warning(
-            "\n\n==========================================================\n\n"
-            "You are not using Flash Attention. The released\n"
-            "GoLLIE models have been trained with Flash Attention,\n"
-            "setting this flag to False can cause the model to perform\n"
-            "worse due to numerical differences in the attention weights."
-            "=====================================================\n\n"
-        )
 
     # Sanity checks
 
@@ -273,6 +276,13 @@ def load_model(
         logging.warning("You provided a path to LoRA weights but use_lora is set to False. We will set use_lora=True.")
         use_lora = True
 
+    # if inference and use_flash_attention:
+    #    logging.warning(
+    #        "We found some instabilities when using Flash Attention for inference. For now we will disable it for "
+    #        "inference."
+    #    )
+    #    use_flash_attention = False
+
     logging.info(f"Loading model model from {model_weights_name_or_path}")
 
     # Get the device map config
@@ -284,6 +294,11 @@ def load_model(
     )
 
     # Load the model config
+    config_kwargs = {}
+    if rope_scaling_factor is not None:
+        rope_scaling = {"type": "dynamic", "factor": rope_scaling_factor}
+        logging.info(f"ROPE scaling config: {rope_scaling_factor}")
+        config_kwargs["rope_scaling"] = rope_scaling
 
     if use_lora:
         config = AutoConfig.from_pretrained(
@@ -291,18 +306,20 @@ def load_model(
             trust_remote_code=trust_remote_code,
             pretraining_tp=1,  # Fix mat1 and mat2 shapes cannot be multiplied  error with LLaMA-2
             # See https://github.com/huggingface/transformers/pull/24906
+            **config_kwargs,
         )
     else:
         config = AutoConfig.from_pretrained(
             model_weights_name_or_path,
             trust_remote_code=trust_remote_code,
+            **config_kwargs,
         )
 
     # Load the model tokenizer
 
     tokenizer: PreTrainedTokenizerBase = AutoTokenizer.from_pretrained(
         model_weights_name_or_path,
-        add_eos_token=True,
+        add_eos_token="solar" in model_weights_name_or_path.lower(),
         trust_remote_code=trust_remote_code,
     )
 
@@ -320,11 +337,9 @@ def load_model(
     # Load the model weights
 
     #  Get the quantization config
-    quant_args = {}
     torch_dtype = torch_dtype if torch_dtype in ["auto", None] else getattr(torch, torch_dtype)
 
     if quantization is not None:
-        quant_args = {"load_in_4bit": True} if quantization == 4 else {"load_in_8bit": True}
         if quantization == 4:
             bnb_config = BitsAndBytesConfig(
                 load_in_4bit=True,
@@ -365,28 +380,46 @@ def load_model(
             f"Model {model_weights_name_or_path} is an decoder-only model. We will load it as a CausalLM model."
         )
 
-        if config.model_type == "llama" and use_flash_attention:
-            from src.model.patch_models.modeling_flash_llama import LlamaForCausalLM as LlamaForCausalLMFlash
-
-            logging.warning("Using Flash Attention for LLaMA model.")
-            load_fn = LlamaForCausalLMFlash
-            use_flash_attention = False  # Do not path the model twice
-
-        else:
-            load_fn = AutoModelForCausalLM
-
+        load_fn = AutoModelForCausalLM
         tokenizer.padding_side = "left"
         model_type = "causal"
 
     else:
-        raise ValueError(
-            f"Model {model_weights_name_or_path} of type {config.model_type} is not supported by CoLLIE."
-            "Supported models are:\n"
-            f"Seq2SeqLM: {MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES}\n"
-            f"CausalLM: {MODEL_FOR_CAUSAL_LM_MAPPING_NAMES}\n"
+        logging.warning(
+            f"Model {model_weights_name_or_path} is not in the "
+            "MODEL_FOR_SEQ_TO_SEQ_CAUSAL_LM_MAPPING_NAMES or MODEL_FOR_CAUSAL_LM_MAPPING_NAMES. "
+            "We will attempt load it as a CausalLM model."
+        )
+        load_fn = AutoModelForCausalLM
+        tokenizer.padding_side = "left"
+        model_type = "causal"
+
+    #  Load the model weights
+    if use_flash_attention:
+        kwargs = {"attn_implementation": "flash_attention_2"}
+        logging.info("Loading the model with flash attention 2")
+    else:
+        kwargs = {}
+        logging.info(
+            "Loading the model without flash attention. If the model supports it, "
+            "you can enable it by addding 'use_flash_attention: true' to "
+            "your config file."
         )
 
     #  Load the model weights
+
+    logging.info(
+        "Loading model with config:\n"
+        f"pretrained_model_name_or_path: {model_weights_name_or_path}\n"
+        f"device_map: {device_map}\n"
+        f"max_memory: {max_memory}\n"
+        f"quantization_config: {bnb_config}\n"
+        f"torch_dtype: {torch_dtype}\n"
+        f"config: {config}\n"
+        f"trust_remote_code: {trust_remote_code}\n"
+        f"kwargs: {kwargs}\n"
+    )
+
     model: PreTrainedModel = load_fn.from_pretrained(
         pretrained_model_name_or_path=model_weights_name_or_path,
         device_map=device_map,
@@ -395,28 +428,36 @@ def load_model(
         torch_dtype=torch_dtype,
         config=config,
         trust_remote_code=trust_remote_code,
-        **quant_args,
+        **kwargs,
     )
 
-    # Path the model to use flash attention using OpenAssistant patching function
-    if use_flash_attention:
-        from src.model.patch_models.patching import patch_model
+    # Fix for Yi-Chat models
+    try:
+        if len(tokenizer) > model.model.embed_tokens.num_embeddings:
+            logging.warning(
+                "The tokenizer has more tokens than the model. This is probably a Yi-Chat model. We will fix it "
+                "by setting bos_token to <|im_start|> and eos_token to <|im_end|>."
+            )
+            tokenizer.bos_token = "<|im_start|>"
+            tokenizer.eos_token = "<|im_end|>"
+    except AttributeError:
+        try:
+            if len(tokenizer) > model.embed_tokens.num_embeddings:
+                logging.warning(
+                    "The tokenizer has more tokens than the model. This is probably a Yi-Chat model. We will fix it "
+                    "by setting bos_token to <|im_start|> and eos_token to <|im_end|>."
+                )
+                tokenizer.bos_token = "<|im_start|>"
+                tokenizer.eos_token = "<|im_end|>"
+        except AttributeError:
+            pass
 
-        logging.info("Patching model to use flash attention")
-        patch_model(model, resid_pdrop=None, flash_attention=True)
-
-    logging.info(f"Model dtype: {model.dtype}")
+    logging.info(f"Model dtype: {model.dtype}. Model device: {model.device}")
     logging.info("Total model memory footprint: " + str(model.get_memory_footprint() / 1e6) + " MB")
 
     # Prepare the model for k-bit training and enable gradient checkpointing
     if quantization is not None and not inference:
-        # Custom prepare_model_for_kbit_training fuction that does not convert weights to float32
-        # Our fuction is faster and more memory efficient, altough it may introduce some numerical instability
-        # we have not observed any issues in our experiments. If you encounter any issues, you can comment
-        # the following line and uncomment the next one.
-        from .model_utils import prepare_model_for_kbit_training
-
-        # from peft import prepare_model_for_kbit_training
+        from peft import prepare_model_for_kbit_training
 
         model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=use_gradient_checkpointing)
     else:
@@ -460,34 +501,9 @@ def load_model(
         else:
             logging.info(f"Loading pretrained LORA weights from {lora_weights_name_or_path}")
 
-            model = PeftModel.from_pretrained(model, lora_weights_name_or_path)
+            model = PeftModel.from_pretrained(model, lora_weights_name_or_path, is_trainable=not inference)
 
         logging.info(f"\nLoRA config:\n{model.peft_config}\n")
-
-    """
-    Convert the model layers to the correct dtype
-    If LoRA and bf16 is used, we convert the LoRA layers to bf16 for faster training
-    """
-
-    if use_lora:
-        from peft.tuners.lora import LoraLayer
-
-        for name, module in model.named_modules():
-            if isinstance(module, LoraLayer):
-                if torch_dtype == torch.bfloat16:
-                    logging.debug(f"Converting LoRA layer {name} to {torch_dtype}")
-                    module = module.to(torch.bfloat16)
-
-    if not fsdp_training:
-        for name, module in model.named_modules():
-            if "norm" in name:
-                logging.debug(f"Converting layer {name} to {torch.float32}")
-                module = module.to(torch.float32)
-            if "lm_head" in name or "embed_tokens" in name:
-                if hasattr(module, "weight"):
-                    if torch_dtype == torch.bfloat16 and module.weight.dtype == torch.float32:
-                        logging.debug(f"Converting layer {name} to {torch_dtype}")
-                        module = module.to(torch.bfloat16)
 
     if inference:
         if use_lora:
@@ -495,11 +511,13 @@ def load_model(
                 # If we are not using quantization, we merge the LoRA layers into the model for faster inference.
                 # This is not possible if we are using 4/8 bit quantization.
                 logging.info("Merging LoRA layers into the model for faster inference.")
-                model = model.merge_and_unload()
+                logging.info(f"Model device: {model.device}")
+                model = model.merge_and_unload(progressbar=True)
             else:
                 logging.info(
                     "Quantization is enabled, we will not merge LoRA layers into the model. Inference will be slower."
                 )
+        model.eval()
     else:
         trainable_params, total_params, trainable_percentage = get_trainable_parameters(model)
         logging.info(
