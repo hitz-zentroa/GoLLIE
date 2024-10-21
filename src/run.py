@@ -84,13 +84,15 @@ def train_collie(
         f" {data_args.prompt_loss_weight} and 'prompt_until': {data_args.prompt_until}."
     )
 
-    if data_args.entity_type_masking_prob > 0.0 or data_args.negatives_prob > 0.0:
+    if data_args.entity_type_masking_prob or data_args.negatives_prob:
+        # Use CollieDatasetWithTransformations if any probability is set
         train_dataset_class = CollieDatasetWithTransformations
         additional_args = {
             'entity_type_masking_prob': data_args.entity_type_masking_prob,
             'negatives_prob': data_args.negatives_prob,
         }
     else:
+        # Use the base class if no transformations are needed
         train_dataset_class = CollieDataset
         additional_args = {}
 
@@ -106,7 +108,8 @@ def train_collie(
             prompt_loss_weight=data_args.prompt_loss_weight,
             prompt_until=data_args.prompt_until,
             max_examples=data_args.max_examples_per_task_train,
-            **additional_args
+            num_workers=min(os.cpu_count(), 16),
+            **additional_args # Pass the transformation probabilities
         )
         training_datasets.append(train_dataset)
 
