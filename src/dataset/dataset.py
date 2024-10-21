@@ -534,45 +534,139 @@ class CollieDatasetWithTransformations(CollieDataset):
         negatives_prob=0.0,
         **kwargs
     ):
-        self.entity_type_masking_prob = entity_type_masking_prob
-        self.negatives_prob = negatives_prob
+        
+        #self.entity_type_masking_prob = entity_type_masking_prob
+        #self.negatives_prob = negatives_prob
+        
+        # Store additional arguments for later use
+        self.num_workers = kwargs.get('num_workers', min(os.cpu_count(), 16))
+        self.tokenizer = kwargs.get('tokenizer')
+        self.dataset_path = kwargs.get('dataset_path')
+        self.max_examples = kwargs.get('max_examples')  
+        
+        # Handle both single values and lists for probabilities
+        # This ensures backward compatibility both for curriculum and normal pretraining
+        if isinstance(entity_type_masking_prob, list):
+            # If a list is provided, use it directly
+            self.entity_type_masking_probs = entity_type_masking_prob
+        else:
+            # If a single value is provided, create a list with that value
+            self.entity_type_masking_probs = [entity_type_masking_prob] 
+            
+        if isinstance(negatives_prob, list):
+            self.negatives_probs = negatives_prob
+        else:
+            self.negatives_probs = [negatives_prob]
+        
+        # Initialize the current epoch to 0
+        self.current_epoch = 0
+        
+        #Update probabilities based on the current epoch
+        self.update_probabilities()
+        
         super().__init__(*args, **kwargs)
+        
+        # Compute the initial tokenized examples
+        # This ensures that the dataset is ready for the first epoch
+        self.dataset_dict[self.current_dataset_key] = self.compute_tokenized_examples(
+            dataset_path=self.dataset_path,
+            num_workers=self.num_workers,
+            tokenizer=self.tokenizer,
+        )
+        
+        
+        
+    def update_probabilities(self):
+        '''Function to update the entity_type_masking_prob and negatives_prob based on the current epoch.'''
+        # Determine the maximum number of epochs based on the length of probability lists
+        max_epochs = max(len(self.entity_type_masking_probs), len(self.negatives_probs))
 
+        # Ensure current_epoch does not exceed the maximum index
+        epoch_idx = min(self.current_epoch, max_epochs - 1)
+
+        # Update entity_type_masking_prob
+        if epoch_idx < len(self.entity_type_masking_probs):
+            self.entity_type_masking_prob = self.entity_type_masking_probs[epoch_idx]
+        else:
+            # If the list is shorter, use the last available value
+            self.entity_type_masking_prob = self.entity_type_masking_probs[-1]
+
+        # Update negatives_prob
+        if epoch_idx < len(self.negatives_probs):
+            self.negatives_prob = self.negatives_probs[epoch_idx]
+        else:
+            self.negatives_prob = self.negatives_probs[-1]
+
+        # Log the updated probabilities
+        logging.info(
+            f"Updated probabilities for epoch {self.current_epoch}: "
+            f"entity_type_masking_prob={self.entity_type_masking_prob}, "
+            f"negatives_prob={self.negatives_prob}"
+        )
+        
+    def rotate_split(self):
+        # Increment the current epoch
+        self.current_epoch += 1
+
+        # Update probabilities based on the new epoch
+        self.update_probabilities()
+
+        # Log that we are recomputing tokenized examples
+        logging.info(f"Recomputing tokenized examples for epoch {self.current_epoch}")
+
+        # Recompute tokenized examples with updated probabilities
+        self.dataset_dict[self.current_dataset_key] = self.compute_tokenized_examples(
+            dataset_path=self.dataset_path,
+            num_workers=self.num_workers,
+            tokenizer=self.tokenizer,
+        )
+
+        
     def compute_tokenized_examples(
         self,
         dataset_path,
         num_workers,
         tokenizer,
     ) -> List[BatchEncoding]:
+
         """
-        Compute the tokenized examples, applying masking transformations before tokenization.
+        Compute the tokenized examples, applying transformations before tokenization.
+
+        Args:
+            dataset_path (str): Path to the dataset file.
+            num_workers (int): Number of workers for tokenization.
+            tokenizer (PreTrainedTokenizerBase): Tokenizer to use.
+
+        Returns:
+            List[BatchEncoding]: List of tokenized examples.
         """
+
+        #Load the dataset entries
         with open(dataset_path, "r", encoding="utf8") as f:
             examples = f.readlines()
 
         # Read the full entries as JSON objects
         entries = [json.loads(example.strip()) for example in examples]
 
+        # Limit the number of examples if max_examples is set
         if self.max_examples is not None and self.max_examples < len(entries):
             entries = random.sample(entries, self.max_examples)
 
-        # Apply transformations to entries
-        if self.entity_type_masking_prob > 0.0 or self.negatives_prob > 0.0:
-            for i, entry in enumerate(entries):
-                if self.entity_type_masking_prob > 0.0:
-                    entry = apply_entity_type_masking(entry, self.entity_type_masking_prob)
-                if self.negatives_prob > 0.0:
-                    entry = apply_negatives(entry, self.negatives_prob)
-                entries[i] = entry
-
-        # After applying transformations
-        for i, entry in enumerate(entries[:5]):
-            print("Sample Masked Entry:")
-            print(entry)
-
-        # Extract 'text' field from entries
+        # Apply transformations to each entry
+        for i, entry in enumerate(entries):
+            # Apply entity type masking if probability > 0
+            if self.entity_type_masking_prob > 0.0:
+                entry = apply_entity_type_masking(entry, self.entity_type_masking_prob)
+            # Apply negatives if probability > 0
+            if self.negatives_prob > 0.0:
+                entry = apply_negatives(entry, self.negatives_prob)
+            # Update the entry in the list
+            entries[i] = entry
+                
+        # Extract 'text' field from transformed entries
         examples = [entry["text"] for entry in entries]
         
+        # Proceed with tokenization using the existing batch_tokenization function
         if num_workers <= 1:
             return batch_tokenization(
                 tokenizer=tokenizer,
@@ -586,6 +680,7 @@ class CollieDatasetWithTransformations(CollieDataset):
                 process_no=0,
             )
         else:
+            # Use multiprocessing for tokenization if num_workers > 1
             tokenizer_fn = partial(
                 batch_tokenization,
                 tokenizer,
