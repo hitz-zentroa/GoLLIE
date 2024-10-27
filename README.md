@@ -183,6 +183,8 @@ For the datasets available in the HuggingFace Datasets library, the script will 
 
 For the following datasets, you must provide the path to the dataset by modifying the corresponding [configs/data_configs/](configs/data_configs/) file: [ACE05](https://catalog.ldc.upenn.edu/LDC2006T06) ([Preprocessing script](https://github.com/hitz-zentroa/GoLLIE/blob/main/src/tasks/ace/preprocess_ace.py)), [CASIE](https://github.com/Ebiquity/CASIE/tree/master/data), [CrossNer](https://github.com/zliucr/CrossNER), [DIANN](http://nlp.uned.es/diann/), [E3C](https://github.com/hltfbk/E3C-Corpus/tree/main/preprocessed_data/clinical_entities/English), [HarveyNER](https://github.com/brickee/HarveyNER/tree/main/data/tweets), [MitMovie](https://groups.csail.mit.edu/sls/downloads/movie/), [MitRestaurant](https://groups.csail.mit.edu/sls/downloads/restaurant/), [RAMS](https://nlp.jhu.edu/rams/), [TACRED](https://nlp.stanford.edu/projects/tacred/), [WikiEvents](https://github.com/raspberryice/gen-arg).
 
+Regarding the ACE05 dataset, you can obtain the splits from the code of OneIE paper: [http://blender.cs.illinois.edu/software/oneie/](http://blender.cs.illinois.edu/software/oneie/)
+
 If you encounter difficulties generating the dataset, please don't hesitate to contact us.
 
 ## How to train your own GoLLIE
